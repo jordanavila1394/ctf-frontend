@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Product } from 'src/app/demo/api/product';
-import { ProductService } from 'src/app/demo/service/product.service';
+import { Product } from 'src/app/shared/api/product';
+import { ProductService } from 'src/app/shared/service/product.service';
 
 @Component({
     templateUrl: './overlaysdemo.component.html',
@@ -34,20 +34,20 @@ export class OverlaysDemoComponent implements OnInit {
 
         this.images = [];
         this.images.push({
-            source: 'assets/demo/images/sopranos/sopranos1.jpg',
-            thumbnail: 'assets/demo/images/sopranos/sopranos1_small.jpg', title: 'Sopranos 1'
+            source: 'assets/shared/images/sopranos/sopranos1.jpg',
+            thumbnail: 'assets/shared/images/sopranos/sopranos1_small.jpg', title: 'Sopranos 1'
         });
         this.images.push({
-            source: 'assets/demo/images/sopranos/sopranos2.jpg',
-            thumbnail: 'assets/demo/images/sopranos/sopranos2_small.jpg', title: 'Sopranos 2'
+            source: 'assets/shared/images/sopranos/sopranos2.jpg',
+            thumbnail: 'assets/shared/images/sopranos/sopranos2_small.jpg', title: 'Sopranos 2'
         });
         this.images.push({
-            source: 'assets/demo/images/sopranos/sopranos3.jpg',
-            thumbnail: 'assets/demo/images/sopranos/sopranos3_small.jpg', title: 'Sopranos 3'
+            source: 'assets/shared/images/sopranos/sopranos3.jpg',
+            thumbnail: 'assets/shared/images/sopranos/sopranos3_small.jpg', title: 'Sopranos 3'
         });
         this.images.push({
-            source: 'assets/demo/images/sopranos/sopranos4.jpg',
-            thumbnail: 'assets/demo/images/sopranos/sopranos4_small.jpg', title: 'Sopranos 4'
+            source: 'assets/shared/images/sopranos/sopranos4.jpg',
+            thumbnail: 'assets/shared/images/sopranos/sopranos4_small.jpg', title: 'Sopranos 4'
         });
     }
 
@@ -76,5 +76,5 @@ export class OverlaysDemoComponent implements OnInit {
     formatCurrency(value: number) {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     }
-    
+
 }
