@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Customer, Representative } from 'src/app/shared/api/customer';
-import { CustomerService } from 'src/app/shared/service/customer.service';
-import { Product } from 'src/app/shared/api/product';
-import { ProductService } from 'src/app/shared/service/product.service';
+import { Customer, Representative } from '../../../../models/customer';
+import { CustomerService } from '../../../../services/customer.service';
+import { Product } from '../../../../models/product';
+import { ProductService } from '../../../../services/product.service';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 

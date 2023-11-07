@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/shared/api/product';
+import { Product } from '../../../../models/product';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { ProductService } from 'src/app/shared/service/product.service';
+import { ProductService } from '../../../../services/product.service';
 
 @Component({
     templateUrl: './crud.component.html',
