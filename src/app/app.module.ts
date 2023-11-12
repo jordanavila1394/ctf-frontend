@@ -11,7 +11,6 @@ import { EventService } from './services/event.service';
 import { IconService } from './services/icon.service';
 import { NodeService } from './services/node.service';
 import { PhotoService } from './services/photo.service';
-import { AuthModule } from './pages/auth/auth.module';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 //Store
@@ -25,16 +24,36 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 //Forms
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+//Modules
+import { CompanyModule } from './pages/company/company.module';
+import { AuthModule } from './pages/auth/auth.module';
+
+//Interceptor
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { HttpRequestInterceptor } from './helpers/http.interceptor';
+
+//Ngx Gp Autocomplete
+import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
+import { Loader } from '@googlemaps/js-api-loader';
+import { BrowserModule } from '@angular/platform-browser';
+import { DefaultAutocompleteModule } from './shared/components/default-autocomplete/default-autocomplete.module';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
     imports: [
+        NgxGpAutocompleteModule,
+        FormsModule,
+        BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         AppRoutingModule,
         AppLayoutModule,
         ToastModule,
         AuthModule,
+        CompanyModule,
+        DefaultAutocompleteModule,
         StoreModule.forRoot(reducers, { metaReducers }),
         StoreDevtoolsModule.instrument({
             logOnly: environment.production,
@@ -43,6 +62,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         EffectsModule.forRoot(effects),
     ],
     providers: [
+        {
+            provide: Loader,
+            useValue: new Loader({
+                apiKey: 'AIzaSyBAwEVldqgIo0MAhbeSuDpAmENPsjuf140',
+                libraries: ['places'],
+            }),
+        },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpRequestInterceptor,
+            multi: true,
+        },
+
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         MessageService,
         CountryService,

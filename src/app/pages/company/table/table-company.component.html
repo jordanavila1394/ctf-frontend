@@ -1,0 +1,282 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Lista Aziende</h5>
+            <p-table
+                #dt1
+                [value]="companies"
+                dataKey="id"
+                [rows]="10"
+                [loading]="loading"
+                [rowHover]="true"
+                styleClass="p-datatable-gridlines"
+                [paginator]="true"
+                [globalFilterFields]="[
+                    'name',
+                    'vat',
+                    'registered_office',
+                    'head_office',
+                    'phone',
+                    'email',
+                    'user.name',
+                    'user.surname'
+                ]"
+                responsiveLayout="scroll"
+            >
+                <ng-template pTemplate="caption">
+                    <div
+                        class="flex justify-content-between flex-column sm:flex-row"
+                    >
+                        <button
+                            pButton
+                            label="Pulisci"
+                            class="p-button-outlined mb-2"
+                            icon="pi pi-filter-slash"
+                            (click)="clear(dt1)"
+                        ></button>
+
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input
+                                pInputText
+                                type="text"
+                                #filter
+                                (input)="onGlobalFilter(dt1, $event)"
+                                placeholder="Cerca parola chiave"
+                                class="w-full"
+                            />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Ragione sociale
+                                <p-columnFilter
+                                    type="text"
+                                    field="name"
+                                    display="menu"
+                                    placeholder="Search by name"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                REA
+                                <p-columnFilter
+                                    type="text"
+                                    field="rea_number"
+                                    display="menu"
+                                    placeholder="Cerca per REA"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                PIVA
+                                <p-columnFilter
+                                    type="text"
+                                    field="vat"
+                                    display="menu"
+                                    placeholder="Cerca per PIVA"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Forma giuridica
+                                <p-columnFilter
+                                    type="text"
+                                    field="legal_form"
+                                    display="menu"
+                                    placeholder="Cerca per Forma giuridica"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Sede legale
+                                <p-columnFilter
+                                    type="text"
+                                    field="registered_office"
+                                    display="menu"
+                                    placeholder="Cerca per sede legale"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Sede operativa
+                                <p-columnFilter
+                                    type="text"
+                                    field="head_office"
+                                    display="menu"
+                                    placeholder="Cerca per sede operativa"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Telefono
+                                <p-columnFilter
+                                    type="text"
+                                    field="phone"
+                                    display="menu"
+                                    placeholder="Cerca per telefono"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Email di contatto
+                                <p-columnFilter
+                                    type="text"
+                                    field="email"
+                                    display="menu"
+                                    placeholder="Cerca per email"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                PEC
+                                <p-columnFilter
+                                    type="text"
+                                    field="pec"
+                                    display="menu"
+                                    placeholder="Cerca per pec"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Amministratore Legale - Nome
+
+                                <p-columnFilter
+                                    type="text"
+                                    field="user.name"
+                                    display="menu"
+                                    placeholder="Cerca per nome"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Amministratore Legale - Cognome
+                                <p-columnFilter
+                                    type="text"
+                                    field="user.surname"
+                                    display="menu"
+                                    placeholder="Cerca per cognome"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Stato attività
+								<p-columnFilter type="boolean" field="status" display="menu"></p-columnFilter>
+							</div>
+						</th>
+                        <th style="min-width: 10rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Date
+                                <p-columnFilter
+                                    type="date"
+                                    field="dateAt"
+                                    display="menu"
+                                    placeholder="mm/dd/yyyy"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-company>
+                    <tr>
+                        <td>
+                            {{ company.name }}
+                        </td>
+                        <td>
+                            {{ company.rea_number }}
+                        </td>
+                        <td>
+                            {{ company.vat }}
+                        </td>
+                        <td>
+                            {{ company.legal_form }}
+                        </td>
+                        <td>
+                            {{ company.registered_office }}
+                        </td>
+                        <td>
+                            {{ company.head_office }}
+                        </td>
+                        <td>
+                            {{ company.phone }}
+                        </td>
+                        <td>
+                            {{ company.email }}
+                        </td>
+                        <td>
+                            {{ company.pec }}
+                        </td>
+                        <td>
+                            <span class="image-text ml-2">{{
+                                company.user.name
+                            }}</span>
+                        </td>
+                        <td>
+                            <span class="image-text ml-2">{{
+                                company.user.surname
+                            }}</span>
+                        </td>
+                       <td class="text-center">
+							<i class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': company.status, 'false-icon pi-times-circle text-pink-500': !company.status}"></i>
+						</td>
+                        
+                        <td>
+                            {{ company.createdAt | date : "MM/dd/yyyy" }}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">No companies found.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="8">
+                            Loading companies data. Please wait.
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

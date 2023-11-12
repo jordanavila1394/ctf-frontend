@@ -1,5 +1,5 @@
 export const environment = {
-    production: true,
-    endpoint: 'http://138.197.181.129/',
+    production: false,
+    endpoint: 'http://localhost:3000/',
     googleMapsApiKey: 'AIzaSyBAwEVldqgIo0MAhbeSuDpAmENPsjuf140',
 };

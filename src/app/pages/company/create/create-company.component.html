@@ -1,0 +1,159 @@
+<div class="grid">
+    <div class="col-12 md:col-12">
+        <div class="card">
+            <form
+                [formGroup]="createForm"
+                #form="ngForm"
+                (ngSubmit)="onSubmit()"
+            >
+                <h5>Azienda</h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="name1">Ragione sociale</label>
+                        <input
+                            pInputText
+                            id="name1"
+                            placeholder="Azienda"
+                            type="text"
+                            formControlName="name"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="vat1">P.IVA</label>
+                        <input
+                            pInputText
+                            id="vat1"
+                            type="text"
+                            placeholder="81232412323"
+                            formControlName="vat"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="rea_number1">Rea number</label>
+                        <input
+                            pInputText
+                            id="rea_number1"
+                            type="text"
+                            placeholder="MI-123456"
+                            formControlName="rea_number"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="legal_form1">Forma giuridica</label>
+
+                        <p-dropdown
+                            [options]="legalFormItems"
+                            optionLabel="name"
+                            optionValue="name"
+                            formControlName="legal_form"
+                            [(ngModel)]="selectedLegalForm"
+                        ></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="vat1">Sede legale</label>
+                        <app-default-autocomplete
+                            controlName="registered_office"
+                            [defaultAutocompleteForm]="createForm"
+                        >
+                        </app-default-autocomplete>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="vat1">Sede operativa</label>
+                        <app-default-autocomplete
+                            controlName="head_office"
+                            [defaultAutocompleteForm]="createForm"
+                        >
+                        </app-default-autocomplete>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="phone1">Telefono</label>
+                        <input
+                            pInputText
+                            id="phone1"
+                            type="text"
+                            placeholder="021234523"
+                            formControlName="phone"
+                            ngModel
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="email1">Email</label>
+                        <input
+                            pInputText
+                            id="email1"
+                            type="text"
+                            placeholder="azienda@email.it"
+                            formControlName="email"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="pec1">PEC</label>
+                        <input
+                            pInputText
+                            id="pec1"
+                            type="text"
+                            placeholder="azienda@pec.it"
+                            formControlName="pec"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="website1">Sito web</label>
+                        <input
+                            pInputText
+                            id="website1"
+                            type="text"
+                            placeholder="www.sito.it"
+                            formControlName="website"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="user1">Rappresentante legale</label>
+                        <p-dropdown
+                            [options]="ceosItems"
+                            optionLabel="full_name"
+                            optionValue="id"
+                            placeholder="Seleziona rappresentante legale"
+                            [showClear]="true"
+                            formControlName="userId"
+                            [(ngModel)]="selectedCeo"
+                        ></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="description1">Descrizione</label>
+
+                        <textarea
+                            rows="5"
+                            cols="30"
+                            placeholder="Eventuali descrizione"
+                            ngModel
+                            formControlName="description"
+                            pInputTextarea
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-3">
+                        <button
+                            pButton
+                            pRipple
+                            type="submit"
+                            label="Aggiungi Azienda"
+                            icon="pi pi-plus"
+                            [disabled]="!createForm.valid"
+                        ></button>
+                    </div>
+                </div>
+                <div>
+                    {{ createForm.value | json }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

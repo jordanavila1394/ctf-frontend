@@ -3,8 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  endpoint: 'http://localhost:3000/'
+    production: false,
+    endpoint: 'http://localhost:3000/',
+    googleMapsApiKey: 'AIzaSyBAwEVldqgIo0MAhbeSuDpAmENPsjuf140',
 };
 
 /*

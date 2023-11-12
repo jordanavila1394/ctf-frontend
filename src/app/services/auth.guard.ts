@@ -1,4 +1,3 @@
-import { ROUTES_DASHBOARD } from './../utils/constants';
 import { Injectable } from "@angular/core";
 import {
     ActivatedRouteSnapshot,
@@ -26,11 +25,11 @@ export class AuthGuard implements CanActivate {
         state: RouterStateSnapshot): boolean | Promise<boolean> {
         const isAuthenticated = this.authService.getAuthStatus();
         if (!isAuthenticated) {
-            this.router.navigate([ROUTES.ROUTES_LOGIN]);
+            this.router.navigate([ROUTES.ROUTE_LOGIN]);
         } else {
           const userRole = this.authService.getRole();
           if (route.data["role"] && route.data["role"].indexOf(userRole) === -1) {
-            this.router.navigate([ROUTES.ROUTES_DASHBOARD]);
+            this.router.navigate([ROUTES.ROUTE_DASHBOARD]);
 
             return false;
           }

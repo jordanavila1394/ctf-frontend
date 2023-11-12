@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from '../stores/auth/authentication.reducer';
 import { environment } from 'src/environments/environment';
 
-const AUTH_API = environment.endpoint+'api/auth/';
+const API_URL = environment.endpoint + 'api/auth/';
 
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -28,7 +28,7 @@ export class AuthService {
 
     login(username: string, password: string): Observable<any> {
         return this.http.post(
-            AUTH_API + 'signin',
+            API_URL + 'signin',
             {
                 username,
                 password,
@@ -43,7 +43,7 @@ export class AuthService {
         password: string
     ): Observable<any> {
         return this.http.post(
-            AUTH_API + 'signup',
+            API_URL + 'signup',
             {
                 username,
                 email,
@@ -54,7 +54,7 @@ export class AuthService {
     }
 
     logout(): Observable<any> {
-        return this.http.post(AUTH_API + 'signout', {}, httpOptions);
+        return this.http.post(API_URL + 'signout', {}, httpOptions);
     }
 
     public getRole(): string {

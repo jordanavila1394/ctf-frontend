@@ -2,6 +2,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './shared/components/notfound/notfound.component';
 import { AppLayoutComponent } from './layout/app.layout.component';
+import { AuthGuard } from './services/auth.guard';
 
 @NgModule({
     imports: [
@@ -17,6 +18,13 @@ import { AppLayoutComponent } from './layout/app.layout.component';
                                 import(
                                     './pages/dashboard/dashboard.module'
                                 ).then((m) => m.DashboardModule),
+                        },
+                        {
+                            path: 'company',
+                            loadChildren: () =>
+                                import('./pages/company/company.module').then(
+                                    (m) => m.CompanyModule
+                                ),
                         },
                         {
                             path: 'uikit',
@@ -54,6 +62,7 @@ import { AppLayoutComponent } from './layout/app.layout.component';
                                 ).then((m) => m.PagesModule),
                         },
                     ],
+                    canActivate: [AuthGuard],
                 },
                 {
                     path: 'auth',
@@ -81,5 +90,6 @@ import { AppLayoutComponent } from './layout/app.layout.component';
         ),
     ],
     exports: [RouterModule],
+    providers: [AuthGuard],
 })
 export class AppRoutingModule {}

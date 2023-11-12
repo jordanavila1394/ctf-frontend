@@ -1,0 +1,14 @@
+<div class="field" [formGroup]="defaultAutocompleteForm">
+    <input
+        pInputText
+        class="p-inputtext p-component p-element"
+        #placesRef="ngx-places"
+        [formControlName]="controlName"
+        ngx-gp-autocomplete
+        [options]="options"
+        (onAddressChange)="handleAddressChange($event)"
+    />
+</div>
+<div>
+    {{ this.output | json }}
+</div>
