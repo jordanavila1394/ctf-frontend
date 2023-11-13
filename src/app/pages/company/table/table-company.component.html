@@ -12,6 +12,7 @@
                 styleClass="p-datatable-gridlines"
                 [paginator]="true"
                 [globalFilterFields]="[
+                    'id',
                     'name',
                     'vat',
                     'registered_office',
@@ -50,7 +51,20 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 3rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                #
+                                <p-columnFilter
+                                    type="text"
+                                    field="id"
+                                    display="menu"
+                                    placeholder="Search by name"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 13rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
@@ -63,20 +77,20 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 10rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
                                 REA
                                 <p-columnFilter
                                     type="text"
-                                    field="rea_number"
+                                    field="reaNumber"
                                     display="menu"
                                     placeholder="Cerca per REA"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 10rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
@@ -89,47 +103,47 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 8rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
                                 Forma giuridica
                                 <p-columnFilter
                                     type="text"
-                                    field="legal_form"
+                                    field="legalForm"
                                     display="menu"
                                     placeholder="Cerca per Forma giuridica"
                                 ></p-columnFilter>
                             </div>
                         </th>
 
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 8rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
                                 Sede legale
                                 <p-columnFilter
                                     type="text"
-                                    field="registered_office"
+                                    field="registeredOffice"
                                     display="menu"
                                     placeholder="Cerca per sede legale"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 8rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
                                 Sede operativa
                                 <p-columnFilter
                                     type="text"
-                                    field="head_office"
+                                    field="headOffice"
                                     display="menu"
                                     placeholder="Cerca per sede operativa"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 8rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
@@ -142,11 +156,11 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 8rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Email di contatto
+                                Email contatto
                                 <p-columnFilter
                                     type="text"
                                     field="email"
@@ -155,7 +169,7 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 8rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
@@ -168,39 +182,32 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 12rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Amministratore Legale - Nome
 
-                                <p-columnFilter
-                                    type="text"
-                                    field="user.name"
-                                    display="menu"
-                                    placeholder="Cerca per nome"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 8rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Amministratore Legale - Cognome
+                                Amministratore Delegato
                                 <p-columnFilter
                                     type="text"
-                                    field="user.surname"
+                                    field="fullName"
                                     display="menu"
-                                    placeholder="Cerca per cognome"
+                                    placeholder="Cerca per nome e cognome"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 8rem">
-							<div class="flex justify-content-between align-items-center">
-								Stato attività
-								<p-columnFilter type="boolean" field="status" display="menu"></p-columnFilter>
-							</div>
-						</th>
+                        <th style="min-width: 3rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Stato attività
+                                <p-columnFilter
+                                    type="boolean"
+                                    field="status"
+                                    display="menu"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
                         <th style="min-width: 10rem">
                             <div
                                 class="flex justify-content-between align-items-center"
@@ -208,10 +215,12 @@
                                 Date
                                 <p-columnFilter
                                     type="date"
-                                    field="dateAt"
+                                    field="createdAt"
                                     display="menu"
-                                    placeholder="mm/dd/yyyy"
-                                ></p-columnFilter>
+                                    placeholder="dd/MM/yyyy"
+                                    dateFormat="dd/MM/yyyy"
+                                >
+                                </p-columnFilter>
                             </div>
                         </th>
                     </tr>
@@ -219,22 +228,25 @@
                 <ng-template pTemplate="body" let-company>
                     <tr>
                         <td>
+                            {{ company.id }}
+                        </td>
+                        <td>
                             {{ company.name }}
                         </td>
                         <td>
-                            {{ company.rea_number }}
+                            {{ company.reaNumber }}
                         </td>
                         <td>
                             {{ company.vat }}
                         </td>
                         <td>
-                            {{ company.legal_form }}
+                            {{ company.legalForm }}
                         </td>
                         <td>
-                            {{ company.registered_office }}
+                            {{ company.registeredOffice }}
                         </td>
                         <td>
-                            {{ company.head_office }}
+                            {{ company.headOffice }}
                         </td>
                         <td>
                             {{ company.phone }}
@@ -247,20 +259,23 @@
                         </td>
                         <td>
                             <span class="image-text ml-2">{{
-                                company.user.name
+                                company.fullName
                             }}</span>
                         </td>
-                        <td>
-                            <span class="image-text ml-2">{{
-                                company.user.surname
-                            }}</span>
+
+                        <td class="text-center">
+                            <i
+                                class="pi"
+                                [ngClass]="{
+                                    'true-icon pi-check-circle text-green-500':
+                                        company.status,
+                                    'false-icon pi-times-circle text-pink-500':
+                                        !company.status
+                                }"
+                            ></i>
                         </td>
-                       <td class="text-center">
-							<i class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': company.status, 'false-icon pi-times-circle text-pink-500': !company.status}"></i>
-						</td>
-                        
                         <td>
-                            {{ company.createdAt | date : "MM/dd/yyyy" }}
+                            {{ company.createdAt | date : "dd/MM/yyyy" }}
                         </td>
                     </tr>
                 </ng-template>

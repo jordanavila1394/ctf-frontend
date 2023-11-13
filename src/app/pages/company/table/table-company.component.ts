@@ -8,7 +8,7 @@ import {
 import { Representative } from '../../../models/customer';
 import { Product } from '../../../models/product';
 import { Table } from 'primeng/table';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import { CompanyService } from 'src/app/services/company.service';
 import { PrimeNGConfig } from 'primeng/api';
 
@@ -53,12 +53,14 @@ export class TableCompanyComponent implements OnInit {
 
     loading: boolean = true;
 
-    @ViewChild('filter') filter!: ElementRef;
+    menuItems: MenuItem[] = [];
 
+    @ViewChild('filter') filter!: ElementRef;
 
     display: boolean;
     defaultFormHTML: any;
     defaultFormValidations: any;
+    datePipe: any;
 
     constructor(
         private config: PrimeNGConfig,
@@ -72,10 +74,8 @@ export class TableCompanyComponent implements OnInit {
         });
     }
 
-    selectAddress(place: any): void {
-        // Place object from API
-        console.log(place);
-    }
+    selectAddress(place: any): void {}
+
     ngOnInit() {
         this.config.setTranslation({
             matchAll: 'Confronta tutto',
@@ -90,9 +90,13 @@ export class TableCompanyComponent implements OnInit {
             lt: 'Minore di',
         });
         this.companyService.getAllCompanies().subscribe((companies) => {
-            this.companies = companies;
+            this.companies = companies.map((company) => ({
+                ...company,
+                fullName: company.user.name + ' ' + company.user.surname,
+            }));
             this.loading = false;
         });
+
         this.userService.getAllCeos().subscribe((ceos) => {
             this.ceos = ceos;
         });
@@ -105,6 +109,27 @@ export class TableCompanyComponent implements OnInit {
             { label: 'Renewal', value: 'renewal' },
             { label: 'Proposal', value: 'proposal' },
         ];
+        this.menuItems = [
+            {
+                label: 'Save',
+                icon: 'pi pi-fw pi-check',
+            },
+            {
+                label: 'Update',
+                icon: 'pi pi-fw pi-refresh',
+            },
+            {
+                label: 'Delete',
+                icon: 'pi pi-fw pi-trash',
+            },
+            {
+                separator: true,
+            },
+            {
+                label: 'Home',
+                icon: 'pi pi-fw pi-home',
+            },
+        ];
     }
 
     onSort() {
@@ -113,32 +138,6 @@ export class TableCompanyComponent implements OnInit {
 
     updateRowGroupMetaData() {
         this.rowGroupMetadata = {};
-
-        // if (this.customers3) {
-        //     for (let i = 0; i < this.customers3.length; i++) {
-        //         const rowData = this.customers3[i];
-        //         const representativeName = rowData?.representative?.name || '';
-
-        //         if (i === 0) {
-        //             this.rowGroupMetadata[representativeName] = {
-        //                 index: 0,
-        //                 size: 1,
-        //             };
-        //         } else {
-        //             const previousRowData = this.customers3[i - 1];
-        //             const previousRowGroup =
-        //                 previousRowData?.representative?.name;
-        //             if (representativeName === previousRowGroup) {
-        //                 this.rowGroupMetadata[representativeName].size++;
-        //             } else {
-        //                 this.rowGroupMetadata[representativeName] = {
-        //                     index: i,
-        //                     size: 1,
-        //                 };
-        //             }
-        //         }
-        //     }
-        // }
     }
 
     expandAll() {

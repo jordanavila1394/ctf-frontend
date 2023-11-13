@@ -31,12 +31,12 @@ export class AppMenuComponent implements OnInit {
                     items: [
                         {
                             label: 'Lista aziende',
-                            icon: 'pi pi-fw pi-list',
+                            icon: 'pi pi-sort-alpha-down',
                             routerLink: [ROUTES.ROUTE_TABLE_COMPANY],
                         },
                         {
                             label: 'Aggiungi azienda',
-                            icon: 'pi pi-fw pi-list',
+                            icon: 'pi pi-plus-circle',
                             routerLink: [ROUTES.ROUTE_CREATE_COMPANY],
                         },
                     ],
@@ -59,12 +59,12 @@ export class AppMenuComponent implements OnInit {
                     items: [
                         {
                             label: 'Lista aziende',
-                            icon: 'pi pi-fw pi-list',
+                            icon: 'pi pi-sort-alpha-down',
                             routerLink: [ROUTES.ROUTE_TABLE_COMPANY],
                         },
                         {
                             label: 'Aggiungi azienda',
-                            icon: 'pi pi-fw pi-list',
+                            icon: 'pi pi-plus-circle',
                             routerLink: [ROUTES.ROUTE_CREATE_COMPANY],
                         },
                     ],

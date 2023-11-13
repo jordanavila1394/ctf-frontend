@@ -65,7 +65,7 @@ import { DefaultAutocompleteModule } from './shared/components/default-autocompl
         {
             provide: Loader,
             useValue: new Loader({
-                apiKey: 'AIzaSyBAwEVldqgIo0MAhbeSuDpAmENPsjuf140',
+                apiKey: environment.googleMapsApiKey,
                 libraries: ['places'],
             }),
         },

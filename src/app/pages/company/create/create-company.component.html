@@ -37,7 +37,7 @@
                             id="rea_number1"
                             type="text"
                             placeholder="MI-123456"
-                            formControlName="rea_number"
+                            formControlName="reaNumber"
                             ngModel
                         />
                     </div>
@@ -48,14 +48,14 @@
                             [options]="legalFormItems"
                             optionLabel="name"
                             optionValue="name"
-                            formControlName="legal_form"
+                            formControlName="legalForm"
                             [(ngModel)]="selectedLegalForm"
                         ></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="vat1">Sede legale</label>
                         <app-default-autocomplete
-                            controlName="registered_office"
+                            controlName="registeredOffice"
                             [defaultAutocompleteForm]="createForm"
                         >
                         </app-default-autocomplete>
@@ -63,7 +63,7 @@
                     <div class="field col-12 md:col-4">
                         <label htmlFor="vat1">Sede operativa</label>
                         <app-default-autocomplete
-                            controlName="head_office"
+                            controlName="headOffice"
                             [defaultAutocompleteForm]="createForm"
                         >
                         </app-default-autocomplete>
@@ -117,7 +117,7 @@
                         <label htmlFor="user1">Rappresentante legale</label>
                         <p-dropdown
                             [options]="ceosItems"
-                            optionLabel="full_name"
+                            optionLabel="fullName"
                             optionValue="id"
                             placeholder="Seleziona rappresentante legale"
                             [showClear]="true"

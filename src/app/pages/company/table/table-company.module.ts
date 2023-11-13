@@ -17,6 +17,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TableModule } from 'primeng/table';
 import { DefaultAutocompleteModule } from 'src/app/shared/components/default-autocomplete/default-autocomplete.module';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     imports: [
@@ -31,6 +32,7 @@ import { DefaultAutocompleteModule } from 'src/app/shared/components/default-aut
         SliderModule,
         InputTextModule,
         ToggleButtonModule,
+        CalendarModule,
         RippleModule,
         MultiSelectModule,
         DropdownModule,

@@ -1,61 +1,73 @@
-import { Injectable } from '@angular/core';
 import {
-    HttpEvent,
-    HttpInterceptor,
-    HttpHandler,
-    HttpRequest,
-    HTTP_INTERCEPTORS,
     HttpErrorResponse,
+    HttpEvent,
+    HttpHandler,
+    HttpInterceptor,
+    HttpRequest,
+    HttpResponse,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-
-import { StorageService } from '../services/storage.service';
-import { EventBusService } from '../event/event-bus.service';
-import { EventData } from '../event/event.class';
+import { Store } from '@ngrx/store';
+import { Injectable } from '@angular/core';
+import { Observable, throwError, timer } from 'rxjs';
+import {
+    catchError,
+    finalize,
+    mergeMap,
+    retry,
+    retryWhen,
+    tap,
+} from 'rxjs/operators';
+import { BackendError, ErrorSeverity } from '../models/Errors';
+import { MessageService } from 'primeng/api';
+import { AuthState } from '../stores/auth/authentication.reducer';
+import { logout } from '../stores/auth/authentication.actions';
+import { LoaderService } from '../services/loader.service';
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
-    private isRefreshing = false;
+    authState$: Observable<AuthState>;
 
     constructor(
-        private storageService: StorageService,
-        private eventBusService: EventBusService
-    ) {}
-
+        private loadingService: LoaderService,
+        private messageService: MessageService,
+        private store: Store<{ authState: AuthState }>
+    ) {
+        this.authState$ = store.select('authState');
+    }
     intercept(
-        req: HttpRequest<any>,
+        request: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
-        req = req.clone({
-            withCredentials: true,
-        });
-
-        return next.handle(req).pipe(
-            catchError((error) => {
-                // logout when token is expired
-                if (
-                    error instanceof HttpErrorResponse &&
-                    !req.url.includes('auth/signin') &&
-                    error.status === 401
-                ) {
-                    return this.handle401Error(req, next);
+        return next.handle(request).pipe(
+            tap(
+                (event) => {
+                    if (event instanceof HttpResponse) {
+                        if (event.status == 201)
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'OK',
+                                detail: event?.body?.message,
+                                life: 3000,
+                            });
+                    }
+                },
+                (error) => {
+                    if (error.status == 400)
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Errore',
+                            detail: error?.error?.message,
+                            life: 3000,
+                        });
+                    if (error.status == 409)
+                        this.messageService.add({
+                            severity: 'warn',
+                            summary: 'Attenzione',
+                            detail: error?.error?.message,
+                            life: 3000,
+                        });
                 }
-
-                return throwError(() => error);
-            })
+            )
         );
-    }
-
-    private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-        if (!this.isRefreshing) {
-            this.isRefreshing = true;
-
-            if (this.storageService.isLoggedIn()) {
-                this.eventBusService.emit(new EventData('logout', null));
-            }
-        }
-
-        return next.handle(request);
     }
 }

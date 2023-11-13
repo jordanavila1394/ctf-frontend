@@ -5,6 +5,8 @@ import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { CompanyService } from 'src/app/services/company.service';
+import { Router } from '@angular/router';
+import { ROUTES } from 'src/app/utils/constants';
 
 @Component({
     templateUrl: './create-company.component.html',
@@ -24,6 +26,7 @@ export class CreateCompanyComponent implements OnInit {
 
     constructor(
         public fb: FormBuilder,
+        private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
         private companyService: CompanyService
@@ -37,7 +40,7 @@ export class CreateCompanyComponent implements OnInit {
         this.userService.getAllCeos().subscribe((ceos) => {
             this.ceosItems = ceos.map((ceo) => ({
                 ...ceo,
-                full_name: ceo.name + ' ' + ceo.surname,
+                fullName: ceo.name + ' ' + ceo.surname,
             }));
         });
     }
@@ -45,10 +48,10 @@ export class CreateCompanyComponent implements OnInit {
     createForm = this.fb.group({
         name: ['', [Validators.required]],
         vat: ['', [Validators.required]],
-        rea_number: ['', [Validators.required]],
-        legal_form: ['', [Validators.required]],
-        registered_office: ['', [Validators.required]],
-        head_office: ['', [Validators.required]],
+        reaNumber: ['', [Validators.required]],
+        legalForm: ['', [Validators.required]],
+        registeredOffice: ['', [Validators.required]],
+        headOffice: ['', [Validators.required]],
         phone: ['', [Validators.required]],
         email: ['', [Validators.required]],
         pec: ['', [Validators.required]],
@@ -65,10 +68,10 @@ export class CreateCompanyComponent implements OnInit {
             .createCompany(
                 this.createForm.value.name,
                 this.createForm.value.vat,
-                this.createForm.value.rea_number,
-                this.createForm.value.legal_form,
-                this.createForm.value?.registered_office,
-                this.createForm.value?.head_office,
+                this.createForm.value.reaNumber,
+                this.createForm.value.legalForm,
+                this.createForm.value.registeredOffice,
+                this.createForm.value.headOffice,
                 this.createForm.value.phone,
                 this.createForm.value.email,
                 this.createForm.value.pec,
@@ -77,10 +80,8 @@ export class CreateCompanyComponent implements OnInit {
                 parseInt(this.createForm.value.userId, 10),
                 1
             )
-            .subscribe(
-                (res) => console.log('HTTP response', res),
-                (err) => console.log('HTTP Error', err),
-                () => console.log('HTTP request completed.')
+            .subscribe((res) =>
+                this.router.navigate([ROUTES.ROUTE_TABLE_COMPANY])
             );
     }
 }
