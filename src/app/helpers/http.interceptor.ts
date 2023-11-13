@@ -17,7 +17,6 @@ import {
     retryWhen,
     tap,
 } from 'rxjs/operators';
-import { BackendError, ErrorSeverity } from '../models/Errors';
 import { MessageService } from 'primeng/api';
 import { AuthState } from '../stores/auth/authentication.reducer';
 import { logout } from '../stores/auth/authentication.actions';
@@ -59,6 +58,8 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                             detail: error?.error?.message,
                             life: 3000,
                         });
+                    if (error.status == 401) this.store.dispatch(logout());
+
                     if (error.status == 409)
                         this.messageService.add({
                             severity: 'warn',
