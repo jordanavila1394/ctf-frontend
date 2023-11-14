@@ -2,11 +2,11 @@
     <div class="col-12 md:col-12">
         <div class="card">
             <form
-                [formGroup]="createForm"
+                [formGroup]="modifyForm"
                 #form="ngForm"
                 (ngSubmit)="onSubmit()"
             >
-                <h5>Crea azienda</h5>
+                <h5>Modifica azienda</h5>
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
                         <label htmlFor="name1">Ragione sociale</label>
@@ -48,7 +48,6 @@
                             [options]="legalFormItems"
                             optionLabel="name"
                             optionValue="name"
-                            placeholder="Seleziona forma giuridica"
                             formControlName="legalForm"
                             [(ngModel)]="selectedLegalForm"
                         ></p-dropdown>
@@ -57,7 +56,7 @@
                         <label htmlFor="vat1">Sede legale</label>
                         <app-default-autocomplete
                             controlName="registeredOffice"
-                            [defaultAutocompleteForm]="createForm"
+                            [defaultAutocompleteForm]="modifyForm"
                         >
                         </app-default-autocomplete>
                     </div>
@@ -65,7 +64,7 @@
                         <label htmlFor="vat1">Sede operativa</label>
                         <app-default-autocomplete
                             controlName="headOffice"
-                            [defaultAutocompleteForm]="createForm"
+                            [defaultAutocompleteForm]="modifyForm"
                         >
                         </app-default-autocomplete>
                     </div>
@@ -150,14 +149,24 @@
                         pButton
                         pRipple
                         type="submit"
+                        class="p-button-outlined p-button-secondary"
+                        label="Annulla"
+                        (click)="goToTableCompany()"
+                        icon="pi pi-times"
+                    ></button>
+
+                    <button
+                        pButton
+                        pRipple
+                        type="submit"
                         class="p-button-success"
-                        label="Crea"
-                        icon="pi pi-plus"
-                        [disabled]="!createForm.valid"
+                        label="Salva"
+                        icon="pi pi-save"
+                        [disabled]="!modifyForm.valid"
                     ></button>
                 </div>
                 <div>
-                    {{ createForm.value | json }}
+                    {{ modifyForm.value | json }}
                 </div>
             </form>
         </div>

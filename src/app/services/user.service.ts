@@ -17,19 +17,57 @@ export class UserService {
         return this.http.get(API_URL + 'allCeos', httpOptions);
     }
 
-    getPublicContent(): Observable<any> {
-        return this.http.get(API_URL + 'all', { responseType: 'text' });
+    getAllUsers(): Observable<any> {
+        return this.http.get(API_URL + 'allUsers', httpOptions);
     }
 
-    getUserBoard(): Observable<any> {
-        return this.http.get(API_URL + 'user', { responseType: 'text' });
+    getUser(id: string): Observable<any> {
+        return this.http.get(API_URL + 'getUser' + '/' + id);
     }
 
-    getModeratorBoard(): Observable<any> {
-        return this.http.get(API_URL + 'mod', { responseType: 'text' });
+    createUser(
+        username: string,
+        name: string,
+        surname: string,
+        email: string,
+        status: boolean
+    ): Observable<any> {
+        return this.http.post(
+            API_URL + 'createUser',
+            {
+                username,
+                name,
+                surname,
+                email,
+                status,
+            },
+            httpOptions
+        );
     }
 
-    getAdminBoard(): Observable<any> {
-        return this.http.get(API_URL + 'admin', { responseType: 'text' });
+    patchUser(
+        id: string,
+        username: string,
+        name: string,
+        surname: string,
+        email: string,
+        status: boolean
+    ): Observable<any> {
+        return this.http.patch(
+            API_URL + 'patchUser' + '/' + id,
+            {
+                id,
+                username,
+                name,
+                surname,
+                email,
+                status,
+            },
+            httpOptions
+        );
+    }
+
+    deleteUser(id: string): Observable<any> {
+        return this.http.delete(API_URL + 'deleteUser' + '/' + id);
     }
 }

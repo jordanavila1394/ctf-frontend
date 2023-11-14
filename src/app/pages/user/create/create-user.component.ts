@@ -2,18 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
-import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { CompanyService } from 'src/app/services/company.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
-import { BlobOptions } from 'buffer';
 
 @Component({
-    templateUrl: './create-company.component.html',
+    templateUrl: './create-user.component.html',
     providers: [MessageService, ConfirmationService],
 })
-export class CreateCompanyComponent implements OnInit {
+export class CreateUserComponent implements OnInit {
     selectedLegalForm: any = null;
     selectedCeo: any = null;
 
@@ -35,8 +33,7 @@ export class CreateCompanyComponent implements OnInit {
         public fb: FormBuilder,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
-        private userService: UserService,
-        private companyService: CompanyService
+        private userService: UserService
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -58,19 +55,11 @@ export class CreateCompanyComponent implements OnInit {
     }
 
     createForm = this.fb.group({
+        username: ['', [Validators.required]],
         name: ['', [Validators.required]],
-        vat: ['', [Validators.required]],
-        reaNumber: ['', [Validators.required]],
-        legalForm: ['', [Validators.required]],
-        registeredOffice: ['', [Validators.required]],
-        headOffice: ['', [Validators.required]],
-        phone: ['', [Validators.required]],
+        surname: ['', [Validators.required]],
         email: ['', [Validators.required]],
-        pec: ['', [Validators.required]],
-        userId: ['', [Validators.required]],
         status: [true, [Validators.required]],
-        website: [''],
-        description: [''],
     });
 
     selectAddress(place: any): void {
@@ -78,24 +67,16 @@ export class CreateCompanyComponent implements OnInit {
     }
 
     onSubmit(): void {
-        this.companyService
-            .createCompany(
+        this.userService
+            .createUser(
+                this.createForm.value.username,
                 this.createForm.value.name,
-                this.createForm.value.vat,
-                this.createForm.value.reaNumber,
-                this.createForm.value.legalForm,
-                this.createForm.value.registeredOffice,
-                this.createForm.value.headOffice,
-                this.createForm.value.phone,
+                this.createForm.value.surname,
                 this.createForm.value.email,
-                this.createForm.value.pec,
-                this.createForm.value.website,
-                this.createForm.value.description,
-                parseInt(this.createForm.value.userId, 10),
                 this.createForm.value.status
             )
             .subscribe((res) =>
-                this.router.navigate([ROUTES.ROUTE_TABLE_COMPANY])
+                this.router.navigate([ROUTES.ROUTE_TABLE_USER])
             );
     }
 }

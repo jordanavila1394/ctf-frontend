@@ -9,12 +9,11 @@ import { Representative } from '../../../models/customer';
 import { Product } from '../../../models/product';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
-import { CompanyService } from 'src/app/services/company.service';
 import { PrimeNGConfig } from 'primeng/api';
 
-import { Company } from 'src/app/models/company';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
+
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
 import { ROUTES } from 'src/app/utils/constants';
@@ -24,18 +23,18 @@ interface expandedRows {
 }
 
 @Component({
-    templateUrl: './table-company.component.html',
-    styleUrls: ['./table-company.component.scss'],
+    templateUrl: './table-user.component.html',
+    styleUrls: ['./table-user.component.scss'],
     providers: [MessageService, ConfirmationService],
 })
-export class TableCompanyComponent implements OnInit {
-    companies: Company[] = [];
+export class TableUserComponent implements OnInit {
+    users: User[] = [];
 
     ceos: User[] = [];
 
-    selectedCompanies1: Company[] = [];
+    selectedUsers1: User[] = [];
 
-    selectedCompany: Company = {};
+    selectedUser: User;
 
     representatives: Representative[] = [];
 
@@ -59,42 +58,14 @@ export class TableCompanyComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    statuses = [
-        { label: 'Unqualified', value: 'unqualified' },
-        { label: 'Qualified', value: 'qualified' },
-        { label: 'New', value: 'new' },
-        { label: 'Negotiation', value: 'negotiation' },
-        { label: 'Renewal', value: 'renewal' },
-        { label: 'Proposal', value: 'proposal' },
-    ];
-    menuItems = [
-        {
-            label: 'Save',
-            icon: 'pi pi-fw pi-check',
-        },
-        {
-            label: 'Update',
-            icon: 'pi pi-fw pi-refresh',
-        },
-        {
-            label: 'Delete',
-            icon: 'pi pi-fw pi-trash',
-        },
-        {
-            separator: true,
-        },
-        {
-            label: 'Home',
-            icon: 'pi pi-fw pi-home',
-        },
-    ];
+    roles: { label: string; name: string }[];
+
     constructor(
         private config: PrimeNGConfig,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private companyService: CompanyService,
         private userService: UserService
     ) {
         this.ngxGpAutocompleteService.setOptions({
@@ -106,6 +77,13 @@ export class TableCompanyComponent implements OnInit {
     selectAddress(place: any): void {}
 
     ngOnInit() {
+        this.roles = [
+            { label: 'Admin', name: 'admin' },
+            { label: 'Autista', name: 'worker' },
+            { label: 'CEO Azienda', name: 'ceo' },
+            { label: 'CTF', name: 'moderator' },
+        ];
+
         this.config.setTranslation({
             matchAll: 'Confronta tutto',
             matchAny: 'Confronta qualsiasi',
@@ -121,20 +99,24 @@ export class TableCompanyComponent implements OnInit {
         this.loadServices();
     }
     loadServices() {
-        this.companyService.getAllCompanies().subscribe((companies) => {
-            this.companies = companies.map((company) => ({
-                ...company,
-                fullName: company.user.name + ' ' + company.user.surname,
+        this.userService.getAllUsers().subscribe((users) => {
+            this.users = users.map((user) => ({
+                ...user,
+                mainRole: {
+                    label: user.roles[0]?.label,
+                    name: user.roles[0]?.name,
+                },
             }));
-            this.loading = false;
+            console.log(this.users);
         });
 
         this.userService.getAllCeos().subscribe((ceos) => {
             this.ceos = ceos;
         });
+        this.loading = false;
     }
 
-    confirmErase(event: Event, idCompany) {
+    confirmErase(event: Event, idUser) {
         this.confirmationService.confirm({
             key: 'confirmErase',
             target: event.target || new EventTarget(),
@@ -146,8 +128,8 @@ export class TableCompanyComponent implements OnInit {
                     summary: 'Confermato',
                     detail: 'Hai accettato',
                 });
-                this.companyService
-                    .deleteCompany(idCompany)
+                this.userService
+                    .deleteUser(idUser)
                     .subscribe((res) => this.loadServices());
             },
             reject: () => {
@@ -162,15 +144,15 @@ export class TableCompanyComponent implements OnInit {
 
     //Change route
 
-    goToModifyCompany(idCompany) {
-        this.router.navigate([ROUTES.ROUTE_MODIFY_COMPANY], {
-            queryParams: { id: idCompany },
+    goToModifyUser(idUser) {
+        this.router.navigate([ROUTES.ROUTE_MODIFY_USER], {
+            queryParams: { id: idUser },
         });
     }
 
-    goToDetailCompany(idCompany) {
-        this.router.navigate([ROUTES.ROUTE_DETAIL_COMPANY], {
-            queryParams: { id: idCompany },
+    goToDetailUser(idUser) {
+        this.router.navigate([ROUTES.ROUTE_DETAIL_USER], {
+            queryParams: { id: idUser },
         });
     }
 
@@ -215,5 +197,14 @@ export class TableCompanyComponent implements OnInit {
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
+    }
+    isActionVisible(user) {
+        let isVisible = true;
+        if (
+            user.mainRole.name === 'admin' ||
+            user.mainRole.name === 'moderator'
+        )
+            return false;
+        return isVisible;
     }
 }

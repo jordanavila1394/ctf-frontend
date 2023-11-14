@@ -27,6 +27,21 @@ export class AppMenuComponent implements OnInit {
                     ],
                 },
                 {
+                    label: 'Utenti',
+                    items: [
+                        {
+                            label: 'Lista utenti',
+                            icon: 'pi pi-sort-alpha-down',
+                            routerLink: [ROUTES.ROUTE_TABLE_USER],
+                        },
+                        {
+                            label: 'Aggiungi utente',
+                            icon: 'pi pi-plus-circle',
+                            routerLink: [ROUTES.ROUTE_CREATE_USER],
+                        },
+                    ],
+                },
+                {
                     label: 'Aziende',
                     items: [
                         {
@@ -51,6 +66,21 @@ export class AppMenuComponent implements OnInit {
                             label: 'Dashboard',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                    ],
+                },
+                {
+                    label: 'Utenti',
+                    items: [
+                        {
+                            label: 'Lista utenti',
+                            icon: 'pi pi-sort-alpha-down',
+                            routerLink: [ROUTES.ROUTE_TABLE_USER],
+                        },
+                        {
+                            label: 'Aggiungi utente',
+                            icon: 'pi pi-plus-circle',
+                            routerLink: [ROUTES.ROUTE_CREATE_USER],
                         },
                     ],
                 },

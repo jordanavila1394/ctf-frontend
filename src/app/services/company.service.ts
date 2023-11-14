@@ -21,6 +21,10 @@ export class CompanyService {
         return this.http.get(API_URL + 'allCompanies', httpOptions);
     }
 
+    getCompany(id: string): Observable<any> {
+        return this.http.get(API_URL + 'getCompany' + '/' + id);
+    }
+
     createCompany(
         name: string,
         vat: string,
@@ -34,7 +38,7 @@ export class CompanyService {
         website: string,
         description: string,
         userId: number,
-        status: number
+        status: boolean
     ): Observable<any> {
         return this.http.post(
             API_URL + 'createCompany',
@@ -55,5 +59,46 @@ export class CompanyService {
             },
             httpOptions
         );
+    }
+    
+    patchCompany(
+        id: string,
+        name: string,
+        vat: string,
+        reaNumber: string,
+        legalForm: string,
+        registeredOffice: string,
+        headOffice: string,
+        phone: string,
+        email: string,
+        pec: string,
+        website: string,
+        description: string,
+        userId: number,
+        status: boolean
+    ): Observable<any> {
+        return this.http.patch(
+            API_URL + 'patchCompany' + '/' + id,
+            {
+                name,
+                vat,
+                reaNumber,
+                legalForm,
+                registeredOffice,
+                headOffice,
+                phone,
+                email,
+                pec,
+                website,
+                description,
+                userId,
+                status,
+            },
+            httpOptions
+        );
+    }
+
+    deleteCompany(id: string): Observable<any> {
+        return this.http.delete(API_URL + 'deleteCompany' + '/' + id);
     }
 }

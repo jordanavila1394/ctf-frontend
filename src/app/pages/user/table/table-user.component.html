@@ -1,10 +1,10 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5>Lista Aziende</h5>
+            <h5>Lista Utenti</h5>
             <p-table
                 #dt1
-                [value]="companies"
+                [value]="users"
                 scrollDirection="horizontal"
                 [scrollable]="true"
                 dataKey="id"
@@ -15,14 +15,10 @@
                 [paginator]="true"
                 [globalFilterFields]="[
                     'id',
+                    'username',
                     'name',
-                    'vat',
-                    'registered_office',
-                    'head_office',
-                    'phone',
-                    'email',
-                    'user.name',
-                    'user.surname'
+                    'surname',
+                    'email'
                 ]"
                 responsiveLayout="scroll"
                 styleClass="p-datatable-striped"
@@ -61,12 +57,25 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Ragione sociale
+                                Username
+                                <p-columnFilter
+                                    type="text"
+                                    field="name"
+                                    display="username"
+                                    placeholder="Cerca per username"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 13rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Nome
                                 <p-columnFilter
                                     type="text"
                                     field="name"
                                     display="menu"
-                                    placeholder="Search by name"
+                                    placeholder="Cerca per nome"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -74,86 +83,75 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                REA
+                                Cognome
                                 <p-columnFilter
                                     type="text"
-                                    field="reaNumber"
+                                    field="surname"
                                     display="menu"
-                                    placeholder="Cerca per REA"
+                                    placeholder="Cerca per cognome"
                                 ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Ruoli
+                                <p-columnFilter
+                                    field="mainRole"
+                                    matchMode="in"
+                                    display="menu"
+                                    [showMatchModes]="false"
+                                    [showOperator]="false"
+                                    [showAddButton]="false"
+                                >
+                                    <ng-template pTemplate="header">
+                                        <div class="px-3 pt-3 pb-0">
+                                            <span class="font-bold"
+                                                >Roles Picker</span
+                                            >
+                                        </div>
+                                    </ng-template>
+                                    <ng-template
+                                        pTemplate="filter"
+                                        let-value
+                                        let-filter="filterCallback"
+                                    >
+                                        <p-multiSelect
+                                            [ngModel]="value"
+                                            [options]="roles"
+                                            placeholder="Any"
+                                            (onChange)="filter($event.value)"
+                                            optionLabel="label"
+                                        >
+                                            <ng-template
+                                                let-option
+                                                pTemplate="item"
+                                            >
+                                                <div
+                                                    class="p-multiselect-representative-option"
+                                                >
+                                                    <span
+                                                        [class]="
+                                                            'user-badge ' +
+                                                            option.name
+                                                        "
+                                                        >{{
+                                                            option.label
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </ng-template>
+                                        </p-multiSelect>
+                                    </ng-template>
+                                </p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                PIVA
-                                <p-columnFilter
-                                    type="text"
-                                    field="vat"
-                                    display="menu"
-                                    placeholder="Cerca per PIVA"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 15rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Forma giuridica
-                                <p-columnFilter
-                                    type="text"
-                                    field="legalForm"
-                                    display="menu"
-                                    placeholder="Cerca per Forma giuridica"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Sede legale
-                                <p-columnFilter
-                                    type="text"
-                                    field="registeredOffice"
-                                    display="menu"
-                                    placeholder="Cerca per sede legale"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Sede operativa
-                                <p-columnFilter
-                                    type="text"
-                                    field="headOffice"
-                                    display="menu"
-                                    placeholder="Cerca per sede operativa"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Telefono
-                                <p-columnFilter
-                                    type="text"
-                                    field="phone"
-                                    display="menu"
-                                    placeholder="Cerca per telefono"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Email contatto
+                                Email
                                 <p-columnFilter
                                     type="text"
                                     field="email"
@@ -162,52 +160,11 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                PEC
-                                <p-columnFilter
-                                    type="text"
-                                    field="pec"
-                                    display="menu"
-                                    placeholder="Cerca per pec"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Amministratore Delegato
-                                <p-columnFilter
-                                    type="text"
-                                    field="fullName"
-                                    display="menu"
-                                    placeholder="Cerca per nome e cognome"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Descrizione
-                                <p-columnFilter
-                                    type="text"
-                                    field="description"
-                                    display="menu"
-                                    placeholder="Cerca per descrizione"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-
                         <th style="min-width: 3rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Stato attività
+                                Stato utente
                                 <p-columnFilter
                                     type="boolean"
                                     field="status"
@@ -219,7 +176,7 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Date
+                                Date creazione
                                 <p-columnFilter
                                     type="date"
                                     field="createdAt"
@@ -244,60 +201,43 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-company>
+                <ng-template pTemplate="body" let-user>
                     <tr>
                         <td
                             class="font-bold"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            {{ company.name }}
+                            {{ user.username }}
                         </td>
                         <td>
-                            {{ company.reaNumber }}
+                            {{ user.name }}
                         </td>
                         <td>
-                            {{ company.vat }}
+                            {{ user.surname }}
                         </td>
                         <td>
-                            {{ company.legalForm }}
+                            <span
+                                [class]="'user-badge ' + user.mainRole.name"
+                                >{{ user.mainRole.label }}</span
+                            >
                         </td>
                         <td>
-                            {{ company.registeredOffice }}
-                        </td>
-                        <td>
-                            {{ company.headOffice }}
-                        </td>
-                        <td>
-                            {{ company.phone }}
-                        </td>
-                        <td>
-                            {{ company.email }}
-                        </td>
-                        <td>
-                            {{ company.pec }}
-                        </td>
-                        <td>
-                            <span class="image-text ml-2">{{
-                                company.fullName
-                            }}</span>
-                        </td>
-                        <td>
-                            {{ company.description }}
+                            {{ user.email }}
                         </td>
                         <td class="text-center">
                             <i
                                 class="pi"
                                 [ngClass]="{
                                     'true-icon pi-check-circle text-green-500':
-                                        company.status,
+                                        user.status,
                                     'false-icon pi-times-circle text-pink-500':
-                                        !company.status
+                                        !user.status
                                 }"
                             ></i>
                         </td>
                         <td>
-                            {{ company.createdAt | date : "dd/MM/yyyy" }}
+                            {{ user.createdAt | date : "dd/MM/yyyy" }}
                         </td>
                         <td
                             alignFrozen="right"
@@ -309,20 +249,22 @@
                                 type="button"
                                 icon="pi pi-search"
                                 class="p-button-success mr-2"
-                                (click)="goToDetailCompany(company.id)"
+                                (click)="goToDetailUser(user.id)"
                             ></button>
                             <button
+                                *ngIf="isActionVisible(user)"
                                 pButton
                                 type="button"
                                 icon="pi pi-pencil"
                                 class="p-button-info mr-2"
-                                (click)="goToModifyCompany(company.id)"
+                                (click)="goToModifyUser(user.id)"
                             ></button>
                             <p-toast></p-toast>
                             <button
+                                *ngIf="isActionVisible(user)"
                                 pButton
                                 type="button"
-                                (click)="confirmErase($event, company.id)"
+                                (click)="confirmErase($event, user.id)"
                                 icon="pi pi-trash"
                                 class="p-button-danger"
                             ></button>

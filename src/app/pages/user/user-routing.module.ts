@@ -8,32 +8,32 @@ import { RouterModule } from '@angular/router';
                 path: 'table',
                 data: { breadcrumb: 'Table' },
                 loadChildren: () =>
-                    import('./table/table-company.module').then(
-                        (m) => m.TableCompanyModule
+                    import('./table/table-user.module').then(
+                        (m) => m.TableUserModule
                     ),
             },
             {
                 path: 'create',
                 data: { breadcrumb: 'Create' },
                 loadChildren: () =>
-                    import('./create/create-company.module').then(
-                        (m) => m.CreateCompanyModule
+                    import('./create/create-user.module').then(
+                        (m) => m.CreateUserModule
                     ),
             },
             {
                 path: 'modify',
                 data: { breadcrumb: 'Modify' },
                 loadChildren: () =>
-                    import('./modify/modify-company.module').then(
-                        (m) => m.ModifyCompanyModule
+                    import('./modify/modify-user.module').then(
+                        (m) => m.ModifyUserModule
                     ),
             },
             {
                 path: 'detail',
                 data: { breadcrumb: 'Detail' },
                 loadChildren: () =>
-                    import('./detail/detail-company.module').then(
-                        (m) => m.DetailCompanyModule
+                    import('./detail/detail-user.module').then(
+                        (m) => m.DetailUserModule
                     ),
             },
 
@@ -42,4 +42,4 @@ import { RouterModule } from '@angular/router';
     ],
     exports: [RouterModule],
 })
-export class CompanyRoutingModule {}
+export class UserRoutingModule {}

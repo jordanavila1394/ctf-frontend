@@ -27,6 +27,13 @@ import { AuthGuard } from './services/auth.guard';
                                 ),
                         },
                         {
+                            path: 'user',
+                            loadChildren: () =>
+                                import('./pages/user/user.module').then(
+                                    (m) => m.UserModule
+                                ),
+                        },
+                        {
                             path: 'uikit',
                             loadChildren: () =>
                                 import(

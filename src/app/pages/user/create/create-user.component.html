@@ -1,0 +1,79 @@
+<div class="grid">
+    <div class="col-12 md:col-12">
+        <div class="card">
+            <form
+                [formGroup]="createForm"
+                #form="ngForm"
+                (ngSubmit)="onSubmit()"
+            >
+                <h5>Crea utente</h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="username1">Username</label>
+                        <input
+                            pInputText
+                            id="username1"
+                            placeholder="username"
+                            type="text"
+                            formControlName="username"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="name1">Nome</label>
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            placeholder="Nome"
+                            formControlName="name"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="surname1">Cognome</label>
+                        <input
+                            pInputText
+                            id="surname1"
+                            type="text"
+                            placeholder="Cognome"
+                            formControlName="surname"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="email1">Email</label>
+                        <input
+                            pInputText
+                            id="email1"
+                            type="text"
+                            placeholder="Email"
+                            formControlName="email"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="status1">Attiva/Disattiva</label> <br />
+                        <p-inputSwitch formControlName="status"></p-inputSwitch>
+                    </div>
+                </div>
+                <div
+                    class="flex justify-content-center align-items-center gap-2"
+                >
+                    <button
+                        pButton
+                        pRipple
+                        type="submit"
+                        class="p-button-success"
+                        label="Crea"
+                        icon="pi pi-plus"
+                        [disabled]="!createForm.valid"
+                    ></button>
+                </div>
+                <div>
+                    {{ createForm.value | json }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -23,9 +24,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DefaultAutocompleteModule } from '../../../shared/components/default-autocomplete/default-autocomplete.module';
 
 // Components
-import { CreateCompanyComponent } from './create-company.component';
-import { CreateCompanyRoutingModule } from './create-company-routing.module';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { ModifyUserComponent } from './modify-user.component';
+import { ModifyUserRoutingModule } from './modify-user-routing.module';
 
 @NgModule({
     imports: [
@@ -39,7 +39,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         InputTextModule,
         InputTextareaModule,
         InputSwitchModule,
-        CreateCompanyRoutingModule,
+        ModifyUserRoutingModule,
         MultiSelectModule,
         ProgressBarModule,
         RatingModule,
@@ -50,6 +50,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         ToastModule,
         ToggleButtonModule,
     ],
-    declarations: [CreateCompanyComponent],
+    declarations: [ModifyUserComponent],
 })
-export class CreateCompanyModule {}
+export class ModifyUserModule {}

@@ -23,8 +23,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DefaultAutocompleteModule } from '../../../shared/components/default-autocomplete/default-autocomplete.module';
 
 // Components
-import { CreateCompanyComponent } from './create-company.component';
-import { CreateCompanyRoutingModule } from './create-company-routing.module';
+import { CreateUserComponent } from './create-user.component';
+import { CreateUserRoutingModule } from './create-user-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
@@ -39,7 +39,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         InputTextModule,
         InputTextareaModule,
         InputSwitchModule,
-        CreateCompanyRoutingModule,
+        CreateUserRoutingModule,
         MultiSelectModule,
         ProgressBarModule,
         RatingModule,
@@ -50,6 +50,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         ToastModule,
         ToggleButtonModule,
     ],
-    declarations: [CreateCompanyComponent],
+    declarations: [CreateUserComponent],
 })
-export class CreateCompanyModule {}
+export class CreateUserModule {}

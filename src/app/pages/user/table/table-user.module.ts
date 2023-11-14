@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TableCompanyComponent } from './table-company.component';
-import { TableCompanyRoutingModule } from './table-company-routing.module';
+import { TableUserComponent } from './table-user.component';
+import { TableUserRoutingModule } from './table-user-routing.module';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleButtonModule } from 'primeng/togglebutton';
@@ -23,7 +23,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 @NgModule({
     imports: [
         CommonModule,
-        TableCompanyRoutingModule,
+        TableUserRoutingModule,
         DefaultAutocompleteModule,
         DialogModule,
         ConfirmDialogModule,
@@ -43,6 +43,6 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
         ReactiveFormsModule,
         ToastModule,
     ],
-    declarations: [TableCompanyComponent],
+    declarations: [TableUserComponent],
 })
-export class TableCompanyModule {}
+export class TableUserModule {}

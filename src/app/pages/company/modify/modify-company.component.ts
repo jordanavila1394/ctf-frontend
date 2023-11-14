@@ -7,13 +7,14 @@ import { UserService } from 'src/app/services/user.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
-import { BlobOptions } from 'buffer';
 
 @Component({
-    templateUrl: './create-company.component.html',
+    templateUrl: './modify-company.component.html',
     providers: [MessageService, ConfirmationService],
 })
-export class CreateCompanyComponent implements OnInit {
+export class ModifyCompanyComponent implements OnInit {
+    idCompany: string;
+
     selectedLegalForm: any = null;
     selectedCeo: any = null;
 
@@ -27,12 +28,11 @@ export class CreateCompanyComponent implements OnInit {
             id: 'Società per azioni',
         },
     ];
-
     ceosItems: any;
-    checkedStatus: boolean = true;
 
     constructor(
         public fb: FormBuilder,
+        private route: ActivatedRoute,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
@@ -43,12 +43,38 @@ export class CreateCompanyComponent implements OnInit {
             types: ['geocode'],
         });
     }
-
     ngOnInit() {
         this.loadServices();
     }
 
     loadServices() {
+        this.route.queryParams.subscribe((params) => {
+            this.idCompany = params['id'];
+            this.modifyForm.patchValue({
+                id: this.idCompany,
+            });
+            this.companyService
+                .getCompany(this.idCompany)
+                .subscribe((company) => {
+                    this.modifyForm.patchValue({
+                        id: this.idCompany,
+                        name: company.name,
+                        vat: company.vat,
+                        reaNumber: company.reaNumber,
+                        legalForm: company.legalForm,
+                        registeredOffice: company.registeredOffice,
+                        headOffice: company.headOffice,
+                        phone: company.phone,
+                        email: company.email,
+                        pec: company.pec,
+                        userId: company.userId,
+                        website: company.website,
+                        description: company.description,
+                        status: company.status,
+                    });
+                });
+        });
+
         this.userService.getAllCeos().subscribe((ceos) => {
             this.ceosItems = ceos.map((ceo) => ({
                 ...ceo,
@@ -57,7 +83,8 @@ export class CreateCompanyComponent implements OnInit {
         });
     }
 
-    createForm = this.fb.group({
+    modifyForm = this.fb.group({
+        id: ['', [Validators.required]],
         name: ['', [Validators.required]],
         vat: ['', [Validators.required]],
         reaNumber: ['', [Validators.required]],
@@ -67,35 +94,38 @@ export class CreateCompanyComponent implements OnInit {
         phone: ['', [Validators.required]],
         email: ['', [Validators.required]],
         pec: ['', [Validators.required]],
+        status: [false, [Validators.required]],
         userId: ['', [Validators.required]],
-        status: [true, [Validators.required]],
         website: [''],
         description: [''],
     });
-
     selectAddress(place: any): void {
         console.log(place);
     }
 
     onSubmit(): void {
         this.companyService
-            .createCompany(
-                this.createForm.value.name,
-                this.createForm.value.vat,
-                this.createForm.value.reaNumber,
-                this.createForm.value.legalForm,
-                this.createForm.value.registeredOffice,
-                this.createForm.value.headOffice,
-                this.createForm.value.phone,
-                this.createForm.value.email,
-                this.createForm.value.pec,
-                this.createForm.value.website,
-                this.createForm.value.description,
-                parseInt(this.createForm.value.userId, 10),
-                this.createForm.value.status
+            .patchCompany(
+                this.modifyForm.value.id,
+                this.modifyForm.value.name,
+                this.modifyForm.value.vat,
+                this.modifyForm.value.reaNumber,
+                this.modifyForm.value.legalForm,
+                this.modifyForm.value.registeredOffice,
+                this.modifyForm.value.headOffice,
+                this.modifyForm.value.phone,
+                this.modifyForm.value.email,
+                this.modifyForm.value.pec,
+                this.modifyForm.value.website,
+                this.modifyForm.value.description,
+                parseInt(this.modifyForm.value.userId, 10),
+                this.modifyForm.value.status
             )
             .subscribe((res) =>
                 this.router.navigate([ROUTES.ROUTE_TABLE_COMPANY])
             );
+    }
+    goToTableCompany() {
+        this.router.navigate([ROUTES.ROUTE_TABLE_COMPANY]);
     }
 }
