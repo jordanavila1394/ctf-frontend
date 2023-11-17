@@ -17,6 +17,10 @@ export class UserService {
         return this.http.get(API_URL + 'allCeos', httpOptions);
     }
 
+    getAllCeosByCompany(id: string): Observable<any> {
+        return this.http.get(API_URL + 'allCeosByCompany' + '/' + id);
+    }
+
     getAllUsers(): Observable<any> {
         return this.http.get(API_URL + 'allUsers', httpOptions);
     }
@@ -27,18 +31,24 @@ export class UserService {
 
     createUser(
         username: string,
+        password: string,
         name: string,
         surname: string,
         email: string,
+        roleId: string,
+        companyId: string,
         status: boolean
     ): Observable<any> {
         return this.http.post(
             API_URL + 'createUser',
             {
                 username,
+                password,
                 name,
                 surname,
                 email,
+                roleId,
+                companyId,
                 status,
             },
             httpOptions
@@ -46,11 +56,13 @@ export class UserService {
     }
 
     patchUser(
-        id: string,
+        id: number,
         username: string,
         name: string,
         surname: string,
         email: string,
+        roleId: string,
+        companyId: string,
         status: boolean
     ): Observable<any> {
         return this.http.patch(
@@ -61,6 +73,8 @@ export class UserService {
                 name,
                 surname,
                 email,
+                roleId,
+                companyId,
                 status,
             },
             httpOptions

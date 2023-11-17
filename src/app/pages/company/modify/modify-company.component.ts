@@ -67,19 +67,20 @@ export class ModifyCompanyComponent implements OnInit {
                         phone: company.phone,
                         email: company.email,
                         pec: company.pec,
-                        userId: company.userId,
+                        ceoId: company.ceoId,
                         website: company.website,
                         description: company.description,
                         status: company.status,
                     });
                 });
-        });
-
-        this.userService.getAllCeos().subscribe((ceos) => {
-            this.ceosItems = ceos.map((ceo) => ({
-                ...ceo,
-                fullName: ceo.name + ' ' + ceo.surname,
-            }));
+            this.userService
+                .getAllCeosByCompany(this.idCompany)
+                .subscribe((ceos) => {
+                    this.ceosItems = ceos.map((ceo) => ({
+                        ...ceo,
+                        fullName: ceo.name + ' ' + ceo.surname,
+                    }));
+                });
         });
     }
 
@@ -95,7 +96,7 @@ export class ModifyCompanyComponent implements OnInit {
         email: ['', [Validators.required]],
         pec: ['', [Validators.required]],
         status: [false, [Validators.required]],
-        userId: ['', [Validators.required]],
+        ceoId: [''],
         website: [''],
         description: [''],
     });
@@ -118,7 +119,7 @@ export class ModifyCompanyComponent implements OnInit {
                 this.modifyForm.value.pec,
                 this.modifyForm.value.website,
                 this.modifyForm.value.description,
-                parseInt(this.modifyForm.value.userId, 10),
+                parseInt(this.modifyForm.value.ceoId, 10),
                 this.modifyForm.value.status
             )
             .subscribe((res) =>

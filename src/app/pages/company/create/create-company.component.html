@@ -29,6 +29,22 @@
                             formControlName="vat"
                             ngModel
                         />
+                        <div
+                            *ngIf="
+                                createForm.controls['vat'].invalid &&
+                                (createForm.controls['vat'].dirty ||
+                                    createForm.controls['vat'].touched)
+                            "
+                            class="alert"
+                        >
+                            <div
+                                *ngIf="
+                                    createForm.controls['vat'].errors['pattern']
+                                "
+                            >
+                                <small class="p-error">PIVA non è valido</small>
+                            </div>
+                        </div>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="rea_number1">Rea number</label>
@@ -89,8 +105,33 @@
                             type="text"
                             placeholder="azienda@email.it"
                             formControlName="email"
+                            (input)="
+                                createForm.controls.email.setValue(
+                                    createForm.controls.email.value.toLowerCase()
+                                )
+                            "
                             ngModel
                         />
+                        <div
+                            *ngIf="
+                                createForm.controls['email'].invalid &&
+                                (createForm.controls['email'].dirty ||
+                                    createForm.controls['email'].touched)
+                            "
+                            class="alert"
+                        >
+                            <div
+                                *ngIf="
+                                    createForm.controls['email'].errors[
+                                        'pattern'
+                                    ]
+                                "
+                            >
+                                <small class="p-error"
+                                    >Email address is invalid</small
+                                >
+                            </div>
+                        </div>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="pec1">PEC</label>
@@ -100,8 +141,31 @@
                             type="text"
                             placeholder="azienda@pec.it"
                             formControlName="pec"
+                            (input)="
+                                createForm.controls.pec.setValue(
+                                    createForm.controls.pec.value.toLowerCase()
+                                )
+                            "
                             ngModel
                         />
+                        <div
+                            *ngIf="
+                                createForm.controls['pec'].invalid &&
+                                (createForm.controls['pec'].dirty ||
+                                    createForm.controls['pec'].touched)
+                            "
+                            class="alert"
+                        >
+                            <div
+                                *ngIf="
+                                    createForm.controls['pec'].errors['pattern']
+                                "
+                            >
+                                <small class="p-error"
+                                    >PEC address is invalid</small
+                                >
+                            </div>
+                        </div>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="website1">Sito web</label>
@@ -114,7 +178,7 @@
                             ngModel
                         />
                     </div>
-                    <div class="field col-12 md:col-4">
+                    <!-- <div class="field col-12 md:col-4">
                         <label htmlFor="user1">Rappresentante legale</label>
                         <p-dropdown
                             [options]="ceosItems"
@@ -122,14 +186,23 @@
                             optionValue="id"
                             placeholder="Seleziona rappresentante legale"
                             [showClear]="true"
-                            formControlName="userId"
+                            formControlName="ceoId"
                             [(ngModel)]="selectedCeo"
                         ></p-dropdown>
+                    </div> -->
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="status1">Data Atto costituzione</label>
+                        <br />
+                        <p-calendar
+                            [showIcon]="true"
+                            inputId="icon"
+                        ></p-calendar>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="status1">Attiva/Disattiva</label> <br />
                         <p-inputSwitch formControlName="status"></p-inputSwitch>
                     </div>
+
                     <div class="field col-12 md:col-4">
                         <label htmlFor="description1">Descrizione</label>
 
@@ -143,6 +216,7 @@
                         ></textarea>
                     </div>
                 </div>
+
                 <div
                     class="flex justify-content-center align-items-center gap-2"
                 >

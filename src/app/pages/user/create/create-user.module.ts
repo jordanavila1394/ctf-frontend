@@ -26,6 +26,7 @@ import { DefaultAutocompleteModule } from '../../../shared/components/default-au
 import { CreateUserComponent } from './create-user.component';
 import { CreateUserRoutingModule } from './create-user-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
     imports: [
@@ -44,6 +45,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         ProgressBarModule,
         RatingModule,
         ReactiveFormsModule,
+        PasswordModule,
         RippleModule,
         SliderModule,
         TableModule,

@@ -37,7 +37,6 @@ export class CompanyService {
         pec: string,
         website: string,
         description: string,
-        userId: number,
         status: boolean
     ): Observable<any> {
         return this.http.post(
@@ -54,13 +53,12 @@ export class CompanyService {
                 pec,
                 website,
                 description,
-                userId,
                 status,
             },
             httpOptions
         );
     }
-    
+
     patchCompany(
         id: string,
         name: string,
@@ -74,7 +72,7 @@ export class CompanyService {
         pec: string,
         website: string,
         description: string,
-        userId: number,
+        ceoId: number,
         status: boolean
     ): Observable<any> {
         return this.http.patch(
@@ -91,7 +89,7 @@ export class CompanyService {
                 pec,
                 website,
                 description,
-                userId,
+                ceoId,
                 status,
             },
             httpOptions

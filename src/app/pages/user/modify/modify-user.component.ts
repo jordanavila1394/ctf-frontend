@@ -6,6 +6,8 @@ import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
+import { CompanyService } from 'src/app/services/company.service';
+import { RoleService } from 'src/app/services/role.service';
 
 @Component({
     templateUrl: './modify-user.component.html',
@@ -29,12 +31,19 @@ export class ModifyUserComponent implements OnInit {
     ];
     ceosItems: any;
 
+    roles: [];
+    companies: [];
+    selectedRole: any;
+    selectedCompany: any;
+
     constructor(
         public fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
-        private userService: UserService
+        private userService: UserService,
+        private companyService: CompanyService,
+        private roleService: RoleService
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -53,15 +62,25 @@ export class ModifyUserComponent implements OnInit {
                 id: this.idUser,
             });
             this.userService.getUser(this.idUser).subscribe((user) => {
+                console.log(user);
+                const companyId = user.companies[0].id;
+                const roleId = user.roles[0].id;
+
                 this.modifyForm.patchValue({
                     id: this.idUser,
                     username: user.username,
                     name: user.name,
                     surname: user.surname,
                     email: user.email,
+                    roleId: roleId,
+                    companyId: companyId,
                     status: user.status,
                 });
             });
+            this.modifyForm.controls['roleId'].disable({
+                onlySelf: true,
+            });
+            this.modifyForm.controls['companyId'].disable({ onlySelf: true });
         });
 
         this.userService.getAllCeos().subscribe((ceos) => {
@@ -69,6 +88,12 @@ export class ModifyUserComponent implements OnInit {
                 ...ceo,
                 fullName: ceo.name + ' ' + ceo.surname,
             }));
+        });
+        this.roleService.getAllRoles().subscribe((roles) => {
+            this.roles = roles;
+        });
+        this.companyService.getAllCompanies().subscribe((companies) => {
+            this.companies = companies;
         });
     }
 
@@ -78,6 +103,8 @@ export class ModifyUserComponent implements OnInit {
         name: ['', [Validators.required]],
         surname: ['', [Validators.required]],
         email: ['', [Validators.required]],
+        roleId: ['', [Validators.required]],
+        companyId: ['', [Validators.required]],
         status: [false, [Validators.required]],
     });
     selectAddress(place: any): void {
@@ -87,11 +114,13 @@ export class ModifyUserComponent implements OnInit {
     onSubmit(): void {
         this.userService
             .patchUser(
-                this.modifyForm.value.id,
+                parseInt(this.modifyForm.value.id, 10),
                 this.modifyForm.value.username,
                 this.modifyForm.value.name,
                 this.modifyForm.value.surname,
                 this.modifyForm.value.email,
+                this.modifyForm.value.roleId,
+                this.modifyForm.value.companyId,
                 this.modifyForm.value.status
             )
             .subscribe((res) =>

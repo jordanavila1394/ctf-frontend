@@ -59,15 +59,28 @@ export class CreateCompanyComponent implements OnInit {
 
     createForm = this.fb.group({
         name: ['', [Validators.required]],
-        vat: ['', [Validators.required]],
+        vat: ['', [Validators.required, Validators.pattern('^[0-9]{11}$')]],
         reaNumber: ['', [Validators.required]],
         legalForm: ['', [Validators.required]],
         registeredOffice: ['', [Validators.required]],
+        registeredOfficeLat: [''],
+        registeredOfficeLong: [''],
         headOffice: ['', [Validators.required]],
         phone: ['', [Validators.required]],
-        email: ['', [Validators.required]],
-        pec: ['', [Validators.required]],
-        userId: ['', [Validators.required]],
+        email: [
+            '',
+            [
+                Validators.required,
+                Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
+            ],
+        ],
+        pec: [
+            '',
+            [
+                Validators.required,
+                Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
+            ],
+        ],
         status: [true, [Validators.required]],
         website: [''],
         description: [''],
@@ -91,7 +104,6 @@ export class CreateCompanyComponent implements OnInit {
                 this.createForm.value.pec,
                 this.createForm.value.website,
                 this.createForm.value.description,
-                parseInt(this.createForm.value.userId, 10),
                 this.createForm.value.status
             )
             .subscribe((res) =>

@@ -26,6 +26,7 @@ import { DefaultAutocompleteModule } from '../../../shared/components/default-au
 import { CreateCompanyComponent } from './create-company.component';
 import { CreateCompanyRoutingModule } from './create-company-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         DialogModule,
         DropdownModule,
         FormsModule,
+        CalendarModule,
         InputTextModule,
         InputTextareaModule,
         InputSwitchModule,

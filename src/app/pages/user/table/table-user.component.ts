@@ -18,6 +18,11 @@ import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
 import { ROUTES } from 'src/app/utils/constants';
 import { Router } from '@angular/router';
+
+import { TranslateService } from '@ngx-translate/core';
+import { CompanyService } from 'src/app/services/company.service';
+import { RoleService } from 'src/app/services/role.service';
+
 interface expandedRows {
     [key: string]: boolean;
 }
@@ -29,8 +34,6 @@ interface expandedRows {
 })
 export class TableUserComponent implements OnInit {
     users: User[] = [];
-
-    ceos: User[] = [];
 
     selectedUsers1: User[] = [];
 
@@ -58,15 +61,18 @@ export class TableUserComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    roles: { label: string; name: string }[];
+    roles: any[];
+    companies: any[];
 
     constructor(
-        private config: PrimeNGConfig,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private confirmationService: ConfirmationService,
+        public translateService: TranslateService,
         private messageService: MessageService,
-        private userService: UserService
+        private userService: UserService,
+        private companyService: CompanyService,
+        private roleService: RoleService
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -77,42 +83,26 @@ export class TableUserComponent implements OnInit {
     selectAddress(place: any): void {}
 
     ngOnInit() {
-        this.roles = [
-            { label: 'Admin', name: 'admin' },
-            { label: 'Autista', name: 'worker' },
-            { label: 'CEO Azienda', name: 'ceo' },
-            { label: 'CTF', name: 'moderator' },
-        ];
-
-        this.config.setTranslation({
-            matchAll: 'Confronta tutto',
-            matchAny: 'Confronta qualsiasi',
-            startsWith: 'Inizia con',
-            contains: 'Contiene',
-            notContains: 'Non contiene',
-            endsWith: 'Finisce in',
-            equals: 'Uguale',
-            notEquals: 'Non uguale',
-            noFilter: 'Senza filtro',
-            lt: 'Minore di',
-        });
         this.loadServices();
     }
     loadServices() {
+        this.companyService.getAllCompanies().subscribe((companies) => {
+            this.companies = companies;
+        });
+
         this.userService.getAllUsers().subscribe((users) => {
             this.users = users.map((user) => ({
                 ...user,
                 mainRole: {
-                    label: user.roles[0]?.label,
                     name: user.roles[0]?.name,
+                    label: user.roles[0]?.label,
                 },
+                role: user.roles[0]?.label,
+                company: user.companies[0]?.name,
+                createdAt: new Date(user.createdAt),
             }));
-            console.log(this.users);
         });
 
-        this.userService.getAllCeos().subscribe((ceos) => {
-            this.ceos = ceos;
-        });
         this.loading = false;
     }
 

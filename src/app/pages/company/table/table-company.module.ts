@@ -19,6 +19,7 @@ import { TableModule } from 'primeng/table';
 import { DefaultAutocompleteModule } from 'src/app/shared/components/default-autocomplete/default-autocomplete.module';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { MenuModule } from 'primeng/menu';
 
 @NgModule({
     imports: [
@@ -39,6 +40,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
         MultiSelectModule,
         DropdownModule,
         ProgressBarModule,
+        MenuModule,
         FormsModule,
         ReactiveFormsModule,
         ToastModule,

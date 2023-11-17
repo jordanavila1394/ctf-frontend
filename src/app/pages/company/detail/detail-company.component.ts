@@ -45,7 +45,7 @@ export class DetailCompanyComponent implements OnInit {
         email: [''],
         pec: [''],
         status: [''],
-        userId: [''],
+        ceoId: [''],
         website: [''],
         description: [''],
     });
@@ -87,7 +87,7 @@ export class DetailCompanyComponent implements OnInit {
                         phone: company.phone,
                         email: company.email,
                         pec: company.pec,
-                        userId: company.userId,
+                        ceoId: company.ceoId,
                         website: company.website,
                         description: company.description,
                         status: company.status,
@@ -110,7 +110,7 @@ export class DetailCompanyComponent implements OnInit {
                 onlySelf: true,
             });
             this.detailForm.controls['pec'].disable({ onlySelf: true });
-            this.detailForm.controls['userId'].disable({ onlySelf: true });
+            this.detailForm.controls['ceoId'].disable({ onlySelf: true });
             this.detailForm.controls['website'].disable({
                 onlySelf: true,
             });

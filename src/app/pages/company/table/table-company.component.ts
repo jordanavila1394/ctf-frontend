@@ -10,7 +10,6 @@ import { Product } from '../../../models/product';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import { CompanyService } from 'src/app/services/company.service';
-import { PrimeNGConfig } from 'primeng/api';
 
 import { Company } from 'src/app/models/company';
 import { UserService } from 'src/app/services/user.service';
@@ -57,39 +56,11 @@ export class TableCompanyComponent implements OnInit {
 
     actionsFrozen: boolean = true;
 
+    items: MenuItem[] | undefined;
+
     @ViewChild('filter') filter!: ElementRef;
 
-    statuses = [
-        { label: 'Unqualified', value: 'unqualified' },
-        { label: 'Qualified', value: 'qualified' },
-        { label: 'New', value: 'new' },
-        { label: 'Negotiation', value: 'negotiation' },
-        { label: 'Renewal', value: 'renewal' },
-        { label: 'Proposal', value: 'proposal' },
-    ];
-    menuItems = [
-        {
-            label: 'Save',
-            icon: 'pi pi-fw pi-check',
-        },
-        {
-            label: 'Update',
-            icon: 'pi pi-fw pi-refresh',
-        },
-        {
-            label: 'Delete',
-            icon: 'pi pi-fw pi-trash',
-        },
-        {
-            separator: true,
-        },
-        {
-            label: 'Home',
-            icon: 'pi pi-fw pi-home',
-        },
-    ];
     constructor(
-        private config: PrimeNGConfig,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private confirmationService: ConfirmationService,
@@ -106,26 +77,22 @@ export class TableCompanyComponent implements OnInit {
     selectAddress(place: any): void {}
 
     ngOnInit() {
-        this.config.setTranslation({
-            matchAll: 'Confronta tutto',
-            matchAny: 'Confronta qualsiasi',
-            startsWith: 'Inizia con',
-            contains: 'Contiene',
-            notContains: 'Non contiene',
-            endsWith: 'Finisce in',
-            equals: 'Uguale',
-            notEquals: 'Non uguale',
-            noFilter: 'Senza filtro',
-            lt: 'Minore di',
-        });
         this.loadServices();
     }
+
     loadServices() {
         this.companyService.getAllCompanies().subscribe((companies) => {
-            this.companies = companies.map((company) => ({
-                ...company,
-                fullName: company.user.name + ' ' + company.user.surname,
-            }));
+            this.companies = companies.map((company) => {
+                let newCompany = company;
+                const ceo = company?.users?.find((x) => x.id === company.ceoId);
+                if (ceo?.name && ceo?.surname) {
+                    newCompany.fullName = ceo?.name + ' ' + ceo?.surname;
+                } else {
+                    newCompany.fullName = '';
+                }
+                return newCompany;
+            });
+
             this.loading = false;
         });
 
@@ -174,6 +141,12 @@ export class TableCompanyComponent implements OnInit {
         });
     }
 
+    goToPlacesCompany(idCompany) {
+        this.router.navigate([ROUTES.ROUTE_PLACES_COMPANY], {
+            queryParams: { id: idCompany },
+        });
+    }
+
     //Table methods
 
     onSort() {
@@ -216,4 +189,5 @@ export class TableCompanyComponent implements OnInit {
         table.clear();
         this.filter.nativeElement.value = '';
     }
+    //Actions
 }

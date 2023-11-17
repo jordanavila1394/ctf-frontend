@@ -31,8 +31,15 @@ export class DefaultAutocompleteComponent {
     }
     public handleAddressChange(place: google.maps.places.PlaceResult) {
         // Do some stuff
+
         this.defaultAutocompleteForm.controls[this.controlName].setValue(
             place.formatted_address
         );
+        this.defaultAutocompleteForm.controls[
+            this.controlName + 'Lat'
+        ].setValue(place.geometry.location.lat());
+        this.defaultAutocompleteForm.controls[
+            this.controlName + 'Long'
+        ].setValue(place.geometry.location.lng());
     }
 }

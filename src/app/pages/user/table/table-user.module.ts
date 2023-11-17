@@ -19,6 +19,7 @@ import { TableModule } from 'primeng/table';
 import { DefaultAutocompleteModule } from 'src/app/shared/components/default-autocomplete/default-autocomplete.module';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -41,6 +42,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
         ProgressBarModule,
         FormsModule,
         ReactiveFormsModule,
+        TranslateModule,
         ToastModule,
     ],
     declarations: [TableUserComponent],

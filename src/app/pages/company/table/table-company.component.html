@@ -231,7 +231,7 @@
                             </div>
                         </th>
                         <th
-                            style="min-width: 13rem"
+                            style="min-width: 17rem"
                             alignFrozen="right"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
@@ -308,15 +308,25 @@
                                 pButton
                                 type="button"
                                 icon="pi pi-search"
-                                class="p-button-success mr-2"
+                                class="p-button-rounded p-button-success p-button-text mr-2"
+                                style="font-size: 1rem"
                                 (click)="goToDetailCompany(company.id)"
                             ></button>
                             <button
                                 pButton
                                 type="button"
                                 icon="pi pi-pencil"
-                                class="p-button-info mr-2"
+                                class="p-button-rounded p-button-info p-button-text mr-2"
+                                style="font-size: 1rem"
+                                
                                 (click)="goToModifyCompany(company.id)"
+                            ></button>
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-map"
+                                class="p-button-secondary p-button-text mr-2"
+                                (click)="goToPlacesCompany(company.id)"
                             ></button>
                             <p-toast></p-toast>
                             <button
@@ -324,7 +334,7 @@
                                 type="button"
                                 (click)="confirmErase($event, company.id)"
                                 icon="pi pi-trash"
-                                class="p-button-danger"
+                                class="p-button-rounded p-button-danger p-button-text"
                             ></button>
                             <p-confirmPopup key="confirmErase"></p-confirmPopup>
                         </td>

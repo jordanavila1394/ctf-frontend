@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
-import { PathLocationStrategy, LocationStrategy } from '@angular/common';
+import {
+    PathLocationStrategy,
+    LocationStrategy,
+    registerLocaleData,
+} from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppLayoutModule } from './layout/app.layout.module';
@@ -24,7 +28,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 //Forms
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+    HttpClientModule,
+    HTTP_INTERCEPTORS,
+    HttpClient,
+} from '@angular/common/http';
 
 //Modules
 import { CompanyModule } from './pages/company/company.module';
@@ -40,6 +48,18 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { BrowserModule } from '@angular/platform-browser';
 import { DefaultAutocompleteModule } from './shared/components/default-autocomplete/default-autocomplete.module';
 
+//TranslateLoader
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function HttpLoaderFactory(httpClient: HttpClient) {
+    return new TranslateHttpLoader(httpClient);
+}
+
+//Translate
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { DrodownLanguageModule } from './shared/components/dropdown-language/dropdown-language.module';
+
+import localeIt from '@angular/common/locales/it';
+
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
     imports: [
@@ -54,10 +74,18 @@ import { DefaultAutocompleteModule } from './shared/components/default-autocompl
         AuthModule,
         CompanyModule,
         DefaultAutocompleteModule,
+        DrodownLanguageModule,
         StoreModule.forRoot(reducers, { metaReducers }),
         StoreDevtoolsModule.instrument({
             logOnly: environment.production,
             autoPause: true,
+        }),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient],
+            },
         }),
         EffectsModule.forRoot(effects),
     ],
@@ -88,4 +116,8 @@ import { DefaultAutocompleteModule } from './shared/components/default-autocompl
     ],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+    constructor() {
+        registerLocaleData(localeIt, 'it');
+    }
+}

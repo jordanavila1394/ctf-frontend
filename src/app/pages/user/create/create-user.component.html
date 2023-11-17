@@ -8,7 +8,7 @@
             >
                 <h5>Crea utente</h5>
                 <div class="p-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-4">
+                    <div class="field col-12 md:col-6">
                         <label htmlFor="username1">Username</label>
                         <input
                             pInputText
@@ -16,8 +16,22 @@
                             placeholder="username"
                             type="text"
                             formControlName="username"
+                            (input)="
+                                createForm.controls.username.setValue(
+                                    createForm.controls.username.value.toLowerCase()
+                                )
+                            "
                             ngModel
                         />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="password1">Password</label>
+
+                        <p-password
+                            formControlName="password"
+                            ngModel
+                            [toggleMask]="true"
+                        ></p-password>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="name1">Nome</label>
@@ -49,8 +63,57 @@
                             type="text"
                             placeholder="Email"
                             formControlName="email"
+                            (input)="
+                                createForm.controls.email.setValue(
+                                    createForm.controls.email.value.toLowerCase()
+                                )
+                            "
                             ngModel
                         />
+                        <div
+                            *ngIf="
+                                createForm.controls['email'].invalid &&
+                                (createForm.controls['email'].dirty ||
+                                    createForm.controls['email'].touched)
+                            "
+                            class="alert"
+                        >
+                            <div
+                                *ngIf="
+                                    createForm.controls['email'].errors[
+                                        'pattern'
+                                    ]
+                                "
+                            >
+                                <small class="p-error"
+                                    >Email address is invalid</small
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="user1">Ruolo</label>
+                        <p-dropdown
+                            [options]="roles"
+                            optionLabel="label"
+                            optionValue="id"
+                            placeholder="Seleziona un ruolo"
+                            [showClear]="true"
+                            formControlName="roleId"
+                            [(ngModel)]="selectedRole"
+                        ></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="user1">Azienda</label>
+                        <p-dropdown
+                            [options]="companies"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Seleziona un azienda"
+                            [showClear]="true"
+                            formControlName="companyId"
+                            [(ngModel)]="selectedCompany"
+                        ></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="status1">Attiva/Disattiva</label> <br />

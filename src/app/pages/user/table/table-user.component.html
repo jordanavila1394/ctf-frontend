@@ -1,7 +1,7 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5>Lista Utenti</h5>
+            <h5>{{ "menu.routes.user.table" | translate }}</h5>
             <p-table
                 #dt1
                 [value]="users"
@@ -29,7 +29,7 @@
                     >
                         <button
                             pButton
-                            label="Pulisci"
+                            label="{{ 'table.actions.clean' | translate }}"
                             class="p-button-outlined mb-2"
                             icon="pi pi-filter-slash"
                             (click)="clear(dt1)"
@@ -98,53 +98,24 @@
                             >
                                 Ruoli
                                 <p-columnFilter
-                                    field="mainRole"
-                                    matchMode="in"
+                                    type="text"
+                                    field="role"
                                     display="menu"
-                                    [showMatchModes]="false"
-                                    [showOperator]="false"
-                                    [showAddButton]="false"
-                                >
-                                    <ng-template pTemplate="header">
-                                        <div class="px-3 pt-3 pb-0">
-                                            <span class="font-bold"
-                                                >Roles Picker</span
-                                            >
-                                        </div>
-                                    </ng-template>
-                                    <ng-template
-                                        pTemplate="filter"
-                                        let-value
-                                        let-filter="filterCallback"
-                                    >
-                                        <p-multiSelect
-                                            [ngModel]="value"
-                                            [options]="roles"
-                                            placeholder="Any"
-                                            (onChange)="filter($event.value)"
-                                            optionLabel="label"
-                                        >
-                                            <ng-template
-                                                let-option
-                                                pTemplate="item"
-                                            >
-                                                <div
-                                                    class="p-multiselect-representative-option"
-                                                >
-                                                    <span
-                                                        [class]="
-                                                            'user-badge ' +
-                                                            option.name
-                                                        "
-                                                        >{{
-                                                            option.label
-                                                        }}</span
-                                                    >
-                                                </div>
-                                            </ng-template>
-                                        </p-multiSelect>
-                                    </ng-template>
-                                </p-columnFilter>
+                                    placeholder="Cerca per ruolo"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Company
+                                <p-columnFilter
+                                    type="text"
+                                    field="company"
+                                    display="menu"
+                                    placeholder="Cerca per company"
+                                ></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
@@ -181,8 +152,7 @@
                                     type="date"
                                     field="createdAt"
                                     display="menu"
-                                    placeholder="dd/MM/yyyy"
-                                    dateFormat="dd/MM/yyyy"
+                                    dateFormat="dd.mm.yy"
                                 >
                                 </p-columnFilter>
                             </div>
@@ -218,10 +188,16 @@
                         </td>
                         <td>
                             <span
-                                [class]="'user-badge ' + user.mainRole.name"
-                                >{{ user.mainRole.label }}</span
+                                class="user-badge {{
+                                    user.mainRole.name
+                                        ? user.mainRole.name
+                                        : ' default'
+                                }}"
                             >
+                                {{ user.role }}
+                            </span>
                         </td>
+                        <td>{{ user.company }}</td>
                         <td>
                             {{ user.email }}
                         </td>
@@ -237,7 +213,13 @@
                             ></i>
                         </td>
                         <td>
-                            {{ user.createdAt | date : "dd/MM/yyyy" }}
+                            <span>{{
+                                user.createdAt
+                                    | date
+                                        : "fullDate"
+                                        : ""
+                                        : translateService.currentLang
+                            }}</span>
                         </td>
                         <td
                             alignFrozen="right"
@@ -277,8 +259,8 @@
                         [(ngModel)]="actionsFrozen"
                         [onIcon]="'pi pi-lock'"
                         offIcon="pi pi-lock-open"
-                        [onLabel]="'Sblocca colonne'"
-                        offLabel="Blocca colonne"
+                        [onLabel]="'table.actions.unlock' | translate"
+                        offLabel="{{ 'table.actions.lock' | translate }}"
                     ></p-toggleButton>
                 </ng-template>
 
