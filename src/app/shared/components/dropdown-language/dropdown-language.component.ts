@@ -17,14 +17,12 @@ export class DropdownLanguageComponent {
     ) {}
     ngOnInit(): void {
         for (const language of this.translateService.getLangs()) {
-            
             this.languagesOptions.push({
                 label: language,
                 name: language.toUpperCase(),
                 value: language,
                 code: language === 'en' ? 'uk' : language,
             });
-            console.log(this.languagesOptions);
         }
         this.selectedLanguage = {
             label: 'it',
@@ -39,6 +37,5 @@ export class DropdownLanguageComponent {
         this.translateService
             .get('primeng')
             .subscribe((res) => this.primengConfig.setTranslation(res));
-        
     }
 }

@@ -2,6 +2,7 @@
     <div class="col-12">
         <div class="card">
             <h5>Lista Aziende</h5>
+
             <p-table
                 #dt1
                 [value]="companies"
@@ -318,7 +319,6 @@
                                 icon="pi pi-pencil"
                                 class="p-button-rounded p-button-info p-button-text mr-2"
                                 style="font-size: 1rem"
-                                
                                 (click)="goToModifyCompany(company.id)"
                             ></button>
                             <button

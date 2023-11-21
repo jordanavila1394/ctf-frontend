@@ -65,6 +65,8 @@ export class CreateCompanyComponent implements OnInit {
         registeredOffice: ['', [Validators.required]],
         registeredOfficeLat: [''],
         registeredOfficeLong: [''],
+        registeredOfficePlaceId: [''],
+        registeredOfficeUrl: [''],
         headOffice: ['', [Validators.required]],
         phone: ['', [Validators.required]],
         email: [

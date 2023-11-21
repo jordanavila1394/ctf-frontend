@@ -33,6 +33,15 @@ import { AuthGuard } from './services/auth.guard';
                                     (m) => m.UserModule
                                 ),
                         },
+
+                        {
+                            path: 'attendance',
+                            loadChildren: () =>
+                                import(
+                                    './pages/attendance/attendance.module'
+                                ).then((m) => m.AttendanceModule),
+                        },
+
                         {
                             path: 'uikit',
                             loadChildren: () =>

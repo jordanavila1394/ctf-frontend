@@ -1,9 +1,52 @@
- <div class="col-12">
+<div class="grid">
+    <div class="col-12 md:col-12">
         <div class="card">
-            <h5>Row Expand</h5>
+            <form
+                [formGroup]="createForm"
+                #form="ngForm"
+                (ngSubmit)="onSubmit()"
+            >
+                <h5>Add place</h5>
+                <div class="formgroup-inline">
+                    <div class="field">
+                        <app-default-autocomplete
+                            id="address1"
+                            type="text"
+                            controlName="address"
+                            [defaultAutocompleteForm]="createForm"
+                        >
+                        </app-default-autocomplete>
+                    </div>
+                    <div class="field">
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            placeholder="Name"
+                            formControlName="name"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field">
+                        <input
+                            pInputText
+                            id="description1"
+                            type="text"
+                            placeholder="Description"
+                            formControlName="description"
+                            ngModel
+                        />
+                    </div>
+                    <button pButton label="Submit"></button>
+                </div>
+                {{ createForm.value | json }}
+            </form>
+        </div>
+        <div class="card" *ngIf="this.places?.length > 0">
+            <h5>List places</h5>
             <p-toast></p-toast>
             <p-table
-                [value]="products"
+                [value]="places"
                 dataKey="name"
                 [expandedRowKeys]="expandedRows"
                 responsiveLayout="scroll"
@@ -25,34 +68,31 @@
                         <th pSortableColumn="name">
                             Name <p-sortIcon field="name"></p-sortIcon>
                         </th>
-                        <th>Image</th>
-                        <th pSortableColumn="price">
-                            Price <p-sortIcon field="price"></p-sortIcon>
+                        <th pSortableColumn="address">
+                            Address <p-sortIcon field="address"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="category">
-                            Category <p-sortIcon field="category"></p-sortIcon>
+                        <th pSortableColumn="latitude">
+                            Latitude <p-sortIcon field="latitude"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="rating">
-                            Reviews <p-sortIcon field="rating"></p-sortIcon>
+                        <th pSortableColumn="longitude">
+                            Longitude
+                            <p-sortIcon field="longitude"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="inventoryStatus">
-                            Status
-                            <p-sortIcon field="inventoryStatus"></p-sortIcon>
+                        <th pSortableColumn="description">
+                            Description
+                            <p-sortIcon field="description"></p-sortIcon>
                         </th>
+                        <th>Map</th>
                     </tr>
                 </ng-template>
-                <ng-template
-                    pTemplate="body"
-                    let-product
-                    let-expanded="expanded"
-                >
+                <ng-template pTemplate="body" let-place let-expanded="expanded">
                     <tr>
                         <td>
                             <button
                                 type="button"
                                 pButton
                                 pRipple
-                                [pRowToggler]="product"
+                                [pRowToggler]="place"
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="
                                     expanded
@@ -61,46 +101,22 @@
                                 "
                             ></button>
                         </td>
-                        <td style="min-width: 12rem">{{ product.name }}</td>
-                        <td>
-                            <img
-                                [src]="
-                                    'assets/demo/images/product/' +
-                                    product.image
-                                "
-                                [alt]="product.name"
-                                width="100"
-                                class="shadow-4"
-                            />
-                        </td>
-                        <td style="min-width: 8rem">
-                            {{ product.price | currency : "USD" }}
-                        </td>
-                        <td style="min-width: 10rem">{{ product.category }}</td>
+                        <td style="min-width: 12rem">{{ place.name }}</td>
+                        <td style="min-width: 12rem">{{ place.address }}</td>
+                        <td style="min-width: 12rem">{{ place.latitude }}</td>
+                        <td style="min-width: 12rem">{{ place.longitude }}</td>
                         <td style="min-width: 10rem">
-                            <p-rating
-                                [ngModel]="product.rating"
-                                [readonly]="true"
-                                [cancel]="false"
-                            ></p-rating>
+                            {{ place.description }}
                         </td>
-                        <td>
-                            <span
-                                [class]="
-                                    'product-badge status-' +
-                                    product.inventoryStatus.toLowerCase()
-                                "
-                                >{{ product.inventoryStatus }}</span
-                            >
-                        </td>
+                        <td style="min-width: 10rem"></td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="rowexpansion" let-product>
+                <ng-template pTemplate="rowexpansion" let-place>
                     <tr>
                         <td colspan="7">
                             <div class="p-3">
                                 <p-table
-                                    [value]="product.orders"
+                                    [value]="place.attendaces"
                                     dataKey="id"
                                     responsiveLayout="scroll"
                                 >
@@ -139,14 +155,17 @@
                                             <th style="width: 4rem"></th>
                                         </tr>
                                     </ng-template>
-                                    <ng-template pTemplate="body" let-order>
+                                    <ng-template
+                                        pTemplate="body"
+                                        let-attendance
+                                    >
                                         <tr>
-                                            <td>{{ order.id }}</td>
-                                            <td>{{ order.customer }}</td>
-                                            <td>{{ order.date }}</td>
+                                            <td>{{ attendance.id }}</td>
+                                            <td>{{ attendance.customer }}</td>
+                                            <td>{{ attendance.date }}</td>
                                             <td>
                                                 {{
-                                                    order.amount
+                                                    attendance.amount
                                                         | currency : "USD"
                                                 }}
                                             </td>
@@ -154,9 +173,11 @@
                                                 <span
                                                     [class]="
                                                         'order-badge order-' +
-                                                        order.status.toLowerCase()
+                                                        attendance.status
                                                     "
-                                                    >{{ order.status }}</span
+                                                    >{{
+                                                        attendance.status
+                                                    }}</span
                                                 >
                                             </td>
                                             <td>
@@ -182,4 +203,9 @@
                 </ng-template>
             </p-table>
         </div>
+        <div class="card" *ngIf="hasPlaces$$ | async as placesData">
+            <app-google-maps [places]="placesData"></app-google-maps>
+            {{ placesData | json }}
+        </div>
     </div>
+</div>

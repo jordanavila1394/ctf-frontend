@@ -23,11 +23,11 @@ interface expandedRows {
 }
 
 @Component({
-    templateUrl: './table-company.component.html',
-    styleUrls: ['./table-company.component.scss'],
+    templateUrl: './table-attendance.component.html',
+    styleUrls: ['./table-attendance.component.scss'],
     providers: [MessageService, ConfirmationService],
 })
-export class TableCompanyComponent implements OnInit {
+export class TableAttendanceComponent implements OnInit {
     companies: Company[] = [];
 
     ceos: User[] = [];

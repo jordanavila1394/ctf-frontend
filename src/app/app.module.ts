@@ -37,6 +37,7 @@ import {
 //Modules
 import { CompanyModule } from './pages/company/company.module';
 import { AuthModule } from './pages/auth/auth.module';
+import { AttendanceModule } from './pages/attendance/attendance.module';
 
 //Interceptor
 import { JwtInterceptor } from './helpers/jwt.interceptor';
@@ -73,6 +74,7 @@ import localeIt from '@angular/common/locales/it';
         ToastModule,
         AuthModule,
         CompanyModule,
+        AttendanceModule,
         DefaultAutocompleteModule,
         DrodownLanguageModule,
         StoreModule.forRoot(reducers, { metaReducers }),
@@ -94,7 +96,7 @@ import localeIt from '@angular/common/locales/it';
             provide: Loader,
             useValue: new Loader({
                 apiKey: environment.googleMapsApiKey,
-                libraries: ['places'],
+                libraries: ['places', 'maps'],
             }),
         },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

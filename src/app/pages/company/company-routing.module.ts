@@ -13,6 +13,14 @@ import { RouterModule } from '@angular/router';
                     ),
             },
             {
+                path: 'places',
+                data: { breadcrumb: 'Places' },
+                loadChildren: () =>
+                    import('./places/places-company.module').then(
+                        (m) => m.PlacesCompanyModule
+                    ),
+            },
+            {
                 path: 'create',
                 data: { breadcrumb: 'Create' },
                 loadChildren: () =>

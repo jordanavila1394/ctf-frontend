@@ -3,6 +3,7 @@ import {
     OnInit,
     ViewChild,
     ElementRef,
+    ChangeDetectorRef,
     AfterViewInit,
 } from '@angular/core';
 import { Representative } from '../../../models/customer';
@@ -17,24 +18,32 @@ import { User } from 'src/app/models/user';
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
 import { ROUTES } from 'src/app/utils/constants';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PlaceService } from 'src/app/services/place.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { Place } from 'src/app/models/place';
+
+interface Places {
+    name: string;
+}
 interface expandedRows {
     [key: string]: boolean;
 }
 
 @Component({
-    templateUrl: './table-company.component.html',
-    styleUrls: ['./table-company.component.scss'],
+    templateUrl: './places-company.component.html',
+    styleUrls: ['./places-company.component.scss'],
     providers: [MessageService, ConfirmationService],
 })
-export class TableCompanyComponent implements OnInit {
-    companies: Company[] = [];
+export class PlacesCompanyComponent implements OnInit {
+    places: [];
 
     ceos: User[] = [];
 
-    selectedCompanies1: Company[] = [];
+    selectedPlaces1: Company[] = [];
 
-    selectedCompany: Company = {};
+    selectedPlace: Company = {};
 
     representatives: Representative[] = [];
 
@@ -60,19 +69,39 @@ export class TableCompanyComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
+    hasPlaces$$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+    idCompany: any;
+    nameCompany: any;
+
     constructor(
+        private route: ActivatedRoute,
         private router: Router,
+        private changeDetectorRef: ChangeDetectorRef,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
-        private userService: UserService
+        private userService: UserService,
+        public fb: FormBuilder,
+        private placeService: PlaceService
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
             types: ['geocode'],
         });
     }
+
+    createForm = this.fb.group({
+        address: ['', [Validators.required]],
+        addressLat: [''],
+        addressLong: [''],
+        addressPlaceId: [''],
+        addressUrl: [''],
+        name: [''],
+        description: [''],
+        companyId: ['', [Validators.required]],
+    });
 
     selectAddress(place: any): void {}
 
@@ -81,70 +110,40 @@ export class TableCompanyComponent implements OnInit {
     }
 
     loadServices() {
-        this.companyService.getAllCompanies().subscribe((companies) => {
-            this.companies = companies.map((company) => {
-                let newCompany = company;
-                const ceo = company?.users?.find((x) => x.id === company.ceoId);
-                if (ceo?.name && ceo?.surname) {
-                    newCompany.fullName = ceo?.name + ' ' + ceo?.surname;
-                } else {
-                    newCompany.fullName = '';
-                }
-                return newCompany;
-            });
+        this.route.queryParams.subscribe((params) => {
+            this.idCompany = params['id'];
+            this.nameCompany = params['name'];
 
+            this.placeService
+                .getPlacesByCompany(this.idCompany)
+                .subscribe((places) => {
+                    this.places = places;
+                    let result: Place = places;
+                    this.hasPlaces$$.next(result);
+                    this.changeDetectorRef.detectChanges();
+                });
+
+            this.createForm.patchValue({
+                companyId: this.idCompany,
+            });
             this.loading = false;
         });
-
-        this.userService.getAllCeos().subscribe((ceos) => {
-            this.ceos = ceos;
-        });
     }
 
-    confirmErase(event: Event, idCompany) {
-        this.confirmationService.confirm({
-            key: 'confirmErase',
-            target: event.target || new EventTarget(),
-            message: 'Sei sicuro di voler eliminare?',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.messageService.add({
-                    severity: 'info',
-                    summary: 'Confermato',
-                    detail: 'Hai accettato',
-                });
-                this.companyService
-                    .deleteCompany(idCompany)
-                    .subscribe((res) => this.loadServices());
-            },
-            reject: () => {
-                this.messageService.add({
-                    severity: 'warn',
-                    summary: 'Rifiutato',
-                    detail: 'Hai rifiutato',
-                });
-            },
-        });
-    }
-
-    //Change route
-
-    goToModifyCompany(idCompany) {
-        this.router.navigate([ROUTES.ROUTE_MODIFY_COMPANY], {
-            queryParams: { id: idCompany },
-        });
-    }
-
-    goToDetailCompany(idCompany) {
-        this.router.navigate([ROUTES.ROUTE_DETAIL_COMPANY], {
-            queryParams: { id: idCompany },
-        });
-    }
-
-    goToPlacesCompany(company) {
-        this.router.navigate([ROUTES.ROUTE_PLACES_COMPANY], {
-            queryParams: { id: company.id, name: company.name },
-        });
+    //Submit
+    onSubmit(): void {
+        this.placeService
+            .createPlace(
+                this.createForm.value.name,
+                this.createForm.value.address,
+                this.createForm.value.addressLat,
+                this.createForm.value.addressLong,
+                this.createForm.value.addressPlaceId,
+                this.createForm.value.addressUrl,
+                parseInt(this.createForm.value.companyId, 10),
+                this.createForm.value.description
+            )
+            .subscribe(() => window.location.reload());
     }
 
     //Table methods
@@ -189,5 +188,4 @@ export class TableCompanyComponent implements OnInit {
         table.clear();
         this.filter.nativeElement.value = '';
     }
-    //Actions
 }
