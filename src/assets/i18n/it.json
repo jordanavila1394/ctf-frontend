@@ -94,6 +94,11 @@
                 "menuTitle": "Aziende",
                 "table": "Lista aziende",
                 "create": "Aggiungi azienda"
+            },
+            "vehicle": {
+                "menuTitle": "Mezzi",
+                "table": "Lista mezzi",
+                "create": "Aggiungi mezzo"
             }
         }
     },

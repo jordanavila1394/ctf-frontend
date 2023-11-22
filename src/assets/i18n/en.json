@@ -94,6 +94,11 @@
                 "menuTitle": "Companies",
                 "table": "Company list",
                 "create": "Add Company"
+            },
+            "vehicle": {
+                "menuTitle": "Vehicles",
+                "table": "Vehicles list",
+                "create": "Add Vehicle"
             }
         },
         "table": {

@@ -60,6 +60,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DrodownLanguageModule } from './shared/components/dropdown-language/dropdown-language.module';
 
 import localeIt from '@angular/common/locales/it';
+import { VehicleModule } from './pages/vehicle/vehicle.module';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -75,6 +76,7 @@ import localeIt from '@angular/common/locales/it';
         AuthModule,
         CompanyModule,
         AttendanceModule,
+        VehicleModule,
         DefaultAutocompleteModule,
         DrodownLanguageModule,
         StoreModule.forRoot(reducers, { metaReducers }),

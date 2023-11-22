@@ -69,7 +69,24 @@ export class AppMenuComponent implements OnInit {
                     },
                 ],
             },
-
+            {
+                label: 'Vehicles',
+                translationCode: 'menu.routes.vehicle.menuTitle',
+                items: [
+                    {
+                        label: 'Lista veicoli',
+                        translationCode: 'menu.routes.vehicle.table',
+                        icon: 'pi pi-list',
+                        routerLink: [ROUTES.ROUTE_TABLE_VEHICLE],
+                    },
+                    {
+                        label: 'Aggiungi veicolo',
+                        translationCode: 'menu.routes.vehicle.create',
+                        icon: 'pi pi-car',
+                        routerLink: [ROUTES.ROUTE_CREATE_VEHICLE],
+                    },
+                ],
+            },
             {
                 label: 'UI Components',
                 items: [

@@ -63,14 +63,17 @@ export class ModifyUserComponent implements OnInit {
             });
             this.userService.getUser(this.idUser).subscribe((user) => {
                 console.log(user);
-                const companyId = user.companies[0].id;
-                const roleId = user.roles[0].id;
+                const companyId = user?.companies[0]?.id
+                    ? user?.companies[0]?.id
+                    : '';
+                const roleId = user?.roles[0]?.id ? user.roles[0].id : '';
 
                 this.modifyForm.patchValue({
                     id: this.idUser,
                     username: user.username,
                     name: user.name,
                     surname: user.surname,
+                    fiscalCode: user.fiscalCode,
                     email: user.email,
                     roleId: roleId,
                     companyId: companyId,
@@ -102,6 +105,7 @@ export class ModifyUserComponent implements OnInit {
         username: ['', [Validators.required]],
         name: ['', [Validators.required]],
         surname: ['', [Validators.required]],
+        fiscalCode: ['', [Validators.required]],
         email: ['', [Validators.required]],
         roleId: ['', [Validators.required]],
         companyId: ['', [Validators.required]],
@@ -118,6 +122,7 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.username,
                 this.modifyForm.value.name,
                 this.modifyForm.value.surname,
+                this.modifyForm.value.fiscalCode,
                 this.modifyForm.value.email,
                 this.modifyForm.value.roleId,
                 this.modifyForm.value.companyId,

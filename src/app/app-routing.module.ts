@@ -41,7 +41,13 @@ import { AuthGuard } from './services/auth.guard';
                                     './pages/attendance/attendance.module'
                                 ).then((m) => m.AttendanceModule),
                         },
-
+                        {
+                            path: 'vehicle',
+                            loadChildren: () =>
+                                import('./pages/vehicle/vehicle.module').then(
+                                    (m) => m.VehicleModule
+                                ),
+                        },
                         {
                             path: 'uikit',
                             loadChildren: () =>

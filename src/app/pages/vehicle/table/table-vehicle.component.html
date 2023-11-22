@@ -1,28 +1,26 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5>Lista Aziende</h5>
+            <h5>Lista Mezzi</h5>
+
             <p-table
                 #dt1
-                [value]="companies"
+                [value]="vehicles"
                 scrollDirection="horizontal"
                 [scrollable]="true"
                 dataKey="id"
-                [rows]="20"
+                [rows]="200"
                 [loading]="loading"
                 [rowHover]="true"
                 styleClass="p-datatable-gridlines"
                 [paginator]="true"
                 [globalFilterFields]="[
                     'id',
-                    'name',
-                    'vat',
-                    'registered_office',
-                    'head_office',
-                    'phone',
-                    'email',
-                    'user.name',
-                    'user.surname'
+                    'licensePlate',
+                    'tipology',
+                    'model',
+                    'rentalType',
+                    'driverType'
                 ]"
                 responsiveLayout="scroll"
                 styleClass="p-datatable-striped"
@@ -54,58 +52,58 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th
-                            style="min-width: 13rem"
+                            style="min-width: 6rem"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Ragione sociale
+                                Targa
                                 <p-columnFilter
                                     type="text"
-                                    field="name"
+                                    field="licensePlate"
                                     display="menu"
-                                    placeholder="Search by name"
+                                    placeholder="Cerca per targa"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 13rem">
+                        <th style="min-width: 11rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                REA
+                                Tipologia
                                 <p-columnFilter
                                     type="text"
-                                    field="reaNumber"
+                                    field="tipology"
                                     display="menu"
-                                    placeholder="Cerca per REA"
+                                    placeholder="Cerca per tipologia"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 13rem">
+                        <th style="min-width: 7rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                PIVA
+                                Modello
                                 <p-columnFilter
                                     type="text"
-                                    field="vat"
+                                    field="model"
                                     display="menu"
-                                    placeholder="Cerca per PIVA"
+                                    placeholder="Cerca per modello"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 15rem">
+                        <th style="min-width: 10rem">
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Forma giuridica
+                                Tipo noleggio
                                 <p-columnFilter
                                     type="text"
-                                    field="legalForm"
+                                    field="rentalType"
                                     display="menu"
-                                    placeholder="Cerca per Forma giuridica"
+                                    placeholder="Cerca per tipo noleggio"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -114,12 +112,12 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Sede legale
+                                Tipo autista
                                 <p-columnFilter
                                     type="text"
-                                    field="registeredOffice"
+                                    field="driverType"
                                     display="menu"
-                                    placeholder="Cerca per sede legale"
+                                    placeholder="Cerca per tipo autista"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -127,12 +125,12 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Sede operativa
+                                Nome Autista
                                 <p-columnFilter
                                     type="text"
-                                    field="headOffice"
+                                    field="driver.fullName"
                                     display="menu"
-                                    placeholder="Cerca per sede operativa"
+                                    placeholder="Cerca per nome"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -140,69 +138,16 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Telefono
+                                Nome Azienda
                                 <p-columnFilter
                                     type="text"
-                                    field="phone"
+                                    field="company.name"
                                     display="menu"
-                                    placeholder="Cerca per telefono"
+                                    placeholder="Cerca per azienda"
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Email contatto
-                                <p-columnFilter
-                                    type="text"
-                                    field="email"
-                                    display="menu"
-                                    placeholder="Cerca per email"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                PEC
-                                <p-columnFilter
-                                    type="text"
-                                    field="pec"
-                                    display="menu"
-                                    placeholder="Cerca per pec"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Amministratore Delegato
-                                <p-columnFilter
-                                    type="text"
-                                    field="fullName"
-                                    display="menu"
-                                    placeholder="Cerca per nome e cognome"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Descrizione
-                                <p-columnFilter
-                                    type="text"
-                                    field="description"
-                                    display="menu"
-                                    placeholder="Cerca per descrizione"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
-
+                        <!--                        
                         <th style="min-width: 3rem">
                             <div
                                 class="flex justify-content-between align-items-center"
@@ -214,7 +159,7 @@
                                     display="menu"
                                 ></p-columnFilter>
                             </div>
-                        </th>
+                        </th> -->
                         <th style="min-width: 10rem">
                             <div
                                 class="flex justify-content-between align-items-center"
@@ -244,71 +189,46 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-company>
+                <ng-template pTemplate="body" let-vehicle>
                     <tr>
                         <td
                             class="font-bold"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            {{ company.name }}
+                            {{ vehicle.licensePlate }}
                         </td>
                         <td>
-                            {{ company.reaNumber }}
+                            {{ vehicle.tipology }}
                         </td>
                         <td>
-                            {{ company.vat }}
+                            {{ vehicle.model }}
                         </td>
                         <td>
-                            {{ company.legalForm }}
+                            {{ vehicle.rentalType }}
                         </td>
                         <td>
-                            {{ company.registeredOffice }}
+                            {{ vehicle.driverType }}
                         </td>
                         <td>
-                            {{ company.headOffice }}
+                            {{ vehicle.driver.fullName }}
                         </td>
                         <td>
-                            {{ company.phone }}
+                            {{ vehicle.company.name }}
                         </td>
                         <td>
-                            {{ company.email }}
-                        </td>
-                        <td>
-                            {{ company.pec }}
-                        </td>
-                        <td>
-                            <span class="image-text ml-2">{{
-                                company.fullName
-                            }}</span>
-                        </td>
-                        <td>
-                            {{ company.description }}
-                        </td>
-                        <td class="text-center">
-                            <i
-                                class="pi"
-                                [ngClass]="{
-                                    'true-icon pi-check-circle text-green-500':
-                                        company.status,
-                                    'false-icon pi-times-circle text-pink-500':
-                                        !company.status
-                                }"
-                            ></i>
-                        </td>
-                        <td>
-                            {{ company.createdAt | date : "dd/MM/yyyy" }}
+                            {{ vehicle.createdAt | date : "dd/MM/yyyy" }}
                         </td>
                         <td
                             alignFrozen="right"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            <button
+                            <!-- <button
                                 pButton
                                 type="button"
                                 icon="pi pi-search"
-                                class="p-button-rounded p-button-success p-button-text"
+                                class="p-button-rounded p-button-success p-button-text mr-2"
                                 style="font-size: 1rem"
                                 (click)="goToDetailCompany(company.id)"
                             ></button>
@@ -316,7 +236,7 @@
                                 pButton
                                 type="button"
                                 icon="pi pi-pencil"
-                                class="p-button-rounded p-button-info p-button-text"
+                                class="p-button-rounded p-button-info p-button-text mr-2"
                                 style="font-size: 1rem"
                                 (click)="goToModifyCompany(company.id)"
                             ></button>
@@ -324,14 +244,7 @@
                                 pButton
                                 type="button"
                                 icon="pi pi-map"
-                                class="p-button-secondary p-button-text"
-                                (click)="goToPlacesCompany(company)"
-                            ></button>
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-car"
-                                class="p-button-secondary p-button-text"
+                                class="p-button-secondary p-button-text mr-2"
                                 (click)="goToPlacesCompany(company)"
                             ></button>
                             <p-toast></p-toast>
@@ -342,7 +255,7 @@
                                 icon="pi pi-trash"
                                 class="p-button-rounded p-button-danger p-button-text"
                             ></button>
-                            <p-confirmPopup key="confirmErase"></p-confirmPopup>
+                            <p-confirmPopup key="confirmErase"></p-confirmPopup> -->
                         </td>
                     </tr>
                 </ng-template>

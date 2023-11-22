@@ -92,6 +92,19 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
+                        <th style="min-width: 13rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Codice fiscale
+                                <p-columnFilter
+                                    type="text"
+                                    field="fiscalCode"
+                                    display="menu"
+                                    placeholder="Cerca per codicefiscale"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
                         <th style="min-width: 12rem">
                             <div
                                 class="flex justify-content-between align-items-center"
@@ -102,6 +115,19 @@
                                     field="role"
                                     display="menu"
                                     placeholder="Cerca per ruolo"
+                                ></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="min-width: 12rem">
+                            <div
+                                class="flex justify-content-between align-items-center"
+                            >
+                                Posizione
+                                <p-columnFilter
+                                    type="text"
+                                    field="position"
+                                    display="menu"
+                                    placeholder="Cerca per posizione"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -187,6 +213,9 @@
                             {{ user.surname }}
                         </td>
                         <td>
+                            {{ user.fiscalCode }}
+                        </td>
+                        <td>
                             <span
                                 class="user-badge {{
                                     user.mainRole.name
@@ -197,6 +226,8 @@
                                 {{ user.role }}
                             </span>
                         </td>
+                        <td>{{ user.position }}</td>
+
                         <td>{{ user.company }}</td>
                         <td>
                             {{ user.email }}
@@ -230,7 +261,8 @@
                                 pButton
                                 type="button"
                                 icon="pi pi-search"
-                                class="p-button-success mr-2"
+                                class="p-button-rounded p-button-success p-button-text"
+                                style="font-size: 1rem"
                                 (click)="goToDetailUser(user.id)"
                             ></button>
                             <button
@@ -238,7 +270,8 @@
                                 pButton
                                 type="button"
                                 icon="pi pi-pencil"
-                                class="p-button-info mr-2"
+                                class="p-button-rounded p-button-info p-button-text"
+                                style="font-size: 1rem"
                                 (click)="goToModifyUser(user.id)"
                             ></button>
                             <p-toast></p-toast>
@@ -248,7 +281,7 @@
                                 type="button"
                                 (click)="confirmErase($event, user.id)"
                                 icon="pi pi-trash"
-                                class="p-button-danger"
+                                class="p-button-rounded p-button-danger p-button-text"
                             ></button>
                             <p-confirmPopup key="confirmErase"></p-confirmPopup>
                         </td>

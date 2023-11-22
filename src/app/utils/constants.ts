@@ -11,4 +11,8 @@ export const ROUTES = {
     ROUTE_TABLE_USER: '/user/table',
     ROUTE_MODIFY_USER: '/user/modify',
     ROUTE_DETAIL_USER: '/user/detail',
+    ROUTE_CREATE_VEHICLE: '/vehicle/create',
+    ROUTE_TABLE_VEHICLE: '/vehicle/table',
+    ROUTE_MODIFY_VEHICLE: '/vehicle/modify',
+    ROUTE_DETAIL_VEHICLE: '/vehicle/detail',
 };
