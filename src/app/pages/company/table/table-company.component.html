@@ -25,7 +25,7 @@
                     'user.surname'
                 ]"
                 responsiveLayout="scroll"
-                styleClass="p-datatable-striped"
+                [styleClass]="selectedSize"
             >
                 <ng-template pTemplate="caption">
                     <div
@@ -38,6 +38,15 @@
                             icon="pi pi-filter-slash"
                             (click)="clear(dt1)"
                         ></button>
+                        <div class="flex justify-content-center mb-3">
+                            <p-selectButton
+                                [options]="sizes"
+                                [(ngModel)]="selectedSize"
+                                [multiple]="false"
+                                optionLabel="name"
+                                optionValue="class"
+                            ></p-selectButton>
+                        </div>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input
@@ -231,7 +240,6 @@
                             </div>
                         </th>
                         <th
-                            style="min-width: 17rem"
                             alignFrozen="right"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
@@ -304,45 +312,24 @@
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-search"
-                                class="p-button-rounded p-button-success p-button-text"
-                                style="font-size: 1rem"
-                                (click)="goToDetailCompany(company.id)"
-                            ></button>
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-pencil"
-                                class="p-button-rounded p-button-info p-button-text"
-                                style="font-size: 1rem"
-                                (click)="goToModifyCompany(company.id)"
-                            ></button>
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-map"
-                                class="p-button-secondary p-button-text"
-                                (click)="goToPlacesCompany(company)"
-                            ></button>
-                            <button
-                                pButton
-                                type="button"
-                                icon="pi pi-car"
-                                class="p-button-secondary p-button-text"
-                                (click)="goToPlacesCompany(company)"
-                            ></button>
-                            <p-toast></p-toast>
-                            <button
-                                pButton
-                                type="button"
-                                (click)="confirmErase($event, company.id)"
-                                icon="pi pi-trash"
-                                class="p-button-rounded p-button-danger p-button-text"
-                            ></button>
-                            <p-confirmPopup key="confirmErase"></p-confirmPopup>
+                            <ng-container>
+                                <p-menu
+                                    #menuOptions
+                                    [model]="items"
+                                    [popup]="true"
+                                    appendTo="body"
+                                ></p-menu>
+                                <button
+                                    pButton
+                                    type="button"
+                                    (click)="
+                                        selectedItem = company;
+                                        menuOptions.toggle($event)
+                                    "
+                                    icon="pi pi-bars"
+                                ></button>
+                                <p-toast></p-toast>
+                            </ng-container>
                         </td>
                     </tr>
                 </ng-template>
@@ -371,4 +358,5 @@
             </p-table>
         </div>
     </div>
+    <p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
 </div>

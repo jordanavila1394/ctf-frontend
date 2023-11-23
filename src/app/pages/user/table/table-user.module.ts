@@ -20,6 +20,7 @@ import { DefaultAutocompleteModule } from 'src/app/shared/components/default-aut
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TranslateModule } from '@ngx-translate/core';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
     imports: [
@@ -33,6 +34,7 @@ import { TranslateModule } from '@ngx-translate/core';
         ButtonModule,
         SliderModule,
         InputTextModule,
+        SelectButtonModule,
         ToggleButtonModule,
         CalendarModule,
         ConfirmPopupModule,

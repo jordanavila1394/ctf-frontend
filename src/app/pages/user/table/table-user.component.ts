@@ -23,6 +23,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
 
+import * as FileSaver from 'file-saver';
+
 interface expandedRows {
     [key: string]: boolean;
 }
@@ -59,6 +61,10 @@ export class TableUserComponent implements OnInit {
 
     actionsFrozen: boolean = true;
 
+    sizes!: any[];
+
+    selectedSize: any = '';
+
     @ViewChild('filter') filter!: ElementRef;
 
     roles: any[];
@@ -83,6 +89,11 @@ export class TableUserComponent implements OnInit {
     selectAddress(place: any): void {}
 
     ngOnInit() {
+        this.sizes = [
+            { name: 'Small', class: 'p-datatable-sm' },
+            { name: 'Normal', class: '' },
+            { name: 'Large', class: 'p-datatable-lg' },
+        ];
         this.loadServices();
     }
     loadServices() {
@@ -196,5 +207,35 @@ export class TableUserComponent implements OnInit {
         )
             return false;
         return isVisible;
+    }
+    //export
+    //Export file
+
+    exportExcel() {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(this.users);
+            const workbook = {
+                Sheets: { data: worksheet },
+                SheetNames: ['data'],
+            };
+            const excelBuffer: any = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array',
+            });
+            this.saveAsExcelFile(excelBuffer, 'utenti-users');
+        });
+    }
+
+    saveAsExcelFile(buffer: any, fileName: string): void {
+        let EXCEL_TYPE =
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        let EXCEL_EXTENSION = '.xlsx';
+        const data: Blob = new Blob([buffer], {
+            type: EXCEL_TYPE,
+        });
+        FileSaver.saveAs(
+            data,
+            fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+        );
     }
 }

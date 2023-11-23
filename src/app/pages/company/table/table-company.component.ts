@@ -8,7 +8,12 @@ import {
 import { Representative } from '../../../models/customer';
 import { Product } from '../../../models/product';
 import { Table } from 'primeng/table';
-import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
+import {
+    MessageService,
+    ConfirmationService,
+    ConfirmEventType,
+    MenuItem,
+} from 'primeng/api';
 import { CompanyService } from 'src/app/services/company.service';
 
 import { Company } from 'src/app/models/company';
@@ -18,6 +23,7 @@ import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
 import { ROUTES } from 'src/app/utils/constants';
 import { Router } from '@angular/router';
+
 interface expandedRows {
     [key: string]: boolean;
 }
@@ -58,6 +64,11 @@ export class TableCompanyComponent implements OnInit {
 
     items: MenuItem[] | undefined;
 
+    sizes!: any[];
+
+    selectedSize: any = '';
+    selectedItem: any = null;
+
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(
@@ -77,6 +88,47 @@ export class TableCompanyComponent implements OnInit {
     selectAddress(place: any): void {}
 
     ngOnInit() {
+        this.items = [
+            {
+                label: 'Options',
+                items: [
+                    {
+                        label: 'Dettagli',
+                        icon: 'pi pi-search',
+                        command: () => {
+                            this.goToDetailCompany(this.selectedItem.id);
+                        },
+                    },
+                    {
+                        label: 'Modifica',
+                        icon: 'pi pi-pencil',
+                        command: () => {
+                            this.goToModifyCompany(this.selectedItem.id);
+                        },
+                    },
+                    {
+                        label: 'Sedi',
+                        icon: 'pi pi-pencil',
+                        command: () => {
+                            this.goToPlacesCompany(this.selectedItem);
+                        },
+                    },
+                    {
+                        label: 'Delete',
+                        icon: 'pi pi-trash',
+                        command: () => {
+                            // this.delete();
+                            this.confirmErase(this.selectedItem.id);
+                        },
+                    },
+                ],
+            },
+        ];
+        this.sizes = [
+            { name: 'Small', class: 'p-datatable-sm' },
+            { name: 'Normal', class: '' },
+            { name: 'Large', class: 'p-datatable-lg' },
+        ];
         this.loadServices();
     }
 
@@ -101,12 +153,12 @@ export class TableCompanyComponent implements OnInit {
         });
     }
 
-    confirmErase(event: Event, idCompany) {
+    confirmErase(idCompany) {
+        console.log('erase');
         this.confirmationService.confirm({
-            key: 'confirmErase',
-            target: event.target || new EventTarget(),
-            message: 'Sei sicuro di voler eliminare?',
-            icon: 'pi pi-exclamation-triangle',
+            message: 'Do you want to delete this record?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
             accept: () => {
                 this.messageService.add({
                     severity: 'info',
@@ -117,16 +169,15 @@ export class TableCompanyComponent implements OnInit {
                     .deleteCompany(idCompany)
                     .subscribe((res) => this.loadServices());
             },
-            reject: () => {
+            reject: (type) => {
                 this.messageService.add({
-                    severity: 'warn',
-                    summary: 'Rifiutato',
-                    detail: 'Hai rifiutato',
+                    severity: 'error',
+                    summary: 'Rejected',
+                    detail: 'You have rejected',
                 });
             },
         });
     }
-
     //Change route
 
     goToModifyCompany(idCompany) {

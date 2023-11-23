@@ -21,6 +21,7 @@ import { MenuModule } from 'primeng/menu';
 
 import { TableVehicleRoutingModule } from './table-vehicle-routing.module';
 import { TableVehicleComponent } from './table-vehicle.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
     imports: [
@@ -32,6 +33,7 @@ import { TableVehicleComponent } from './table-vehicle.component';
         RatingModule,
         ButtonModule,
         SliderModule,
+        SelectButtonModule,
         InputTextModule,
         ToggleButtonModule,
         CalendarModule,

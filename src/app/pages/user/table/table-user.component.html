@@ -1,17 +1,31 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5>{{ "menu.routes.user.table" | translate }}</h5>
+            <div class="flex" style="margin: 1rem">
+                <h5>{{ "menu.routes.user.table" | translate }}</h5>
+
+                <button
+                    type="button"
+                    pButton
+                    pRipple
+                    icon="pi pi-file-excel"
+                    (click)="exportExcel()"
+                    class="p-button-success mr-2"
+                    pTooltip="XLS"
+                    tooltipPosition="bottom"
+                    style="margin-left: auto"
+                ></button>
+            </div>
+
             <p-table
                 #dt1
                 [value]="users"
                 scrollDirection="horizontal"
                 [scrollable]="true"
                 dataKey="id"
-                [rows]="20"
+                [rows]="100"
                 [loading]="loading"
                 [rowHover]="true"
-                styleClass="p-datatable-gridlines"
                 [paginator]="true"
                 [globalFilterFields]="[
                     'id',
@@ -21,7 +35,7 @@
                     'email'
                 ]"
                 responsiveLayout="scroll"
-                styleClass="p-datatable-striped"
+                [styleClass]="selectedSize"
             >
                 <ng-template pTemplate="caption">
                     <div
@@ -34,6 +48,15 @@
                             icon="pi pi-filter-slash"
                             (click)="clear(dt1)"
                         ></button>
+                        <div class="flex justify-content-center mb-3">
+                            <p-selectButton
+                                [options]="sizes"
+                                [(ngModel)]="selectedSize"
+                                [multiple]="false"
+                                optionLabel="name"
+                                optionValue="class"
+                            ></p-selectButton>
+                        </div>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input
