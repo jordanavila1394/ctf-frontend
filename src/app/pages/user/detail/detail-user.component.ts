@@ -7,6 +7,8 @@ import { UserService } from 'src/app/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { BlobOptions } from 'buffer';
+import { CompanyService } from 'src/app/services/company.service';
+import { RoleService } from 'src/app/services/role.service';
 
 @Component({
     templateUrl: './detail-user.component.html',
@@ -14,6 +16,11 @@ import { BlobOptions } from 'buffer';
 })
 export class DetailUserComponent implements OnInit {
     idUser: string;
+
+    roles: [];
+    companies: [];
+    selectedRole: any;
+    selectedCompany: any;
 
     selectedLegalForm: any = null;
     selectedCeo: any = null;
@@ -37,7 +44,12 @@ export class DetailUserComponent implements OnInit {
         username: [''],
         name: [''],
         surname: [''],
+        fiscalCode: [''],
         email: [''],
+        roleId: [''],
+        companyId: [''],
+        workerNumber: [''],
+        position: [''],
         status: [''],
     });
 
@@ -45,7 +57,9 @@ export class DetailUserComponent implements OnInit {
         public fb: FormBuilder,
         private route: ActivatedRoute,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
-        private userService: UserService
+        private userService: UserService,
+        private companyService: CompanyService,
+        private roleService: RoleService
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -69,10 +83,23 @@ export class DetailUserComponent implements OnInit {
                     username: user.username,
                     name: user.name,
                     surname: user.surname,
+                    fiscalCode: user.fiscalCode,
                     email: user.email,
+                    roleId: user.roles[0].id,
+                    companyId: user.companies[0].id,
+                    workerNumber: user.workerNumber,
+                    position: user.position,
                     status: user.status,
                 });
             });
+
+            this.roleService.getAllRoles().subscribe((roles) => {
+                this.roles = roles;
+            });
+            this.companyService.getAllCompanies().subscribe((companies) => {
+                this.companies = companies;
+            });
+
             this.detailForm.controls['id'].disable({
                 onlySelf: true,
             });
@@ -81,6 +108,21 @@ export class DetailUserComponent implements OnInit {
             this.detailForm.controls['name'].disable({ onlySelf: true });
             this.detailForm.controls['surname'].disable({ onlySelf: true });
             this.detailForm.controls['email'].disable({
+                onlySelf: true,
+            });
+            this.detailForm.controls['fiscalCode'].disable({
+                onlySelf: true,
+            });
+            this.detailForm.controls['roleId'].disable({
+                onlySelf: true,
+            });
+            this.detailForm.controls['companyId'].disable({
+                onlySelf: true,
+            });
+            this.detailForm.controls['workerNumber'].disable({
+                onlySelf: true,
+            });
+            this.detailForm.controls['position'].disable({
                 onlySelf: true,
             });
 

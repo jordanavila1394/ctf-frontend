@@ -35,8 +35,11 @@ export class UserService {
         name: string,
         surname: string,
         email: string,
+        fiscalCode: string,
         roleId: string,
         companyId: string,
+        workerNumber: string,
+        position: string,
         status: boolean
     ): Observable<any> {
         return this.http.post(
@@ -47,8 +50,11 @@ export class UserService {
                 name,
                 surname,
                 email,
+                fiscalCode,
                 roleId,
                 companyId,
+                workerNumber,
+                position,
                 status,
             },
             httpOptions
@@ -64,6 +70,8 @@ export class UserService {
         email: string,
         roleId: string,
         companyId: string,
+        workerNumber: string,
+        position: string,
         status: boolean
     ): Observable<any> {
         return this.http.patch(
@@ -77,6 +85,8 @@ export class UserService {
                 email,
                 roleId,
                 companyId,
+                workerNumber,
+                position,
                 status,
             },
             httpOptions

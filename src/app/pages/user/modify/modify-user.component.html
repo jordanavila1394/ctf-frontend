@@ -19,6 +19,9 @@
                             ngModel
                         />
                     </div>
+                    <div class="field col-12 md:col-4"></div>
+                    <div class="field col-12 md:col-4"></div>
+
                     <div class="field col-12 md:col-4">
                         <label htmlFor="name1">Nome</label>
                         <input
@@ -42,17 +45,6 @@
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="fiscalCode1">Codice Fiscale</label>
-                        <input
-                            pInputText
-                            id="fiscalCode1"
-                            type="text"
-                            placeholder="CodiceFiscale"
-                            formControlName="fiscalCode"
-                            ngModel
-                        />
-                    </div>
-                    <div class="field col-12 md:col-4">
                         <label htmlFor="email1">Email</label>
                         <input
                             pInputText
@@ -63,7 +55,19 @@
                             ngModel
                         />
                     </div>
-                      <div class="field col-12 md:col-4">
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="fiscalCode1">Codice Fiscale</label>
+                        <input
+                            pInputText
+                            id="fiscalCode1"
+                            type="text"
+                            placeholder="CodiceFiscale"
+                            formControlName="fiscalCode"
+                            ngModel
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-4">
                         <label htmlFor="user1">Ruolo</label>
                         <p-dropdown
                             [options]="roles"
@@ -86,6 +90,28 @@
                             formControlName="companyId"
                             [(ngModel)]="selectedCompany"
                         ></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="workerNumber1">Numero lavoratore</label>
+                        <input
+                            pInputText
+                            id="workerNumber1"
+                            type="text"
+                            placeholder="Numero lavoratore"
+                            formControlName="workerNumber"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="position1">Posizione</label>
+                        <input
+                            pInputText
+                            id="position1"
+                            type="text"
+                            placeholder="Posizione"
+                            formControlName="position"
+                            ngModel
+                        />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="status1">Attiva/Disattiva</label> <br />

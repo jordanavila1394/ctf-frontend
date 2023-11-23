@@ -36,6 +36,20 @@ export class ModifyUserComponent implements OnInit {
     selectedRole: any;
     selectedCompany: any;
 
+    modifyForm = this.fb.group({
+        id: ['', [Validators.required]],
+        username: ['', [Validators.required]],
+        name: ['', [Validators.required]],
+        surname: ['', [Validators.required]],
+        fiscalCode: ['', [Validators.required]],
+        email: ['', [Validators.required]],
+        roleId: ['', [Validators.required]],
+        companyId: ['', [Validators.required]],
+        workerNumber: [''],
+        position: [''],
+        status: [false, [Validators.required]],
+    });
+
     constructor(
         public fb: FormBuilder,
         private route: ActivatedRoute,
@@ -77,6 +91,8 @@ export class ModifyUserComponent implements OnInit {
                     email: user.email,
                     roleId: roleId,
                     companyId: companyId,
+                    workerNumber: user.workerNumber,
+                    position: user.position,
                     status: user.status,
                 });
             });
@@ -100,17 +116,6 @@ export class ModifyUserComponent implements OnInit {
         });
     }
 
-    modifyForm = this.fb.group({
-        id: ['', [Validators.required]],
-        username: ['', [Validators.required]],
-        name: ['', [Validators.required]],
-        surname: ['', [Validators.required]],
-        fiscalCode: ['', [Validators.required]],
-        email: ['', [Validators.required]],
-        roleId: ['', [Validators.required]],
-        companyId: ['', [Validators.required]],
-        status: [false, [Validators.required]],
-    });
     selectAddress(place: any): void {
         console.log(place);
     }
@@ -126,6 +131,8 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.email,
                 this.modifyForm.value.roleId,
                 this.modifyForm.value.companyId,
+                this.modifyForm.value.workerNumber,
+                this.modifyForm.value.position,
                 this.modifyForm.value.status
             )
             .subscribe((res) =>
