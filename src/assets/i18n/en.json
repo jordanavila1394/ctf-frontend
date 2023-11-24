@@ -85,6 +85,11 @@
             "dashboard": {
                 "menuTitle": "Dashboard"
             },
+            "attendance": {
+                "menuTitle": "Attendance",
+                "table": "Attendance list",
+                "create": "Add attendance"
+            },
             "user": {
                 "menuTitle": "Users",
                 "table": "User list",

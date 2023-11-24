@@ -96,4 +96,5 @@ export class UserService {
     deleteUser(id: string): Observable<any> {
         return this.http.delete(API_URL + 'deleteUser' + '/' + id);
     }
+
 }

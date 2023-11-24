@@ -15,4 +15,8 @@ export const ROUTES = {
     ROUTE_TABLE_VEHICLE: '/vehicle/table',
     ROUTE_MODIFY_VEHICLE: '/vehicle/modify',
     ROUTE_DETAIL_VEHICLE: '/vehicle/detail',
+    ROUTE_CREATE_ATTENDANCE: '/attendance/create',
+    ROUTE_TABLE_ATTENDANCE: '/attendance/table',
+    ROUTE_MODIFY_ATTENDANCE: '/attendance/modify',
+    ROUTE_DETAIL_ATTENDANCE: '/attendance/detail',
 };

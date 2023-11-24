@@ -1,23 +1,15 @@
-import {
-    Component,
-    OnInit,
-    ViewChild,
-    ElementRef,
-    AfterViewInit,
-} from '@angular/core';
-import { Representative } from '../../../models/customer';
-import { Product } from '../../../models/product';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import { CompanyService } from 'src/app/services/company.service';
 
 import { Company } from 'src/app/models/company';
-import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user';
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
 import { ROUTES } from 'src/app/utils/constants';
 import { Router } from '@angular/router';
+import { AttendanceService } from 'src/app/services/attendance.service';
+import { UserService } from 'src/app/services/user.service';
 interface expandedRows {
     [key: string]: boolean;
 }
@@ -28,17 +20,11 @@ interface expandedRows {
     providers: [MessageService, ConfirmationService],
 })
 export class TableAttendanceComponent implements OnInit {
-    companies: Company[] = [];
+    attendances: Company[] = [];
 
-    ceos: User[] = [];
+    selectedAttendances: Company[] = [];
 
-    selectedCompanies1: Company[] = [];
-
-    selectedCompany: Company = {};
-
-    representatives: Representative[] = [];
-
-    products: Product[] = [];
+    selectedAttendance: Company = {};
 
     rowGroupMetadata: any;
 
@@ -66,7 +52,7 @@ export class TableAttendanceComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
-        private userService: UserService
+        private attendanceService: AttendanceService
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -81,23 +67,15 @@ export class TableAttendanceComponent implements OnInit {
     }
 
     loadServices() {
-        this.companyService.getAllCompanies().subscribe((companies) => {
-            this.companies = companies.map((company) => {
-                let newCompany = company;
-                const ceo = company?.users?.find((x) => x.id === company.ceoId);
-                if (ceo?.name && ceo?.surname) {
-                    newCompany.fullName = ceo?.name + ' ' + ceo?.surname;
-                } else {
-                    newCompany.fullName = '';
-                }
-                return newCompany;
+
+        this.attendanceService.getAllAttendances().subscribe((attendances) => {
+            this.attendances = attendances.map((attendance) => {
+                let newAttendance = attendance;
+                newAttendance.company = attendance?.driver?.companies[0];
+                return newAttendance;
             });
 
             this.loading = false;
-        });
-
-        this.userService.getAllCeos().subscribe((ceos) => {
-            this.ceos = ceos;
         });
     }
 
@@ -129,25 +107,17 @@ export class TableAttendanceComponent implements OnInit {
 
     //Change route
 
-    goToModifyCompany(idCompany) {
-        this.router.navigate([ROUTES.ROUTE_MODIFY_COMPANY], {
+    goToModifyAttendance(idCompany) {
+        this.router.navigate([ROUTES.ROUTE_MODIFY_ATTENDANCE], {
             queryParams: { id: idCompany },
         });
     }
 
-    goToDetailCompany(idCompany) {
-        this.router.navigate([ROUTES.ROUTE_DETAIL_COMPANY], {
+    goToDetailAttendance(idCompany) {
+        this.router.navigate([ROUTES.ROUTE_DETAIL_ATTENDANCE], {
             queryParams: { id: idCompany },
         });
     }
-
-    goToPlacesCompany(company) {
-        this.router.navigate([ROUTES.ROUTE_PLACES_COMPANY], {
-            queryParams: { id: company.id, name: company.name },
-        });
-    }
-
-    //Table methods
 
     onSort() {
         this.updateRowGroupMetaData();
@@ -155,19 +125,6 @@ export class TableAttendanceComponent implements OnInit {
 
     updateRowGroupMetaData() {
         this.rowGroupMetadata = {};
-    }
-
-    expandAll() {
-        if (!this.isExpanded) {
-            this.products.forEach((product) =>
-                product && product.name
-                    ? (this.expandedRows[product.name] = true)
-                    : ''
-            );
-        } else {
-            this.expandedRows = {};
-        }
-        this.isExpanded = !this.isExpanded;
     }
 
     formatCurrency(value: number) {
@@ -189,5 +146,4 @@ export class TableAttendanceComponent implements OnInit {
         table.clear();
         this.filter.nativeElement.value = '';
     }
-    //Actions
 }

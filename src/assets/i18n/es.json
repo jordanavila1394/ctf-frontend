@@ -85,6 +85,11 @@
             "dashboard": {
                 "menuTitle": "Dashboard"
             },
+            "attendance": {
+                "menuTitle": "Presencias",
+                "table": "Lista presencias",
+                "create": "Agrega presencia"
+            },
             "user": {
                 "menuTitle": "Usuarios",
                 "table": "Lista usuarios",

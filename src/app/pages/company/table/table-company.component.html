@@ -259,53 +259,53 @@
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            {{ company.name }}
+                            {{ company?.name }}
                         </td>
                         <td>
-                            {{ company.reaNumber }}
+                            {{ company?.reaNumber }}
                         </td>
                         <td>
-                            {{ company.vat }}
+                            {{ company?.vat }}
                         </td>
                         <td>
-                            {{ company.legalForm }}
+                            {{ company?.legalForm }}
                         </td>
                         <td>
-                            {{ company.registeredOffice }}
+                            {{ company?.registeredOffice }}
                         </td>
                         <td>
-                            {{ company.headOffice }}
+                            {{ company?.headOffice }}
                         </td>
                         <td>
-                            {{ company.phone }}
+                            {{ company?.phone }}
                         </td>
                         <td>
-                            {{ company.email }}
+                            {{ company?.email }}
                         </td>
                         <td>
-                            {{ company.pec }}
+                            {{ company?.pec }}
                         </td>
                         <td>
                             <span class="image-text ml-2">{{
-                                company.fullName
+                                company?.fullName
                             }}</span>
                         </td>
                         <td>
-                            {{ company.description }}
+                            {{ company?.description }}
                         </td>
                         <td class="text-center">
                             <i
                                 class="pi"
                                 [ngClass]="{
                                     'true-icon pi-check-circle text-green-500':
-                                        company.status,
+                                        company?.status,
                                     'false-icon pi-times-circle text-pink-500':
-                                        !company.status
+                                        !company?.status
                                 }"
                             ></i>
                         </td>
                         <td>
-                            {{ company.createdAt | date : "dd/MM/yyyy" }}
+                            {{ company?.createdAt | date : "dd/MM/yyyy" }}
                         </td>
                         <td
                             alignFrozen="right"

@@ -231,33 +231,33 @@
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            {{ user.username }}
+                            {{ user?.username }}
                         </td>
                         <td>
-                            {{ user.name }}
+                            {{ user?.name }}
                         </td>
                         <td>
-                            {{ user.surname }}
+                            {{ user?.surname }}
                         </td>
                         <td>
-                            {{ user.fiscalCode }}
+                            {{ user?.fiscalCode }}
                         </td>
                         <td>
                             <span
                                 class="user-badge {{
-                                    user.mainRole.name
-                                        ? user.mainRole.name
+                                    user?.mainRole?.name
+                                        ? user?.mainRole?.name
                                         : ' default'
                                 }}"
                             >
-                                {{ user.role }}
+                                {{ user?.role }}
                             </span>
                         </td>
-                        <td>{{ user.position }}</td>
+                        <td>{{ user?.position }}</td>
 
-                        <td>{{ user.company }}</td>
+                        <td>{{ user?.company }}</td>
                         <td>
-                            {{ user.email }}
+                            {{ user?.email }}
                         </td>
                         <td class="text-center">
                             <i

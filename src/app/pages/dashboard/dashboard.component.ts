@@ -4,12 +4,15 @@ import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { Subscription } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import * as moment from 'moment';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { AttendanceService } from 'src/app/services/attendance.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-
     items!: MenuItem[];
 
     products!: Product[];
@@ -20,78 +23,197 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     subscription!: Subscription;
 
-    constructor(private productService: ProductService, public layoutService: LayoutService) {
+    barData: any;
+
+    barOptions: any;
+
+    locale: string;
+
+    dataCheckIns: any;
+    dataMissing: any[];
+
+    usersNumber: any;
+    vehiclesNumber: any;
+    constructor(
+        private productService: ProductService,
+        public layoutService: LayoutService,
+        public translateService: TranslateService,
+        private userService: UserService,
+        public attendaceService: AttendanceService
+    ) {
+        this.locale = this.translateService.currentLang;
+        moment.locale(this.locale);
         this.subscription = this.layoutService.configUpdate$.subscribe(() => {
             this.initChart();
         });
+        this.translateService.onLangChange.subscribe(
+            (langChangeEvent: LangChangeEvent) => {
+                this.locale = langChangeEvent.lang;
+                moment.locale(this.locale);
+                this.initChart();
+            }
+        );
     }
 
     ngOnInit() {
-        this.initChart();
-        this.productService.getProductsSmall().then(data => this.products = data);
+        this.productService
+            .getProductsSmall()
+            .then((data) => (this.products = data));
+
+        this.attendaceService.getDataAttendances().subscribe((data) => {
+            let newCheckIns = [];
+            let newMissing = [];
+            data?.checkIns.forEach((attendance) => {
+                newCheckIns.push(attendance?.count);
+                newMissing.push(
+                    parseInt(data.usersNumber) - parseInt(attendance?.count, 10)
+                );
+            });
+            this.dataCheckIns = newCheckIns;
+            this.dataMissing = newMissing;
+            this.usersNumber = data.usersNumber;
+            this.vehiclesNumber = data.vehiclesNumber;
+
+            this.initChart();
+        });
 
         this.items = [
             { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-            { label: 'Remove', icon: 'pi pi-fw pi-minus' }
+            { label: 'Remove', icon: 'pi pi-fw pi-minus' },
         ];
     }
 
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+        const textColorSecondary = documentStyle.getPropertyValue(
+            '--text-color-secondary'
+        );
+        const surfaceBorder =
+            documentStyle.getPropertyValue('--surface-border');
+
+        // CHECKIN E CHECKOUT
+
+        let days = [];
+        for (let index = 0; index < 5; index++) {
+            const today = moment();
+            let day = today.subtract(index, 'days');
+            days.push(day.format('dddd , L'));
+        }
+
+        this.barData = {
+            labels: days.reverse(),
+            datasets: [
+                {
+                    label: 'CheckIn Done',
+                    backgroundColor:
+                        documentStyle.getPropertyValue('--green-500'),
+                    borderColor: documentStyle.getPropertyValue('--green-500'),
+                    data: this.dataCheckIns,
+                },
+                {
+                    label: 'Missing',
+                    backgroundColor:
+                        documentStyle.getPropertyValue('--red-500'),
+                    borderColor: documentStyle.getPropertyValue('--red-500'),
+                    data: this.dataMissing,
+                },
+            ],
+        };
+        this.barOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        fontColor: textColor,
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColorSecondary,
+                        font: {
+                            weight: 500,
+                        },
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false,
+                    },
+                },
+                y: {
+                    ticks: {
+                        color: textColorSecondary,
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false,
+                    },
+                },
+            },
+        };
 
         this.chartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+            ],
             datasets: [
                 {
                     label: 'First Dataset',
                     data: [65, 59, 80, 81, 56, 55, 40],
                     fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    borderColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    tension: .4
+                    backgroundColor:
+                        documentStyle.getPropertyValue('--bluegray-700'),
+                    borderColor:
+                        documentStyle.getPropertyValue('--bluegray-700'),
+                    tension: 0.4,
                 },
                 {
                     label: 'Second Dataset',
                     data: [28, 48, 40, 19, 86, 27, 90],
                     fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--green-600'),
+                    backgroundColor:
+                        documentStyle.getPropertyValue('--green-600'),
                     borderColor: documentStyle.getPropertyValue('--green-600'),
-                    tension: .4
-                }
-            ]
+                    tension: 0.4,
+                },
+            ],
         };
 
         this.chartOptions = {
             plugins: {
                 legend: {
                     labels: {
-                        color: textColor
-                    }
-                }
+                        color: textColor,
+                    },
+                },
             },
             scales: {
                 x: {
                     ticks: {
-                        color: textColorSecondary
+                        color: textColorSecondary,
                     },
                     grid: {
                         color: surfaceBorder,
-                        drawBorder: false
-                    }
+                        drawBorder: false,
+                    },
                 },
                 y: {
                     ticks: {
-                        color: textColorSecondary
+                        color: textColorSecondary,
                     },
                     grid: {
                         color: surfaceBorder,
-                        drawBorder: false
-                    }
-                }
-            }
+                        drawBorder: false,
+                    },
+                },
+            },
         };
     }
 

@@ -220,28 +220,28 @@
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            {{ vehicle.licensePlate }}
+                            {{ vehicle?.licensePlate }}
                         </td>
                         <td>
-                            {{ vehicle.tipology }}
+                            {{ vehicle?.tipology }}
                         </td>
                         <td>
-                            {{ vehicle.model }}
+                            {{ vehicle?.model }}
                         </td>
                         <td>
-                            {{ vehicle.rentalType }}
+                            {{ vehicle?.rentalType }}
                         </td>
                         <td>
-                            {{ vehicle.driverType }}
+                            {{ vehicle?.driverType }}
                         </td>
                         <td>
-                            {{ vehicle.driver.fullName }}
+                            {{ vehicle?.driver?.fullName }}
                         </td>
                         <td>
-                            {{ vehicle.company.name }}
+                            {{ vehicle?.company?.name }}
                         </td>
                         <td>
-                            {{ vehicle.createdAt | date : "dd/MM/yyyy" }}
+                            {{ vehicle?.createdAt | date : "dd/MM/yyyy" }}
                         </td>
                         <td
                             alignFrozen="right"
