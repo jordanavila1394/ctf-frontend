@@ -21,6 +21,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MenuModule } from 'primeng/menu';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -44,6 +45,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
         ProgressBarModule,
         MenuModule,
         FormsModule,
+        TranslateModule,
         ReactiveFormsModule,
         ToastModule,
     ],

@@ -19,7 +19,7 @@ import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 import { ROUTES } from 'src/app/utils/constants';
 import { Router } from '@angular/router';
 
-import { TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
 
@@ -70,6 +70,9 @@ export class TableUserComponent implements OnInit {
     roles: any[];
     companies: any[];
 
+    items: MenuItem[] | undefined;
+    selectedItem: any = null;
+
     constructor(
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
@@ -89,13 +92,53 @@ export class TableUserComponent implements OnInit {
     selectAddress(place: any): void {}
 
     ngOnInit() {
-        this.sizes = [
-            { name: 'Small', class: 'p-datatable-sm' },
-            { name: 'Normal', class: '' },
-            { name: 'Large', class: 'p-datatable-lg' },
+        this.items = [
+            {
+                label: 'Options',
+                items: [
+                    {
+                        label: 'Dettagli',
+                        icon: 'pi pi-search',
+                        command: () => {
+                            this.goToDetailUser(this.selectedItem.id);
+                        },
+                    },
+                    {
+                        label: 'Modifica',
+                        icon: 'pi pi-pencil',
+                        command: () => {
+                            this.goToModifyUser(this.selectedItem.id);
+                        },
+                    },
+                    {
+                        label: 'Delete',
+                        icon: 'pi pi-trash',
+                        command: () => {
+                            // this.delete();
+                            this.confirmErase(this.selectedItem.id);
+                        },
+                    },
+                ],
+            },
         ];
+        this.sizes = [
+            {
+                name: 'S',
+                class: 'p-datatable-sm',
+            },
+            {
+                name: 'M',
+                class: '',
+            },
+            {
+                name: 'L',
+                class: 'p-datatable-lg',
+            },
+        ];
+
         this.loadServices();
     }
+
     loadServices() {
         this.companyService.getAllCompanies().subscribe((companies) => {
             this.companies = companies;
@@ -117,12 +160,11 @@ export class TableUserComponent implements OnInit {
         this.loading = false;
     }
 
-    confirmErase(event: Event, idUser) {
+    confirmErase(idUser) {
         this.confirmationService.confirm({
-            key: 'confirmErase',
-            target: event.target || new EventTarget(),
-            message: 'Sei sicuro di voler eliminare?',
-            icon: 'pi pi-exclamation-triangle',
+            message: 'Do you want to delete this record?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
             accept: () => {
                 this.messageService.add({
                     severity: 'info',

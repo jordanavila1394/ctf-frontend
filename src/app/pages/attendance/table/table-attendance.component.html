@@ -32,9 +32,11 @@
                     <div
                         class="flex justify-content-between flex-column sm:flex-row"
                     >
+                        <h5>{{ "menu.routes.user.table" }}</h5>
+
                         <button
                             pButton
-                            label="Pulisci"
+                            label="{{ 'table.actions.clean' | translate }}"
                             class="p-button-outlined mb-2"
                             icon="pi pi-filter-slash"
                             (click)="clear(dt1)"

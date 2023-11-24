@@ -106,16 +106,36 @@
         "actions": {
             "clean": "Pulisci",
             "lock": "Blocca",
-            "unlock": "Sblocca"
+            "unlock": "Sblocca",
+            "small": "S",
+            "normal": "M",
+            "large": "L"
         },
         "columns": {
-            "username": "Username",
-            "name": "Nome",
-            "surname": "Cognome",
-            "roles": "Ruoli",
+            "username": "Usuario",
+            "licensePlate": "Targa",
+            "tipology": "Tipologia",
+            "model": "Modello",
+            "rentalType": "Tipo noleggio",
+            "driverType": "Tipo autista",
+            "name": "Nombre",
+            "suranme": "Apellido",
+            "role": "Rol",
+            "company": "Emmpresa",
+            "businessName": "Nombre empresa",
+            "reaNumber": "Numero REA",
+            "vat": "PIVA",
+            "headOffice": "Sitio operativo",
+            "registeredOffice": "Sitio legal",
+            "phone": "Telefono",
             "email": "Email",
+            "pec": "PEC",
+            "ceo": "Aministrador Delegado",
+            "description": "Descripcion",
             "status": "Stato",
-            "createdAt": "Data creazione"
+            "createdAt": "Fecha creacion",
+            "updatedAt": "Fecha actualizacion",
+            "actions": "Acciones"
         }
     }
 }

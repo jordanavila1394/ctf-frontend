@@ -22,6 +22,7 @@ import { MenuModule } from 'primeng/menu';
 import { TableVehicleRoutingModule } from './table-vehicle-routing.module';
 import { TableVehicleComponent } from './table-vehicle.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -44,6 +45,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
         ProgressBarModule,
         MenuModule,
         FormsModule,
+        TranslateModule,
         ReactiveFormsModule,
         ToastModule,
     ],

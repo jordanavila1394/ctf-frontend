@@ -23,6 +23,7 @@ import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
 import { ROUTES } from 'src/app/utils/constants';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -74,6 +75,7 @@ export class TableCompanyComponent implements OnInit {
     constructor(
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
+        public translateService: TranslateService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
@@ -125,9 +127,18 @@ export class TableCompanyComponent implements OnInit {
             },
         ];
         this.sizes = [
-            { name: 'Small', class: 'p-datatable-sm' },
-            { name: 'Normal', class: '' },
-            { name: 'Large', class: 'p-datatable-lg' },
+            {
+                name: 'S',
+                class: 'p-datatable-sm',
+            },
+            {
+                name: 'M',
+                class: '',
+            },
+            {
+                name: 'L',
+                class: 'p-datatable-lg',
+            },
         ];
         this.loadServices();
     }
@@ -154,7 +165,6 @@ export class TableCompanyComponent implements OnInit {
     }
 
     confirmErase(idCompany) {
-        console.log('erase');
         this.confirmationService.confirm({
             message: 'Do you want to delete this record?',
             header: 'Delete Confirmation',

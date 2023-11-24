@@ -211,7 +211,7 @@
                             </div>
                         </th>
                         <th
-                            style="min-width: 13rem"
+                            style="min-width: 5rem"
                             alignFrozen="right"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
@@ -284,7 +284,26 @@
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            <button
+                            <ng-container>
+                                <p-menu
+                                    #menuOptions
+                                    [model]="items"
+                                    [popup]="true"
+                                    appendTo="body"
+                                ></p-menu>
+                                <button
+                                    pButton
+                                    type="button"
+                                    (click)="
+                                        selectedItem = user;
+                                        menuOptions.toggle($event)
+                                    "
+                                    icon="pi pi-bars"
+                                ></button>
+                                <p-toast></p-toast>
+                            </ng-container>
+
+                            <!-- <button
                                 pButton
                                 type="button"
                                 icon="pi pi-search"
@@ -310,7 +329,7 @@
                                 icon="pi pi-trash"
                                 class="p-button-rounded p-button-danger p-button-text"
                             ></button>
-                            <p-confirmPopup key="confirmErase"></p-confirmPopup>
+                            <p-confirmPopup key="confirmErase"></p-confirmPopup> -->
                         </td>
                     </tr>
                 </ng-template>

@@ -78,9 +78,18 @@ export class TableVehicleComponent implements OnInit {
 
     ngOnInit() {
         this.sizes = [
-            { name: 'Small', class: 'p-datatable-sm' },
-            { name: 'Normal', class: '' },
-            { name: 'Large', class: 'p-datatable-lg' },
+            {
+                name: 'S',
+                class: 'p-datatable-sm',
+            },
+            {
+                name: 'M',
+                class: '',
+            },
+            {
+                name: 'L',
+                class: 'p-datatable-lg',
+            },
         ];
         this.loadServices();
     }

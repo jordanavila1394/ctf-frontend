@@ -21,6 +21,7 @@ import { MenuModule } from 'primeng/menu';
 
 import { TableAttendanceRoutingModule } from './table-attedance-routing.module';
 import { TableAttendanceComponent } from './table-attendance.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -42,6 +43,7 @@ import { TableAttendanceComponent } from './table-attendance.component';
         ProgressBarModule,
         MenuModule,
         FormsModule,
+        TranslateModule,
         ReactiveFormsModule,
         ToastModule,
     ],

@@ -100,27 +100,42 @@
                 "table": "Vehicles list",
                 "create": "Add Vehicle"
             }
+        }
+    },
+    "table": {
+        "actions": {
+            "clean": "Clean",
+            "lock": "Block",
+            "unlock": "Unlock",
+            "small": "Small",
+            "normal": "Normal",
+            "Large": "Large"
         },
-        "table": {
-            "username": "Username",
-            "name": "Name",
-            "suranme": "Surname",
-            "role": "Role",
-            "company": "Company",
-            "businessName": "Business name",
-            "reaNumber": "Rea number",
-            "vat": "Vat number",
-            "headOffice": "Head Office",
-            "registeredOffice": "Registered Office",
-            "phone": "Phone",
+        "columns": {
+            "username": "Usuario",
+            "licensePlate": "License plate",
+            "tipology": "Tipology",
+            "model": "Model",
+            "rentalType": "Rental type",
+            "driverType": "Driver type",
+            "name": "Nombre",
+            "suranme": "Apellido",
+            "role": "Rol",
+            "company": "Emmpresa",
+            "businessName": "Nombre empresa",
+            "reaNumber": "Numero REA",
+            "vat": "PIVA",
+            "headOffice": "Sitio operativo",
+            "registeredOffice": "Sitio legal",
+            "phone": "Telefono",
             "email": "Email",
-            "pec":"PEC",
-            "ceo":"CEO",
-            "description":"Description",
-            "status": "Status",
-            "createdAt": "Created At",
-            "updatedAt": "Updated At",
-            "actions": "Azioni"
+            "pec": "PEC",
+            "ceo": "Aministrador Delegado",
+            "description": "Descripcion",
+            "status": "Stato",
+            "createdAt": "Fecha creacion",
+            "updatedAt": "Fecha actualizacion",
+            "actions": "Acciones"
         }
     }
 }

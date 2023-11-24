@@ -100,9 +100,24 @@
                 "table": "Lista veiculos",
                 "create": "Agrega veiculo"
             }
+        }
+    },
+    "table": {
+        "actions": {
+            "clean": "Limpia",
+            "lock": "Bloquea",
+            "unlock": "Desbloquea",
+            "small": "Pequeño",
+            "normal": "Normal",
+            "Large": "Ancho"
         },
-        "table": {
+        "columns": {
             "username": "Usuario",
+            "licensePlate": "Placa",
+            "tipology": "Tipologia",
+            "model": "Modelo",
+            "rentalType": "Tipo renta",
+            "driverType": "Tipo conductor",
             "name": "Nombre",
             "suranme": "Apellido",
             "role": "Rol",

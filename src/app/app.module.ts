@@ -123,5 +123,7 @@ import { VehicleModule } from './pages/vehicle/vehicle.module';
 export class AppModule {
     constructor() {
         registerLocaleData(localeIt, 'it');
+        registerLocaleData(localeIt, 'es');
+        registerLocaleData(localeIt, 'en');
     }
 }
