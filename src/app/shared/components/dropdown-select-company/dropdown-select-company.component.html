@@ -1,0 +1,29 @@
+<div>
+    <p-dropdown
+        [options]="companies"
+        [(ngModel)]="selectedCompany"
+        optionLabel="name"
+        value="selectedLanguage"
+        (onChange)="onChangeOption($event)"
+        class="dropdown-select-language"
+    >
+        <ng-template
+            *ngIf="companyState$ | async; let companyState"
+            class="selectItem"
+            pTemplate="selectedItem"
+        >
+            <div
+                style="width: 100px"
+                class="flex align-items-center gap-2"
+                *ngIf="selectedCompany"
+            >
+                <div>{{ companyState?.currentCompany?.name }}</div>
+            </div>
+        </ng-template>
+        <ng-template let-company pTemplate="item">
+            <div class="flex align-items-center gap-2">
+                <div>{{ company.name }}</div>
+            </div>
+        </ng-template>
+    </p-dropdown>
+</div>

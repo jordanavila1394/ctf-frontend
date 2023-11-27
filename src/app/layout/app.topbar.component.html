@@ -26,7 +26,6 @@
     >
         <i class="pi pi-ellipsis-v"></i>
     </button>
-
     <div
         #topbarmenu
         class="layout-topbar-menu"
@@ -35,6 +34,7 @@
                 layoutService.state.profileSidebarVisible
         }"
     >
+        <app-dropdown-select-company> </app-dropdown-select-company>
         <app-dropdown-language> </app-dropdown-language>
         <button class="p-link layout-topbar-button">
             <i class="pi pi-calendar"></i>
@@ -44,13 +44,13 @@
             <i class="pi pi-user"></i>
             <span>Profile</span>
         </button>
-        <button
+        <!-- <button
             class="p-link layout-topbar-button"
             [routerLink]="'/documentation'"
         >
             <i class="pi pi-cog"></i>
             <span>Settings</span>
-        </button>
+        </button> -->
         <button class="p-link layout-topbar-button" (click)="OnClickLogout()">
             <i class="pi pi-power-off"></i>
             <span>Settings</span>

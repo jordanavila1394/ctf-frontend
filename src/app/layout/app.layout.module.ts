@@ -18,6 +18,7 @@ import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from './app.sidebar.component';
 import { AppLayoutComponent } from './app.layout.component';
 import { DrodownLanguageModule } from '../shared/components/dropdown-language/dropdown-language.module';
+import { DropdownSelectCompanyModule } from '../shared/components/dropdown-select-company/dropdown-select-company.module';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { DrodownLanguageModule } from '../shared/components/dropdown-language/dr
         InputTextModule,
         SidebarModule,
         BadgeModule,
+        DropdownSelectCompanyModule,
         RadioButtonModule,
         InputSwitchModule,
         RippleModule,

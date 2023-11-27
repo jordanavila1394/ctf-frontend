@@ -13,7 +13,7 @@ export class DropdownLanguageComponent {
 
     constructor(
         public translateService: TranslateService,
-        public primengConfig: PrimeNGConfig
+        public primengConfig: PrimeNGConfig,
     ) {}
     ngOnInit(): void {
         for (const language of this.translateService.getLangs()) {
