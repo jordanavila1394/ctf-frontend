@@ -12,7 +12,14 @@ import { RouterModule } from '@angular/router';
                         (m) => m.TableVehicleModule
                     ),
             },
-
+            {
+                path: 'create',
+                data: { breadcrumb: 'Create' },
+                loadChildren: () =>
+                    import('./create/create-vehicle.module').then(
+                        (m) => m.CreateVehicleModule
+                    ),
+            },
             { path: '**', redirectTo: '/notfound' },
         ]),
     ],

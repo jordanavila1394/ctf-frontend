@@ -43,12 +43,6 @@ export class AppMenuComponent implements OnInit {
                         icon: 'pi pi-users',
                         routerLink: [ROUTES.ROUTE_TABLE_ATTENDANCE],
                     },
-                    {
-                        label: 'Add attendance',
-                        translationCode: 'menu.routes.attendance.create',
-                        icon: 'pi pi-user-plus',
-                        routerLink: [ROUTES.ROUTE_CREATE_ATTENDANCE],
-                    },
                 ],
             },
             {
@@ -105,7 +99,10 @@ export class AppMenuComponent implements OnInit {
                     },
                 ],
             },
-            {
+        ];
+
+        if (environment.production == false) {
+            this.model.push({
                 label: 'UI Components',
                 items: [
                     {
@@ -195,8 +192,8 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/uikit/misc'],
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Prime Blocks',
                 items: [
                     {
@@ -212,8 +209,8 @@ export class AppMenuComponent implements OnInit {
                         target: '_blank',
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Utilities',
                 items: [
                     {
@@ -228,8 +225,8 @@ export class AppMenuComponent implements OnInit {
                         target: '_blank',
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
                 items: [
@@ -280,8 +277,8 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/pages/empty'],
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Hierarchy',
                 items: [
                     {
@@ -349,8 +346,8 @@ export class AppMenuComponent implements OnInit {
                         ],
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Get Started',
                 items: [
                     {
@@ -365,8 +362,8 @@ export class AppMenuComponent implements OnInit {
                         target: '_blank',
                     },
                 ],
-            },
-        ];
+            });
+        }
         this.translateMenuItems();
 
         this.translateService.onLangChange.subscribe(
