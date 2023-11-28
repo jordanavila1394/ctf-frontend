@@ -2,18 +2,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import * as moment from 'moment';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { UserService } from 'src/app/services/user.service';
 import Formatter from 'src/app/utils/formatters';
+import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
     templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnDestroy {
     items!: MenuItem[];
 
     products!: Product[];
@@ -39,6 +41,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         arrayCountMissing: any[];
         arrayDates: any[];
     };
+    idCompany;
+    companyState$: Observable<CompanyState>;
+    selectedCompany: any;
 
     constructor(
         private productService: ProductService,
@@ -46,160 +51,177 @@ export class DashboardComponent implements OnInit, OnDestroy {
         public translateService: TranslateService,
         private userService: UserService,
         public attendaceService: AttendanceService,
+        private store: Store<{ companyState: CompanyState }>,
     ) {
         this.formatter = new Formatter();
         this.locale = this.translateService.currentLang;
         moment.locale(this.locale);
+
+        this.companyState$ = store.select('companyState');
+
+        this.companyState$.subscribe((company) => {
+            this.selectedCompany = company?.currentCompany;
+            this.initChart(this.selectedCompany);
+        });
+
         this.subscription = this.layoutService.configUpdate$.subscribe(() => {
-            this.initChart();
+            this.initChart(this.selectedCompany);
         });
         this.translateService.onLangChange.subscribe(
             (langChangeEvent: LangChangeEvent) => {
                 this.locale = langChangeEvent.lang;
                 moment.locale(this.locale);
-                this.initChart();
+                this.initChart(this.selectedCompany);
             },
         );
     }
 
-    ngOnInit() {
-        this.initChart();
-    }
+    initChart(currentCompany) {
+        this.attendaceService
+            .getDataAttendances(currentCompany?.id | 0)
+            .subscribe((data) => {
+                this.attendances = this.formatter.formatCheckins(
+                    data,
+                    this.locale,
+                );
+                this.usersNumber = data.usersNumber;
+                this.vehiclesNumber = data.vehiclesNumber;
 
-    initChart() {
-        this.attendaceService.getDataAttendances().subscribe((data) => {
-            this.attendances = this.formatter.formatCheckins(data, this.locale);
-            this.usersNumber = data.usersNumber;
-            this.vehiclesNumber = data.vehiclesNumber;
+                const documentStyle = getComputedStyle(
+                    document.documentElement,
+                );
+                const textColor =
+                    documentStyle.getPropertyValue('--text-color');
+                const textColorSecondary = documentStyle.getPropertyValue(
+                    '--text-color-secondary',
+                );
+                const surfaceBorder =
+                    documentStyle.getPropertyValue('--surface-border');
 
-            const documentStyle = getComputedStyle(document.documentElement);
-            const textColor = documentStyle.getPropertyValue('--text-color');
-            const textColorSecondary = documentStyle.getPropertyValue(
-                '--text-color-secondary',
-            );
-            const surfaceBorder =
-                documentStyle.getPropertyValue('--surface-border');
+                // CHECKIN E CHECKOUT
 
-            // CHECKIN E CHECKOUT
-
-            this.barData = {
-                labels: this.attendances?.arrayDates,
-                datasets: [
-                    {
-                        label: 'CheckIn Done',
-                        backgroundColor:
-                            documentStyle.getPropertyValue('--green-500'),
-                        borderColor:
-                            documentStyle.getPropertyValue('--green-500'),
-                        data: this.attendances?.arrayCountCheck,
-                    },
-                    {
-                        label: 'Missing',
-                        backgroundColor:
-                            documentStyle.getPropertyValue('--red-500'),
-                        borderColor:
-                            documentStyle.getPropertyValue('--red-500'),
-                        data: this.attendances?.arrayCountMissing,
-                    },
-                ],
-            };
-            this.barOptions = {
-                plugins: {
-                    legend: {
-                        labels: {
-                            fontColor: textColor,
+                this.barData = {
+                    labels: this.attendances?.arrayDates,
+                    datasets: [
+                        {
+                            label: 'CheckIn Done',
+                            backgroundColor:
+                                documentStyle.getPropertyValue('--green-500'),
+                            borderColor:
+                                documentStyle.getPropertyValue('--green-500'),
+                            data: this.attendances?.arrayCountCheck,
                         },
-                    },
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: textColorSecondary,
-                            font: {
-                                weight: 500,
+                        {
+                            label: 'Missing',
+                            backgroundColor:
+                                documentStyle.getPropertyValue('--red-500'),
+                            borderColor:
+                                documentStyle.getPropertyValue('--red-500'),
+                            data: this.attendances?.arrayCountMissing,
+                        },
+                    ],
+                };
+                this.barOptions = {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                fontColor: textColor,
                             },
                         },
-                        grid: {
-                            display: false,
-                            drawBorder: false,
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: textColorSecondary,
+                                font: {
+                                    weight: 500,
+                                },
+                            },
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                        },
+                        y: {
+                            ticks: {
+                                color: textColorSecondary,
+                            },
+                            grid: {
+                                color: surfaceBorder,
+                                drawBorder: false,
+                            },
                         },
                     },
-                    y: {
-                        ticks: {
-                            color: textColorSecondary,
-                        },
-                        grid: {
-                            color: surfaceBorder,
-                            drawBorder: false,
-                        },
-                    },
-                },
-            };
+                };
 
-            this.chartData = {
-                labels: [
-                    'January',
-                    'February',
-                    'March',
-                    'April',
-                    'May',
-                    'June',
-                    'July',
-                ],
-                datasets: [
-                    {
-                        label: 'First Dataset',
-                        data: [65, 59, 80, 81, 56, 55, 40],
-                        fill: false,
-                        backgroundColor:
-                            documentStyle.getPropertyValue('--bluegray-700'),
-                        borderColor:
-                            documentStyle.getPropertyValue('--bluegray-700'),
-                        tension: 0.4,
-                    },
-                    {
-                        label: 'Second Dataset',
-                        data: [28, 48, 40, 19, 86, 27, 90],
-                        fill: false,
-                        backgroundColor:
-                            documentStyle.getPropertyValue('--green-600'),
-                        borderColor:
-                            documentStyle.getPropertyValue('--green-600'),
-                        tension: 0.4,
-                    },
-                ],
-            };
+                this.chartData = {
+                    labels: [
+                        'January',
+                        'February',
+                        'March',
+                        'April',
+                        'May',
+                        'June',
+                        'July',
+                    ],
+                    datasets: [
+                        {
+                            label: 'First Dataset',
+                            data: [65, 59, 80, 81, 56, 55, 40],
+                            fill: false,
+                            backgroundColor:
+                                documentStyle.getPropertyValue(
+                                    '--bluegray-700',
+                                ),
+                            borderColor:
+                                documentStyle.getPropertyValue(
+                                    '--bluegray-700',
+                                ),
+                            tension: 0.4,
+                        },
+                        {
+                            label: 'Second Dataset',
+                            data: [28, 48, 40, 19, 86, 27, 90],
+                            fill: false,
+                            backgroundColor:
+                                documentStyle.getPropertyValue('--green-600'),
+                            borderColor:
+                                documentStyle.getPropertyValue('--green-600'),
+                            tension: 0.4,
+                        },
+                    ],
+                };
 
-            this.chartOptions = {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: textColor,
+                this.chartOptions = {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: textColor,
+                            },
                         },
                     },
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: textColorSecondary,
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: textColorSecondary,
+                            },
+                            grid: {
+                                color: surfaceBorder,
+                                drawBorder: false,
+                            },
                         },
-                        grid: {
-                            color: surfaceBorder,
-                            drawBorder: false,
+                        y: {
+                            ticks: {
+                                color: textColorSecondary,
+                            },
+                            grid: {
+                                color: surfaceBorder,
+                                drawBorder: false,
+                            },
                         },
                     },
-                    y: {
-                        ticks: {
-                            color: textColorSecondary,
-                        },
-                        grid: {
-                            color: surfaceBorder,
-                            drawBorder: false,
-                        },
-                    },
-                },
-            };
-        });
+                };
+            });
     }
 
     ngOnDestroy() {

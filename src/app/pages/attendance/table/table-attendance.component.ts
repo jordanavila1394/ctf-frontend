@@ -1,84 +1,97 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Table } from 'primeng/table';
-import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
-import { CompanyService } from 'src/app/services/company.service';
+//Angular
+import {
+    Component,
+    OnInit,
+    ViewChild,
+    ElementRef,
+    OnDestroy,
+} from '@angular/core';
+import { Router } from '@angular/router';
 
-import { Company } from 'src/app/models/company';
+//Libraries
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
-import { ROUTES } from 'src/app/utils/constants';
-import { Router } from '@angular/router';
+//PrimeNg
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
+import { Table } from 'primeng/table';
+
+//Services
+import { CompanyService } from 'src/app/services/company.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
-import { UserService } from 'src/app/services/user.service';
-interface expandedRows {
-    [key: string]: boolean;
-}
+
+//Models
+import { Company } from 'src/app/models/company';
+
+//Utils
+import { ROUTES } from 'src/app/utils/constants';
+
+//Store
+import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
     templateUrl: './table-attendance.component.html',
     styleUrls: ['./table-attendance.component.scss'],
     providers: [MessageService, ConfirmationService],
 })
-export class TableAttendanceComponent implements OnInit {
+export class TableAttendanceComponent implements OnInit, OnDestroy {
     attendances: Company[] = [];
-
-    selectedAttendances: Company[] = [];
-
-    selectedAttendance: Company = {};
 
     rowGroupMetadata: any;
 
-    expandedRows: expandedRows = {};
-
-    activityValues: number[] = [0, 100];
-
-    isExpanded: boolean = false;
-
-    idFrozen: boolean = false;
-
     loading: boolean = true;
-
-    display: boolean;
 
     actionsFrozen: boolean = true;
 
-    items: MenuItem[] | undefined;
+    idCompany: any;
+    companyState$: Observable<CompanyState>;
+    selectedCompany: any;
+    subscription: Subscription = new Subscription();
 
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(
         private router: Router,
-        private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
-        private attendanceService: AttendanceService
+        private attendanceService: AttendanceService,
+        private store: Store<{ companyState: CompanyState }>,
     ) {
-        this.ngxGpAutocompleteService.setOptions({
-            componentRestrictions: { country: ['IT'] },
-            types: ['geocode'],
-        });
+        this.companyState$ = store.select('companyState');
     }
 
-    selectAddress(place: any): void {}
-
-    ngOnInit() {
-        this.loadServices();
+    ngOnInit(): void {
+        const companyServiceSubscription = this.companyState$.subscribe(
+            (company) => {
+                this.selectedCompany = company?.currentCompany;
+                this.loadServices(this.selectedCompany);
+            },
+        );
+        this.subscription.add(companyServiceSubscription);
     }
 
-    loadServices() {
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+    //Services
+    loadServices(selectedCompany) {
+        const attendanceServiceSubscription = this.attendanceService
+            .getAllAttendances(selectedCompany.id)
+            .subscribe((attendances) => {
+                this.attendances = attendances.map((attendance) => {
+                    let newAttendance = attendance;
+                    newAttendance.company = attendance?.driver?.companies[0];
+                    return newAttendance;
+                });
 
-        this.attendanceService.getAllAttendances().subscribe((attendances) => {
-            this.attendances = attendances.map((attendance) => {
-                let newAttendance = attendance;
-                newAttendance.company = attendance?.driver?.companies[0];
-                return newAttendance;
+                this.loading = false;
             });
-
-            this.loading = false;
-        });
+        this.subscription.add(attendanceServiceSubscription);
     }
 
+    //Dialog
     confirmErase(event: Event, idCompany) {
         this.confirmationService.confirm({
             key: 'confirmErase',
@@ -93,7 +106,9 @@ export class TableAttendanceComponent implements OnInit {
                 });
                 this.companyService
                     .deleteCompany(idCompany)
-                    .subscribe((res) => this.loadServices());
+                    .subscribe((res) =>
+                        this.loadServices(this.selectedCompany),
+                    );
             },
             reject: () => {
                 this.messageService.add({
@@ -119,6 +134,7 @@ export class TableAttendanceComponent implements OnInit {
         });
     }
 
+    //Table
     onSort() {
         this.updateRowGroupMetaData();
     }
@@ -127,18 +143,10 @@ export class TableAttendanceComponent implements OnInit {
         this.rowGroupMetadata = {};
     }
 
-    formatCurrency(value: number) {
-        return value.toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        });
-    }
-
     onGlobalFilter(table: Table, event: Event) {
-        console.log('event', event);
         table.filterGlobal(
             (event.target as HTMLInputElement).value,
-            'contains'
+            'contains',
         );
     }
 

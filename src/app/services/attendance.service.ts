@@ -13,11 +13,23 @@ const httpOptions = {
 export class AttendanceService {
     constructor(private http: HttpClient) {}
 
-    getAllAttendances(): Observable<any> {
-        return this.http.get(API_URL + 'allAttendances', httpOptions);
+    getAllAttendances(idCompany): Observable<any> {
+        return this.http.post(
+            API_URL + 'allAttendances',
+            {
+                idCompany,
+            },
+            httpOptions,
+        );
     }
 
-    getDataAttendances(): Observable<any> {
-        return this.http.get(API_URL + 'getDataAttendances', httpOptions);
+    getDataAttendances(idCompany): Observable<any> {
+        return this.http.post(
+            API_URL + 'getDataAttendances',
+            {
+                idCompany,
+            },
+            httpOptions,
+        );
     }
 }
