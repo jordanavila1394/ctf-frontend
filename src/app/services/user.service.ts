@@ -36,12 +36,11 @@ export class UserService {
     }
 
     createUser(
-        username: string,
+        fiscalCode: string,
         password: string,
         name: string,
         surname: string,
         email: string,
-        fiscalCode: string,
         roleId: string,
         companyId: string,
         workerNumber: string,
@@ -51,12 +50,11 @@ export class UserService {
         return this.http.post(
             API_URL + 'createUser',
             {
-                username,
+                fiscalCode,
                 password,
                 name,
                 surname,
                 email,
-                fiscalCode,
                 roleId,
                 companyId,
                 workerNumber,
@@ -69,7 +67,6 @@ export class UserService {
 
     patchUser(
         id: number,
-        username: string,
         name: string,
         surname: string,
         fiscalCode: string,
@@ -84,7 +81,6 @@ export class UserService {
             API_URL + 'patchUser' + '/' + id,
             {
                 id,
-                username,
                 name,
                 surname,
                 fiscalCode,

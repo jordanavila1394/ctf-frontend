@@ -38,7 +38,6 @@ export class ModifyUserComponent implements OnInit {
 
     modifyForm = this.fb.group({
         id: ['', [Validators.required]],
-        username: ['', [Validators.required]],
         name: ['', [Validators.required]],
         surname: ['', [Validators.required]],
         fiscalCode: ['', [Validators.required]],
@@ -57,7 +56,7 @@ export class ModifyUserComponent implements OnInit {
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
         private companyService: CompanyService,
-        private roleService: RoleService
+        private roleService: RoleService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -84,7 +83,6 @@ export class ModifyUserComponent implements OnInit {
 
                 this.modifyForm.patchValue({
                     id: this.idUser,
-                    username: user.username,
                     name: user.name,
                     surname: user.surname,
                     fiscalCode: user.fiscalCode,
@@ -124,7 +122,6 @@ export class ModifyUserComponent implements OnInit {
         this.userService
             .patchUser(
                 parseInt(this.modifyForm.value.id, 10),
-                this.modifyForm.value.username,
                 this.modifyForm.value.name,
                 this.modifyForm.value.surname,
                 this.modifyForm.value.fiscalCode,
@@ -133,10 +130,10 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.companyId,
                 this.modifyForm.value.workerNumber,
                 this.modifyForm.value.position,
-                this.modifyForm.value.status
+                this.modifyForm.value.status,
             )
             .subscribe((res) =>
-                this.router.navigate([ROUTES.ROUTE_TABLE_USER])
+                this.router.navigate([ROUTES.ROUTE_TABLE_USER]),
             );
     }
     goToTableUser() {

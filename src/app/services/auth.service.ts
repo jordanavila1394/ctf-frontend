@@ -21,35 +21,35 @@ export class AuthService {
 
     constructor(
         private http: HttpClient,
-        private store: Store<{ authState: AuthState }>
+        private store: Store<{ authState: AuthState }>,
     ) {
         this.authState$ = store.select('authState');
     }
 
-    login(username: string, password: string): Observable<any> {
+    login(fiscalCode: string, password: string): Observable<any> {
         return this.http.post(
             API_URL + 'signin',
             {
-                username,
+                fiscalCode,
                 password,
             },
-            httpOptions
+            httpOptions,
         );
     }
 
     register(
-        username: string,
+        fiscalCode: string,
         email: string,
-        password: string
+        password: string,
     ): Observable<any> {
         return this.http.post(
             API_URL + 'signup',
             {
-                username,
+                fiscalCode,
                 email,
                 password,
             },
-            httpOptions
+            httpOptions,
         );
     }
 

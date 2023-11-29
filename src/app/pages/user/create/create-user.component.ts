@@ -41,7 +41,7 @@ export class CreateUserComponent implements OnInit {
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
         private companyService: CompanyService,
-        private roleService: RoleService
+        private roleService: RoleService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -63,7 +63,6 @@ export class CreateUserComponent implements OnInit {
     }
 
     createForm = this.fb.group({
-        username: ['', [Validators.required]],
         password: ['', [Validators.required]],
         name: ['', [Validators.required]],
         surname: ['', [Validators.required]],
@@ -75,8 +74,8 @@ export class CreateUserComponent implements OnInit {
             ],
         ],
         fiscalCode: ['', [Validators.required]],
-        workerNumber: ['', ],
-        position: ['', ],
+        workerNumber: [''],
+        position: [''],
         roleId: ['', [Validators.required]],
         companyId: ['', [Validators.required]],
         status: [true, [Validators.required]],
@@ -93,20 +92,19 @@ export class CreateUserComponent implements OnInit {
     onSubmit(): void {
         this.userService
             .createUser(
-                this.createForm.value.username,
+                this.createForm.value.fiscalCode,
                 this.createForm.value.password,
                 this.createForm.value.name,
                 this.createForm.value.surname,
                 this.createForm.value.email,
-                this.createForm.value.fiscalCode,
                 this.createForm.value.roleId,
                 this.createForm.value.companyId,
                 this.createForm.value.workerNumber,
                 this.createForm.value.position,
-                this.createForm.value.status
+                this.createForm.value.status,
             )
             .subscribe((res) =>
-                this.router.navigate([ROUTES.ROUTE_TABLE_USER])
+                this.router.navigate([ROUTES.ROUTE_TABLE_USER]),
             );
     }
 }

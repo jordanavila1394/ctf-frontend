@@ -29,7 +29,6 @@
                 [paginator]="true"
                 [globalFilterFields]="[
                     'id',
-                    'username',
                     'name',
                     'surname',
                     'email',
@@ -84,12 +83,12 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Username
+                                Codice Fiscale
                                 <p-columnFilter
                                     type="text"
                                     field="name"
-                                    display="username"
-                                    placeholder="Cerca per username"
+                                    display="fiscalCode"
+                                    placeholder="Cerca per codice fiscale"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -119,19 +118,7 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Codice fiscale
-                                <p-columnFilter
-                                    type="text"
-                                    field="fiscalCode"
-                                    display="menu"
-                                    placeholder="Cerca per codicefiscale"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
+
                         <th style="min-width: 12rem">
                             <div
                                 class="flex justify-content-between align-items-center"
@@ -231,16 +218,13 @@
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            {{ user?.username }}
+                            {{ user?.fiscalCode }}
                         </td>
                         <td>
                             {{ user?.name }}
                         </td>
                         <td>
                             {{ user?.surname }}
-                        </td>
-                        <td>
-                            {{ user?.fiscalCode }}
                         </td>
                         <td>
                             <span

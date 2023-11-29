@@ -29,12 +29,12 @@ export class LoginComponent {
         public layoutService: LayoutService,
         private messageService: MessageService,
         private store: Store<{ authState: any }>,
-        private storageService: StorageService
+        private storageService: StorageService,
     ) {
         this.authState$ = store.select('authState');
     }
     signInForm = this.fb.group({
-        username: ['', [Validators.required]],
+        fiscalCode: ['', [Validators.required]],
         password: ['', [Validators.required]],
     });
     authState$: Observable<AuthState>;
@@ -49,8 +49,8 @@ export class LoginComponent {
             this.roles = this.storageService.getUser().roles;
         }
     }
-    get username() {
-        return this.signInForm.get('username');
+    get fiscalCode() {
+        return this.signInForm.get('fiscalCode');
     }
 
     get password() {
@@ -58,10 +58,10 @@ export class LoginComponent {
     }
 
     onSubmitSignIn(): void {
-        const username = this.signInForm.value.username || '';
+        const fiscalCode = this.signInForm.value.fiscalCode || '';
         const password = this.signInForm.value.password || '';
 
-        const signInData = new LoginRequest(username, password);
+        const signInData = new LoginRequest(fiscalCode, password);
         this.store.dispatch(login({ request: signInData }));
     }
 }

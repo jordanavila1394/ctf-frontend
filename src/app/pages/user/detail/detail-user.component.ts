@@ -41,7 +41,6 @@ export class DetailUserComponent implements OnInit {
 
     detailForm = this.fb.group({
         id: [''],
-        username: [''],
         name: [''],
         surname: [''],
         fiscalCode: [''],
@@ -59,7 +58,7 @@ export class DetailUserComponent implements OnInit {
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
         private companyService: CompanyService,
-        private roleService: RoleService
+        private roleService: RoleService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -80,7 +79,6 @@ export class DetailUserComponent implements OnInit {
             this.userService.getUser(this.idUser).subscribe((user) => {
                 this.detailForm.patchValue({
                     id: this.idUser,
-                    username: user.username,
                     name: user.name,
                     surname: user.surname,
                     fiscalCode: user.fiscalCode,
@@ -104,7 +102,6 @@ export class DetailUserComponent implements OnInit {
                 onlySelf: true,
             });
 
-            this.detailForm.controls['username'].disable({ onlySelf: true });
             this.detailForm.controls['name'].disable({ onlySelf: true });
             this.detailForm.controls['surname'].disable({ onlySelf: true });
             this.detailForm.controls['email'].disable({
