@@ -1,63 +1,51 @@
+//Angular
 import {
     Component,
     OnInit,
     ViewChild,
     ElementRef,
     AfterViewInit,
+    OnDestroy,
 } from '@angular/core';
-import { Representative } from '../../../models/customer';
-import { Product } from '../../../models/product';
-import { Table } from 'primeng/table';
-import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
-import { PrimeNGConfig } from 'primeng/api';
-
-import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user';
-
-import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
-
-import { ROUTES } from 'src/app/utils/constants';
 import { Router } from '@angular/router';
 
+//Models
+import { Representative } from '../../../models/customer';
+import { Product } from '../../../models/product';
+import { User } from 'src/app/models/user';
+
+//PrimeNg
+import { Table } from 'primeng/table';
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
+
+//Utils
+import { ROUTES } from 'src/app/utils/constants';
+
+//Services
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
+import { UserService } from 'src/app/services/user.service';
 
+//Libraries
 import * as FileSaver from 'file-saver';
 
-interface expandedRows {
-    [key: string]: boolean;
-}
+//Store
+import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
     templateUrl: './table-user.component.html',
     styleUrls: ['./table-user.component.scss'],
     providers: [MessageService, ConfirmationService],
 })
-export class TableUserComponent implements OnInit {
+export class TableUserComponent implements OnInit, OnDestroy {
     users: User[] = [];
-
-    selectedUsers1: User[] = [];
-
-    selectedUser: User;
-
-    representatives: Representative[] = [];
-
-    products: Product[] = [];
 
     rowGroupMetadata: any;
 
-    expandedRows: expandedRows = {};
-
-    activityValues: number[] = [0, 100];
-
-    isExpanded: boolean = false;
-
-    idFrozen: boolean = false;
-
     loading: boolean = true;
-
-    display: boolean;
 
     actionsFrozen: boolean = true;
 
@@ -67,29 +55,24 @@ export class TableUserComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    roles: any[];
-    companies: any[];
-
     items: MenuItem[] | undefined;
     selectedItem: any = null;
 
+    idCompany: any;
+    companyState$: Observable<CompanyState>;
+    selectedCompany: any;
+    subscription: Subscription = new Subscription();
+
     constructor(
         private router: Router,
-        private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private confirmationService: ConfirmationService,
         public translateService: TranslateService,
         private messageService: MessageService,
         private userService: UserService,
-        private companyService: CompanyService,
-        private roleService: RoleService
+        private store: Store<{ companyState: CompanyState }>,
     ) {
-        this.ngxGpAutocompleteService.setOptions({
-            componentRestrictions: { country: ['IT'] },
-            types: ['geocode'],
-        });
+        this.companyState$ = store.select('companyState');
     }
-
-    selectAddress(place: any): void {}
 
     ngOnInit() {
         this.items = [
@@ -136,26 +119,35 @@ export class TableUserComponent implements OnInit {
             },
         ];
 
-        this.loadServices();
+        const companyServiceSubscription = this.companyState$.subscribe(
+            (company) => {
+                this.selectedCompany = company?.currentCompany;
+                this.loadServices(this.selectedCompany);
+            },
+        );
+        this.subscription.add(companyServiceSubscription);
     }
 
-    loadServices() {
-        this.companyService.getAllCompanies().subscribe((companies) => {
-            this.companies = companies;
-        });
+    ngOnDestroy() {
+        if (this.subscription) this.subscription.unsubscribe();
+    }
 
-        this.userService.getAllUsers().subscribe((users) => {
-            this.users = users.map((user) => ({
-                ...user,
-                mainRole: {
-                    name: user.roles[0]?.name,
-                    label: user.roles[0]?.label,
-                },
-                role: user.roles[0]?.label,
-                company: user.companies[0]?.name,
-                createdAt: new Date(user.createdAt),
-            }));
-        });
+    loadServices(selectedCompany) {
+        const userServiceSubscription = this.userService
+            .getAllUsers(selectedCompany.id)
+            .subscribe((users) => {
+                this.users = users.map((user) => ({
+                    ...user,
+                    mainRole: {
+                        name: user.roles[0]?.name,
+                        label: user.roles[0]?.label,
+                    },
+                    role: user.roles[0]?.label,
+                    company: user.companies[0]?.name,
+                    createdAt: new Date(user.createdAt),
+                }));
+            });
+        this.subscription.add(userServiceSubscription);
 
         this.loading = false;
     }
@@ -173,7 +165,9 @@ export class TableUserComponent implements OnInit {
                 });
                 this.userService
                     .deleteUser(idUser)
-                    .subscribe((res) => this.loadServices());
+                    .subscribe((res) =>
+                        this.loadServices(this.selectedCompany),
+                    );
             },
             reject: () => {
                 this.messageService.add({
@@ -209,31 +203,11 @@ export class TableUserComponent implements OnInit {
         this.rowGroupMetadata = {};
     }
 
-    expandAll() {
-        if (!this.isExpanded) {
-            this.products.forEach((product) =>
-                product && product.name
-                    ? (this.expandedRows[product.name] = true)
-                    : ''
-            );
-        } else {
-            this.expandedRows = {};
-        }
-        this.isExpanded = !this.isExpanded;
-    }
-
-    formatCurrency(value: number) {
-        return value.toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        });
-    }
-
     onGlobalFilter(table: Table, event: Event) {
         console.log('event', event);
         table.filterGlobal(
             (event.target as HTMLInputElement).value,
-            'contains'
+            'contains',
         );
     }
 
@@ -277,7 +251,7 @@ export class TableUserComponent implements OnInit {
         });
         FileSaver.saveAs(
             data,
-            fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+            fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION,
         );
     }
 }

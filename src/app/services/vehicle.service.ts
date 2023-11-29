@@ -13,7 +13,13 @@ const httpOptions = {
 export class VehicleService {
     constructor(private http: HttpClient) {}
 
-    getAllVehicles(): Observable<any> {
-        return this.http.get(API_URL + 'allVehicles', httpOptions);
+    getAllVehicles(idCompany): Observable<any> {
+        return this.http.post(
+            API_URL + 'allVehicles',
+            {
+                idCompany,
+            },
+            httpOptions,
+        );
     }
 }

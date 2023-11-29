@@ -21,9 +21,10 @@ import * as FileSaver from 'file-saver';
 import { ROUTES } from 'src/app/utils/constants';
 import { Router } from '@angular/router';
 import { VehicleService } from 'src/app/services/vehicle.service';
-interface expandedRows {
-    [key: string]: boolean;
-}
+//Store
+import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
     templateUrl: './table-vehicle.component.html',
@@ -36,8 +37,6 @@ export class TableVehicleComponent implements OnInit {
     selectedVehicle: any[] = [];
 
     rowGroupMetadata: any;
-
-    expandedRows: expandedRows = {};
 
     activityValues: number[] = [0, 100];
 
@@ -59,6 +58,11 @@ export class TableVehicleComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
+    idCompany: any;
+    companyState$: Observable<CompanyState>;
+    selectedCompany: any;
+    subscription: Subscription = new Subscription();
+
     constructor(
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
@@ -66,12 +70,9 @@ export class TableVehicleComponent implements OnInit {
         private messageService: MessageService,
         private companyService: CompanyService,
         private vehicleService: VehicleService,
-        private userService: UserService
+        private store: Store<{ companyState: CompanyState }>,
     ) {
-        this.ngxGpAutocompleteService.setOptions({
-            componentRestrictions: { country: ['IT'] },
-            types: ['geocode'],
-        });
+        this.companyState$ = store.select('companyState');
     }
 
     selectAddress(place: any): void {}
@@ -91,18 +92,31 @@ export class TableVehicleComponent implements OnInit {
                 class: 'p-datatable-lg',
             },
         ];
-        this.loadServices();
+        const companyServiceSubscription = this.companyState$.subscribe(
+            (company) => {
+                this.selectedCompany = company?.currentCompany;
+                this.loadServices(this.selectedCompany);
+            },
+        );
+        this.subscription.add(companyServiceSubscription);
     }
 
-    loadServices() {
-        this.vehicleService.getAllVehicles().subscribe((vehicles) => {
-            this.vehicles = vehicles.map((vehicle) => {
-                vehicle.driver.fullName =
-                    vehicle.driver.name + ' ' + vehicle.driver.surname;
-                return vehicle;
+    ngOnDestroy() {
+        if (this.subscription) this.subscription.unsubscribe();
+    }
+
+    loadServices(selectedCompany) {
+        const vehicleServiceSubscription = this.vehicleService
+            .getAllVehicles(selectedCompany.id)
+            .subscribe((vehicles) => {
+                this.vehicles = vehicles.map((vehicle) => {
+                    vehicle.driver.fullName =
+                        vehicle.driver.name + ' ' + vehicle.driver.surname;
+                    return vehicle;
+                });
+                this.loading = false;
             });
-            this.loading = false;
-        });
+        this.subscription.add(vehicleServiceSubscription);
     }
 
     confirmErase(event: Event, idCompany) {
@@ -119,7 +133,9 @@ export class TableVehicleComponent implements OnInit {
                 });
                 this.companyService
                     .deleteCompany(idCompany)
-                    .subscribe((res) => this.loadServices());
+                    .subscribe((res) =>
+                        this.loadServices(this.selectedCompany),
+                    );
             },
             reject: () => {
                 this.messageService.add({
@@ -185,7 +201,7 @@ export class TableVehicleComponent implements OnInit {
         console.log('event', event);
         table.filterGlobal(
             (event.target as HTMLInputElement).value,
-            'contains'
+            'contains',
         );
     }
 
@@ -219,7 +235,7 @@ export class TableVehicleComponent implements OnInit {
         });
         FileSaver.saveAs(
             data,
-            fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+            fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION,
         );
     }
     //Actions

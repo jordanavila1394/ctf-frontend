@@ -1,7 +1,7 @@
 {
-  "name": "sakai-ng",
+  "name": "ams-ng",
   "version": "16.0.0",
-  "license": "PrimeNG Commercial",
+  "license": "",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development",

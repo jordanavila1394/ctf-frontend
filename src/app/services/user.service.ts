@@ -21,8 +21,14 @@ export class UserService {
         return this.http.get(API_URL + 'allCeosByCompany' + '/' + id);
     }
 
-    getAllUsers(): Observable<any> {
-        return this.http.get(API_URL + 'allUsers', httpOptions);
+    getAllUsers(idCompany): Observable<any> {
+        return this.http.post(
+            API_URL + 'allUsers',
+            {
+                idCompany,
+            },
+            httpOptions,
+        );
     }
 
     getUser(id: string): Observable<any> {
@@ -40,7 +46,7 @@ export class UserService {
         companyId: string,
         workerNumber: string,
         position: string,
-        status: boolean
+        status: boolean,
     ): Observable<any> {
         return this.http.post(
             API_URL + 'createUser',
@@ -57,7 +63,7 @@ export class UserService {
                 position,
                 status,
             },
-            httpOptions
+            httpOptions,
         );
     }
 
@@ -72,7 +78,7 @@ export class UserService {
         companyId: string,
         workerNumber: string,
         position: string,
-        status: boolean
+        status: boolean,
     ): Observable<any> {
         return this.http.patch(
             API_URL + 'patchUser' + '/' + id,
@@ -89,12 +95,11 @@ export class UserService {
                 position,
                 status,
             },
-            httpOptions
+            httpOptions,
         );
     }
 
     deleteUser(id: string): Observable<any> {
         return this.http.delete(API_URL + 'deleteUser' + '/' + id);
     }
-
 }

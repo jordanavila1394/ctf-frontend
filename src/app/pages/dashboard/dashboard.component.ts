@@ -1,82 +1,98 @@
+//Angular
 import { Component, OnInit, OnDestroy } from '@angular/core';
+
+//PrimeNg
 import { MenuItem } from 'primeng/api';
+
+//Models
 import { Product } from '../../models/product';
+
+//Services
 import { ProductService } from '../../services/product.service';
-import { Observable, Subscription } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import * as moment from 'moment';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { UserService } from 'src/app/services/user.service';
-import Formatter from 'src/app/utils/formatters';
-import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+
+//Store
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+
+//Libraies
+import * as moment from 'moment';
+
+//Utils
+import Formatter from 'src/app/utils/formatters';
 
 @Component({
     templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnDestroy {
-    items!: MenuItem[];
+export class DashboardComponent implements OnInit, OnDestroy {
+    //Chart
+    barDataAttendances: any;
+    barOptionsAttendances: any;
 
-    products!: Product[];
-
-    chartData: any;
-
-    chartOptions: any;
-
-    subscription!: Subscription;
-
-    barData: any;
-
-    barOptions: any;
-
+    //Language
     locale: string;
 
+    //Utils
+    formatter!: Formatter;
+
+    //Store
+    subscription: Subscription;
+    companyState$: Observable<CompanyState>;
+
+    //Variables
     usersNumber: any;
     vehiclesNumber: any;
-
-    formatter!: Formatter;
     attendances: {
         arrayCountCheck: any[];
         arrayCountMissing: any[];
         arrayDates: any[];
     };
-    idCompany;
-    companyState$: Observable<CompanyState>;
     selectedCompany: any;
+    idCompany: any;
 
     constructor(
-        private productService: ProductService,
         public layoutService: LayoutService,
         public translateService: TranslateService,
-        private userService: UserService,
         public attendaceService: AttendanceService,
         private store: Store<{ companyState: CompanyState }>,
     ) {
+        //Init
         this.formatter = new Formatter();
-        this.locale = this.translateService.currentLang;
-        moment.locale(this.locale);
-
         this.companyState$ = store.select('companyState');
-
-        this.companyState$.subscribe((company) => {
-            this.selectedCompany = company?.currentCompany;
-            this.initChart(this.selectedCompany);
-        });
-
-        this.subscription = this.layoutService.configUpdate$.subscribe(() => {
-            this.initChart(this.selectedCompany);
-        });
-        this.translateService.onLangChange.subscribe(
-            (langChangeEvent: LangChangeEvent) => {
-                this.locale = langChangeEvent.lang;
-                moment.locale(this.locale);
-                this.initChart(this.selectedCompany);
+    }
+    ngOnInit(): void {
+        const companyServiceSubscription = this.companyState$.subscribe(
+            (company) => {
+                this.selectedCompany = company?.currentCompany;
+                this.loadServices(this.selectedCompany);
             },
         );
+        const translateServiceSubscription =
+            this.translateService.onLangChange.subscribe(
+                (langChangeEvent: LangChangeEvent) => {
+                    this.locale = langChangeEvent.lang;
+                    moment.locale(this.locale);
+                    this.loadServices(this.selectedCompany);
+                },
+            );
+        const layourServixeSubscription =
+            this.layoutService.configUpdate$.subscribe(() => {
+                this.loadServices(this.selectedCompany);
+            });
+        if (this.subscription) {
+            this.subscription.add(companyServiceSubscription);
+
+            this.subscription.add(layourServixeSubscription);
+
+            this.subscription.add(translateServiceSubscription);
+        }
     }
 
-    initChart(currentCompany) {
+    loadServices(currentCompany) {
         this.attendaceService
             .getDataAttendances(currentCompany?.id | 0)
             .subscribe((data) => {
@@ -84,23 +100,14 @@ export class DashboardComponent implements OnDestroy {
                     data,
                     this.locale,
                 );
+
                 this.usersNumber = data.usersNumber;
                 this.vehiclesNumber = data.vehiclesNumber;
 
                 const documentStyle = getComputedStyle(
                     document.documentElement,
                 );
-                const textColor =
-                    documentStyle.getPropertyValue('--text-color');
-                const textColorSecondary = documentStyle.getPropertyValue(
-                    '--text-color-secondary',
-                );
-                const surfaceBorder =
-                    documentStyle.getPropertyValue('--surface-border');
-
-                // CHECKIN E CHECKOUT
-
-                this.barData = {
+                this.barDataAttendances = {
                     labels: this.attendances?.arrayDates,
                     datasets: [
                         {
@@ -121,112 +128,10 @@ export class DashboardComponent implements OnDestroy {
                         },
                     ],
                 };
-                this.barOptions = {
-                    plugins: {
-                        legend: {
-                            labels: {
-                                fontColor: textColor,
-                            },
-                        },
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                color: textColorSecondary,
-                                font: {
-                                    weight: 500,
-                                },
-                            },
-                            grid: {
-                                display: false,
-                                drawBorder: false,
-                            },
-                        },
-                        y: {
-                            ticks: {
-                                color: textColorSecondary,
-                            },
-                            grid: {
-                                color: surfaceBorder,
-                                drawBorder: false,
-                            },
-                        },
-                    },
-                };
-
-                this.chartData = {
-                    labels: [
-                        'January',
-                        'February',
-                        'March',
-                        'April',
-                        'May',
-                        'June',
-                        'July',
-                    ],
-                    datasets: [
-                        {
-                            label: 'First Dataset',
-                            data: [65, 59, 80, 81, 56, 55, 40],
-                            fill: false,
-                            backgroundColor:
-                                documentStyle.getPropertyValue(
-                                    '--bluegray-700',
-                                ),
-                            borderColor:
-                                documentStyle.getPropertyValue(
-                                    '--bluegray-700',
-                                ),
-                            tension: 0.4,
-                        },
-                        {
-                            label: 'Second Dataset',
-                            data: [28, 48, 40, 19, 86, 27, 90],
-                            fill: false,
-                            backgroundColor:
-                                documentStyle.getPropertyValue('--green-600'),
-                            borderColor:
-                                documentStyle.getPropertyValue('--green-600'),
-                            tension: 0.4,
-                        },
-                    ],
-                };
-
-                this.chartOptions = {
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: textColor,
-                            },
-                        },
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                color: textColorSecondary,
-                            },
-                            grid: {
-                                color: surfaceBorder,
-                                drawBorder: false,
-                            },
-                        },
-                        y: {
-                            ticks: {
-                                color: textColorSecondary,
-                            },
-                            grid: {
-                                color: surfaceBorder,
-                                drawBorder: false,
-                            },
-                        },
-                    },
-                };
             });
     }
 
     ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
+        if (this.subscription) this.subscription.unsubscribe();
     }
 }

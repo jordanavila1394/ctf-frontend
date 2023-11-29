@@ -73,7 +73,7 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        if (this.subscription) this.subscription.unsubscribe();
     }
     //Services
     loadServices(selectedCompany) {
