@@ -13,25 +13,48 @@ import { AuthGuard } from './services/auth.guard';
                     component: AppLayoutComponent,
                     children: [
                         {
-                            path: '',
+                            path: 'dashboard',
                             loadChildren: () =>
                                 import(
                                     './pages/dashboard/dashboard.module'
                                 ).then((m) => m.DashboardModule),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
+                        {
+                            path: 'home',
+                            loadChildren: () =>
+                                import('./pages/home/home.module').then(
+                                    (m) => m.HomeModule,
+                                ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_WORKER'],
+                            },
                         },
                         {
                             path: 'company',
                             loadChildren: () =>
                                 import('./pages/company/company.module').then(
-                                    (m) => m.CompanyModule
+                                    (m) => m.CompanyModule,
                                 ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
                         },
                         {
                             path: 'user',
                             loadChildren: () =>
                                 import('./pages/user/user.module').then(
-                                    (m) => m.UserModule
+                                    (m) => m.UserModule,
                                 ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
                         },
 
                         {
@@ -40,14 +63,23 @@ import { AuthGuard } from './services/auth.guard';
                                 import(
                                     './pages/attendance/attendance.module'
                                 ).then((m) => m.AttendanceModule),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
                         },
                         {
                             path: 'vehicle',
                             loadChildren: () =>
                                 import('./pages/vehicle/vehicle.module').then(
-                                    (m) => m.VehicleModule
+                                    (m) => m.VehicleModule,
                                 ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
                         },
+
                         {
                             path: 'uikit',
                             loadChildren: () =>
@@ -84,22 +116,15 @@ import { AuthGuard } from './services/auth.guard';
                                 ).then((m) => m.PagesModule),
                         },
                     ],
-                    canActivate: [AuthGuard],
                 },
                 {
                     path: 'auth',
                     loadChildren: () =>
                         import('./pages/auth/auth.module').then(
-                            (m) => m.AuthModule
+                            (m) => m.AuthModule,
                         ),
                 },
-                {
-                    path: 'landing',
-                    loadChildren: () =>
-                        import(
-                            './shared/components/landing/landing.module'
-                        ).then((m) => m.LandingModule),
-                },
+
                 { path: 'notfound', component: NotfoundComponent },
                 { path: '**', redirectTo: '/notfound' },
             ],
@@ -108,7 +133,7 @@ import { AuthGuard } from './services/auth.guard';
                 scrollPositionRestoration: 'enabled',
                 anchorScrolling: 'enabled',
                 onSameUrlNavigation: 'reload',
-            }
+            },
         ),
     ],
     exports: [RouterModule],

@@ -13,7 +13,6 @@ const httpOptions = {
     providedIn: 'root',
 })
 export class CompanyService {
-    userRole!: string;
 
     constructor(private http: HttpClient) {}
 

@@ -23,6 +23,16 @@ export class AttendanceService {
         );
     }
 
+    getAttendanceByUser(idUser): Observable<any> {
+        return this.http.post(
+            API_URL + 'getAttendance',
+            {
+                idUser,
+            },
+            httpOptions,
+        );
+    }
+
     getDataAttendances(idCompany): Observable<any> {
         return this.http.post(
             API_URL + 'getDataAttendances',

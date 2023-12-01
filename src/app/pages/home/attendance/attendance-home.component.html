@@ -1,0 +1,102 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="welcome-container">
+                <span class="font-bold">
+                    {{ currentUser?.name }} {{ currentUser?.surname }}</span
+                >
+                <br />
+                <div>
+                    <span class="font-bold">Azienda: </span>
+                    <span>{{ currentCompany?.name }}</span>
+                </div>
+                <!-- {{ currentUser | json }}
+                {{ attendanceData | json }} -->
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <form [formGroup]="checkInForm" #form="ngForm">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="user1">Seleziona sede</label>
+                        <p-dropdown
+                            [options]="placesItems"
+                            optionLabel="name"
+                            optionValue="id"
+                            [showClear]="true"
+                            formControlName="placeId"
+                            placeholder="--Targa--"
+                            [(ngModel)]="selectedPlace"
+                            (onChange)="onChangePlace($event)"
+                        ></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="user1">Seleziona mezzo</label>
+                        <p-dropdown
+                            [options]="vehiclesItems"
+                            optionLabel="licensePlate"
+                            optionValue="id"
+                            [showClear]="true"
+                            formControlName="vehicleId"
+                            [(ngModel)]="selectedVehicle"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div *ngIf="currentAddress">
+                <div>Attualmente ti trovi</div>
+                <div class="font-bold">{{ currentAddress }}</div>
+            </div>
+            <div *ngIf="distanceBetween">
+                Sei a {{ distanceBetween | number: ".1-3" }} km dalla sede
+                selezionata. <br />
+                <div *ngIf="isNearDistance">Puoi effetuare il check</div>
+                <div *ngIf="!isNearDistance">Non puoi effetuare il check</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div>
+            <div class="attendance-button-wrapper">
+                <button
+                    *ngIf="!(attendanceData && attendanceData?.found)"
+                    [ngClass]="
+                        isNearDistance
+                            ? 'attendance-button active-checkin'
+                            : 'attendance-button disabled'
+                    "
+                    [disabled]="isNearDistance"
+                    (click)="saveCheckIn(currentUser)"
+                >
+                    <span>Checkin</span>
+                </button>
+                <button
+                    *ngIf="attendanceData && attendanceData?.found"
+                    [ngClass]="
+                        isNearDistance
+                            ? 'attendance-button active-checkout'
+                            : 'attendance-button disabled'
+                    "
+                    [disabled]="isNearDistance"
+                    (click)="saveCheckOut(currentUser)"
+                >
+                    <span>Checkout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div *ngIf="currentPlaceMap">
+            <app-google-maps
+                [customZoom]="16"
+                [places]="[currentPlaceMap]"
+            ></app-google-maps>
+        </div>
+    </div>
+</div>

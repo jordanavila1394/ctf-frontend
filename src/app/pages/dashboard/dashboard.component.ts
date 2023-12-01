@@ -2,16 +2,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 //PrimeNg
-import { MenuItem } from 'primeng/api';
 
 //Models
-import { Product } from '../../models/product';
 
 //Services
-import { ProductService } from '../../services/product.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
-import { UserService } from 'src/app/services/user.service';
 
 //Store
 import { Observable, Subscription } from 'rxjs';
@@ -79,15 +75,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.loadServices(this.selectedCompany);
                 },
             );
-        const layourServixeSubscription =
+        const layourServiceSubscription =
             this.layoutService.configUpdate$.subscribe(() => {
                 this.loadServices(this.selectedCompany);
             });
         if (this.subscription) {
             this.subscription.add(companyServiceSubscription);
-
-            this.subscription.add(layourServixeSubscription);
-
+            this.subscription.add(layourServiceSubscription);
             this.subscription.add(translateServiceSubscription);
         }
     }

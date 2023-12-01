@@ -61,6 +61,7 @@ import { DrodownLanguageModule } from './shared/components/dropdown-language/dro
 
 import localeIt from '@angular/common/locales/it';
 import { VehicleModule } from './pages/vehicle/vehicle.module';
+import { HomeModule } from './pages/home/home.module';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -77,6 +78,7 @@ import { VehicleModule } from './pages/vehicle/vehicle.module';
         CompanyModule,
         AttendanceModule,
         VehicleModule,
+        HomeModule,
         DefaultAutocompleteModule,
         DrodownLanguageModule,
         StoreModule.forRoot(reducers, { metaReducers }),

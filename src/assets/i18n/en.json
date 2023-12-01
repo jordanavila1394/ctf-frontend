@@ -85,6 +85,9 @@
             "dashboard": {
                 "menuTitle": "Dashboard"
             },
+            "landing": {
+                "menuTitle": "Landing"
+            },
             "attendance": {
                 "menuTitle": "Attendance",
                 "table": "Attendance list",

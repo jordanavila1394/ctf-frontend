@@ -1,0 +1,211 @@
+//Angular
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+//PrimeNg
+
+//Models
+
+//Services
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
+
+//Store
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+import { AuthState } from 'src/app/stores/auth/authentication.reducer';
+
+//Libraies
+import * as moment from 'moment';
+
+//Utils
+import Formatter from 'src/app/utils/formatters';
+import { AuthService } from '../../../services/auth.service';
+import { AttendanceService } from 'src/app/services/attendance.service';
+import { FormBuilder } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
+
+@Component({
+    templateUrl: './attendance-home.component.html',
+    styleUrls: ['./attendance-home.component.scss'],
+})
+export class AttendanceHomeComponent implements OnInit, OnDestroy {
+    authState$: Observable<AuthState>;
+
+    //Language
+    locale: string;
+
+    //Utils
+    formatter!: Formatter;
+
+    //Store
+    subscription: Subscription;
+    companyState$: Observable<CompanyState>;
+
+    //Longiture latitude
+
+    gpsLatitude;
+    gpsLongitude;
+
+    //Variables
+
+    menuItems: any;
+    loading: boolean;
+    attendanceData: any;
+
+    storeUser: any;
+    currentUser: any;
+    currentCompany: any;
+
+    selectedPlace: any;
+    placesItems: any;
+
+    selectedVehicle: any;
+    vehiclesItems: any;
+
+    checkInForm = this.fb.group({
+        placeId: [''],
+        vehicleId: [''],
+    });
+    currentPlaceMap: any;
+    currentAddress: string;
+    distanceBetween: number;
+    isNearDistance: boolean = false;
+
+    constructor(
+        public fb: FormBuilder,
+        public layoutService: LayoutService,
+        private attendanceService: AttendanceService,
+        private userService: UserService,
+        private store: Store<{ authState: AuthState }>,
+    ) {
+        //Init
+        this.authState$ = store.select('authState');
+
+        this.formatter = new Formatter();
+    }
+
+    ngOnInit(): void {
+        this.getLocation();
+
+        this.authState$.subscribe((authS) => {
+            this.storeUser = authS?.user || '';
+
+            //
+            this.loadServices(this.storeUser);
+        });
+        const layourServiceSubscription =
+            this.layoutService.configUpdate$.subscribe(() => {
+                this.loadServices(this.currentUser);
+            });
+        if (this.subscription) {
+            this.subscription.add(layourServiceSubscription);
+        }
+    }
+
+    loadServices(storeUser) {
+        const attendanceServiceSubscription = this.attendanceService
+            .getAttendanceByUser(storeUser.id)
+            .subscribe((data) => {
+                this.attendanceData = data;
+                this.loading = false;
+            });
+        const userServiceSubscription = this.userService
+            .getUser(storeUser.id)
+            .subscribe((data) => {
+                this.currentUser = data;
+                this.currentCompany = data?.companies[0];
+                this.placesItems = data?.companies[0]?.places;
+                this.vehiclesItems = data?.companies[0]?.vehicles;
+                this.loading = false;
+            });
+
+        if (attendanceServiceSubscription && this.subscription)
+            this.subscription.add(attendanceServiceSubscription);
+
+        if (userServiceSubscription && this.subscription)
+            this.subscription.add(userServiceSubscription);
+    }
+
+    getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position: any) => {
+                    if (position) {
+                        console.log(
+                            'Latitude: ' +
+                                position.coords.latitude +
+                                'Longitude: ' +
+                                position.coords.longitude,
+                        );
+                        this.gpsLatitude = position.coords.latitude;
+                        this.gpsLongitude = position.coords.longitude;
+                        new google.maps.Geocoder()
+                            .geocode({
+                                location: {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude,
+                                },
+                            })
+                            .then((response) => {
+                                if (response.results[0]) {
+                                    this.currentAddress =
+                                        response.results[0].formatted_address;
+                                } else {
+                                    window.alert('No results found');
+                                }
+                            })
+                            .catch((e) =>
+                                window.alert('Geocoder failed due to: ' + e),
+                            );
+                    }
+                },
+                (error: any) => console.log(error),
+            );
+        } else {
+            alert('Geolocation is not supported by this browser.');
+        }
+    }
+
+    onChangePlace(event) {
+        this.currentPlaceMap = this.placesItems.filter(
+            (place) => place.id === event.value,
+        )[0];
+
+        this.distanceBetween = this.getDistanceFromLatLonInKm(
+            this.gpsLatitude,
+            this.gpsLongitude,
+            this.currentPlaceMap?.latitude,
+            this.currentPlaceMap?.longitude,
+        );
+        this.isNearDistance = this.distanceBetween < 0.3; //300 metri
+    }
+
+    getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = this.deg2rad(lat2 - lat1); // deg2rad below
+        var dLon = this.deg2rad(lon2 - lon1);
+        var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this.deg2rad(lat1)) *
+                Math.cos(this.deg2rad(lat2)) *
+                Math.sin(dLon / 2) *
+                Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c; // Distance in km
+        return d;
+    }
+
+    deg2rad(deg) {
+        return deg * (Math.PI / 180);
+    }
+
+    saveCheckIn(currentUser) {
+        console.log('checkin');
+    }
+    saveCheckOut(currentUser) {
+        console.log('checkout');
+    }
+    ngOnDestroy() {
+        if (this.subscription) this.subscription.unsubscribe();
+    }
+}

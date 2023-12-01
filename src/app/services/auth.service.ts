@@ -17,7 +17,8 @@ const httpOptions = {
 export class AuthService {
     authState$: Observable<AuthState>;
     isAuthenticated!: boolean;
-    userRole!: string;
+    userRoles!: string;
+    user: any;
 
     constructor(
         private http: HttpClient,
@@ -57,12 +58,19 @@ export class AuthService {
         return this.http.post(API_URL + 'signout', {}, httpOptions);
     }
 
-    public getRole(): string {
+    public getRoles(): any {
         this.authState$.subscribe((authS) => {
-            this.userRole = authS?.user?.role || '';
+            this.userRoles = authS?.user?.roles || '';
         });
 
-        return this.userRole;
+        return this.userRoles;
+    }
+
+    public getUser(): any {
+        this.authState$.subscribe((authS) => {
+            this.user = authS?.user || '';
+        });
+        return this.user;
     }
 
     public getAuthStatus(): boolean {

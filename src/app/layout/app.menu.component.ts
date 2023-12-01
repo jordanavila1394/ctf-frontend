@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { ROUTES } from '../utils/constants';
 
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -13,15 +15,21 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 export class AppMenuComponent implements OnInit {
     model: any[] = [];
     constructor(
+        private authService: AuthService,
+        public router: Router,
         public layoutService: LayoutService,
-        private translateService: TranslateService
+        private translateService: TranslateService,
     ) {}
 
     userSectionTitle;
 
     ngOnInit() {
-        this.model = [
-            {
+        const userRoles = this.authService.getRoles();
+        if (
+            userRoles.includes('ROLE_ADMIN') ||
+            userRoles.includes('ROLE_MODERATOR')
+        ) {
+            this.model.push({
                 label: 'Dashboard',
                 translationCode: 'menu.routes.dashboard.menuTitle',
                 items: [
@@ -29,11 +37,11 @@ export class AppMenuComponent implements OnInit {
                         label: 'Dashboard',
                         translationCode: 'menu.routes.dashboard.menuTitle',
                         icon: 'pi pi-fw pi-home',
-                        routerLink: ['/'],
+                        routerLink: [ROUTES.ROUTE_DASHBOARD],
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Attendances',
                 translationCode: 'menu.routes.attendance.menuTitle',
                 items: [
@@ -44,8 +52,8 @@ export class AppMenuComponent implements OnInit {
                         routerLink: [ROUTES.ROUTE_TABLE_ATTENDANCE],
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Users',
                 translationCode: 'menu.routes.user.menuTitle',
                 items: [
@@ -62,8 +70,8 @@ export class AppMenuComponent implements OnInit {
                         routerLink: [ROUTES.ROUTE_CREATE_USER],
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Aziende',
                 translationCode: 'menu.routes.company.menuTitle',
                 items: [
@@ -80,8 +88,8 @@ export class AppMenuComponent implements OnInit {
                         routerLink: [ROUTES.ROUTE_CREATE_COMPANY],
                     },
                 ],
-            },
-            {
+            });
+            this.model.push({
                 label: 'Vehicles',
                 translationCode: 'menu.routes.vehicle.menuTitle',
                 items: [
@@ -98,9 +106,23 @@ export class AppMenuComponent implements OnInit {
                         routerLink: [ROUTES.ROUTE_CREATE_VEHICLE],
                     },
                 ],
-            },
-        ];
+            });
+        }
 
+        if (userRoles.includes('ROLE_WORKER')) {
+            this.model.push({
+                label: 'Landing',
+                translationCode: 'menu.routes.landing.menuTitle',
+                items: [
+                    {
+                        label: 'Landing',
+                        translationCode: 'menu.routes.landing.menuTitle',
+                        icon: 'pi pi-fw pi-home',
+                        routerLink: [ROUTES.ROUTE_LANDING_HOME],
+                    },
+                ],
+            });
+        }
         if (environment.production == false) {
             this.model.push({
                 label: 'UI Components',
@@ -231,9 +253,9 @@ export class AppMenuComponent implements OnInit {
                 icon: 'pi pi-fw pi-briefcase',
                 items: [
                     {
-                        label: 'Landing',
+                        label: 'Home',
                         icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing'],
+                        routerLink: ['/home'],
                     },
                     {
                         label: 'Auth',
@@ -370,7 +392,7 @@ export class AppMenuComponent implements OnInit {
             (event: LangChangeEvent) => {
                 this.translateService.use(event.lang);
                 this.translateMenuItems();
-            }
+            },
         );
     }
 
@@ -378,14 +400,14 @@ export class AppMenuComponent implements OnInit {
         this.model = this.model.map((item) => {
             if (item.label && item.translationCode) {
                 item.label = this.translateService.instant(
-                    item.translationCode
+                    item.translationCode,
                 );
             }
             if (item.items) {
                 for (let el of item.items) {
                     if (el.translationCode) {
                         el.label = this.translateService.instant(
-                            el.translationCode
+                            el.translationCode,
                         );
                     }
                 }

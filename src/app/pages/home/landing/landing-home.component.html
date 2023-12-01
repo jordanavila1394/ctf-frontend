@@ -1,0 +1,40 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="welcome-container">
+                Ciao,
+                <span class="font-bold"
+                    >{{ currentUser.name }} {{ currentUser.surname }}</span
+                >.
+                <br />
+                Benvenuto su CTF Manager
+            </div>
+        </div>
+        <div>
+            <div class="items-actions">
+                <div class="item" *ngFor="let menu of menuItems">
+                    <div class="image-wrapper">
+                        <img src="{{ menu?.source }}" class="" />
+                    </div>
+                    <span>{{ menu?.label }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            {{ attendanceData | json }}
+            <div class="attendance-wrapper" *ngIf="!attendanceData.found">
+                <span> Non hai fatto il checkin oggi</span>
+                <button
+                    pButton
+                    pRipple
+                    label="Procedi con il Check In"
+                    class="p-button-success"
+                    size="large"
+                    [routerLink]="['/home/attendance']"
+                ></button>
+            </div>
+        </div>
+    </div>
+</div>

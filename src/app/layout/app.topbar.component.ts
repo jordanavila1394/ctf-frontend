@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { AuthState } from '../stores/auth/authentication.reducer';
 import { logout } from '../stores/auth/authentication.actions';
 import { CompanyService } from '../services/company.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'app-topbar',
@@ -21,6 +22,8 @@ export class AppTopBarComponent {
 
     companies: [];
 
+    isVisibleMenuCompanies: boolean = false;
+
     @ViewChild('menubutton') menuButton!: ElementRef;
 
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
@@ -30,13 +33,22 @@ export class AppTopBarComponent {
     constructor(
         public layoutService: LayoutService,
         private companyService: CompanyService,
+        private authService: AuthService,
         private store: Store<{ authState: AuthState }>,
     ) {
         this.authState$ = store.select('authState');
+        const userRoles = this.authService.getRoles();
+
+        if (
+            userRoles.includes('ROLE_ADMIN') ||
+            userRoles.includes('ROLE_MODERATOR')
+        ) {
+            this.isVisibleMenuCompanies = true;
+        } else {
+            this.isVisibleMenuCompanies = false;
+        }
     }
 
-
-    
     loadServices() {
         this.companyService.getAllCompanies().subscribe((companies) => {
             this.companies = companies;
@@ -44,6 +56,5 @@ export class AppTopBarComponent {
     }
     OnClickLogout() {
         this.store.dispatch(logout());
-        window.location.reload();
     }
 }
