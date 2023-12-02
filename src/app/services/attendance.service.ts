@@ -42,4 +42,27 @@ export class AttendanceService {
             httpOptions,
         );
     }
+
+    createAttendance(userId, companyId, placeId, vehicleId): Observable<any> {
+        return this.http.post(
+            API_URL + 'createAttendance',
+            {
+                userId,
+                companyId,
+                placeId,
+                vehicleId,
+            },
+            httpOptions,
+        );
+    }
+    patchAttendance(id, userId): Observable<any> {
+        return this.http.post(
+            API_URL + 'patchAttendance',
+            {
+                id,
+                userId,
+            },
+            httpOptions,
+        );
+    }
 }

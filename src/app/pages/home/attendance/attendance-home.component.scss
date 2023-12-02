@@ -19,10 +19,11 @@
 
         }
         &.active-checkout{
-            background: linear-gradient(to bottom, rgb(216, 93, 69) 0%, rgb(193, 109, 13) 100%);
+            background: linear-gradient(to bottom, rgb(206, 152, 66) 0%, rgb(193, 109, 13) 100%);
 
         }
         &.disabled{
+            background: linear-gradient(to bottom, rgb(245, 240, 243) 0%, rgb(188, 187, 187) 100%);
 
         }
       }

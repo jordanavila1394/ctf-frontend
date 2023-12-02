@@ -19,6 +19,7 @@ import { AppSidebarComponent } from './app.sidebar.component';
 import { AppLayoutComponent } from './app.layout.component';
 import { DrodownLanguageModule } from '../shared/components/dropdown-language/dropdown-language.module';
 import { DropdownSelectCompanyModule } from '../shared/components/dropdown-select-company/dropdown-select-company.module';
+import { GeoModalPermissionModule } from '../shared/components/geo-modal-permission/geo-moda-permission.module';
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import { DropdownSelectCompanyModule } from '../shared/components/dropdown-selec
         RippleModule,
         RouterModule,
         DrodownLanguageModule,
+        GeoModalPermissionModule,
         AppConfigModule,
     ],
     exports: [AppLayoutComponent],

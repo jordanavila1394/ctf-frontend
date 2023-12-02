@@ -1,0 +1,22 @@
+#modal-geo-permission{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(103, 102, 102, 0.342);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .card{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 80%;
+        height: 30vh;
+        img{
+            width: 65px;
+            height: 65px;
+        }
+    }
+}

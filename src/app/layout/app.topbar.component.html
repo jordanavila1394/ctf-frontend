@@ -34,32 +34,27 @@
                 layoutService.state.profileSidebarVisible
         }"
     >
-        <div class="gap-2">
-            <app-dropdown-select-company *ngIf="isVisibleMenuCompanies">
-            </app-dropdown-select-company>
-            <app-dropdown-language> </app-dropdown-language>
-            <button class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
-            </button>
-            <button class="p-link layout-topbar-button">
-                <i class="pi pi-user"></i>
-                <span>Profile</span>
-            </button>
-            <!-- <button
+        <app-dropdown-select-company *ngIf="isVisibleMenuCompanies">
+        </app-dropdown-select-company>
+        <app-dropdown-language> </app-dropdown-language>
+        <button class="p-link layout-topbar-button">
+            <i class="pi pi-calendar"></i>
+            <span>Calendar</span>
+        </button>
+        <button class="p-link layout-topbar-button">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+        </button>
+        <!-- <button
             class="p-link layout-topbar-button"
             [routerLink]="'/documentation'"
         >
             <i class="pi pi-cog"></i>
             <span>Esci</span>
         </button> -->
-            <button
-                class="p-link layout-topbar-button"
-                (click)="OnClickLogout()"
-            >
-                <i class="pi pi-power-off"></i>
-                <span>Esci</span>
-            </button>
-        </div>
+        <button class="p-link layout-topbar-button" (click)="OnClickLogout()">
+            <i class="pi pi-power-off"></i>
+            <span>Esci</span>
+        </button>
     </div>
 </div>

@@ -20,6 +20,14 @@ import { RouterModule } from '@angular/router';
                         (m) => m.AttendanceHomeModule,
                     ),
             },
+            {
+                path: 'my-attendances',
+                data: { breadcrumb: 'My Attendances' },
+                loadChildren: () =>
+                    import('./my-attendances/my-attendances-home.module').then(
+                        (m) => m.MyAttendancesHomeModule,
+                    ),
+            },
         ]),
     ],
     exports: [RouterModule],

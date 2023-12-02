@@ -1,33 +1,20 @@
-//Angular
-import { Component, OnInit, OnDestroy } from '@angular/core';
-
-//PrimeNg
-
-//Models
-
-//Services
-import { LayoutService } from 'src/app/layout/service/app.layout.service';
-
-//Store
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ROUTES } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
-import { AuthState } from 'src/app/stores/auth/authentication.reducer';
-
-//Libraies
 import * as moment from 'moment';
-
-//Utils
-import Formatter from 'src/app/utils/formatters';
-import { AuthService } from '../../../services/auth.service';
+import { Observable, Subscription } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
-import { ROUTES } from 'src/app/utils/constants';
+import { AuthState } from 'src/app/stores/auth/authentication.reducer';
+import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
+import Formatter from 'src/app/utils/formatters';
 
 @Component({
-    templateUrl: './landing-home.component.html',
-    styleUrls: ['./landing-home.component.scss'],
+    templateUrl: './my-attendances-home.component.html',
+    styleUrls: ['./my-attendances-home.component.scss'],
 })
-export class LandingHomeComponent implements OnInit, OnDestroy {
+export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
     authState$: Observable<AuthState>;
 
     //Language
@@ -45,44 +32,45 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
     menuItems: any;
     loading: boolean;
     attendanceData: any;
+    monthsItems = [];
+    selectedMonth: any;
+    currentYear: any;
+
+    myAttendancesForm = this.fb.group({
+        currentYear: [''],
+        currentMonth: [''],
+    });
 
     constructor(
+        public fb: FormBuilder,
         public layoutService: LayoutService,
         private attendanceService: AttendanceService,
         private store: Store<{ authState: AuthState }>,
     ) {
         //Init
         this.authState$ = store.select('authState');
-        this.menuItems = [
-            {
-                label: 'Mappa',
-                source: 'assets/icons/location.png',
-                linkRoute: '/',
-                icon: 'pi pi-fw pi-check',
-            },
-            {
-                label: 'Presenze',
-                source: 'assets/icons/calendar.png',
-                linkRoute: ROUTES.ROUTE_MYATTENDANCES_HOME,
-                icon: 'pi pi-fw pi-refresh',
-            },
-            {
-                label: 'Cedolini',
-                source: 'assets/icons/stamp.png',
-                linkRoute: '/',
-                icon: 'pi pi-fw pi-trash',
-            },
-            {
-                label: 'Supporto',
-                source: 'assets/icons/customer-service.png',
-                linkRoute: '/',
-                icon: 'pi pi-fw pi-home',
-            },
-        ];
         this.formatter = new Formatter();
     }
 
     ngOnInit(): void {
+        //Current year
+        this.myAttendancesForm.patchValue({
+            currentYear: moment().year() + '',
+            currentMonth: moment().month() + '',
+        });
+
+        //Current month
+        this.monthsItems.push({
+            name: moment().format('MMMM'),
+            code: moment().month(),
+        });
+
+        //Previous month
+        this.monthsItems.push({
+            name: moment().subtract(1, 'month').format('MMMM'),
+            code: moment().subtract(1, 'month').month(),
+        });
+
         this.authState$.subscribe((authS) => {
             this.currentUser = authS?.user || '';
             this.loadServices(this.currentUser);
@@ -94,6 +82,10 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
         if (this.subscription) {
             this.subscription.add(layourServiceSubscription);
         }
+    }
+
+    onChangeMonth(event) {
+        console.log(event.value);
     }
 
     loadServices(currentUser) {

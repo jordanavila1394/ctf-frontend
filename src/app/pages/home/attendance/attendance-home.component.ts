@@ -23,6 +23,8 @@ import { AuthService } from '../../../services/auth.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
+import { ROUTES } from 'src/app/utils/constants';
 
 @Component({
     templateUrl: './attendance-home.component.html',
@@ -70,12 +72,14 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     currentAddress: string;
     distanceBetween: number;
     isNearDistance: boolean = false;
+    attendanceCheckIn: any;
 
     constructor(
         public fb: FormBuilder,
         public layoutService: LayoutService,
         private attendanceService: AttendanceService,
         private userService: UserService,
+        private router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
         //Init
@@ -89,8 +93,6 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
 
         this.authState$.subscribe((authS) => {
             this.storeUser = authS?.user || '';
-
-            //
             this.loadServices(this.storeUser);
         });
         const layourServiceSubscription =
@@ -107,6 +109,26 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             .getAttendanceByUser(storeUser.id)
             .subscribe((data) => {
                 this.attendanceData = data;
+                this.attendanceCheckIn = this.attendanceData?.attendance;
+                if (this.attendanceCheckIn?.placeId) {
+                    this.checkInForm.patchValue({
+                        placeId: this.attendanceCheckIn?.placeId,
+                    });
+                }
+                if (this.attendanceCheckIn?.vehicleId) {
+                    this.checkInForm.patchValue({
+                        vehicleId: this.attendanceCheckIn?.vehicleId,
+                    });
+                }
+                if (this.attendanceCheckIn) {
+                    this.checkInForm.controls['placeId'].disable({
+                        onlySelf: true,
+                    });
+                    this.checkInForm.controls['vehicleId'].disable({
+                        onlySelf: true,
+                    });
+                }
+
                 this.loading = false;
             });
         const userServiceSubscription = this.userService
@@ -131,14 +153,9 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             navigator.geolocation.getCurrentPosition(
                 (position: any) => {
                     if (position) {
-                        console.log(
-                            'Latitude: ' +
-                                position.coords.latitude +
-                                'Longitude: ' +
-                                position.coords.longitude,
-                        );
                         this.gpsLatitude = position.coords.latitude;
                         this.gpsLongitude = position.coords.longitude;
+                        console.log(this.gpsLatitude);
                         new google.maps.Geocoder()
                             .geocode({
                                 location: {
@@ -153,6 +170,10 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                                 } else {
                                     window.alert('No results found');
                                 }
+                                this.currentPlaceMap = this.placesItems.filter(
+                                    (place) => place.id === this.attendanceCheckIn?.placeId,
+                                )[0];
+                                this.calculateDistance();
                             })
                             .catch((e) =>
                                 window.alert('Geocoder failed due to: ' + e),
@@ -170,6 +191,12 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         this.currentPlaceMap = this.placesItems.filter(
             (place) => place.id === event.value,
         )[0];
+
+        this.calculateDistance();
+    }
+
+    calculateDistance() {
+        
 
         this.distanceBetween = this.getDistanceFromLatLonInKm(
             this.gpsLatitude,
@@ -199,11 +226,25 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         return deg * (Math.PI / 180);
     }
 
-    saveCheckIn(currentUser) {
-        console.log('checkin');
+    saveCheckIn() {
+        this.attendanceService
+            .createAttendance(
+                this.currentUser?.id,
+                this.currentCompany?.id,
+                this.checkInForm.value.placeId,
+                this.checkInForm.value.vehicleId,
+            )
+            .subscribe((res) =>
+                this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
+            );
     }
-    saveCheckOut(currentUser) {
-        console.log('checkout');
+    saveCheckOut() {
+        console.log(this.attendanceCheckIn);
+        this.attendanceService
+            .patchAttendance(this.attendanceCheckIn?.id, this.currentUser?.id)
+            .subscribe((res) =>
+                this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
+            );
     }
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();

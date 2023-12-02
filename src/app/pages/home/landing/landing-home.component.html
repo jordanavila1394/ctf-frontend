@@ -12,20 +12,29 @@
         </div>
         <div>
             <div class="items-actions">
-                <div class="item" *ngFor="let menu of menuItems">
-                    <div class="image-wrapper">
-                        <img src="{{ menu?.source }}" class="" />
-                    </div>
-                    <span>{{ menu?.label }}</span>
+                <div
+                    class="item-circle"
+                    *ngFor="let menu of menuItems"
+                    routerLink="{{ menu.linkRoute }}"
+                >
+                    <a>
+                        <div class="item">
+                            <div class="image-wrapper">
+                                <img src="{{ menu?.source }}" class="" />
+                            </div>
+                            <span>{{ menu?.label }}</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-12">
         <div class="card">
-            {{ attendanceData | json }}
-            <div class="attendance-wrapper" *ngIf="!attendanceData.found">
-                <span> Non hai fatto il checkin oggi</span>
+            <div
+                class="attendance-wrapper"
+                *ngIf="!attendanceData?.foundCheckIn"
+            >
                 <button
                     pButton
                     pRipple
@@ -34,6 +43,39 @@
                     size="large"
                     [routerLink]="['/home/attendance']"
                 ></button>
+            </div>
+            <div
+                class="attendance-wrapper"
+                *ngIf="
+                    attendanceData?.foundCheckIn &&
+                    !attendanceData?.attendance?.checkOut
+                "
+            >
+                <button
+                    pButton
+                    pRipple
+                    label="Devi fare il checkout "
+                    class="p-button-warning"
+                    size="large"
+                    [routerLink]="['/home/attendance']"
+                ></button>
+            </div>
+            <div
+                *ngIf="
+                    attendanceData?.foundCheckIn &&
+                    attendanceData?.attendance?.checkOut
+                "
+                class="flex flex-column justify-content-center align-items-center gap-3"
+            >
+                <div>
+                    <span class="font-bold"
+                        >Hai gia inviato la tua presenza oggi</span
+                    >
+                </div>
+
+                <div>
+                    <img src="assets/icons/like.png" alt="Like" />
+                </div>
             </div>
         </div>
     </div>

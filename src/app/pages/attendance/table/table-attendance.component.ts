@@ -88,7 +88,8 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
 
                 this.loading = false;
             });
-        this.subscription.add(attendanceServiceSubscription);
+        if (this.subscription && attendanceServiceSubscription)
+            this.subscription.add(attendanceServiceSubscription);
     }
 
     //Dialog
