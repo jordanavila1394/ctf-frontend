@@ -31,7 +31,11 @@ import { AuthGuard } from './services/auth.guard';
                                 ),
                             canActivate: [AuthGuard],
                             data: {
-                                roles: ['ROLE_WORKER'],
+                                roles: [
+                                    'ROLE_WORKER',
+                                    'ROLE_ADMIN',
+                                    'ROLE_MODERATOR',
+                                ],
                             },
                         },
                         {

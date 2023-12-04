@@ -109,7 +109,8 @@ export class AppMenuComponent implements OnInit {
             });
         }
 
-        if (userRoles.includes('ROLE_WORKER')) {
+        if (userRoles.includes('ROLE_WORKER') ||userRoles.includes('ROLE_ADMIN') ||
+        userRoles.includes('ROLE_MODERATOR')) {
             this.model.push({
                 label: 'Landing',
                 translationCode: 'menu.routes.landing.menuTitle',

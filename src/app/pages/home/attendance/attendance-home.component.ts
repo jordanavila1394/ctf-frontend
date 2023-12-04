@@ -168,7 +168,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                                     this.currentAddress =
                                         response.results[0].formatted_address;
                                 } else {
-                                    window.alert('No results found');
+                                    console.log('No results found');
                                 }
                                 this.currentPlaceMap = this.placesItems.filter(
                                     (place) =>
@@ -178,14 +178,14 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                                 this.calculateDistance();
                             })
                             .catch((e) =>
-                                window.alert('Geocoder failed due to: ' + e),
+                            console.log('Geocoder failed due to: ' + e),
                             );
                     }
                 },
                 (error: any) => console.log(error),
             );
         } else {
-            alert('Geolocation is not supported by this browser.');
+            console.log('Geolocation is not supported by this browser.');
         }
     }
 
