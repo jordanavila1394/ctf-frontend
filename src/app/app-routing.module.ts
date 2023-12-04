@@ -11,6 +11,7 @@ import { AuthGuard } from './services/auth.guard';
                 {
                     path: '',
                     component: AppLayoutComponent,
+                    canActivate: [AuthGuard],
                     children: [
                         {
                             path: 'dashboard',

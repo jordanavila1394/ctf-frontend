@@ -9,6 +9,7 @@ import { AuthState } from '../stores/auth/authentication.reducer';
 import { logout } from '../stores/auth/authentication.actions';
 import { CompanyService } from '../services/company.service';
 import { AuthService } from '../services/auth.service';
+import { ROUTES } from '../utils/constants';
 
 @Component({
     selector: 'app-topbar',
@@ -30,6 +31,8 @@ export class AppTopBarComponent {
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
+    redirectRoute: any;
+
     constructor(
         public layoutService: LayoutService,
         private companyService: CompanyService,
@@ -44,8 +47,10 @@ export class AppTopBarComponent {
             userRoles.includes('ROLE_MODERATOR')
         ) {
             this.isVisibleMenuCompanies = true;
+            this.redirectRoute = ROUTES.ROUTE_DASHBOARD;
         } else {
             this.isVisibleMenuCompanies = false;
+            this.redirectRoute = ROUTES.ROUTE_LANDING_HOME;
         }
     }
 
