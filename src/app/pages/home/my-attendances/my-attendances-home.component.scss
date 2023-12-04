@@ -1,0 +1,42 @@
+.my-attendances{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    .headers{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        div{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20%;
+            span{
+                font-size: 0.9rem;
+                font-weight: 400;
+            }
+        }
+    }
+    .attendance{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        div{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 20%;
+            &.currentdate{
+           
+                background-color: rgba(220, 219, 219, 0.902);
+                font-weight: 500;
+                padding: 0.5rem;
+                border-radius: 15px;
+                width: 20%;
+            }
+        }
+       
+       
+    }
+}

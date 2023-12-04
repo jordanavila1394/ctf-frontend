@@ -10,6 +10,9 @@ import { AuthState } from 'src/app/stores/auth/authentication.reducer';
 import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
 import Formatter from 'src/app/utils/formatters';
 
+//Libraries
+import * as FileSaver from 'file-saver';
+
 @Component({
     templateUrl: './my-attendances-home.component.html',
     styleUrls: ['./my-attendances-home.component.scss'],
@@ -31,15 +34,14 @@ export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
     currentUser: any;
     menuItems: any;
     loading: boolean;
-    attendanceData: any;
+    attendances: any;
     monthsItems = [];
-    selectedMonth: any;
-    currentYear: any;
 
     myAttendancesForm = this.fb.group({
         currentYear: [''],
         currentMonth: [''],
     });
+    selectedCurrentMonth: any;
 
     constructor(
         public fb: FormBuilder,
@@ -56,8 +58,12 @@ export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
         //Current year
         this.myAttendancesForm.patchValue({
             currentYear: moment().year() + '',
-            currentMonth: moment().month() + '',
         });
+
+        this.selectedCurrentMonth = {
+            name: moment().format('MMMM'),
+            code: moment().month(),
+        };
 
         //Current month
         this.monthsItems.push({
@@ -85,18 +91,64 @@ export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
     }
 
     onChangeMonth(event) {
-        console.log(event.value);
+        this.loadServices(this.currentUser);
     }
 
     loadServices(currentUser) {
+        const currentYear =
+            parseInt(this.myAttendancesForm.value.currentYear, 10) || '';
+        const currentMonth = this.selectedCurrentMonth?.code || '';
+        console.log(currentYear);
+        console.log(currentMonth);
+
         const attendanceServiceSubscription = this.attendanceService
-            .getAttendanceByUser(currentUser.id)
+            .getMyAttendances(currentUser.id, currentYear, currentMonth)
             .subscribe((data) => {
-                this.attendanceData = data;
+                this.attendances = data;
+                this.attendances = data.map((attendance) => ({
+                    ...attendance,
+                    totalHours: this.differenceHours(
+                        new Date(attendance?.checkOut),
+                        new Date(attendance?.checkIn),
+                    ),
+                }));
+                console.log(this.attendances);
                 this.loading = false;
             });
         if (this.subscription && attendanceServiceSubscription)
             this.subscription.add(attendanceServiceSubscription);
+    }
+    differenceHours(date2, date1) {
+        var difference = (date2.getTime() - date1.getTime()) / 1000;
+        difference /= 60 * 60;
+        return Math.abs(Math.round(difference));
+    }
+    exportExcel() {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(this.attendances);
+            const workbook = {
+                Sheets: { data: worksheet },
+                SheetNames: ['data'],
+            };
+            const excelBuffer: any = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array',
+            });
+            this.saveAsExcelFile(excelBuffer, 'presenze');
+        });
+    }
+
+    saveAsExcelFile(buffer: any, fileName: string): void {
+        let EXCEL_TYPE =
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        let EXCEL_EXTENSION = '.xlsx';
+        const data: Blob = new Blob([buffer], {
+            type: EXCEL_TYPE,
+        });
+        FileSaver.saveAs(
+            data,
+            fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION,
+        );
     }
 
     ngOnDestroy() {

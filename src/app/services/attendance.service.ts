@@ -33,6 +33,18 @@ export class AttendanceService {
         );
     }
 
+    getMyAttendances(idUser, year, month): Observable<any> {
+        return this.http.post(
+            API_URL + 'getMyAttendances',
+            {
+                idUser,
+                year,
+                month,
+            },
+            httpOptions,
+        );
+    }
+
     getDataAttendances(idCompany): Observable<any> {
         return this.http.post(
             API_URL + 'getDataAttendances',
@@ -43,9 +55,9 @@ export class AttendanceService {
         );
     }
 
-    createAttendance(userId, companyId, placeId, vehicleId): Observable<any> {
+    checkInAttendance(userId, companyId, placeId, vehicleId): Observable<any> {
         return this.http.post(
-            API_URL + 'createAttendance',
+            API_URL + 'checkInAttendance',
             {
                 userId,
                 companyId,
@@ -55,9 +67,9 @@ export class AttendanceService {
             httpOptions,
         );
     }
-    patchAttendance(id, userId): Observable<any> {
+    checkOutAttendance(id, userId): Observable<any> {
         return this.http.post(
-            API_URL + 'patchAttendance',
+            API_URL + 'checkOutAttendance',
             {
                 id,
                 userId,

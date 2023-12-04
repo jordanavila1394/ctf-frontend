@@ -171,7 +171,9 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                                     window.alert('No results found');
                                 }
                                 this.currentPlaceMap = this.placesItems.filter(
-                                    (place) => place.id === this.attendanceCheckIn?.placeId,
+                                    (place) =>
+                                        place.id ===
+                                        this.attendanceCheckIn?.placeId,
                                 )[0];
                                 this.calculateDistance();
                             })
@@ -196,8 +198,6 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     }
 
     calculateDistance() {
-        
-
         this.distanceBetween = this.getDistanceFromLatLonInKm(
             this.gpsLatitude,
             this.gpsLongitude,
@@ -228,7 +228,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
 
     saveCheckIn() {
         this.attendanceService
-            .createAttendance(
+            .checkInAttendance(
                 this.currentUser?.id,
                 this.currentCompany?.id,
                 this.checkInForm.value.placeId,
@@ -241,7 +241,10 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     saveCheckOut() {
         console.log(this.attendanceCheckIn);
         this.attendanceService
-            .patchAttendance(this.attendanceCheckIn?.id, this.currentUser?.id)
+            .checkOutAttendance(
+                this.attendanceCheckIn?.id,
+                this.currentUser?.id,
+            )
             .subscribe((res) =>
                 this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
             );

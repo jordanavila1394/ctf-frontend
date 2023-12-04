@@ -32,7 +32,11 @@
                         ],
                         "customWebpackConfig": {
                             "path": "src/custom-webpack.config.ts"
-                        }
+                        },
+                        "allowedCommonJsDependencies": [
+                            "moment",
+                            "file-saver"
+                          ]
                     },
                     "configurations": {
                         "production": {

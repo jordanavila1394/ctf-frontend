@@ -19,12 +19,52 @@
                             [options]="monthsItems"
                             optionLabel="name"
                             formControlName="currentMonth"
+                            [(ngModel)]="selectedCurrentMonth"
                             (onChange)="onChangeMonth($event)"
                         ></p-dropdown>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="card">hello word</div>
+        <div class="card">
+            <div class="my-attendances">
+                <div class="headers">
+                    <div><span>Data</span></div>
+                    <div><span>Check In</span></div>
+                    <div><span>Check Out</span></div>
+                    <div><span>Ore totali</span></div>
+                </div>
+                <div class="attendance" *ngFor="let attendance of attendances">
+                    <div class="currentdate">
+                        <div>
+                            {{ attendance.checkIn | date: "d" }}
+                        </div>
+                        <div>
+                            {{ attendance.checkIn | date: "EE" }}
+                        </div>
+                    </div>
+                    <div class="checkin">
+                        {{ attendance.checkIn | date: "HH:mm:ss" }}
+                    </div>
+                    <div class="checkout">
+                        {{ attendance.checkOut | date: "HH:mm:ss" }}
+                    </div>
+                    <div class="totalhours">{{ attendance.totalHours }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <button
+                type="button"
+                pButton
+                pRipple
+                icon="pi pi-file-excel"
+                (click)="exportExcel()"
+                class="p-button-success mr-2"
+                pTooltip="XLS"
+                tooltipPosition="bottom"
+                style="margin-left: auto"
+            ></button>
+        </div>
     </div>
 </div>
