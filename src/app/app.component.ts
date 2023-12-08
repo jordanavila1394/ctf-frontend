@@ -12,7 +12,7 @@ export class AppComponent {
 
     constructor(
         public translateService: TranslateService,
-        public primengConfig: PrimeNGConfig
+        public primengConfig: PrimeNGConfig,
     ) {
         this.primengConfig.ripple = true;
         translateService.addLangs(['it', 'es', 'en']);
@@ -24,7 +24,7 @@ export class AppComponent {
         this.translateService.onLangChange.subscribe(
             (langChangeEvent: LangChangeEvent) => {
                 this.locale = langChangeEvent.lang;
-            }
+            },
         );
     }
     changeLang(lang: string) {

@@ -91,6 +91,7 @@
             "attendance": {
                 "menuTitle": "Presenze",
                 "table": "Lista presenze",
+                "users": "Lista presenza utenti",
                 "create": "Aggiungi presenza"
             },
             "user": {

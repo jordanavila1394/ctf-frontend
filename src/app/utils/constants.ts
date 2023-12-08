@@ -17,6 +17,7 @@ export const ROUTES = {
     ROUTE_DETAIL_VEHICLE: '/vehicle/detail',
     ROUTE_CREATE_ATTENDANCE: '/attendance/create',
     ROUTE_TABLE_ATTENDANCE: '/attendance/table',
+    ROUTE_USERS_ATTENDANCE: '/attendance/users',
     ROUTE_MODIFY_ATTENDANCE: '/attendance/modify',
     ROUTE_DETAIL_ATTENDANCE: '/attendance/detail',
     ROUTE_LANDING_HOME: '/home/landing',

@@ -98,8 +98,6 @@ export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
         const currentYear =
             parseInt(this.myAttendancesForm.value.currentYear, 10) || '';
         const currentMonth = this.selectedCurrentMonth?.code || '';
-        console.log(currentYear);
-        console.log(currentMonth);
 
         const attendanceServiceSubscription = this.attendanceService
             .getMyAttendances(currentUser.id, currentYear, currentMonth)
@@ -107,22 +105,64 @@ export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
                 this.attendances = data;
                 this.attendances = data.map((attendance) => ({
                     ...attendance,
-                    totalHours: this.differenceHours(
-                        new Date(attendance?.checkOut),
+                    workedHours: attendance?.checkOut
+                        ? this.formatter.formatDifferenceHours(
+                              new Date(attendance?.checkOut),
+                              new Date(attendance?.checkIn),
+                          )
+                        : 0,
+                    checkIsWeekend: this.formatter.formatIsWeekendOrFestivo(
                         new Date(attendance?.checkIn),
                     ),
                 }));
-                console.log(this.attendances);
+                console.log('this.attendances', this.attendances);
                 this.loading = false;
             });
         if (this.subscription && attendanceServiceSubscription)
             this.subscription.add(attendanceServiceSubscription);
     }
-    differenceHours(date2, date1) {
-        var difference = (date2.getTime() - date1.getTime()) / 1000;
-        difference /= 60 * 60;
-        return Math.abs(Math.round(difference));
-    }
+
+    // getMissingDates(attendances) {
+    //     let missingDay = [];
+    //     let checkInInMonth = moment()
+    //         .startOf('month')
+    //         .set({ hour: 9, minute: 0, year: 2023, month: 11 });
+    //     const currentDate = moment().set({ hour: 9, minute: 0 });
+    //     // .format('YYYY-MM-DD hh:mm')
+    //     while (checkInInMonth.isSameOrBefore(currentDate)) {
+    //         console.log(checkInInMonth.format('YYYY-MM-DD hh:mm'));
+
+    //         console.log(' day', checkInInMonth.format('DD'));
+    //         const found = attendances.find(
+    //             (day) =>
+    //                 moment(day.checkIn).format('DD') ==
+    //                 checkInInMonth.format('DD'),
+    //         );
+    //         console.log('found', found);
+    //         if (!found || found == undefined) {
+    //             console.log(
+    //                 'checkIn month: ',
+    //                 checkInInMonth.format('YYYY-MM-DD hh:mm'),
+    //             );
+    //             missingDay.push({
+    //                 checkIn: moment(checkInInMonth)
+    //                     .set({ hour: 9, minute: 0 })
+    //                     .utc()
+    //                     .format(),
+    //                 checkOut: moment(checkInInMonth)
+    //                     .set({ hour: 18, minute: 0 })
+    //                     .utc()
+    //                     .format(),
+    //             });
+    //         }
+
+    //         checkInInMonth.add(1, 'days');
+    //     }
+    //     console.log('missingDay', missingDay);
+
+    //     return missingDay;
+    // }
+
     exportExcel() {
         import('xlsx').then((xlsx) => {
             const worksheet = xlsx.utils.json_to_sheet(this.attendances);

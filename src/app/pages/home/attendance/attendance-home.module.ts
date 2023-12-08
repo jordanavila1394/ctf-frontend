@@ -8,19 +8,23 @@ import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TranslateModule } from '@ngx-translate/core';
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { AttendanceHomeComponent } from './attendance-home.component';
 import { AttendanceHomeRoutingModule } from './attendance-home-routing.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { GoogleMapsDemoModule } from 'src/app/shared/components/google-map/google-maps.module';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
     imports: [
         CommonModule,
         AttendanceHomeRoutingModule,
         GoogleMapsDemoModule,
+        ProgressSpinnerModule,
         FormsModule,
         ChartModule,
+        FileUploadModule,
         MenuModule,
         DropdownModule,
         ReactiveFormsModule,

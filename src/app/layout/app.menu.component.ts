@@ -48,8 +48,14 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Attendance list',
                         translationCode: 'menu.routes.attendance.table',
-                        icon: 'pi pi-users',
+                        icon: 'pi pi-list',
                         routerLink: [ROUTES.ROUTE_TABLE_ATTENDANCE],
+                    },
+                    {
+                        label: 'Attendance users list',
+                        translationCode: 'menu.routes.attendance.users',
+                        icon: 'pi pi-users',
+                        routerLink: [ROUTES.ROUTE_USERS_ATTENDANCE],
                     },
                 ],
             });
@@ -109,8 +115,11 @@ export class AppMenuComponent implements OnInit {
             });
         }
 
-        if (userRoles.includes('ROLE_WORKER') ||userRoles.includes('ROLE_ADMIN') ||
-        userRoles.includes('ROLE_MODERATOR')) {
+        if (
+            userRoles.includes('ROLE_WORKER') ||
+            userRoles.includes('ROLE_ADMIN') ||
+            userRoles.includes('ROLE_MODERATOR')
+        ) {
             this.model.push({
                 label: 'Landing',
                 translationCode: 'menu.routes.landing.menuTitle',

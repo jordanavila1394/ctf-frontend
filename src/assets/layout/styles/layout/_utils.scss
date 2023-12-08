@@ -9,6 +9,9 @@
     &:last-child {
         margin-bottom: 0;
     }
+    @media screen and (max-width: 600px) {
+        padding: 0.8rem;
+      }
 }
 
 .p-toast {

@@ -12,12 +12,8 @@
         </div>
         <div>
             <div class="items-actions">
-                <div
-                    class="item-circle"
-                    *ngFor="let menu of menuItems"
-                    routerLink="{{ menu.linkRoute }}"
-                >
-                    <a>
+                <div class="item-circle" *ngFor="let menu of menuItems">
+                    <a routerLink="{{ menu?.linkRoute }}" [class.disabled]="!(menu?.linkRoute) ? true : null">
                         <div class="item">
                             <div class="image-wrapper">
                                 <img src="{{ menu?.source }}" class="" />
@@ -31,6 +27,16 @@
     </div>
     <div class="col-12">
         <div class="card">
+            <div>
+                {{
+                    attendanceData?.attendance?.checkIn
+                        | date: "MMM dd,yyyy HH:mm:ss"
+                }}
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
             <div
                 class="attendance-wrapper"
                 *ngIf="!attendanceData?.foundCheckIn"
@@ -39,7 +45,7 @@
                     pButton
                     pRipple
                     label="Procedi con il Check In"
-                    class="p-button-success"
+                    class="p-button-success p-button-lg"
                     size="large"
                     [routerLink]="['/home/attendance']"
                 ></button>
@@ -55,7 +61,7 @@
                     pButton
                     pRipple
                     label="Devi fare il checkout "
-                    class="p-button-warning"
+                    class="p-button-warning p-button-lg"
                     size="large"
                     [routerLink]="['/home/attendance']"
                 ></button>

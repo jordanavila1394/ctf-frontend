@@ -4,6 +4,7 @@
     justify-content: space-around;
     gap: 1rem;
     .item-circle{
+        cursor: pointer;
         a{
             color: black;
             font-size: 1.2rem;
@@ -33,6 +34,11 @@
             
                
             }
+
+            &.disabled {
+                pointer-events: none;
+                cursor: default;
+             }
         }
     }
     

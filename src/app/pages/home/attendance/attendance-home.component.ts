@@ -26,6 +26,11 @@ import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 
+interface UploadEvent {
+    originalEvent: Event;
+    files: File[];
+}
+
 @Component({
     templateUrl: './attendance-home.component.html',
     styleUrls: ['./attendance-home.component.scss'],
@@ -47,6 +52,9 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
 
     gpsLatitude;
     gpsLongitude;
+
+    //Upload 
+    uploadedFiles: any[] = [];
 
     //Variables
 
@@ -244,11 +252,21 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             .checkOutAttendance(
                 this.attendanceCheckIn?.id,
                 this.currentUser?.id,
+                this.uploadedFiles,
             )
             .subscribe((res) =>
                 this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
             );
     }
+    //Upload Image
+
+    onUpload(event:UploadEvent| any) {
+        for(let file of event.files) {
+            this.uploadedFiles.push(file);
+        }
+
+    }
+
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
     }

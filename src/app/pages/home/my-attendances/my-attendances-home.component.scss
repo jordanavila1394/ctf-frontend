@@ -12,8 +12,8 @@
             justify-content: center;
             width: 20%;
             span{
-                font-size: 0.9rem;
-                font-weight: 400;
+                font-size: 1rem;
+                font-weight: 500;
             }
         }
     }
@@ -21,6 +21,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        &.is-weekend{
+            background-color: rgb(231, 230, 230);
+               
+           }
+
         div{
             display: flex;
             flex-direction: column;
@@ -35,8 +41,34 @@
                 border-radius: 15px;
                 width: 20%;
             }
+            &.status{
+                span{
+                    padding: 1rem;
+                    border-radius: 5px;
+                    font-weight: 500;
+                    &.success{
+                        background-color: rgb(14, 153, 14);
+                        color: white;
+                    }
+                    &.warning{
+                        background-color: rgb(230, 191, 38);
+                        color: white;
+                    }
+                    &.error{
+                        background-color: rgb(220, 87, 29);
+                        color: white;
+                    }
+                }
+                
+            }
         }
        
        
+    }
+    .missing{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
     }
 }

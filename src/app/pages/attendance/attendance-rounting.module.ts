@@ -9,10 +9,17 @@ import { RouterModule } from '@angular/router';
                 data: { breadcrumb: 'Table' },
                 loadChildren: () =>
                     import('./table/table-attendance.module').then(
-                        (m) => m.TableAttendanceModule
+                        (m) => m.TableAttendanceModule,
                     ),
             },
-
+            {
+                path: 'users',
+                data: { breadcrumb: 'Users' },
+                loadChildren: () =>
+                    import('./users/users-attendance.module').then(
+                        (m) => m.UsersAttendanceModule,
+                    ),
+            },
             { path: '**', redirectTo: '/notfound' },
         ]),
     ],

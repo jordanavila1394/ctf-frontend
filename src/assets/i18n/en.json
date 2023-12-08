@@ -91,6 +91,7 @@
             "attendance": {
                 "menuTitle": "Attendance",
                 "table": "Attendance list",
+                "users": "Attendance users list",
                 "create": "Add attendance"
             },
             "user": {

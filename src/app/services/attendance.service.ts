@@ -67,12 +67,13 @@ export class AttendanceService {
             httpOptions,
         );
     }
-    checkOutAttendance(id, userId): Observable<any> {
+    checkOutAttendance(id, userId, uploadedFiles): Observable<any> {
         return this.http.post(
             API_URL + 'checkOutAttendance',
             {
                 id,
                 userId,
+                uploadedFiles,
             },
             httpOptions,
         );

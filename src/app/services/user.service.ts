@@ -31,6 +31,18 @@ export class UserService {
         );
     }
 
+    getAllUsersWithAttendances(idCompany, year, month): Observable<any> {
+        return this.http.post(
+            API_URL + 'allUsersWithAttendances',
+            {
+                idCompany,
+                year,
+                month,
+            },
+            httpOptions,
+        );
+    }
+
     getUser(id: string): Observable<any> {
         return this.http.get(API_URL + 'getUser' + '/' + id);
     }

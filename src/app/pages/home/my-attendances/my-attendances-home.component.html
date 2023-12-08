@@ -32,24 +32,47 @@
                     <div><span>Data</span></div>
                     <div><span>Check In</span></div>
                     <div><span>Check Out</span></div>
+                    <div><span>Stato</span></div>
                     <div><span>Ore totali</span></div>
                 </div>
-                <div class="attendance" *ngFor="let attendance of attendances">
+                <div
+                    class="attendance"
+                    [ngClass]="{
+                        'is-weekend': attendance?.checkIsWeekend
+                    }"
+                    *ngFor="let attendance of attendances"
+                >
                     <div class="currentdate">
                         <div>
-                            {{ attendance.checkIn | date: "d" }}
+                            {{ attendance?.checkIn | date: "d" }}
                         </div>
                         <div>
-                            {{ attendance.checkIn | date: "EE" }}
+                            {{ attendance?.checkIn | date: "EE" }}
                         </div>
                     </div>
                     <div class="checkin">
-                        {{ attendance.checkIn | date: "HH:mm:ss" }}
+                        {{ attendance?.checkIn | date: "HH:mm" }}
                     </div>
                     <div class="checkout">
-                        {{ attendance.checkOut | date: "HH:mm:ss" }}
+                        {{ attendance?.checkOut | date: "HH:mm" }}
                     </div>
-                    <div class="totalhours">{{ attendance.totalHours }}</div>
+                    <div class="status">
+                        <span
+                            [ngClass]="{
+                                success: attendance?.status === 'Presente',
+                                warning: attendance?.status === 'Verificare',
+                                error: attendance?.status === 'Check Out?'
+                            }"
+                        >
+                            {{ attendance?.status }}
+                        </span>
+                    </div>
+                    <div class="workedHours">
+                        {{ attendance?.workedHours }}
+                    </div>
+                </div>
+                <div class="missing" *ngIf="attendances?.length === 0">
+                    <span class="font-bold">Non ci sono presenze</span>
                 </div>
             </div>
         </div>

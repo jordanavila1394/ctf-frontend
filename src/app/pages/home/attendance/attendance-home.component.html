@@ -43,33 +43,45 @@
                             [(ngModel)]="selectedVehicle"
                         ></p-dropdown>
                     </div>
+                    <div
+                        class="field col-12 md:col-4"
+                        *ngIf="
+                            attendanceData &&
+                            attendanceData?.foundCheckIn &&
+                            currentAddress
+                        "
+                    >
+                        <label htmlFor="images1">Aggiungi immagini</label>
+                        <p-fileUpload
+                            name="demo[]"
+                            [showUploadButton]="false"
+                            [multiple]="true"
+                            accept="image/*"
+                            [maxFileSize]="1000000"
+                        >
+                            <ng-template pTemplate="content">
+                                <ul *ngIf="uploadedFiles.length">
+                                    <li *ngFor="let file of uploadedFiles">
+                                        {{ file.name }} - {{ file.size }} bytes
+                                    </li>
+                                </ul>
+                            </ng-template>
+                        </p-fileUpload>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="col-12">
-        <div class="card">
-            <div *ngIf="currentAddress">
-                <div>Attualmente ti trovi</div>
-                <div class="font-bold">{{ currentAddress }}</div>
-            </div>
-            <div>
-                {{ distanceBetween }}
-            </div>
-            <div *ngIf="distanceBetween">
-                Sei a {{ distanceBetween | number: ".1-3" }} km dalla sede
-                selezionata. <br />
-                <div *ngIf="isNearDistance">Puoi effetuare il check</div>
-                <div *ngIf="!isNearDistance">Non puoi effetuare il check</div>
-            </div>
-            <div></div>
-        </div>
-    </div>
+
     <div class="col-12">
         <div>
             <div class="attendance-button-wrapper">
+                <p-progressSpinner *ngIf="!currentAddress"></p-progressSpinner>
                 <button
-                    *ngIf="!(attendanceData && attendanceData?.foundCheckIn)"
+                    *ngIf="
+                        !(attendanceData && attendanceData?.foundCheckIn) &&
+                        currentAddress
+                    "
                     [ngClass]="
                         isNearDistance
                             ? 'attendance-button active-checkin'
@@ -81,7 +93,11 @@
                     <span>Checkin</span>
                 </button>
                 <button
-                    *ngIf="attendanceData && attendanceData?.foundCheckIn"
+                    *ngIf="
+                        attendanceData &&
+                        attendanceData?.foundCheckIn &&
+                        currentAddress
+                    "
                     [ngClass]="
                         isNearDistance
                             ? 'attendance-button active-checkout'
@@ -93,6 +109,25 @@
                     <span>Checkout</span>
                 </button>
             </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card" *ngIf="currentAddress">
+            <div *ngIf="currentAddress">
+                <div>Attualmente ti trovi</div>
+                <div class="font-bold">{{ currentAddress }}</div>
+            </div>
+
+            <div *ngIf="distanceBetween">
+                Sei a {{ distanceBetween | number: ".1-3" }} km dalla sede
+                selezionata. <br />
+                <div *ngIf="isNearDistance">Puoi effetuare il check</div>
+                <div *ngIf="!isNearDistance">Non puoi effetuare il check.</div>
+                <div *ngIf="!isNearDistance">
+                    Entra nel raggio di 300m e ricarica la pagina
+                </div>
+            </div>
+            <div></div>
         </div>
     </div>
     <div class="col-12">
