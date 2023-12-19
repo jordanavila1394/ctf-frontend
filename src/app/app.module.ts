@@ -62,6 +62,8 @@ import { DrodownLanguageModule } from './shared/components/dropdown-language/dro
 import localeIt from '@angular/common/locales/it';
 import { VehicleModule } from './pages/vehicle/vehicle.module';
 import { HomeModule } from './pages/home/home.module';
+import { ImagesDialogModule } from './shared/components/imagesDialog/images-dialog.module';
+import { PdfSplitDropzoneModule } from './shared/components/pdf-splitter/pdf-splitter.module';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -81,6 +83,8 @@ import { HomeModule } from './pages/home/home.module';
         HomeModule,
         DefaultAutocompleteModule,
         DrodownLanguageModule,
+        ImagesDialogModule,
+        PdfSplitDropzoneModule,
         StoreModule.forRoot(reducers, { metaReducers }),
         StoreDevtoolsModule.instrument({
             logOnly: environment.production,

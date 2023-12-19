@@ -30,8 +30,8 @@
             <div class="my-attendances">
                 <div class="headers">
                     <div><span>Data</span></div>
-                    <div><span>Check In</span></div>
-                    <div><span>Check Out</span></div>
+                    <div><span>CheckIn</span></div>
+                    <div><span>CheckOut</span></div>
                     <div><span>Stato</span></div>
                     <div><span>Ore totali</span></div>
                 </div>
@@ -57,15 +57,17 @@
                         {{ attendance?.checkOut | date: "HH:mm" }}
                     </div>
                     <div class="status">
-                        <span
-                            [ngClass]="{
-                                success: attendance?.status === 'Presente',
-                                warning: attendance?.status === 'Verificare',
-                                error: attendance?.status === 'Check Out?'
-                            }"
-                        >
-                            {{ attendance?.status }}
-                        </span>
+                        <div [ngSwitch]="attendance?.status">
+                            <span class="success" *ngSwitchCase="'Presente'">
+                                {{ attendance?.status }}
+                            </span>
+                            <span class="warning" *ngSwitchCase="'Verificare'">
+                                {{ attendance?.status }}
+                            </span>
+                            <span class="error" *ngSwitchCase="'CheckOut?'">
+                                {{ attendance?.status }}
+                            </span>
+                        </div>
                     </div>
                     <div class="workedHours">
                         {{ attendance?.workedHours }}

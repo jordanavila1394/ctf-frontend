@@ -1,5 +1,5 @@
 //Angular
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 
 //PrimeNg
 
@@ -25,17 +25,16 @@ import { FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
-
-interface UploadEvent {
-    originalEvent: Event;
-    files: File[];
-}
+import { UploadService } from 'src/app/services/upload.service';
+import { FileUpload, FileUploadEvent, UploadEvent } from 'primeng/fileupload';
 
 @Component({
     templateUrl: './attendance-home.component.html',
     styleUrls: ['./attendance-home.component.scss'],
 })
 export class AttendanceHomeComponent implements OnInit, OnDestroy {
+    @ViewChild('fileUpload') fileUpload: FileUpload;
+
     authState$: Observable<AuthState>;
 
     //Language
@@ -53,8 +52,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     gpsLatitude;
     gpsLongitude;
 
-    //Upload 
-    uploadedFiles: any[] = [];
+    //Uplo
 
     //Variables
 
@@ -82,11 +80,14 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     isNearDistance: boolean = false;
     attendanceCheckIn: any;
 
+    uploadedFiles: any[] = [];
+
     constructor(
         public fb: FormBuilder,
         public layoutService: LayoutService,
         private attendanceService: AttendanceService,
         private userService: UserService,
+        private uploadService: UploadService,
         private router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
@@ -163,7 +164,6 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                     if (position) {
                         this.gpsLatitude = position.coords.latitude;
                         this.gpsLongitude = position.coords.longitude;
-                        console.log(this.gpsLatitude);
                         new google.maps.Geocoder()
                             .geocode({
                                 location: {
@@ -186,7 +186,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                                 this.calculateDistance();
                             })
                             .catch((e) =>
-                            console.log('Geocoder failed due to: ' + e),
+                                console.log('Geocoder failed due to: ' + e),
                             );
                     }
                 },
@@ -247,26 +247,47 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             );
     }
     saveCheckOut() {
-        console.log(this.attendanceCheckIn);
+        const formData = new FormData();
+
+        for (let file of this.uploadedFiles) {
+            formData.append('files', file);
+        }
+
+        //TARGA
+        const licensePlate = this.vehiclesItems.find(
+            (vehicle) => vehicle.id === this.selectedVehicle,
+        ).licensePlate;
+
+        const checkInId = this.attendanceCheckIn?.id;
+        formData.append('checkInId', checkInId);
+        formData.append('licensePlate', licensePlate);
+
+        this.uploadService.uploadFiles(formData).subscribe(
+            (response) => {},
+            (error) => {},
+        );
+
         this.attendanceService
             .checkOutAttendance(
                 this.attendanceCheckIn?.id,
                 this.currentUser?.id,
-                this.uploadedFiles,
             )
             .subscribe((res) =>
                 this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
             );
     }
-    //Upload Image
 
-    onUpload(event:UploadEvent| any) {
-        for(let file of event.files) {
+    //Upload Image
+    uploadFiles(event) {
+        for (let file of event.files) {
             this.uploadedFiles.push(file);
         }
-
     }
-
+    remove(event: Event, file: any) {
+		const index: number = this.uploadedFiles.indexOf(file);
+		this.fileUpload.remove(event, index);
+	}
+    
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
     }

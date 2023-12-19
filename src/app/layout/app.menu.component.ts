@@ -46,16 +46,16 @@ export class AppMenuComponent implements OnInit {
                 translationCode: 'menu.routes.attendance.menuTitle',
                 items: [
                     {
-                        label: 'Attendance list',
-                        translationCode: 'menu.routes.attendance.table',
-                        icon: 'pi pi-list',
-                        routerLink: [ROUTES.ROUTE_TABLE_ATTENDANCE],
-                    },
-                    {
                         label: 'Attendance users list',
                         translationCode: 'menu.routes.attendance.users',
                         icon: 'pi pi-users',
                         routerLink: [ROUTES.ROUTE_USERS_ATTENDANCE],
+                    },
+                    {
+                        label: 'Attendance list',
+                        translationCode: 'menu.routes.attendance.table',
+                        icon: 'pi pi-list',
+                        routerLink: [ROUTES.ROUTE_TABLE_ATTENDANCE],
                     },
                 ],
             });

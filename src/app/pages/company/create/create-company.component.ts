@@ -89,7 +89,6 @@ export class CreateCompanyComponent implements OnInit {
     });
 
     selectAddress(place: any): void {
-        console.log(place);
     }
 
     onSubmit(): void {

@@ -101,7 +101,6 @@ export class ModifyCompanyComponent implements OnInit {
         description: [''],
     });
     selectAddress(place: any): void {
-        console.log(place);
     }
 
     onSubmit(): void {

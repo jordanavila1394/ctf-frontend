@@ -115,54 +115,13 @@ export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
                         new Date(attendance?.checkIn),
                     ),
                 }));
-                console.log('this.attendances', this.attendances);
                 this.loading = false;
             });
         if (this.subscription && attendanceServiceSubscription)
             this.subscription.add(attendanceServiceSubscription);
     }
 
-    // getMissingDates(attendances) {
-    //     let missingDay = [];
-    //     let checkInInMonth = moment()
-    //         .startOf('month')
-    //         .set({ hour: 9, minute: 0, year: 2023, month: 11 });
-    //     const currentDate = moment().set({ hour: 9, minute: 0 });
-    //     // .format('YYYY-MM-DD hh:mm')
-    //     while (checkInInMonth.isSameOrBefore(currentDate)) {
-    //         console.log(checkInInMonth.format('YYYY-MM-DD hh:mm'));
-
-    //         console.log(' day', checkInInMonth.format('DD'));
-    //         const found = attendances.find(
-    //             (day) =>
-    //                 moment(day.checkIn).format('DD') ==
-    //                 checkInInMonth.format('DD'),
-    //         );
-    //         console.log('found', found);
-    //         if (!found || found == undefined) {
-    //             console.log(
-    //                 'checkIn month: ',
-    //                 checkInInMonth.format('YYYY-MM-DD hh:mm'),
-    //             );
-    //             missingDay.push({
-    //                 checkIn: moment(checkInInMonth)
-    //                     .set({ hour: 9, minute: 0 })
-    //                     .utc()
-    //                     .format(),
-    //                 checkOut: moment(checkInInMonth)
-    //                     .set({ hour: 18, minute: 0 })
-    //                     .utc()
-    //                     .format(),
-    //             });
-    //         }
-
-    //         checkInInMonth.add(1, 'days');
-    //     }
-    //     console.log('missingDay', missingDay);
-
-    //     return missingDay;
-    // }
-
+    
     exportExcel() {
         import('xlsx').then((xlsx) => {
             const worksheet = xlsx.utils.json_to_sheet(this.attendances);

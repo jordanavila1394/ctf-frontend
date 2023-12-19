@@ -1,0 +1,42 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Permessi</h5>
+            <form [formGroup]="permissionForm" #form="ngForm">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="user1">Tipologia permesso</label>
+                        <p-dropdown
+                            formControlName="typology"
+                            [options]="tipologyPermissionsItems"
+                            optionLabel="name"
+                            optionValue="value"
+                            [showClear]="true"
+                            placeholder="--Tipologia--"
+                        ></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="dates1">Seleziona date permessi</label>
+                        <p-calendar
+                            formControlName="dates"
+                            selectionMode="multiple"
+                            placeholder="Seleziona date"
+                        ></p-calendar>
+                    </div>
+                </div>
+                <button
+                    pButton
+                    pRipple
+                    label="Richiedi permesso"
+                    class="w-full p-3 text-xl"
+                    (click)="savePermission()"
+                ></button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div></div>
+    </div>
+</div>

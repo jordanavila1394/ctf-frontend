@@ -57,6 +57,8 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
             {
                 label: 'Permesso',
                 source: 'assets/icons/leave.png',
+                linkRoute: ROUTES.ROUTE_PERMISSION_HOME,
+
                 icon: 'pi pi-fw pi-check',
             },
             {

@@ -1,0 +1,5 @@
+<div class="images-wrapper">
+    <div class="image-wrapper" *ngFor="let file of this.files">
+        <img class="image" [src]="getImageUrl(file?.keyFile)" alt="Immagine" />
+    </div>
+</div>

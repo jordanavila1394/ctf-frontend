@@ -13,7 +13,10 @@
         <div>
             <div class="items-actions">
                 <div class="item-circle" *ngFor="let menu of menuItems">
-                    <a routerLink="{{ menu?.linkRoute }}" [class.disabled]="!(menu?.linkRoute) ? true : null">
+                    <a
+                        routerLink="{{ menu?.linkRoute }}"
+                        [class.disabled]="!menu?.linkRoute ? true : null"
+                    >
                         <div class="item">
                             <div class="image-wrapper">
                                 <img src="{{ menu?.source }}" class="" />
@@ -25,13 +28,30 @@
             </div>
         </div>
     </div>
-    <div class="col-12">
+    <div
+        class="col-12"
+        *ngIf="
+            attendanceData?.foundCheckIn &&
+            !attendanceData?.attendance?.checkOut
+        "
+    >
         <div class="card">
-            <div>
-                {{
-                    attendanceData?.attendance?.checkIn
-                        | date: "MMM dd,yyyy HH:mm:ss"
-                }}
+            <div class="checkin-wrapper">
+                <div class="title">Ultimo Check In</div>
+                <div class="content">
+                    <div class="day">
+                        {{
+                            attendanceData?.attendance?.checkIn
+                                | date: "EEEE, MMMM dd, yyyy"
+                        }}
+                    </div>
+                    <div class="hours">
+                        {{
+                            attendanceData?.attendance?.checkIn
+                                | date: "HH:mm:ss a"
+                        }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

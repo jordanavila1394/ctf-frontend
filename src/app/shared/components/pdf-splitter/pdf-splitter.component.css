@@ -1,0 +1,12 @@
+#dropZone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .pdf-container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+  }
+  

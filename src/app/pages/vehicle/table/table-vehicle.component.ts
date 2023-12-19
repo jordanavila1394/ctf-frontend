@@ -198,7 +198,6 @@ export class TableVehicleComponent implements OnInit {
     }
 
     onGlobalFilter(table: Table, event: Event) {
-        console.log('event', event);
         table.filterGlobal(
             (event.target as HTMLInputElement).value,
             'contains',

@@ -82,7 +82,6 @@ export class CreateUserComponent implements OnInit {
     });
 
     selectAddress(place: any): void {
-        console.log(place);
     }
 
     forceLower(strInput) {

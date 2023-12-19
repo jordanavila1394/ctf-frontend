@@ -3,19 +3,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const API_URL = environment.endpoint + 'api/attendance/';
+const API_URL = environment.endpoint + 'api/permission/';
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 @Injectable({
     providedIn: 'root',
 })
-export class AttendanceService {
+export class PermissionService {
     constructor(private http: HttpClient) {}
 
-    getAllAttendances(idCompany): Observable<any> {
+    getAllPermissions(idCompany): Observable<any> {
         return this.http.post(
-            API_URL + 'allAttendances',
+            API_URL + 'allPermission',
             {
                 idCompany,
             },
@@ -23,9 +23,9 @@ export class AttendanceService {
         );
     }
 
-    getAttendanceByUser(idUser): Observable<any> {
+    getPermissionByUser(idUser): Observable<any> {
         return this.http.post(
-            API_URL + 'getAttendance',
+            API_URL + 'getPermission',
             {
                 idUser,
             },
@@ -33,9 +33,9 @@ export class AttendanceService {
         );
     }
 
-    getMyAttendances(idUser, year, month): Observable<any> {
+    getMyPermissions(idUser, year, month): Observable<any> {
         return this.http.post(
-            API_URL + 'getMyAttendances',
+            API_URL + 'getMyPermissions',
             {
                 idUser,
                 year,
@@ -45,9 +45,9 @@ export class AttendanceService {
         );
     }
 
-    getDataAttendances(idCompany): Observable<any> {
+    getDataPermissions(idCompany): Observable<any> {
         return this.http.post(
-            API_URL + 'getDataAttendances',
+            API_URL + 'getDataPermissions',
             {
                 idCompany,
             },
@@ -55,24 +55,14 @@ export class AttendanceService {
         );
     }
 
-    checkInAttendance(userId, companyId, placeId, vehicleId): Observable<any> {
+    createPermission(userId, companyId, typology, dates): Observable<any> {
         return this.http.post(
-            API_URL + 'checkInAttendance',
+            API_URL + 'createPermission',
             {
                 userId,
                 companyId,
-                placeId,
-                vehicleId,
-            },
-            httpOptions,
-        );
-    }
-    checkOutAttendance(id, userId): Observable<any> {
-        return this.http.post(
-            API_URL + 'checkOutAttendance',
-            {
-                id,
-                userId,
+                typology,
+                dates,
             },
             httpOptions,
         );

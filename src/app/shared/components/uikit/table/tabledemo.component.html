@@ -272,10 +272,10 @@
                             }}</span>
                         </td>
                         <td>
-                            {{ customer.date | date : "MM/dd/yyyy" }}
+                            {{ customer.date | date: "MM/dd/yyyy" }}
                         </td>
                         <td>
-                            {{ customer.balance | currency : "USD" : "symbol" }}
+                            {{ customer.balance | currency: "USD" : "symbol" }}
                         </td>
                         <td>
                             <span
@@ -449,7 +449,9 @@
                         icon="pi pi-fw {{
                             isExpanded ? 'pi-minus' : 'pi-plus'
                         }}"
-                        label="{{ isExpanded ? 'Collapse All' : 'Expand All' }}"
+                        label="{{
+                            isExpanded ? 'Chiudi Tutto' : 'Espandi Tutto'
+                        }}"
                         (click)="expandAll()"
                     ></button>
                     <div class="flex table-header"></div>
@@ -509,7 +511,7 @@
                             />
                         </td>
                         <td style="min-width: 8rem">
-                            {{ product.price | currency : "USD" }}
+                            {{ product.price | currency: "USD" }}
                         </td>
                         <td style="min-width: 10rem">{{ product.category }}</td>
                         <td style="min-width: 10rem">
@@ -582,7 +584,7 @@
                                             <td>
                                                 {{
                                                     order.amount
-                                                        | currency : "USD"
+                                                        | currency: "USD"
                                                 }}
                                             </td>
                                             <td>

@@ -28,6 +28,14 @@ import { RouterModule } from '@angular/router';
                         (m) => m.MyAttendancesHomeModule,
                     ),
             },
+            {
+                path: 'permission',
+                data: { breadcrumb: 'Permission' },
+                loadChildren: () =>
+                    import('./permission/permission-home.module').then(
+                        (m) => m.PermissionHomeModule,
+                    ),
+            },
         ]),
     ],
     exports: [RouterModule],

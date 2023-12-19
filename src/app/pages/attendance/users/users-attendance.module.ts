@@ -19,10 +19,12 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MenuModule } from 'primeng/menu';
 import { GalleriaModule } from 'primeng/galleria';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
 import { UsersAttendanceRoutingModule } from './users-attedance-routing.module';
 import { UsersAttendanceComponent } from './users-attendance.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { PdfSplitDropzoneModule } from 'src/app/shared/components/pdf-splitter/pdf-splitter.module';
 
 @NgModule({
     imports: [
@@ -42,7 +44,9 @@ import { TranslateModule } from '@ngx-translate/core';
         GalleriaModule,
         MultiSelectModule,
         DropdownModule,
+        DynamicDialogModule,
         ProgressBarModule,
+        PdfSplitDropzoneModule,
         MenuModule,
         FormsModule,
         TranslateModule,

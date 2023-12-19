@@ -36,6 +36,11 @@ import { FormBuilder } from '@angular/forms';
 //Libraries
 import * as FileSaver from 'file-saver';
 import * as moment from 'moment';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ImagesDialogComponent } from 'src/app/shared/components/imagesDialog/images-dialog.component';
+
+import * as pdfjsLib from 'pdfjs-dist';
+
 
 interface expandedRows {
     [key: string]: boolean;
@@ -44,7 +49,7 @@ interface expandedRows {
 @Component({
     templateUrl: './users-attendance.component.html',
     styleUrls: ['./users-attendance.component.scss'],
-    providers: [MessageService, ConfirmationService],
+    providers: [MessageService, ConfirmationService, DialogService],
 })
 export class UsersAttendanceComponent implements OnInit, OnDestroy {
     users: any;
@@ -68,6 +73,8 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
 
     monthsItems = [];
 
+    imageList: string[] = [];
+
     //Utils
     formatter!: Formatter;
 
@@ -86,6 +93,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private companyService: CompanyService,
         private attendanceService: AttendanceService,
+        public dialogService: DialogService,
         private userService: UserService,
         private store: Store<{ companyState: CompanyState }>,
     ) {
@@ -163,7 +171,6 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                         checkIsWeekend: this.formatter.formatIsWeekendOrFestivo(
                             new Date(attendance?.checkIn),
                         ),
-
                     })),
                     totalHours: this.formatter.formatTotalWorkedHours(
                         user?.attendances,
@@ -193,7 +200,6 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                     xlsx.utils.json_to_sheet(formattedAttendances);
                 arrayHeaders.push(fullName);
             }
-            console.log(objExcel);
             let workbook = {
                 Sheets: objExcel,
                 SheetNames: arrayHeaders,
@@ -263,12 +269,15 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     }
 
     //DIALOG
-    showDialog() {
-        this.visible = true;
+    showImages(files) {
+        const ref = this.dialogService.open(ImagesDialogComponent, {
+            header: 'Foto',
+            width: '90%',
+            data: files,
+        });
     }
 
     //Table
-
     expandAll() {
         if (!this.isExpanded) {
             this.users.forEach((product) =>

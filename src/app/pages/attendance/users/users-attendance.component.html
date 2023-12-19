@@ -23,19 +23,7 @@
                             (onChange)="onChangeMonth($event)"
                         ></p-dropdown>
                     </div>
-                    <div class="field col">
-                        <button
-                            type="button"
-                            pButton
-                            pRipple
-                            icon="pi pi-file-excel"
-                            (click)="exportExcel()"
-                            class="p-button-success mr-2"
-                            pTooltip="XLS"
-                            tooltipPosition="bottom"
-                            style="margin-left: auto"
-                        ></button>
-                    </div>
+                    <div class="field col"></div>
                 </div>
             </form>
         </div>
@@ -49,7 +37,7 @@
             >
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem"></th>
+                        <th></th>
                         <th pSortableColumn="name">
                             Nome <p-sortIcon field="name"></p-sortIcon>
                         </th>
@@ -83,14 +71,14 @@
                                 "
                             ></button>
                         </td>
-                        <td style="min-width: 12rem">{{ user.name }}</td>
+                        <td>{{ user.name }}</td>
                         <td>
                             {{ user.surname }}
                         </td>
-                        <td style="min-width: 8rem" class="font-bold">
+                        <td class="font-bold">
                             {{ user.fiscalCode }}
                         </td>
-                        <td style="min-width: 8rem" class="font-bold">
+                        <td class="font-bold">
                             {{ user.totalHours }}
                         </td>
                     </tr>
@@ -114,7 +102,6 @@
                                             <th>Ore totali</th>
                                             <th>Stato</th>
                                             <th>Foto</th>
-                                            <th style="width: 4rem"></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template
@@ -168,47 +155,28 @@
                                                             'Verificare',
                                                         error:
                                                             attendance?.status ===
-                                                            'Check Out?'
+                                                            'CheckOut?'
                                                     }"
                                                 >
                                                     {{ attendance?.status }}
                                                 </span>
                                             </td>
                                             <td>
-                                                <p-button
-                                                    (click)="showDialog()"
-                                                    icon="pi pi-external-link"
-                                                    label="Show"
-                                                ></p-button>
-                                                <p-dialog
-                                                    header="Fotos"
-                                                    [(visible)]="visible"
-                                                    [breakpoints]="{
-                                                        '960px': '75vw'
-                                                    }"
-                                                    [style]="{ width: '50vw' }"
-                                                    [draggable]="false"
-                                                    [resizable]="false"
-                                                >
-                                                <img  src="{{attendance?.images[0].imageData}}"/>
-
-                                                    <!-- <p-galleria (value)="attendance.images"  [showThumbnails]="false" [showIndicatorsOnItem]="true" indicatorsPosition="left"  [containerStyle]="{ 'max-width': '100%', 'margin-top': '2em' }">
-                                                    <ng-template pTemplate="item" let-item>
-                                                        <img [src]="item?.imageData" style="width: 100%; display: block;" />
-                                                    </ng-template>
-                                                    <ng-template pTemplate="indicator" let-index>
-                                                        <span style="color: #e9ecef; cursor: pointer">
-                                                            {{ index + 1 }}
-                                                        </span>
-                                                    </ng-template>
-                                                </p-galleria> -->
-                                                </p-dialog>
-                                            </td>
-                                            <td>
-                                                <p-button
+                                                <button
+                                                    *ngIf="
+                                                        attendance?.files
+                                                            ?.length > 0
+                                                    "
                                                     type="button"
-                                                    icon="pi pi-search"
-                                                ></p-button>
+                                                    (click)="
+                                                        showImages(
+                                                            attendance?.files
+                                                        )
+                                                    "
+                                                    pButton
+                                                    class="p-button-outlined p-button-secondary"
+                                                    icon="pi pi-images"
+                                                ></button>
                                             </td>
                                         </tr>
                                     </ng-template>
@@ -231,12 +199,29 @@
                         icon="pi pi-fw {{
                             isExpanded ? 'pi-minus' : 'pi-plus'
                         }}"
-                        label="{{ isExpanded ? 'Collapse All' : 'Expand All' }}"
+                        label="{{
+                            isExpanded ? 'Chiudi Tutto' : 'Espandi Tutto'
+                        }}"
                         (click)="expandAll()"
                     ></button>
-                    <div class="flex table-header"></div>
+                    <button
+                        type="button"
+                        pButton
+                        pRipple
+                        icon="pi pi-file-excel"
+                        (click)="exportExcel()"
+                        class="p-button-success mr-2"
+                        pTooltip="XLS"
+                        tooltipPosition="bottom"
+                        style="margin-left: 1rem"
+                    ></button>
                 </ng-template>
             </p-table>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <app-pdf-splitter></app-pdf-splitter>
         </div>
     </div>
 </div>

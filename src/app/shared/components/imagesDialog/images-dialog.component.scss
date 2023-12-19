@@ -1,0 +1,13 @@
+.images-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    gap:1rem;
+    .image-wrapper{
+        width: 100%;
+        height: auto;
+        img{
+            width: 100%;
+            height: auto; 
+        }
+    }
+}

@@ -18,11 +18,8 @@ export class GoogleMapsDemoComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('this.customZoom', this.customZoom);
         this.zoom = this.customZoom ? this.customZoom : 9.5;
         for (let place of this.places) {
-            console.log('PLACE places', this.places);
-            console.log('PLACE place', place);
 
             this.center = {
                 lat: parseFloat(place?.latitude),

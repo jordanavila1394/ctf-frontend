@@ -37,7 +37,6 @@ export class DropdownSelectCompanyComponent implements OnInit {
         });
     }
     onChangeOption(event) {
-        console.log(event.value);
         this.store.dispatch(setCompany({ currentCompany: event.value }));
     }
 }

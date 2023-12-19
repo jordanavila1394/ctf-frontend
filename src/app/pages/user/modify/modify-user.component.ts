@@ -75,7 +75,6 @@ export class ModifyUserComponent implements OnInit {
                 id: this.idUser,
             });
             this.userService.getUser(this.idUser).subscribe((user) => {
-                console.log(user);
                 const companyId = user?.companies[0]?.id
                     ? user?.companies[0]?.id
                     : '';
@@ -115,7 +114,6 @@ export class ModifyUserComponent implements OnInit {
     }
 
     selectAddress(place: any): void {
-        console.log(place);
     }
 
     onSubmit(): void {
