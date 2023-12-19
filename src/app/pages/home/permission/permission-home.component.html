@@ -25,12 +25,14 @@
                         ></p-calendar>
                     </div>
                 </div>
+
                 <button
                     pButton
                     pRipple
                     label="Richiedi permesso"
                     class="w-full p-3 text-xl"
                     (click)="savePermission()"
+                    [disabled]="!permissionForm.valid"
                 ></button>
             </form>
         </div>

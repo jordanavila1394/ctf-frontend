@@ -1,9 +1,5 @@
 //Angular
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-
-//PrimeNg
-
-//Models
+import { Component, OnInit } from '@angular/core';
 
 //Services
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
@@ -19,15 +15,12 @@ import * as moment from 'moment';
 
 //Utils
 import Formatter from 'src/app/utils/formatters';
-import { AuthService } from '../../../services/auth.service';
-import { AttendanceService } from 'src/app/services/attendance.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
-import { UploadService } from 'src/app/services/upload.service';
-import { FileUpload, FileUploadEvent, UploadEvent } from 'primeng/fileupload';
 import { PermissionService } from 'src/app/services/permission.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
     templateUrl: './permission-home.component.html',
@@ -59,8 +52,8 @@ export class PermissionHomeComponent implements OnInit {
     dates: Date[] | undefined;
 
     permissionForm = this.fb.group({
-        typology: [''],
-        dates: [''],
+        typology: ['', [Validators.required]],
+        dates: ['', [Validators.required]],
     });
 
     tipologyPermissionsItems: any = [
@@ -69,9 +62,14 @@ export class PermissionHomeComponent implements OnInit {
             value: 'Malattia',
         },
         {
-            name: 'Maternità',
-            value: 'Maternità',
+            name: 'Permesso ROL',
+            value: 'Permesso ROL',
         },
+        {
+            name: 'Ferie',
+            value: 'Ferie',
+        },
+       
     ];
     selectedPermission: any;
     permissionData: any;
@@ -80,6 +78,7 @@ export class PermissionHomeComponent implements OnInit {
         public fb: FormBuilder,
         public layoutService: LayoutService,
         private permissionService: PermissionService,
+        private messageService: MessageService,
         private userService: UserService,
         private router: Router,
         private store: Store<{ authState: AuthState }>,
@@ -144,10 +143,13 @@ export class PermissionHomeComponent implements OnInit {
                 this.permissionForm.value.typology,
                 datesInString,
             )
-            .subscribe((res) =>
-                this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
-            );
+            .subscribe((res) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Permesso',
+                    detail: 'Hai fatto richiesta con successo',
+                });
+                this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
+            });
     }
 }
-
-

@@ -152,7 +152,7 @@
                                 Nome Autista
                                 <p-columnFilter
                                     type="text"
-                                    field="driver.fullName"
+                                    field="user.fullName"
                                     display="menu"
                                     placeholder="Cerca per nome"
                                 ></p-columnFilter>
@@ -235,7 +235,7 @@
                             {{ vehicle?.driverType }}
                         </td>
                         <td>
-                            {{ vehicle?.driver?.fullName }}
+                            {{ vehicle?.user?.fullName }}
                         </td>
                         <td>
                             {{ vehicle?.company?.name }}

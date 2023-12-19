@@ -55,7 +55,7 @@
                                 Nome
                                 <p-columnFilter
                                     type="text"
-                                    field="driver.name"
+                                    field="user.name"
                                     display="menu"
                                     placeholder="Search by userId"
                                 ></p-columnFilter>
@@ -68,7 +68,7 @@
                                 Cognome
                                 <p-columnFilter
                                     type="text"
-                                    field="driver.surname"
+                                    field="user.surname"
                                     display="menu"
                                     placeholder="Search by userId"
                                 ></p-columnFilter>
@@ -134,10 +134,10 @@
                 <ng-template pTemplate="body" let-attendance>
                     <tr>
                         <td class="font-bold">
-                            {{ attendance?.driver?.name }}
+                            {{ attendance?.user?.name }}
                         </td>
                         <td class="font-bold">
-                            {{ attendance?.driver?.surname }}
+                            {{ attendance?.user?.surname }}
                         </td>
                         <td class="font-bold">
                             {{ attendance?.company?.name }}

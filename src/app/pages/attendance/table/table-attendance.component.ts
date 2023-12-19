@@ -82,7 +82,7 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
             .subscribe((attendances) => {
                 this.attendances = attendances.map((attendance) => {
                     let newAttendance = attendance;
-                    newAttendance.company = attendance?.driver?.companies[0];
+                    newAttendance.company = attendance?.user?.companies[0];
                     return newAttendance;
                 });
 

@@ -110,8 +110,8 @@ export class TableVehicleComponent implements OnInit {
             .getAllVehicles(selectedCompany.id)
             .subscribe((vehicles) => {
                 this.vehicles = vehicles.map((vehicle) => {
-                    vehicle.driver.fullName =
-                        vehicle.driver.name + ' ' + vehicle.driver.surname;
+                    vehicle.user.fullName =
+                        vehicle.user.name + ' ' + vehicle.user.surname;
                     return vehicle;
                 });
                 this.loading = false;

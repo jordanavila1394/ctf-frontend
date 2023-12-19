@@ -15,7 +15,7 @@ export class PermissionService {
 
     getAllPermissions(idCompany): Observable<any> {
         return this.http.post(
-            API_URL + 'allPermission',
+            API_URL + 'allPermissions',
             {
                 idCompany,
             },
@@ -63,6 +63,27 @@ export class PermissionService {
                 companyId,
                 typology,
                 dates,
+            },
+            httpOptions,
+        );
+    }
+    rejectPermission(id, userId): Observable<any> {
+        return this.http.post(
+            API_URL + 'rejectPermission',
+            {
+                id,
+                userId,
+            },
+            httpOptions,
+        );
+    }
+
+    approvePermission(id, userId): Observable<any> {
+        return this.http.post(
+            API_URL + 'approvePermission',
+            {
+                id,
+                userId,
             },
             httpOptions,
         );
