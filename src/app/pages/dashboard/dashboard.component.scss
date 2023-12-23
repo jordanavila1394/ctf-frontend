@@ -5,10 +5,12 @@
     .item{
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
         background-color: rgb(249, 247, 247);
         padding: 1rem;
         border-radius: 5px;
+      
 
         &.approved{
             background-color: rgba(195, 246, 195, 0.64);
@@ -23,6 +25,14 @@
         div {
             padding: 0.5rem;
             flex: 1 1 0;
+
+            @media screen and (max-width: 600px) {
+                display: flex;
+                justify-content: space-around;
+                flex: inherit;
+                width: 50%;
+            }
+
             &.title{
                 display: flex;
                 flex-direction: column;
@@ -34,14 +44,22 @@
                 .days{
                     display: flex;
                     flex-direction: column;
+                    width: 100%;
                     .day{
                         font-weight: 500;
                     }
                 }
+               
             }
             &.message{
                 // width: 20%;
-    
+                @media screen and (max-width: 600px) {
+                    font-size: 0.8rem;
+                }
+            }
+            &.actions{
+                display: flex;
+
             }
             
         }

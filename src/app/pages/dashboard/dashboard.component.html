@@ -57,7 +57,7 @@
         <div class="card">
             <h5>Richieste</h5>
             <p-toast></p-toast>
-            <div class="list-permission">
+            <div class="list-permission" *ngIf="permissions.length > 0">
                 <div *ngFor="let permission of permissions">
                     <div
                         class="item"
@@ -92,7 +92,9 @@
                                 </span>
                             </div>
                         </div>
-
+                        <div>
+                            {{ permission?.status }}
+                        </div>
                         <div class="message">
                             <strong
                                 >{{ permission?.user.name }}
@@ -113,21 +115,15 @@
                                 </span>
                             </div>
                         </div>
-                        <div>
-                            {{ permission?.status }}
-                        </div>
+
                         <div class="actions">
                             <button
                                 pButton
                                 pRipple
                                 type="button"
                                 icon="pi pi-check"
-                                class="p-button-rounded p-button-text"
-                                (click)="
-                                    approvePermission(
-                                        permission
-                                    )
-                                "
+                                class="p-button-rounded p-button-success p-button-text"
+                                (click)="approvePermission(permission)"
                             ></button>
                             <button
                                 pButton
@@ -135,15 +131,14 @@
                                 type="button"
                                 icon="pi pi-times"
                                 class="p-button-rounded p-button-danger p-button-text"
-                                (click)="
-                                    rejectPermission(
-                                        permission
-                                    )
-                                "
+                                (click)="rejectPermission(permission)"
                             ></button>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div *ngIf="permissions.length === 0">
+                Nessuna richiesta trovata
             </div>
         </div>
     </div>

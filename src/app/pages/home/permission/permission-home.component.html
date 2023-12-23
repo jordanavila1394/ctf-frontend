@@ -39,6 +39,94 @@
     </div>
 
     <div class="col-12">
-        <div></div>
+        <div class="card p-fluid">
+            <form [formGroup]="myPermissionsForm" #form="ngForm">
+                <h5>Seleziona mese e anno</h5>
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label htmlFor="year1">Anno</label>
+                        <input
+                            pInputText
+                            id="year1"
+                            type="text"
+                            formControlName="currentYear"
+                        />
+                    </div>
+                    <div class="field col">
+                        <label htmlFor="month1">Mese</label>
+                        <p-dropdown
+                            [options]="monthsItems"
+                            optionLabel="name"
+                            formControlName="currentMonth"
+                            [(ngModel)]="selectedCurrentMonth"
+                            (onChange)="onChangeMonth($event)"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </form>
+
+            <div class="list-permission" *ngIf="permissions">
+                <div *ngFor="let permission of permissions">
+                    <div
+                        class="item"
+                        [ngClass]="{
+                            approved: permission?.status === 'Approvato',
+                            waiting: permission?.status === 'In Attesa',
+                            rejected: permission?.status === 'Negato'
+                        }"
+                    >
+                        <div class="icon">
+                            <div [ngSwitch]="permission?.typology">
+                                <span *ngSwitchCase="'Malattia'">
+                                    <img
+                                        src="assets/icons/flu.png"
+                                        class="w-3rem h-3rem"
+                                        alt="Malattia"
+                                    />
+                                </span>
+                                <span *ngSwitchCase="'Ferie'">
+                                    <img
+                                        src="assets/icons/holiday.png"
+                                        class="w-3rem h-3rem"
+                                        alt="Ferie"
+                                    />
+                                </span>
+                                <span *ngSwitchCase="'Permesso ROL'">
+                                    <img
+                                        src="assets/icons/permit.png"
+                                        class="w-3rem h-3rem"
+                                        alt="Ferie"
+                                    />
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            {{ permission?.status }}
+                        </div>
+                        <!-- <div class="message">
+                            <strong
+                                >{{ permission?.user.name }}
+                                {{ permission?.user.surname }}</strong
+                            >
+                            ha richiesto:
+                        </div> -->
+                        <div class="typology">
+                            {{ permission?.typology }}
+                        </div>
+                        <div class="dates">
+                            <div class="days">
+                                <span
+                                    class="day"
+                                    *ngFor="let data of permission?.dates"
+                                >
+                                    {{ data }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!permissions">Nessuna richiesta trovata</div>
+        </div>
     </div>
 </div>

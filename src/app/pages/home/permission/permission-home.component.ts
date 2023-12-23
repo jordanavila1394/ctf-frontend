@@ -56,6 +56,13 @@ export class PermissionHomeComponent implements OnInit {
         dates: ['', [Validators.required]],
     });
 
+    myPermissionsForm = this.fb.group({
+        currentYear: [''],
+        currentMonth: [''],
+    });
+    selectedCurrentMonth: any;
+    monthsItems = [];
+
     tipologyPermissionsItems: any = [
         {
             name: 'Malattia',
@@ -69,10 +76,8 @@ export class PermissionHomeComponent implements OnInit {
             name: 'Ferie',
             value: 'Ferie',
         },
-       
     ];
-    selectedPermission: any;
-    permissionData: any;
+    permissions: any;
 
     constructor(
         public fb: FormBuilder,
@@ -90,9 +95,31 @@ export class PermissionHomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        //Current year
+        this.myPermissionsForm.patchValue({
+            currentYear: moment().year() + '',
+        });
+
+        this.selectedCurrentMonth = {
+            name: moment().format('MMMM'),
+            code: moment().month(),
+        };
+
+        //Current month
+        this.monthsItems.push({
+            name: moment().format('MMMM'),
+            code: moment().month(),
+        });
+
+        //Previous month
+        this.monthsItems.push({
+            name: moment().subtract(1, 'month').format('MMMM'),
+            code: moment().subtract(1, 'month').month(),
+        });
+
         this.authState$.subscribe((authS) => {
-            this.storeUser = authS?.user || '';
-            this.loadServices(this.storeUser);
+            this.currentUser = authS?.user || '';
+            this.loadServices(this.currentUser);
         });
         const layourServiceSubscription =
             this.layoutService.configUpdate$.subscribe(() => {
@@ -103,16 +130,28 @@ export class PermissionHomeComponent implements OnInit {
         }
     }
 
-    loadServices(storeUser) {
-        const permissionServiceSubscription = this.permissionService
-            .getPermissionByUser(storeUser.id)
-            .subscribe((data) => {
-                this.permissionData = data;
+    onChangeMonth(event) {
+        this.loadServices(this.currentUser);
+    }
 
+    loadServices(currentUser) {
+        const currentYear =
+            parseInt(this.myPermissionsForm.value.currentYear, 10) || '';
+        const currentMonth = this.selectedCurrentMonth?.code || '';
+
+        const permissionServiceSubscription = this.permissionService
+            .getMyPermissions(currentUser.id, currentYear, currentMonth)
+            .subscribe((permissions) => {
+                this.permissions = permissions;
+                this.permissions = permissions.map((permission) => ({
+                    ...permission,
+                    datesText: permission?.dates,
+                    dates: permission?.dates.split(','),
+                }));
                 this.loading = false;
             });
         const userServiceSubscription = this.userService
-            .getUser(storeUser.id)
+            .getUser(currentUser.id)
             .subscribe((data) => {
                 this.currentUser = data;
                 this.currentCompany = data?.companies[0];

@@ -97,6 +97,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     loadServices(currentCompany) {
+        console.log('currentCompany', currentCompany);
         const attendanceServiceSubscription = this.attendaceService
             .getDataAttendances(currentCompany?.id | 0)
             .subscribe((data) => {
@@ -117,17 +118,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         {
                             label: 'CheckIn Fatto',
                             backgroundColor:
-                                documentStyle.getPropertyValue('--green-500'),
+                                documentStyle.getPropertyValue('--green-200'),
                             borderColor:
-                                documentStyle.getPropertyValue('--green-500'),
+                                documentStyle.getPropertyValue('--green-200'),
                             data: this.attendances?.arrayCountCheck,
                         },
                         {
                             label: 'Mancante',
                             backgroundColor:
-                                documentStyle.getPropertyValue('--red-500'),
+                                documentStyle.getPropertyValue('--red-200'),
                             borderColor:
-                                documentStyle.getPropertyValue('--red-500'),
+                                documentStyle.getPropertyValue('--red-200'),
                             data: this.attendances?.arrayCountMissing,
                         },
                     ],
@@ -135,7 +136,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             });
 
         const permissionServiceSubscription = this.permissionService
-            .getAllPermissions(currentCompany.id)
+            .getAllPermissions(currentCompany.id | 0)
             .subscribe((permissions) => {
                 this.permissions = permissions;
                 this.permissions = permissions.map((permission) => ({
@@ -143,7 +144,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     datesText: permission?.dates,
                     dates: permission?.dates.split(','),
                 }));
-                console.log(this.permissions);
                 this.loading = false;
             });
         if (this.subscription && permissionServiceSubscription)

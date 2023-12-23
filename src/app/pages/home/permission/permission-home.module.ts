@@ -16,6 +16,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { GoogleMapsDemoModule } from 'src/app/shared/components/google-map/google-maps.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CalendarModule } from 'primeng/calendar';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { CalendarModule } from 'primeng/calendar';
         MenuModule,
         DropdownModule,
         CalendarModule,
+        InputTextModule,
         ReactiveFormsModule,
         TableModule,
         StyleClassModule,

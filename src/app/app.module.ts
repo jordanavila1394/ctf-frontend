@@ -20,6 +20,7 @@ import { MessageService } from 'primeng/api';
 //Store
 import { reducers, metaReducers } from './stores/global.reducers';
 import { effects } from './stores/global.effects';
+
 //Ngrx Store
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';

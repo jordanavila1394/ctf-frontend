@@ -87,6 +87,13 @@ export class TableUserComponent implements OnInit, OnDestroy {
                         },
                     },
                     {
+                        label: 'Documenti',
+                        icon: 'pi pi-file',
+                        command: () => {
+                            this.goToDocumentUser(this.selectedItem.id);
+                        },
+                    },
+                    {
                         label: 'Modifica',
                         icon: 'pi pi-pencil',
                         command: () => {
@@ -189,6 +196,12 @@ export class TableUserComponent implements OnInit, OnDestroy {
 
     goToDetailUser(idUser) {
         this.router.navigate([ROUTES.ROUTE_DETAIL_USER], {
+            queryParams: { id: idUser },
+        });
+    }
+
+    goToDocumentUser(idUser) {
+        this.router.navigate([ROUTES.ROUTE_DOCUMENT_USER], {
             queryParams: { id: idUser },
         });
     }
