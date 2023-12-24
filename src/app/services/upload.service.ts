@@ -11,9 +11,10 @@ const API_URL = environment.endpoint + 'api/upload/';
 export class UploadService {
     constructor(private http: HttpClient) {}
 
-    uploadFiles(formData: FormData) {
-        return this.http.post(API_URL + 'uploadFiles',
-            formData,
-        );
+    uploadAttendanceImages(formData: FormData) {
+        return this.http.post(API_URL + 'uploadAttendanceImages', formData);
+    }
+    uploadDocuments(formData: FormData) {
+        return this.http.post(API_URL + 'uploadDocuments', formData);
     }
 }

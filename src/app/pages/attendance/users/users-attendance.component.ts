@@ -41,7 +41,6 @@ import { ImagesDialogComponent } from 'src/app/shared/components/imagesDialog/im
 
 import * as pdfjsLib from 'pdfjs-dist';
 
-
 interface expandedRows {
     [key: string]: boolean;
 }
@@ -269,11 +268,11 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     }
 
     //DIALOG
-    showImages(files) {
+    showImages(attendanceImages) {
         const ref = this.dialogService.open(ImagesDialogComponent, {
             header: 'Foto',
             width: '90%',
-            data: files,
+            data: attendanceImages,
         });
     }
 

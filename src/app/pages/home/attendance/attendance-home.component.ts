@@ -262,7 +262,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         formData.append('checkInId', checkInId);
         formData.append('licensePlate', licensePlate);
 
-        this.uploadService.uploadFiles(formData).subscribe(
+        this.uploadService.uploadAttendanceImages(formData).subscribe(
             (response) => {},
             (error) => {},
         );
