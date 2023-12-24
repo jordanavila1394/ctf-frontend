@@ -1,0 +1,37 @@
+<div class="grid">
+    <div class="col-12 md:col-12">
+        <div class="card">
+            <h5>Documenti</h5>
+             <form [formGroup]="documentsForm" #form="ngForm">
+                <h5>Seleziona categoria documento/documenti</h5>
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label htmlFor="category1">Categoria</label>
+                        <p-dropdown
+                            [options]="categoriesItems"
+                            optionLabel="name"
+                            formControlName="category"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </form>
+            <p-fileUpload
+                #fileUpload
+                [customUpload]="true"
+                name="files[]"
+                (onSelect)="uploadFiles($event)"
+                [showUploadButton]="false"
+                [multiple]="true"
+                [maxFileSize]="500000000"
+            >
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">
+                            {{ file.name }} - {{ file.size }} bytes
+                        </li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+        </div>
+    </div>
+</div>

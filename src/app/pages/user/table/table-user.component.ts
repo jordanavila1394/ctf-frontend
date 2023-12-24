@@ -56,7 +56,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
     @ViewChild('filter') filter!: ElementRef;
 
     items: MenuItem[] | undefined;
-    selectedItem: any = null;
+    selectedUser: any = null;
 
     idCompany: any;
     companyState$: Observable<CompanyState>;
@@ -83,21 +83,24 @@ export class TableUserComponent implements OnInit, OnDestroy {
                         label: 'Dettagli',
                         icon: 'pi pi-search',
                         command: () => {
-                            this.goToDetailUser(this.selectedItem.id);
+                            this.goToDetailUser(this.selectedUser.id);
                         },
                     },
                     {
                         label: 'Documenti',
                         icon: 'pi pi-file',
                         command: () => {
-                            this.goToDocumentUser(this.selectedItem.id);
+                            this.goToDocumentUser(
+                                this.selectedUser.id,
+                                this.selectedUser.fiscalCode,
+                            );
                         },
                     },
                     {
                         label: 'Modifica',
                         icon: 'pi pi-pencil',
                         command: () => {
-                            this.goToModifyUser(this.selectedItem.id);
+                            this.goToModifyUser(this.selectedUser.id);
                         },
                     },
                     {
@@ -105,7 +108,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
                         icon: 'pi pi-trash',
                         command: () => {
                             // this.delete();
-                            this.confirmErase(this.selectedItem.id);
+                            this.confirmErase(this.selectedUser.id);
                         },
                     },
                 ],
@@ -200,9 +203,9 @@ export class TableUserComponent implements OnInit, OnDestroy {
         });
     }
 
-    goToDocumentUser(idUser) {
-        this.router.navigate([ROUTES.ROUTE_DOCUMENT_USER], {
-            queryParams: { id: idUser },
+    goToDocumentUser(idUser, fiscalCode) {
+        this.router.navigate([ROUTES.ROUTE_DOCUMENTS_USER], {
+            queryParams: { id: idUser, fiscalCode: fiscalCode },
         });
     }
 
