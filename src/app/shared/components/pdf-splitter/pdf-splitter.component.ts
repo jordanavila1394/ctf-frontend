@@ -47,8 +47,6 @@ export class PdfSplitterComponent {
         fields.forEach((field) => {
             const type = field.constructor.name;
             const name = field.getName();
-            console.log(`${type}: ${name}`);
         });
-        console.log(fields);
     }
 }

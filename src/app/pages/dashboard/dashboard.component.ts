@@ -97,7 +97,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     loadServices(currentCompany) {
-        console.log('currentCompany', currentCompany);
         const attendanceServiceSubscription = this.attendaceService
             .getDataAttendances(currentCompany?.id | 0)
             .subscribe((data) => {

@@ -1,37 +1,92 @@
 <div class="grid">
     <div class="col-12 md:col-12">
         <div class="card">
-            <h5>Documenti</h5>
-             <form [formGroup]="documentsForm" #form="ngForm">
+            <h5>Aggiungi documento</h5>
+            <form [formGroup]="documentsForm" #form="ngForm">
                 <h5>Seleziona categoria documento/documenti</h5>
                 <div class="p-formgrid grid">
                     <div class="field col">
-                        <label htmlFor="category1">Categoria</label>
                         <p-dropdown
+                            placeholder="-Seleziona-"
                             [options]="categoriesItems"
                             optionLabel="name"
                             formControlName="category"
+                            [(ngModel)]="selectedCategory"
                         ></p-dropdown>
                     </div>
                 </div>
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <p-fileUpload
+                            #fileUpload
+                            [customUpload]="true"
+                            name="files[]"
+                            (onSelect)="uploadFiles($event)"
+                            [showUploadButton]="false"
+                            [multiple]="true"
+                            [maxFileSize]="500000000"
+                        >
+                        </p-fileUpload>
+                    </div>
+                </div>
+                <div
+                    class="flex justify-content-center align-items-center gap-2"
+                >
+                    <button
+                        pButton
+                        pRipple
+                        type="submit"
+                        class="p-button-success"
+                        label="Aggiungi documento"
+                        icon="pi pi-plus"
+                        [disabled]="
+                            !(
+                                documentsForm.valid &&
+                                this.uploadedFiles.length > 0
+                            )
+                        "
+                        (click)="saveDocument()"
+                    ></button>
+                </div>
             </form>
-            <p-fileUpload
-                #fileUpload
-                [customUpload]="true"
-                name="files[]"
-                (onSelect)="uploadFiles($event)"
-                [showUploadButton]="false"
-                [multiple]="true"
-                [maxFileSize]="500000000"
-            >
-                <ng-template pTemplate="content">
-                    <ul *ngIf="uploadedFiles.length">
-                        <li *ngFor="let file of uploadedFiles">
-                            {{ file.name }} - {{ file.size }} bytes
-                        </li>
-                    </ul>
-                </ng-template>
-            </p-fileUpload>
+        </div>
+    </div>
+
+    <div class="col-12 md:col-12">
+        <div class="card">
+            <h4>Documenti</h4>
+            <div class="document-list" *ngIf="this.files?.length > 0">
+                <ng-container *ngFor="let file of this.files">
+                    <div class="file-wrapper">
+                        <div class="category">{{ file.category }}</div>
+                        <div>
+                            <img
+                                src="assets/icons/{{ file.category }}.png"
+                                class="w-3rem h-3rem"
+                                alt="Ferie"
+                            />
+                        </div>
+
+                        <div>
+                            {{ file.createdAt | date: "EEEE, MMMM dd, yyyy" }}
+                        </div>
+                        <div class="file-name">
+                            <strong>
+                                {{ getFileName(file?.keyFile) }}
+                            </strong>
+                        </div>
+                        <div class="file-extension">
+                            .{{ getFileExtension(file?.keyFile) }}
+                        </div>
+
+                        <a class="link" href="{{ getFileUrl(file?.keyFile) }}">
+                        </a>
+                    </div>
+                </ng-container>
+            </div>
+            <div *ngIf="this.files?.length === 0">
+                Non ci sono documenti caricati
+            </div>
         </div>
     </div>
 </div>

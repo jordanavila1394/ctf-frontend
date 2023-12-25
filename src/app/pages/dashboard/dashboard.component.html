@@ -57,7 +57,7 @@
         <div class="card">
             <h5>Richieste</h5>
             <p-toast></p-toast>
-            <div class="list-permission" *ngIf="permissions.length > 0">
+            <div class="list-permission" *ngIf="permissions?.length > 0">
                 <div *ngFor="let permission of permissions">
                     <div
                         class="item"
@@ -137,7 +137,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="permissions.length === 0">
+            <div *ngIf="permissions?.length === 0">
                 Nessuna richiesta trovata
             </div>
         </div>

@@ -17,7 +17,6 @@ import { Table } from 'primeng/table';
 
 //Services
 import { CompanyService } from 'src/app/services/company.service';
-import { AttendanceService } from 'src/app/services/attendance.service';
 
 //Models
 import { Company } from 'src/app/models/company';
@@ -91,7 +90,6 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
-        private attendanceService: AttendanceService,
         public dialogService: DialogService,
         private userService: UserService,
         private store: Store<{ companyState: CompanyState }>,
