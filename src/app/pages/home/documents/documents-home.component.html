@@ -1,0 +1,47 @@
+<div class="grid">
+    <div class="col-12 md:col-12">
+        <div class="card">
+            <p-panel header="Cedolini" [toggleable]="true">
+                <div class="document-list"></div>
+            </p-panel>
+        </div>
+        <div class="card">
+            <p-panel header="Documenti" [toggleable]="true">
+                <div class="document-list">
+                    <ng-container *ngFor="let file of this.files">
+                        <div class="file-wrapper">
+                            <div class="category">{{ file.category }}</div>
+                            <div>
+                                <img
+                                    src="assets/icons/{{ file.category }}.png"
+                                    class="w-3rem h-3rem"
+                                    alt="Ferie"
+                                />
+                            </div>
+
+                            <div>
+                                {{
+                                    file.createdAt | date: "EEEE, MMMM dd, yyyy"
+                                }}
+                            </div>
+                            <div class="file-name">
+                                <strong>
+                                    {{ getFileName(file?.keyFile) }}
+                                </strong>
+                            </div>
+                            <div class="file-extension">
+                                .{{ getFileExtension(file?.keyFile) }}
+                            </div>
+
+                            <a
+                                class="link"
+                                href="{{ getFileUrl(file?.keyFile) }}"
+                            >
+                            </a>
+                        </div>
+                    </ng-container>
+                </div>
+            </p-panel>
+        </div>
+    </div>
+</div>

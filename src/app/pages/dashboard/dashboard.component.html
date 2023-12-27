@@ -92,18 +92,31 @@
                                 </span>
                             </div>
                         </div>
-                        <div>
-                            {{ permission?.status }}
+                        <div class="status">
+                            <span
+                                [ngClass]="{
+                                    approved:
+                                        permission?.status === 'Approvato',
+                                    waiting: permission?.status === 'In Attesa',
+                                    rejected: permission?.status === 'Negato'
+                                }"
+                                >{{ permission?.status }}</span
+                            >
                         </div>
                         <div class="message">
-                            <strong
-                                >{{ permission?.user.name }}
-                                {{ permission?.user.surname }}</strong
-                            >
+                            <strong>
+                                <a
+                                    href="https://wa.me/{{
+                                        permission?.user.cellphone
+                                    }}"
+                                    >{{ permission?.user.name }}
+                                    {{ permission?.user.surname }}</a
+                                >
+                            </strong>
                             ha richiesto:
                         </div>
                         <div class="typology">
-                            {{ permission?.typology }}
+                            <strong>{{ permission?.typology }}</strong>
                         </div>
                         <div class="dates">
                             <div class="days">

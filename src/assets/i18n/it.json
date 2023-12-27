@@ -86,7 +86,10 @@
                 "menuTitle": "Dashboard"
             },
             "landing": {
-                "menuTitle": "Landing"
+                "menuTitle": "Landing",
+                "permission": "Permessi",
+                "attendances": "Presenze",
+                "documents": "Documenti"
             },
             "attendance": {
                 "menuTitle": "Presenze",

@@ -21,6 +21,8 @@ import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { PermissionService } from 'src/app/services/permission.service';
 import { MessageService } from 'primeng/api';
+import { EmailService } from 'src/app/services/email.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     templateUrl: './permission-home.component.html',
@@ -78,20 +80,23 @@ export class PermissionHomeComponent implements OnInit {
         },
     ];
     permissions: any;
-
+    adminEmail: any;
+    minimumDate: any;
     constructor(
         public fb: FormBuilder,
         public layoutService: LayoutService,
         private permissionService: PermissionService,
         private messageService: MessageService,
         private userService: UserService,
+        private emailService: EmailService,
         private router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
         //Init
         this.authState$ = store.select('authState');
-
+        this.adminEmail = environment?.adminEmail;
         this.formatter = new Formatter();
+        this.minimumDate = new Date();
     }
 
     ngOnInit(): void {
@@ -188,7 +193,27 @@ export class PermissionHomeComponent implements OnInit {
                     summary: 'Permesso',
                     detail: 'Hai fatto richiesta con successo',
                 });
+
                 this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
             });
+        let messageEmail = '';
+        messageEmail += "E' stato richiesto la tua approvazione: <br>";
+        messageEmail += '<strong>' + datesInString + '</strong><br>';
+
+        this.emailService
+            .sendEmail(
+                this.adminEmail[0],
+                'CTF - Richiesta permesso - ' +
+                    this.currentUser?.name +
+                    ' ' +
+                    this.currentUser?.surname,
+                messageEmail,
+            )
+            .subscribe(
+                (risposta) =>
+                    console.log('Email inviata con successo:', risposta),
+                (errore) =>
+                    console.error("Errore durante l'invio dell'email:", errore),
+            );
     }
 }

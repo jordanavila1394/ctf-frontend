@@ -36,6 +36,14 @@ import { RouterModule } from '@angular/router';
                         (m) => m.PermissionHomeModule,
                     ),
             },
+            {
+                path: 'documents',
+                data: { breadcrumb: 'Documents' },
+                loadChildren: () =>
+                    import('./documents/documents-home.module').then(
+                        (m) => m.DocumentsHomeModule,
+                    ),
+            },
         ]),
     ],
     exports: [RouterModule],

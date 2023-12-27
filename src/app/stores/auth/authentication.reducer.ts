@@ -8,7 +8,10 @@ import {
 
 export const initialState: AuthState = {
     isAuthenticated: false,
-    user: null,
+    user: {
+        name: "Mario",
+        surname:"Rossi"
+    },
     errorMessage: null,
     error: null,
     pending: false,

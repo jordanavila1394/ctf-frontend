@@ -130,6 +130,24 @@ export class AppMenuComponent implements OnInit {
                         icon: 'pi pi-fw pi-home',
                         routerLink: [ROUTES.ROUTE_LANDING_HOME],
                     },
+                    {
+                        label: 'Permission',
+                        translationCode: 'menu.routes.landing.permission',
+                        icon: 'pi pi-fw pi-sign-out',
+                        routerLink: [ROUTES.ROUTE_PERMISSION_HOME],
+                    },
+                    {
+                        label: 'My Attendances',
+                        translationCode: 'menu.routes.landing.attendances',
+                        icon: 'pi pi-fw pi-list',
+                        routerLink: [ROUTES.ROUTE_MYATTENDANCES_HOME],
+                    },
+                    {
+                        label: 'Documents',
+                        translationCode: 'menu.routes.landing.documents',
+                        icon: 'pi pi-fw pi-file',
+                        routerLink: [ROUTES.ROUTE_DOCUMENTS_HOME],
+                    },
                 ],
             });
         }

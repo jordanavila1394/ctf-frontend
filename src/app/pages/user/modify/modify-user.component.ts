@@ -42,6 +42,7 @@ export class ModifyUserComponent implements OnInit {
         surname: ['', [Validators.required]],
         fiscalCode: ['', [Validators.required]],
         email: ['', [Validators.required]],
+        cellphone: ['', [Validators.required]],
         roleId: ['', [Validators.required]],
         companyId: ['', [Validators.required]],
         workerNumber: [''],
@@ -86,6 +87,7 @@ export class ModifyUserComponent implements OnInit {
                     surname: user.surname,
                     fiscalCode: user.fiscalCode,
                     email: user.email,
+                    cellphone: user.cellphone,
                     roleId: roleId,
                     companyId: companyId,
                     workerNumber: user.workerNumber,
@@ -113,8 +115,7 @@ export class ModifyUserComponent implements OnInit {
         });
     }
 
-    selectAddress(place: any): void {
-    }
+    selectAddress(place: any): void {}
 
     onSubmit(): void {
         this.userService
@@ -124,6 +125,7 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.surname,
                 this.modifyForm.value.fiscalCode,
                 this.modifyForm.value.email,
+                this.modifyForm.value.cellphone,
                 this.modifyForm.value.roleId,
                 this.modifyForm.value.companyId,
                 this.modifyForm.value.workerNumber,

@@ -73,6 +73,7 @@ export class CreateUserComponent implements OnInit {
                 Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
             ],
         ],
+        cellphone: ['', [Validators.required]],
         fiscalCode: ['', [Validators.required]],
         workerNumber: [''],
         position: [''],
@@ -81,8 +82,7 @@ export class CreateUserComponent implements OnInit {
         status: [true, [Validators.required]],
     });
 
-    selectAddress(place: any): void {
-    }
+    selectAddress(place: any): void {}
 
     forceLower(strInput) {
         strInput.value = strInput.value.toLowerCase();
@@ -96,6 +96,7 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.name,
                 this.createForm.value.surname,
                 this.createForm.value.email,
+                this.createForm.value.cellphone,
                 this.createForm.value.roleId,
                 this.createForm.value.companyId,
                 this.createForm.value.workerNumber,

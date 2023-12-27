@@ -24,5 +24,6 @@ export const ROUTES = {
     ROUTE_LANDING_HOME: '/home/landing',
     ROUTE_ATTENDANCE_HOME: '/home/attendance',
     ROUTE_MYATTENDANCES_HOME: '/home/my-attendances',
+    ROUTE_DOCUMENTS_HOME: '/home/documents',
     ROUTE_PERMISSION_HOME: '/home/permission',
 };

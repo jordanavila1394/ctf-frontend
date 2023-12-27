@@ -1,18 +1,21 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { DownloadService } from 'src/app/services/download.service';
 import { SpacesService } from 'src/app/services/spaces.service';
 import { UploadService } from 'src/app/services/upload.service';
 
+import { AuthState } from 'src/app/stores/auth/authentication.reducer';
+
 @Component({
-    selector: 'app-documents-user',
-    templateUrl: './documents-user.component.html',
-    styleUrls: ['./documents-user.component.scss'],
+    templateUrl: './documents-home.component.html',
+    styleUrls: ['./documents-home.component.scss'],
 })
-export class DocumentsUserComponent {
+export class DocumentsHomeComponent {
+    authState$: Observable<AuthState>;
+
     uploadedFiles: any[] = [];
     filesSpaces: AWS.S3.Object[];
     files: any;
@@ -47,6 +50,7 @@ export class DocumentsUserComponent {
     currentFiscalCode: any;
     selectedCategory: any;
     subscription: Subscription;
+    currentUser: any;
 
     constructor(
         public fb: FormBuilder,
@@ -54,13 +58,16 @@ export class DocumentsUserComponent {
         private uploadService: UploadService,
         private downloadService: DownloadService,
         private spacesService: SpacesService,
+        private store: Store<{ authState: AuthState }>,
     ) {
-        this.route.queryParams.subscribe((params) => {
+        this.authState$ = store.select('authState');
+        this.authState$.subscribe((authS) => {
+            this.currentUser = authS?.user || '';
             this.documentsForm.patchValue({
-                fiscalCode: params['fiscalCode'],
-                userId: params['id'],
+                fiscalCode: authS?.user.fiscalCode,
+                userId: authS?.user.id,
             });
-            this.loadServices(params['id'], params['fiscalCode']);
+            this.loadServices(this.currentUser.id, this.currentUser.fiscalCode);
         });
     }
 

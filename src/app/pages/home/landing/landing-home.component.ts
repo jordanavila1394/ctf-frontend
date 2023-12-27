@@ -19,7 +19,6 @@ import * as moment from 'moment';
 
 //Utils
 import Formatter from 'src/app/utils/formatters';
-import { AuthService } from '../../../services/auth.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { ROUTES } from 'src/app/utils/constants';
 
@@ -68,8 +67,9 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
                 icon: 'pi pi-fw pi-refresh',
             },
             {
-                label: 'Cedolini',
+                label: 'Documenti',
                 source: 'assets/icons/stamp.png',
+                linkRoute: ROUTES.ROUTE_DOCUMENTS_HOME,
                 icon: 'pi pi-fw pi-trash',
             },
             {
