@@ -37,6 +37,22 @@ import { RouterModule } from '@angular/router';
                     ),
             },
             {
+                path: 'medical',
+                data: { breadcrumb: 'Medical' },
+                loadChildren: () =>
+                    import('./medical/medical-home.module').then(
+                        (m) => m.MedicalHomeModule,
+                    ),
+            },
+            {
+                path: 'guide',
+                data: { breadcrumb: 'Guide' },
+                loadChildren: () =>
+                    import('./guide/guide-home.module').then(
+                        (m) => m.GuideHomeModule,
+                    ),
+            },
+            {
                 path: 'documents',
                 data: { breadcrumb: 'Documents' },
                 loadChildren: () =>

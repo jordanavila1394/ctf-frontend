@@ -1,9 +1,16 @@
 //Angular
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
+
+//Prime NG
+import { MessageService } from 'primeng/api';
 
 //Services
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-
+import { UserService } from 'src/app/services/user.service';
+import { PermissionService } from 'src/app/services/permission.service';
+import { EmailService } from 'src/app/services/email.service';
 //Store
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -15,20 +22,16 @@ import * as moment from 'moment';
 
 //Utils
 import Formatter from 'src/app/utils/formatters';
-import { FormBuilder, Validators } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
-import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
-import { PermissionService } from 'src/app/services/permission.service';
-import { MessageService } from 'primeng/api';
-import { EmailService } from 'src/app/services/email.service';
+
+//Environments
 import { environment } from 'src/environments/environment';
 
 @Component({
-    templateUrl: './permission-home.component.html',
-    styleUrls: ['./permission-home.component.scss'],
+    templateUrl: './list-medical-home.component.html',
+    styleUrls: ['./list-medical-home.component.scss'],
 })
-export class PermissionHomeComponent implements OnInit {
+export class ListMedicalHomeComponent implements OnInit {
     authState$: Observable<AuthState>;
 
     //Language
@@ -53,32 +56,24 @@ export class PermissionHomeComponent implements OnInit {
 
     dates: Date[] | undefined;
 
-    permissionForm = this.fb.group({
-        typology: ['', [Validators.required]],
+    medicalForm = this.fb.group({
+        typology: ['Malattia'],
         dates: ['', [Validators.required]],
         note: [''],
     });
 
-    myPermissionsForm = this.fb.group({
+    myMedicalsForm = this.fb.group({
         currentYear: [''],
         currentMonth: [''],
     });
     selectedCurrentMonth: any;
     monthsItems = [];
 
-    tipologyPermissionsItems: any = [
-        {
-            name: 'Permesso ROL',
-            value: 'Permesso ROL',
-        },
-        {
-            name: 'Ferie',
-            value: 'Ferie',
-        },
-    ];
+    
     permissions: any;
     adminEmail: any;
     minimumDate: any;
+    routes: any;
     constructor(
         public fb: FormBuilder,
         public layoutService: LayoutService,
@@ -94,11 +89,16 @@ export class PermissionHomeComponent implements OnInit {
         this.adminEmail = environment?.adminEmail;
         this.formatter = new Formatter();
         this.minimumDate = new Date();
+
+        this.medicalForm.patchValue({
+            typology: 'Malattia',
+        });
+        this.routes = ROUTES;
     }
 
     ngOnInit(): void {
         //Current year
-        this.myPermissionsForm.patchValue({
+        this.myMedicalsForm.patchValue({
             currentYear: moment().year() + '',
         });
 
@@ -138,11 +138,11 @@ export class PermissionHomeComponent implements OnInit {
 
     loadServices(currentUser) {
         const currentYear =
-            parseInt(this.myPermissionsForm.value.currentYear, 10) || '';
+            parseInt(this.myMedicalsForm.value.currentYear, 10) || '';
         const currentMonth = this.selectedCurrentMonth?.code || '';
 
         const permissionServiceSubscription = this.permissionService
-            .getMyPermissions(currentUser.id, currentYear, currentMonth)
+            .getMyMedicalLeave(currentUser.id, currentYear, currentMonth)
             .subscribe((permissions) => {
                 this.permissions = permissions;
                 this.permissions = permissions.map((permission) => ({
@@ -169,7 +169,7 @@ export class PermissionHomeComponent implements OnInit {
     savePermission() {
         let datesInString;
 
-        for (let date of this.permissionForm.value.dates) {
+        for (let date of this.medicalForm.value.dates) {
             if (datesInString != null) {
                 datesInString =
                     datesInString + ',' + moment(date).format('DD-MM-YYYY');
@@ -181,27 +181,36 @@ export class PermissionHomeComponent implements OnInit {
             .createPermission(
                 this.currentUser?.id,
                 this.currentCompany?.id,
-                this.permissionForm.value.typology,
+                this.medicalForm.value.typology,
                 datesInString,
-                this.permissionForm.value.note,
+                this.medicalForm.value.note,
             )
             .subscribe((res) => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Permesso',
-                    detail: 'Hai fatto richiesta con successo',
+                    summary: 'Avviso',
+                    detail: 'Hai notificato la malattia con successo',
                 });
 
                 this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
             });
+        this.sendMailAdmin(datesInString);
+        this.sendMailUser(datesInString);
+    }
+    sendMailAdmin(datesInString) {
         let messageEmail = '';
-        messageEmail += "E' stato richiesto la tua approvazione: <br>";
+        messageEmail +=
+            "L'utente " +
+            this.currentUser?.name +
+            ' ' +
+            this.currentUser?.surname +
+            ', ha notificato la sua malattia: <br>';
         messageEmail += '<strong>' + datesInString + '</strong><br>';
 
         this.emailService
             .sendEmail(
                 this.adminEmail[0],
-                'CTF - Richiesta permesso - ' +
+                'CTF - Avviso malattia - ' +
                     this.currentUser?.name +
                     ' ' +
                     this.currentUser?.surname,
@@ -213,5 +222,35 @@ export class PermissionHomeComponent implements OnInit {
                 (errore) =>
                     console.error("Errore durante l'invio dell'email:", errore),
             );
+    }
+    sendMailUser(datesInString) {
+        let messageEmail = '';
+        messageEmail +=
+            'Ciao ' +
+            this.currentUser?.name +
+            ' ' +
+            this.currentUser?.surname +
+            ', hai notificato la tua malattia: <br>';
+        messageEmail += '<strong>' + datesInString + '</strong><br>';
+
+        if (this.currentUser.email)
+            this.emailService
+                .sendEmail(
+                    this.currentUser.email,
+                    'CTF - Avviso malattia - ' +
+                        this.currentUser?.name +
+                        ' ' +
+                        this.currentUser?.surname,
+                    messageEmail,
+                )
+                .subscribe(
+                    (risposta) =>
+                        console.log('Email inviata con successo:', risposta),
+                    (errore) =>
+                        console.error(
+                            "Errore durante l'invio dell'email:",
+                            errore,
+                        ),
+                );
     }
 }

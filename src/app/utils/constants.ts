@@ -21,9 +21,13 @@ export const ROUTES = {
     ROUTE_USERS_ATTENDANCE: '/attendance/users',
     ROUTE_MODIFY_ATTENDANCE: '/attendance/modify',
     ROUTE_DETAIL_ATTENDANCE: '/attendance/detail',
+    ROUTE_TABLE_PERMISSION: '/permission/table',
     ROUTE_LANDING_HOME: '/home/landing',
     ROUTE_ATTENDANCE_HOME: '/home/attendance',
     ROUTE_MYATTENDANCES_HOME: '/home/my-attendances',
     ROUTE_DOCUMENTS_HOME: '/home/documents',
     ROUTE_PERMISSION_HOME: '/home/permission',
+    ROUTE_MEDICAL_HOME: '/home/medical',
+    ROUTE_MEDICAL_DETAIL_HOME: '/home/medical/detail',
+    ROUTE_GUIDE_HOME: '/home/guide',
 };

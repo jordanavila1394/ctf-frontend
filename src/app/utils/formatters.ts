@@ -62,6 +62,16 @@ export default class Formatter {
             return 0;
         }
     }
+    formatDifferenceAccurateHours(date2, date1) {
+        const checkIn = moment(date1);
+        const checkOut = moment(date2);
+        const duration = moment.duration(checkOut.diff(checkIn));
+
+        const hours = Math.floor(duration.asHours());
+        const minutes = Math.floor(duration.asMinutes()) % 60;
+
+        return `${hours} ore e ${minutes} minuti`;
+    }
     formatIsWeekendOrFestivo(date) {
         if (date.getDay() == 6 || date.getDay() == 0) return true;
         return false;

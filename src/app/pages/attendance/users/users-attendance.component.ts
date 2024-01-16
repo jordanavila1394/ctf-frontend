@@ -165,6 +165,12 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                                   new Date(attendance?.checkIn),
                               )
                             : 0,
+                        workedAccurateHours: attendance?.checkOut
+                            ? this.formatter.formatDifferenceAccurateHours(
+                                  new Date(attendance?.checkOut),
+                                  new Date(attendance?.checkIn),
+                              )
+                            : 0,
                         checkIsWeekend: this.formatter.formatIsWeekendOrFestivo(
                             new Date(attendance?.checkIn),
                         ),

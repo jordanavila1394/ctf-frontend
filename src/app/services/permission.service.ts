@@ -22,7 +22,15 @@ export class PermissionService {
             httpOptions,
         );
     }
-
+    getPermissionById(idPermission): Observable<any> {
+        return this.http.post(
+            API_URL + 'getPermissionById',
+            {
+                idPermission,
+            },
+            httpOptions,
+        );
+    }
     getPermissionByUser(idUser): Observable<any> {
         return this.http.post(
             API_URL + 'getPermission',
@@ -45,6 +53,18 @@ export class PermissionService {
         );
     }
 
+    getMyMedicalLeave(idUser, year, month): Observable<any> {
+        return this.http.post(
+            API_URL + 'getMyMedicalLeave',
+            {
+                idUser,
+                year,
+                month,
+            },
+            httpOptions,
+        );
+    }
+
     getDataPermissions(idCompany): Observable<any> {
         return this.http.post(
             API_URL + 'getDataPermissions',
@@ -55,7 +75,29 @@ export class PermissionService {
         );
     }
 
-    createPermission(userId, companyId, typology, dates): Observable<any> {
+    addProtocolNumberPermission(
+        idPermission,
+        note,
+        protocolNumber,
+    ): Observable<any> {
+        return this.http.post(
+            API_URL + 'addProtocolNumberPermission',
+            {
+                idPermission,
+                note,
+                protocolNumber,
+            },
+            httpOptions,
+        );
+    }
+
+    createPermission(
+        userId,
+        companyId,
+        typology,
+        dates,
+        note,
+    ): Observable<any> {
         return this.http.post(
             API_URL + 'createPermission',
             {
@@ -63,6 +105,7 @@ export class PermissionService {
                 companyId,
                 typology,
                 dates,
+                note,
             },
             httpOptions,
         );

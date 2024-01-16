@@ -60,6 +60,18 @@ export class AppMenuComponent implements OnInit {
                 ],
             });
             this.model.push({
+                label: 'Permissions',
+                translationCode: 'menu.routes.permission.menuTitle',
+                items: [
+                    {
+                        label: 'Permission list',
+                        translationCode: 'menu.routes.permission.table',
+                        icon: 'pi pi-list',
+                        routerLink: [ROUTES.ROUTE_TABLE_PERMISSION],
+                    },
+                ],
+            });
+            this.model.push({
                 label: 'Users',
                 translationCode: 'menu.routes.user.menuTitle',
                 items: [

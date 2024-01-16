@@ -10,8 +10,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { TranslateModule } from '@ngx-translate/core';
 import { FileUploadModule } from 'primeng/fileupload';
 
-import { PermissionHomeComponent } from './permission-home.component';
-import { PermissionHomeRoutingModule } from './permission-home-routing.module';
+import { DetailMedicalHomeComponent } from './detail-medical-home.component';
+import { DetailMedicalHomeRoutingModule } from './detail-medical-home-routing.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { GoogleMapsDemoModule } from 'src/app/shared/components/google-map/google-maps.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -22,7 +22,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 @NgModule({
     imports: [
         CommonModule,
-        PermissionHomeRoutingModule,
+        DetailMedicalHomeRoutingModule,
         GoogleMapsDemoModule,
         ProgressSpinnerModule,
         FormsModule,
@@ -40,6 +40,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         ButtonModule,
         TranslateModule,
     ],
-    declarations: [PermissionHomeComponent],
+    declarations: [DetailMedicalHomeComponent],
 })
-export class PermissionHomeModule {}
+export class DetailMedicalHomeModule {}

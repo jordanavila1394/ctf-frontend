@@ -54,6 +54,13 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
         this.authState$ = store.select('authState');
         this.menuItems = [
             {
+                label: 'Malattia',
+                source: 'assets/icons/flu.png',
+                linkRoute: ROUTES.ROUTE_MEDICAL_HOME,
+
+                icon: 'pi pi-fw pi-check',
+            },
+            {
                 label: 'Permesso',
                 source: 'assets/icons/leave.png',
                 linkRoute: ROUTES.ROUTE_PERMISSION_HOME,
@@ -71,6 +78,12 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
                 source: 'assets/icons/stamp.png',
                 linkRoute: ROUTES.ROUTE_DOCUMENTS_HOME,
                 icon: 'pi pi-fw pi-trash',
+            },
+            {
+                label: 'Guida',
+                source: 'assets/icons/user-guide.png',
+                linkRoute: ROUTES.ROUTE_GUIDE_HOME,
+                icon: 'pi pi-fw pi-home',
             },
             {
                 label: 'Supporto',

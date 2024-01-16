@@ -5,7 +5,6 @@ import { IconsComponent } from './icons/icons.component';
 @NgModule({
     imports: [RouterModule.forChild([
         { path: 'icons', data: { breadcrumb: 'Prime Icons' }, component: IconsComponent },
-        { path: '**', redirectTo: '/notfound' }
     ])],
     exports: [RouterModule]
 })

@@ -74,6 +74,17 @@ import { AuthGuard } from './services/auth.guard';
                             },
                         },
                         {
+                            path: 'permission',
+                            loadChildren: () =>
+                                import(
+                                    './pages/permission/permission.module'
+                                ).then((m) => m.PermissionModule),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
+                        {
                             path: 'vehicle',
                             loadChildren: () =>
                                 import('./pages/vehicle/vehicle.module').then(
@@ -131,7 +142,6 @@ import { AuthGuard } from './services/auth.guard';
                 },
 
                 { path: 'notfound', component: NotfoundComponent },
-                { path: '**', redirectTo: '/notfound' },
             ],
             {
                 useHash: false,

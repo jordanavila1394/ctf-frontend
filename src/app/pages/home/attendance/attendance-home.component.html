@@ -10,7 +10,6 @@
                     <span class="font-bold">Azienda: </span>
                     <span>{{ currentCompany?.name }}</span>
                 </div>
-            
             </div>
         </div>
     </div>
@@ -57,9 +56,10 @@
                             name="files[]"
                             [multiple]="true"
                             accept="image/*"
-                            [maxFileSize]="1000000"
+                            [maxFileSize]="10000000"
                             (onSelect)="uploadFiles($event)"
                             [showUploadButton]="false"
+                            label="Seleziona"
                         >
                             <ng-template let-file pTemplate="file">
                                 <div class="ui-fileupload-row">

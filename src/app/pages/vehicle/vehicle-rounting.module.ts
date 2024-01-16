@@ -20,7 +20,6 @@ import { RouterModule } from '@angular/router';
                         (m) => m.CreateVehicleModule
                     ),
             },
-            { path: '**', redirectTo: '/notfound' },
         ]),
     ],
     exports: [RouterModule],

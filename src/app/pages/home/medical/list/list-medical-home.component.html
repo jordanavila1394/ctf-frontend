@@ -1,23 +1,13 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5>Richiede permesso</h5>
-            <form [formGroup]="permissionForm" #form="ngForm">
+            <h5>Avvisa malattia</h5>
+            <form [formGroup]="medicalForm" #form="ngForm">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="user1">Tipologia permesso</label>
-                        <p-dropdown
-                            formControlName="typology"
-                            [options]="tipologyPermissionsItems"
-                            optionLabel="name"
-                            optionValue="value"
-                            [showClear]="true"
-                            placeholder="--Tipologia--"
-                        ></p-dropdown>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <label htmlFor="dates1">Seleziona date permessi</label>
+                        <label htmlFor="dates1"
+                            >Seleziona periodo o data malattia</label
+                        >
                         <p-calendar
                             formControlName="dates"
                             selectionMode="multiple"
@@ -37,15 +27,24 @@
                             pInputTextarea
                         ></textarea>
                     </div>
+                    <div class="field col-12 md:col-6" style="display: none">
+                        <label htmlFor="typology1">Tipologia permesso</label>
+                        <input
+                            pInputText
+                            id="typology1"
+                            type="text"
+                            formControlName="typology"
+                        />
+                    </div>
                 </div>
 
                 <button
                     pButton
                     pRipple
-                    label="Richiedi permesso"
+                    label="Manda avviso"
                     class="w-full p-3 text-xl"
                     (click)="savePermission()"
-                    [disabled]="!permissionForm.valid"
+                    [disabled]="!medicalForm.valid"
                 ></button>
             </form>
         </div>
@@ -53,7 +52,7 @@
 
     <div class="col-12">
         <div class="card p-fluid">
-            <form [formGroup]="myPermissionsForm" #form="ngForm">
+            <form [formGroup]="myMedicalsForm" #form="ngForm">
                 <h5>Seleziona mese e anno</h5>
                 <div class="p-formgrid grid">
                     <div class="field col">
@@ -125,15 +124,11 @@
                                 >{{ permission?.status }}</span
                             >
                         </div>
-                        <!-- <div class="message">
-                            <strong
-                                >{{ permission?.user.name }}
-                                {{ permission?.user.surname }}</strong
-                            >
-                            ha richiesto:
-                        </div> -->
                         <div class="typology">
                             {{ permission?.typology }}
+                            <div *ngIf="permission?.protocolNumber">
+                                N° <strong>{{ permission?.protocolNumber }}</strong>
+                            </div>
                         </div>
                         <div class="dates">
                             <div class="days">
@@ -145,6 +140,14 @@
                                 </span>
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        <button
+                            type="button"
+                            pButton
+                            [routerLink]="[permission.id]"
+                            label="Aggiungi N° Protocollo"
+                        ></button>
                     </div>
                     <div class="note" *ngIf="permission.note">
                         <strong>Note: </strong> {{ permission.note }}

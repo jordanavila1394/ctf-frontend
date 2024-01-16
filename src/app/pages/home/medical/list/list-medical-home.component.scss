@@ -121,11 +121,19 @@
             }
 
             &.waiting {
+                // background-color: rgb(249, 247, 247);
+                // color: white;
                 background-color: rgb(249, 247, 247);
             }
 
             &.rejected {
                 background-color: rgba(248, 211, 195, 0.828);
+            }
+
+            .typology {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
 
             div {
@@ -188,6 +196,9 @@
                     display: flex;
                 }
             }
+        }
+        .note {
+            padding: 1rem 0;
         }
     }
 }

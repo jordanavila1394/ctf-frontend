@@ -44,7 +44,6 @@ import { RouterModule } from '@angular/router';
                         (m) => m.DocumentsUserModule,
                     ),
             },
-            { path: '**', redirectTo: '/notfound' },
         ]),
     ],
     exports: [RouterModule],

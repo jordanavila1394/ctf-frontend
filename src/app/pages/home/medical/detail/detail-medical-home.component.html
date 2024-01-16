@@ -1,0 +1,59 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Dettaglio</h5>
+            <form [formGroup]="medicalForm" #form="ngForm">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="typology1">Tipologia permesso</label>
+                        <input
+                            pInputText
+                            id="typology1"
+                            type="text"
+                            formControlName="typology"
+                        />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="dates1">Date</label>
+                        <input
+                            pInputText
+                            id="dates1"
+                            type="text"
+                            formControlName="dates"
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="dates1">Note</label>
+                        <textarea
+                            rows="5"
+                            cols="30"
+                            placeholder="Eventuali note"
+                            ngModel
+                            formControlName="note"
+                            pInputTextarea
+                        ></textarea>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="protocolNumber1">N° Protocollo</label>
+                        <input
+                            pInputText
+                            id="protocolNumber1"
+                            type="text"
+                            formControlName="protocolNumber"
+                        />
+                    </div>
+                </div>
+
+                <button
+                    pButton
+                    pRipple
+                    label="Salva"
+                    class="w-full p-3 text-xl"
+                    (click)="updatePermission()"
+                    [disabled]="!medicalForm.valid"
+                ></button>
+            </form>
+        </div>
+    </div>
+</div>

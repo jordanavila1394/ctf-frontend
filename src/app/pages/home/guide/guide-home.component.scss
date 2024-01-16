@@ -1,0 +1,11 @@
+.video-wrapper {
+    margin: 2rem 0;
+    video {
+        width: 640px;
+        height: 360px;
+        @media screen and (max-width: 600px) {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
