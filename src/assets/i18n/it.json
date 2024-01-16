@@ -27,7 +27,7 @@
         "removeRule": "Remove Rule",
         "accept": "Yes",
         "reject": "No",
-        "choose": "Choose",
+        "choose": "Seleziona",
         "upload": "Upload",
         "cancel": "Cancel",
         "dayNames": [
@@ -96,6 +96,10 @@
                 "table": "Lista presenze",
                 "users": "Lista presenza utenti",
                 "create": "Aggiungi presenza"
+            },
+            "permission": {
+                "menuTitle": "Permessi e malattie",
+                "table": "Lista permessi e malattie"
             },
             "user": {
                 "menuTitle": "Utenti",

@@ -97,6 +97,10 @@
                 "users": "Attendance users list",
                 "create": "Add attendance"
             },
+            "permission": {
+                "menuTitle": "Permissions",
+                "table": "Permission list"
+            },
             "user": {
                 "menuTitle": "Users",
                 "table": "User list",

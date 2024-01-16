@@ -27,7 +27,7 @@
         "removeRule": "Remove Rule",
         "accept": "Yes",
         "reject": "No",
-        "choose": "Choose",
+        "choose": "Seleciona",
         "upload": "Upload",
         "cancel": "Cancel",
         "dayNames": [
@@ -96,6 +96,10 @@
                 "table": "Lista presencias",
                 "users": "Lista presencia usuarios",
                 "create": "Agrega presencia"
+            },
+            "permission": {
+                "menuTitle": "Permisos",
+                "table": "Lista permisos"
             },
             "user": {
                 "menuTitle": "Usuarios",
