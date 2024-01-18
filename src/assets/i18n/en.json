@@ -88,6 +88,7 @@
             "landing": {
                 "menuTitle": "Landing",
                 "permission": "Permission",
+                "medical":"Medical leave",
                 "attendances": "Attendances",
                 "documents": "Documents"
             },

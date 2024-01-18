@@ -42,10 +42,10 @@
         "dayNamesShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
         "dayNamesMin": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
         "monthNames": [
-            "January",
-            "February",
-            "March",
-            "April",
+            "Gennaio",
+            "Febbraio",
+            "Marzo",
+            "Aprile",
             "May",
             "June",
             "July",
@@ -88,6 +88,7 @@
             "landing": {
                 "menuTitle": "Landing",
                 "permission": "Permessi",
+                "medical":"Malattia",
                 "attendances": "Presenze",
                 "documents": "Documenti"
             },

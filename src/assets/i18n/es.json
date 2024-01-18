@@ -88,6 +88,7 @@
             "landing": {
                 "menuTitle": "Landing",
                 "permission": "Permiso",
+                "medical":"Enfermedad",
                 "attendances": "Presencias",
                 "documents": "Documentos"
             },

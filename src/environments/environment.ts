@@ -10,7 +10,8 @@ export const environment = {
     accessKeyId: process.env['DIGITAL_OCEAN_KEY_ID'],
     secretAccessKey: process.env['DIGITAL_OCEAN_ACCESS_KEY'],
     bucketName: process.env['DIGITAL_OCEAN_BUCKET'],
-    adminEmail: ['avila@ctfitalia.com'],
+    adminEmails: ['avila@ctfitalia.com'],
+    operatorPhoneNumber: '+393343129952', //Operator Help desk
 };
 
 /*
