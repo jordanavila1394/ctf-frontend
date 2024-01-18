@@ -100,6 +100,8 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         //Current year
+        moment.locale('it');
+
         this.usersAttendancesForm.patchValue({
             currentYear: moment().year() + '',
         });

@@ -23,23 +23,44 @@
                             [options]="placesItems"
                             optionLabel="name"
                             optionValue="id"
-                            [showClear]="true"
                             formControlName="placeId"
                             placeholder="--Sede--"
-                            [(ngModel)]="selectedPlace"
                             (onChange)="onChangePlace($event)"
+                            [(ngModel)]="selectedPlace"
+                            [required]="true"
                         ></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label htmlFor="user1">Seleziona mezzo</label>
                         <p-dropdown
                             [options]="vehiclesItems"
+                            [(ngModel)]="selectedVehicle"
                             optionLabel="licensePlate"
                             optionValue="id"
+                            [filter]="true"
+                            filterBy="licensePlate"
                             [showClear]="true"
+                            placeholder="--Veicolo--"
                             formControlName="vehicleId"
-                            [(ngModel)]="selectedVehicle"
-                        ></p-dropdown>
+                            (onChange)="onChangeVehicle($event)"
+                            [required]="true"
+                        >
+                            <ng-template let-vehicle pTemplate="selectedItem">
+                                <div
+                                    class="flex align-items-center gap-2"
+                                    *ngIf="selectedVehicle"
+                                >
+                                    <div>
+                                        {{ vehicle.licensePlate }}
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-vehicle pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ vehicle.licensePlate }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
                     </div>
                     <div
                         class="field col-12 md:col-12"
@@ -93,7 +114,6 @@
             </form>
         </div>
     </div>
-
     <div class="col-12">
         <div>
             <div class="attendance-button-wrapper">
@@ -143,7 +163,9 @@
                 Sei a {{ distanceBetween | number: ".1-3" }} km dalla sede
                 selezionata. <br />
                 <div *ngIf="isNearDistance">Puoi effetuare il check</div>
-                <div *ngIf="!isNearDistance">Non puoi effetuare il check.</div>
+                <div *ngIf="!isNearDistance">
+                    <span style="color: red">Non puoi effetuare il check.</span>
+                </div>
                 <div *ngIf="!isNearDistance">
                     Entra nel raggio di 300m e ricarica la pagina
                 </div>
@@ -151,12 +173,12 @@
             <div></div>
         </div>
     </div>
-    <div class="col-12">
+    <!-- <div class="col-12">
         <div *ngIf="currentPlaceMap">
             <app-google-maps
                 [customZoom]="16"
                 [places]="[currentPlaceMap]"
             ></app-google-maps>
         </div>
-    </div>
+    </div> -->
 </div>

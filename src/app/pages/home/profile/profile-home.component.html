@@ -1,0 +1,161 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Il mio profilo</h5>
+            <form [formGroup]="profileForm" #form="ngForm">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-12">
+                        <label htmlFor="fiscalCode1">Codice fiscale</label>
+                        <input
+                            pInputText
+                            id="fiscalCode1"
+                            type="text"
+                            placeholder="Codice fiscale"
+                            formControlName="fiscalCode"
+                            ngModel
+                        />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="name1">Nome</label>
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            placeholder="Nome"
+                            formControlName="name"
+                            ngModel
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="surname1">Cognome</label>
+                        <input
+                            pInputText
+                            id="surname1"
+                            type="text"
+                            placeholder="Cognome"
+                            formControlName="surname"
+                            ngModel
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="email1">Email</label>
+                        <input
+                            pInputText
+                            id="email1"
+                            type="text"
+                            placeholder="Email"
+                            formControlName="email"
+                            (input)="
+                                profileForm.controls.email.setValue(
+                                    profileForm.controls.email.value.toLowerCase()
+                                )
+                            "
+                            ngModel
+                        />
+                        <div
+                            *ngIf="
+                                profileForm.controls['email'].invalid &&
+                                (profileForm.controls['email'].dirty ||
+                                    profileForm.controls['email'].touched)
+                            "
+                            class="alert"
+                        >
+                            <div
+                                *ngIf="
+                                    profileForm.controls['email'].errors[
+                                        'pattern'
+                                    ]
+                                "
+                            >
+                                <small class="p-error"
+                                    >Email address is invalid</small
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="cellphone1">Cellulare</label>
+                        <input
+                            pInputText
+                            id="cellphone1"
+                            type="text"
+                            placeholder="Cellulare"
+                            formControlName="cellphone"
+                            ngModel
+                        />
+                    </div>
+
+                    <!-- <div class="field col-12 md:col-6">
+                        <label htmlFor="password1">Password</label>
+
+                        <p-password
+                            formControlName="password"
+                            ngModel
+                        ></p-password>
+                    </div> -->
+                </div>
+
+                <button
+                    pButton
+                    pRipple
+                    label="Salva profilo"
+                    class="w-full p-3 text-xl"
+                    (click)="saveProfile()"
+                    [disabled]="!profileForm.valid"
+                ></button>
+            </form>
+        </div>
+        <div class="card">
+            <h5>Cambia password</h5>
+            <p>La nuova password deve contenere minimo 6 caratteri</p>
+            <form [formGroup]="changePasswordForm" #form="ngForm">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label for="newPassword">Nuova Password</label>
+                        <input
+                            pInputText
+                            id="newPassword"
+                            formControlName="newPassword"
+                            required
+                            ngModel
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="confirmPassword"
+                            >Conferma nuova password</label
+                        >
+                        <input
+                            pInputText
+                            id="confirmPassword"
+                            formControlName="confirmPassword"
+                            required
+                            ngModel
+                        />
+                        <div
+                            *ngIf="
+                                changePasswordForm.hasError('notSame') &&
+                                !changePasswordForm
+                                    .get('confirmPassword')
+                                    .hasError('required')
+                            "
+                        >
+                            Le password non corrispondono.
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    pButton
+                    pRipple
+                    label="Salva password"
+                    class="w-full p-3 text-xl"
+                    (click)="savePassword()"
+                    [disabled]="!changePasswordForm.valid"
+                ></button>
+            </form>
+        </div>
+    </div>
+</div>

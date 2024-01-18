@@ -69,9 +69,8 @@ export class ListMedicalHomeComponent implements OnInit {
     selectedCurrentMonth: any;
     monthsItems = [];
 
-    
     permissions: any;
-    adminEmail: any;
+    adminEmails: any;
     minimumDate: any;
     routes: any;
     constructor(
@@ -86,7 +85,7 @@ export class ListMedicalHomeComponent implements OnInit {
     ) {
         //Init
         this.authState$ = store.select('authState');
-        this.adminEmail = environment?.adminEmail;
+        this.adminEmails = environment?.adminEmails;
         this.formatter = new Formatter();
         this.minimumDate = new Date();
 
@@ -98,6 +97,8 @@ export class ListMedicalHomeComponent implements OnInit {
 
     ngOnInit(): void {
         //Current year
+        moment.locale('it');
+
         this.myMedicalsForm.patchValue({
             currentYear: moment().year() + '',
         });
@@ -209,7 +210,7 @@ export class ListMedicalHomeComponent implements OnInit {
 
         this.emailService
             .sendEmail(
-                this.adminEmail[0],
+                this.adminEmails,
                 'CTF - Avviso malattia - ' +
                     this.currentUser?.name +
                     ' ' +

@@ -30,4 +30,5 @@ export const ROUTES = {
     ROUTE_MEDICAL_HOME: '/home/medical',
     ROUTE_MEDICAL_DETAIL_HOME: '/home/medical/detail',
     ROUTE_GUIDE_HOME: '/home/guide',
+    ROUTE_PROFILE_HOME: '/home/profile',
 };

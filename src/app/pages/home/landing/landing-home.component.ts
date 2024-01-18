@@ -21,6 +21,7 @@ import * as moment from 'moment';
 import Formatter from 'src/app/utils/formatters';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { ROUTES } from 'src/app/utils/constants';
+import { environment } from 'src/environments/environment';
 
 @Component({
     templateUrl: './landing-home.component.html',
@@ -45,12 +46,16 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
     loading: boolean;
     attendanceData: any;
 
+    //Global variables
+    operatorPhoneNumber: any;
+
     constructor(
         public layoutService: LayoutService,
         private attendanceService: AttendanceService,
         private store: Store<{ authState: AuthState }>,
     ) {
         //Init
+        this.operatorPhoneNumber = environment?.operatorPhoneNumber;
         this.authState$ = store.select('authState');
         this.menuItems = [
             {
@@ -85,11 +90,6 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
                 linkRoute: ROUTES.ROUTE_GUIDE_HOME,
                 icon: 'pi pi-fw pi-home',
             },
-            {
-                label: 'Supporto',
-                source: 'assets/icons/customer-service.png',
-                icon: 'pi pi-fw pi-home',
-            },
         ];
         this.formatter = new Formatter();
     }
@@ -117,6 +117,12 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
             });
         if (this.subscription && attendanceServiceSubscription)
             this.subscription.add(attendanceServiceSubscription);
+    }
+    openWhatsAppChatOperator() {
+        if (this.operatorPhoneNumber) {
+            const whatsappLink = `https://wa.me/${this.operatorPhoneNumber}`;
+            window.open(whatsappLink, '_blank');
+        }
     }
 
     ngOnDestroy() {

@@ -149,6 +149,12 @@ export class AppMenuComponent implements OnInit {
                         routerLink: [ROUTES.ROUTE_PERMISSION_HOME],
                     },
                     {
+                        label: 'Malattia',
+                        translationCode: 'menu.routes.landing.medical',
+                        icon: 'pi pi-fw pi-plus',
+                        routerLink: [ROUTES.ROUTE_MEDICAL_HOME],
+                    },
+                    {
                         label: 'My Attendances',
                         translationCode: 'menu.routes.landing.attendances',
                         icon: 'pi pi-fw pi-list',

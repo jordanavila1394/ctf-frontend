@@ -1,11 +1,7 @@
 <div class="grid">
     <div class="col-12 md:col-12">
         <div class="card">
-            <form
-                [formGroup]="modifyForm"
-                #form="ngForm"
-                (ngSubmit)="onSubmit()"
-            >
+            <form [formGroup]="modifyForm" #form="ngForm">
                 <h5>Modifica utente</h5>
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
@@ -118,6 +114,8 @@
                 <div
                     class="flex justify-content-center align-items-center gap-2"
                 >
+                    <p-toast></p-toast>
+
                     <button
                         pButton
                         pRipple
@@ -134,10 +132,61 @@
                         type="submit"
                         class="p-button-success"
                         label="Salva"
+                        (click)="updateUser()"
                         icon="pi pi-save"
                         [disabled]="!modifyForm.valid"
                     ></button>
                 </div>
+            </form>
+        </div>
+        <div class="card">
+            <h5>Cambia password</h5>
+            <p>La nuova password deve contenere minimo 6 caratteri</p>
+            <form [formGroup]="changePasswordForm" #form="ngForm">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label for="newPassword">Nuova Password</label>
+                        <input
+                            pInputText
+                            id="newPassword"
+                            formControlName="newPassword"
+                            required
+                            ngModel
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="confirmPassword"
+                            >Conferma nuova password</label
+                        >
+                        <input
+                            pInputText
+                            id="confirmPassword"
+                            formControlName="confirmPassword"
+                            required
+                            ngModel
+                        />
+                        <div
+                            *ngIf="
+                                changePasswordForm.hasError('notSame') &&
+                                !changePasswordForm
+                                    .get('confirmPassword')
+                                    .hasError('required')
+                            "
+                        >
+                            Le password non corrispondono.
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    pButton
+                    pRipple
+                    label="Salva password"
+                    class="w-full p-3 text-xl"
+                    (click)="savePassword()"
+                    [disabled]="!changePasswordForm.valid"
+                ></button>
             </form>
         </div>
     </div>

@@ -50,12 +50,24 @@ export class ModifyUserComponent implements OnInit {
         status: [false, [Validators.required]],
     });
 
+    changePasswordForm = this.fb.group(
+        {
+            newPassword: ['', [Validators.required, Validators.minLength(6)]],
+            confirmPassword: [
+                '',
+                [Validators.required, Validators.minLength(6)],
+            ],
+        },
+        { validator: this.checkPasswords },
+    );
+
     constructor(
         public fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
+        private messageService: MessageService,
         private companyService: CompanyService,
         private roleService: RoleService,
     ) {
@@ -117,7 +129,7 @@ export class ModifyUserComponent implements OnInit {
 
     selectAddress(place: any): void {}
 
-    onSubmit(): void {
+    updateUser(): void {
         this.userService
             .patchUser(
                 parseInt(this.modifyForm.value.id, 10),
@@ -132,11 +144,40 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.position,
                 this.modifyForm.value.status,
             )
-            .subscribe((res) =>
-                this.router.navigate([ROUTES.ROUTE_TABLE_USER]),
-            );
+            .subscribe((res) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Avviso',
+                    detail: 'Hai modificato l\'utente con successo',
+                });
+                this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
+            });
     }
     goToTableUser() {
         this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
+    }
+
+    //Password
+    checkPasswords(group: FormGroup) {
+        const newPassword = group.get('newPassword').value;
+        const confirmPassword = group.get('confirmPassword').value;
+
+        return newPassword === confirmPassword ? null : { notSame: true };
+    }
+
+    savePassword() {
+        this.userService
+            .saveNewPassword(
+                parseInt(this.idUser, 10),
+                this.changePasswordForm.value.newPassword,
+            )
+            .subscribe((res) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Avviso',
+                    detail: 'Hai modificato la password con successo',
+                });
+                this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
+            });
     }
 }

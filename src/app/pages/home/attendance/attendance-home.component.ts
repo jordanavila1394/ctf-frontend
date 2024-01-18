@@ -28,6 +28,10 @@ import { ROUTES } from 'src/app/utils/constants';
 import { UploadService } from 'src/app/services/upload.service';
 import { FileUpload, FileUploadEvent, UploadEvent } from 'primeng/fileupload';
 
+import { Howl } from 'howler';
+import { MessageService } from 'primeng/api';
+import { VehicleService } from 'src/app/services/vehicle.service';
+
 @Component({
     templateUrl: './attendance-home.component.html',
     styleUrls: ['./attendance-home.component.scss'],
@@ -71,16 +75,23 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     vehiclesItems: any;
 
     checkInForm = this.fb.group({
-        placeId: [''],
-        vehicleId: [''],
+        placeId: null,
+        vehicleId: null,
     });
     currentPlaceMap: any;
     currentAddress: string;
     distanceBetween: number;
     isNearDistance: boolean = false;
+
+    disableButtonCheckIn: boolean = false;
+    disableButtonCheckOut: boolean = false;
+
     attendanceCheckIn: any;
 
     uploadedFiles: any[] = [];
+    private soundButton = new Howl({
+        src: ['assets/sounds/button-press.mp3'],
+    });
 
     constructor(
         public fb: FormBuilder,
@@ -88,6 +99,8 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         private attendanceService: AttendanceService,
         private userService: UserService,
         private uploadService: UploadService,
+        private messageService: MessageService,
+        private vehicleService: VehicleService,
         private router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
@@ -98,12 +111,11 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.getLocation();
-
         this.authState$.subscribe((authS) => {
             this.storeUser = authS?.user || '';
-            this.loadServices(this.storeUser);
+            this.getLocation(this.storeUser);
         });
+
         const layourServiceSubscription =
             this.layoutService.configUpdate$.subscribe(() => {
                 this.loadServices(this.currentUser);
@@ -113,57 +125,14 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadServices(storeUser) {
-        const attendanceServiceSubscription = this.attendanceService
-            .getAttendanceByUser(storeUser.id)
-            .subscribe((data) => {
-                this.attendanceData = data;
-                this.attendanceCheckIn = this.attendanceData?.attendance;
-                if (this.attendanceCheckIn?.placeId) {
-                    this.checkInForm.patchValue({
-                        placeId: this.attendanceCheckIn?.placeId,
-                    });
-                }
-                if (this.attendanceCheckIn?.vehicleId) {
-                    this.checkInForm.patchValue({
-                        vehicleId: this.attendanceCheckIn?.vehicleId,
-                    });
-                }
-                if (this.attendanceCheckIn) {
-                    this.checkInForm.controls['placeId'].disable({
-                        onlySelf: true,
-                    });
-                    this.checkInForm.controls['vehicleId'].disable({
-                        onlySelf: true,
-                    });
-                }
-
-                this.loading = false;
-            });
-        const userServiceSubscription = this.userService
-            .getUser(storeUser.id)
-            .subscribe((data) => {
-                this.currentUser = data;
-                this.currentCompany = data?.companies[0];
-                this.placesItems = data?.companies[0]?.places;
-                this.vehiclesItems = data?.companies[0]?.vehicles;
-                this.loading = false;
-            });
-
-        if (attendanceServiceSubscription && this.subscription)
-            this.subscription.add(attendanceServiceSubscription);
-
-        if (userServiceSubscription && this.subscription)
-            this.subscription.add(userServiceSubscription);
-    }
-
-    getLocation() {
+    getLocation(currentUser) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position: any) => {
                     if (position) {
                         this.gpsLatitude = position.coords.latitude;
                         this.gpsLongitude = position.coords.longitude;
+                        this.loadServices(currentUser);
                         new google.maps.Geocoder()
                             .geocode({
                                 location: {
@@ -178,12 +147,6 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                                 } else {
                                     console.log('No results found');
                                 }
-                                this.currentPlaceMap = this.placesItems.filter(
-                                    (place) =>
-                                        place.id ===
-                                        this.attendanceCheckIn?.placeId,
-                                )[0];
-                                this.calculateDistance();
                             })
                             .catch((e) =>
                                 console.log('Geocoder failed due to: ' + e),
@@ -196,29 +159,121 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             console.log('Geolocation is not supported by this browser.');
         }
     }
+    loadServices(storeUser) {
+        const userServiceSubscription = this.userService
+            .getUser(storeUser.id)
+            .subscribe((data) => {
+                this.currentUser = data;
+                this.currentCompany = data?.companies[0];
+                this.placesItems = data?.companies[0]?.places;
+                this.vehiclesItems = data?.companies[0]?.vehicles;
+                this.loading = false;
+                const vehicleServiceSubscription = this.vehicleService
+                    .getAllVehicles(0)
+                    .subscribe((vehicles) => {
+                        this.vehiclesItems = vehicles;
+                        const attendanceServiceSubscription =
+                            this.attendanceService
+                                .getAttendanceByUser(storeUser.id)
+                                .subscribe((data) => {
+                                    this.attendanceData = data;
+                                    this.attendanceCheckIn =
+                                        this.attendanceData?.attendance;
 
+                                    let savedSelectionPlace = parseInt(
+                                        localStorage.getItem('selectedPlace'),
+                                        10,
+                                    );
+                                    if (savedSelectionPlace) {
+                                        this.checkInForm.patchValue({
+                                            placeId: savedSelectionPlace,
+                                        });
+                                        this.calculateDistance(
+                                            savedSelectionPlace,
+                                        );
+                                    }
+                                    let savedSelectionVehicle = parseInt(
+                                        localStorage.getItem('selectedVehicle'),
+                                        10,
+                                    );
+
+                                    if (savedSelectionVehicle) {
+                                        this.checkInForm.patchValue({
+                                            vehicleId: savedSelectionVehicle,
+                                        });
+                                    }
+                                    if (this.attendanceCheckIn?.placeId) {
+                                        this.checkInForm.patchValue({
+                                            placeId:
+                                                this.attendanceCheckIn?.placeId,
+                                        });
+                                    }
+                                    if (this.attendanceCheckIn?.vehicleId) {
+                                        this.checkInForm.patchValue({
+                                            vehicleId:
+                                                this.attendanceCheckIn
+                                                    ?.vehicleId,
+                                        });
+                                    }
+                                    if (this.attendanceCheckIn) {
+                                        this.checkInForm.controls[
+                                            'placeId'
+                                        ].disable({
+                                            onlySelf: true,
+                                        });
+                                        this.checkInForm.controls[
+                                            'vehicleId'
+                                        ].disable({
+                                            onlySelf: true,
+                                        });
+                                    }
+
+                                    this.loading = false;
+                                });
+                        if (attendanceServiceSubscription && this.subscription)
+                            this.subscription.add(
+                                attendanceServiceSubscription,
+                            );
+                        this.loading = false;
+                    });
+                this.subscription.add(vehicleServiceSubscription);
+            });
+
+        if (userServiceSubscription && this.subscription)
+            this.subscription.add(userServiceSubscription);
+    }
     onChangePlace(event) {
-        this.currentPlaceMap = this.placesItems.filter(
-            (place) => place.id === event.value,
-        )[0];
-
-        this.calculateDistance();
+        localStorage.setItem('selectedPlace', this.selectedPlace);
+        this.calculateDistance(event.value);
     }
 
-    calculateDistance() {
+    onChangeVehicle(event) {
+        localStorage.setItem('selectedVehicle', this.selectedVehicle);
+    }
+
+    calculateDistance(placeId) {
+        this.currentPlaceMap = this.placesItems.filter(
+            (place) => place.id === placeId,
+        )[0];
         this.distanceBetween = this.getDistanceFromLatLonInKm(
             this.gpsLatitude,
             this.gpsLongitude,
             this.currentPlaceMap?.latitude,
             this.currentPlaceMap?.longitude,
         );
+
         this.isNearDistance = this.distanceBetween < 0.3; //300 metri
+        this.disableButtonCheckIn =
+            !this.isNearDistance ||
+            this.selectedPlace === null ||
+            this.selectedVehicle === null;
     }
 
     getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
         var R = 6371; // Radius of the earth in km
-        var dLat = this.deg2rad(lat2 - lat1); // deg2rad below
-        var dLon = this.deg2rad(lon2 - lon1);
+        var dLat = this.deg2rad(parseFloat(lat2) - parseFloat(lat1)); // deg2rad below
+        var dLon = this.deg2rad(parseFloat(lon2) - parseFloat(lon1));
+
         var a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(this.deg2rad(lat1)) *
@@ -235,16 +290,30 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     }
 
     saveCheckIn() {
-        this.attendanceService
-            .checkInAttendance(
-                this.currentUser?.id,
-                this.currentCompany?.id,
-                this.checkInForm.value.placeId,
-                this.checkInForm.value.vehicleId,
-            )
-            .subscribe((res) =>
-                this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
-            );
+        if (!this.checkInForm.value.vehicleId) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Errore',
+                detail: 'Scegliere veicolo',
+                life: 3000,
+            });
+        }
+        if (
+            this.checkInForm.value.placeId &&
+            this.checkInForm.value.vehicleId
+        ) {
+            this.attendanceService
+                .checkInAttendance(
+                    this.currentUser?.id,
+                    this.currentCompany?.id,
+                    this.checkInForm.value.placeId,
+                    this.checkInForm.value.vehicleId,
+                )
+                .subscribe((res) => {
+                    this.playSoundButton();
+                    this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
+                });
+        }
     }
     saveCheckOut() {
         const formData = new FormData();
@@ -252,29 +321,37 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         for (let file of this.uploadedFiles) {
             formData.append('files', file);
         }
+        if (this.uploadedFiles.length > 0) {
+            const licensePlate = this.vehiclesItems.find(
+                (vehicle) => vehicle.id === this.selectedVehicle,
+            ).licensePlate;
 
-        //TARGA
-        const licensePlate = this.vehiclesItems.find(
-            (vehicle) => vehicle.id === this.selectedVehicle,
-        ).licensePlate;
+            const checkInId = this.attendanceCheckIn?.id;
+            formData.append('checkInId', checkInId);
+            formData.append('licensePlate', licensePlate);
 
-        const checkInId = this.attendanceCheckIn?.id;
-        formData.append('checkInId', checkInId);
-        formData.append('licensePlate', licensePlate);
-
-        this.uploadService.uploadAttendanceImages(formData).subscribe(
-            (response) => {},
-            (error) => {},
-        );
-
-        this.attendanceService
-            .checkOutAttendance(
-                this.attendanceCheckIn?.id,
-                this.currentUser?.id,
-            )
-            .subscribe((res) =>
-                this.router.navigate([ROUTES.ROUTE_LANDING_HOME]),
+            this.uploadService.uploadAttendanceImages(formData).subscribe(
+                (response) => {},
+                (error) => {},
             );
+
+            this.attendanceService
+                .checkOutAttendance(
+                    this.attendanceCheckIn?.id,
+                    this.currentUser?.id,
+                )
+                .subscribe((res) => {
+                    this.playSoundButton();
+                    this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
+                });
+        } else {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Errore',
+                detail: 'Aggiungi foto del mezzo',
+                life: 3000,
+            });
+        }
     }
 
     //Upload Image
@@ -284,10 +361,15 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         }
     }
     remove(event: Event, file: any) {
-		const index: number = this.uploadedFiles.indexOf(file);
-		this.fileUpload.remove(event, index);
-	}
-    
+        const index: number = this.uploadedFiles.indexOf(file);
+        this.fileUpload.remove(event, index);
+    }
+
+    //Sounds
+    playSoundButton() {
+        this.soundButton.play();
+    }
+
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
     }

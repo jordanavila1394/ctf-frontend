@@ -77,7 +77,7 @@ export class PermissionHomeComponent implements OnInit {
         },
     ];
     permissions: any;
-    adminEmail: any;
+    adminEmails: any;
     minimumDate: any;
     constructor(
         public fb: FormBuilder,
@@ -91,13 +91,14 @@ export class PermissionHomeComponent implements OnInit {
     ) {
         //Init
         this.authState$ = store.select('authState');
-        this.adminEmail = environment?.adminEmail;
+        this.adminEmails = environment?.adminEmails;
         this.formatter = new Formatter();
         this.minimumDate = new Date();
     }
 
     ngOnInit(): void {
         //Current year
+        moment.locale('it');
         this.myPermissionsForm.patchValue({
             currentYear: moment().year() + '',
         });
@@ -200,7 +201,7 @@ export class PermissionHomeComponent implements OnInit {
 
         this.emailService
             .sendEmail(
-                this.adminEmail[0],
+                this.adminEmails,
                 'CTF - Richiesta permesso - ' +
                     this.currentUser?.name +
                     ' ' +

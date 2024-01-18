@@ -111,6 +111,39 @@ export class UserService {
         );
     }
 
+    saveProfileUser(
+        id: number,
+        name: string,
+        surname: string,
+        fiscalCode: string,
+        email: string,
+        cellphone: string,
+    ): Observable<any> {
+        return this.http.patch(
+            API_URL + 'saveProfileUser',
+            {
+                id,
+                name,
+                surname,
+                fiscalCode,
+                email,
+                cellphone,
+            },
+            httpOptions,
+        );
+    }
+
+    saveNewPassword(id: number, password: string): Observable<any> {
+        return this.http.patch(
+            API_URL + 'saveNewPassword',
+            {
+                id,
+                password,
+            },
+            httpOptions,
+        );
+    }
+
     deleteUser(id: string): Observable<any> {
         return this.http.delete(API_URL + 'deleteUser' + '/' + id);
     }

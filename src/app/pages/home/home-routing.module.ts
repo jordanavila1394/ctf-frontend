@@ -60,6 +60,14 @@ import { RouterModule } from '@angular/router';
                         (m) => m.DocumentsHomeModule,
                     ),
             },
+            {
+                path: 'profile',
+                data: { breadcrumb: 'Profile' },
+                loadChildren: () =>
+                    import('./profile/profile-home.module').then(
+                        (m) => m.ProfileHomeModule,
+                    ),
+            },
         ]),
     ],
     exports: [RouterModule],

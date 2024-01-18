@@ -10,6 +10,7 @@ import { logout } from '../stores/auth/authentication.actions';
 import { CompanyService } from '../services/company.service';
 import { AuthService } from '../services/auth.service';
 import { ROUTES } from '../utils/constants';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-topbar',
@@ -37,6 +38,7 @@ export class AppTopBarComponent {
         public layoutService: LayoutService,
         private companyService: CompanyService,
         private authService: AuthService,
+        public router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
         this.authState$ = store.select('authState');
@@ -59,7 +61,13 @@ export class AppTopBarComponent {
             this.companies = companies;
         });
     }
+
+    goToProfile() {
+        this.router.navigate([ROUTES.ROUTE_PROFILE_HOME]);
+    }
+
     OnClickLogout() {
         this.store.dispatch(logout());
+        localStorage.clear();
     }
 }

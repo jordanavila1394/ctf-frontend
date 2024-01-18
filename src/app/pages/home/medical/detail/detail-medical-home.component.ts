@@ -60,7 +60,7 @@ export class DetailMedicalHomeComponent implements OnInit {
     });
 
     selectedCurrentMonth: any;
-    adminEmail: any;
+    adminEmails: any;
     routes: any;
     permission: any;
     idPermission: string;
@@ -76,7 +76,7 @@ export class DetailMedicalHomeComponent implements OnInit {
     ) {
         //Init
         this.authState$ = store.select('authState');
-        this.adminEmail = environment?.adminEmail;
+        this.adminEmails = environment?.adminEmails;
         this.formatter = new Formatter();
         this.routes = ROUTES;
     }
@@ -166,7 +166,7 @@ export class DetailMedicalHomeComponent implements OnInit {
                 '<br>';
         this.emailService
             .sendEmail(
-                this.adminEmail[0],
+                this.adminEmails,
                 'CTF - Numero protocollo malattia - ' +
                     this.medicalForm.value.protocolNumber +
                     ' ' +
