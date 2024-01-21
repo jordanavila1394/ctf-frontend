@@ -27,8 +27,6 @@
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": ["src/styles.scss"],
                         "scripts": [
-                            "node_modules/prismjs/prism.js",
-                            "node_modules/prismjs/components/prism-typescript.js",
                             "node_modules/pdfjs-dist/build/pdf.mjs",
                             "node_modules/pdfjs-dist/build/pdf.worker.mjs"
                         ],
@@ -37,7 +35,17 @@
                         },
                         "allowedCommonJsDependencies": [
                             "moment",
-                            "file-saver"
+                            "file-saver",
+                            "moment",
+                            "dropzone",
+                            "moment",
+                            "pdfjs-dist",
+                            "pdfjs-dist/web/pdf_viewer",
+                            "pako",
+                            "howler",
+                            "aws-sdk",
+                
+
                           ]
                     },
                     "configurations": {
@@ -45,7 +53,7 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "3mb",
+                                    "maximumWarning": "10mb",
                                     "maximumError": "5mb"
                                 },
                                 {

@@ -54,7 +54,7 @@ export class AuthEffects {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: res?.error?.error?.message,
+                        detail: JSON.stringify(res),
                     })
                 )
             ),

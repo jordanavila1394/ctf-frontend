@@ -30,10 +30,7 @@ export class AuthService {
     login(fiscalCode: string, password: string): Observable<any> {
         return this.http.post(
             API_URL + 'signin',
-            {
-                fiscalCode,
-                password,
-            },
+            JSON.stringify({ fiscalCode, password }),
             httpOptions,
         );
     }
