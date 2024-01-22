@@ -43,9 +43,7 @@
                             "pdfjs-dist/web/pdf_viewer",
                             "pako",
                             "howler",
-                            "aws-sdk",
-                
-
+                            "aws-sdk"
                           ]
                     },
                     "configurations": {

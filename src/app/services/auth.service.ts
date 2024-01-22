@@ -8,10 +8,7 @@ import { environment } from 'src/environments/environment';
 const API_URL = environment.endpoint + 'api/auth/';
 
 const httpOptions = {
-    headers: new HttpHeaders({
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-    }),
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
 @Injectable({
