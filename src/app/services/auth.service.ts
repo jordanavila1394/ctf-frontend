@@ -8,7 +8,10 @@ import { environment } from 'src/environments/environment';
 const API_URL = environment.endpoint + 'api/auth/';
 
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+    }),
 };
 
 @Injectable({
@@ -30,7 +33,7 @@ export class AuthService {
     login(fiscalCode: string, password: string): Observable<any> {
         return this.http.post(
             API_URL + 'signin',
-            JSON.stringify({ fiscalCode, password }),
+            { fiscalCode: fiscalCode, password: password },
             httpOptions,
         );
     }
