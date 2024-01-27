@@ -10,35 +10,6 @@
                 Benvenuto su CTF Manager
             </div>
         </div>
-        <div>
-            <div class="items-actions">
-                <div class="item-circle" *ngFor="let menu of menuItems">
-                    <a
-                        routerLink="{{ menu?.linkRoute }}"
-                        [class.disabled]="!menu?.linkRoute ? true : null"
-                    >
-                        <div class="item">
-                            <div class="image-wrapper">
-                                <img src="{{ menu?.source }}" class="" />
-                            </div>
-                            <span>{{ menu?.label }}</span>
-                        </div>
-                    </a>
-                </div>
-                <div class="item-circle">
-                    <a
-                    (click)="openWhatsAppChatOperator()"
-                    >
-                        <div class="item">
-                            <div class="image-wrapper">
-                                <img src='assets/icons/customer-service.png' class="" />
-                            </div>
-                            <span>Supporto</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
     <div
         class="col-12"
@@ -113,6 +84,46 @@
 
                 <div>
                     <img src="assets/icons/like.png" alt="Like" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12" *ngIf="!currentUser.email">
+        <div class="card" style="display: flex; justify-content: center">
+            <p style="font-size: 0.7rem; color: orange">
+                <strong>email</strong> mancante, aggiungila per
+                ricevere notifiche. Clicca su <a (click)="openProfile()">Profilo</a>
+            </p>
+        </div>
+    </div>
+    <div class="col-12">
+        <div>
+            <div class="items-actions">
+                <div class="item-circle" *ngFor="let menu of menuItems">
+                    <a
+                        routerLink="{{ menu?.linkRoute }}"
+                        [class.disabled]="!menu?.linkRoute ? true : null"
+                    >
+                        <div class="item">
+                            <div class="image-wrapper">
+                                <img src="{{ menu?.source }}" class="" />
+                            </div>
+                            <span>{{ menu?.label }}</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="item-circle">
+                    <a (click)="openWhatsAppChatOperator()">
+                        <div class="item">
+                            <div class="image-wrapper">
+                                <img
+                                    src="assets/icons/customer-service.png"
+                                    class=""
+                                />
+                            </div>
+                            <span>Supporto</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>

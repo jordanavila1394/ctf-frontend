@@ -33,6 +33,8 @@ export class LoginComponent {
     ) {
         this.authState$ = store.select('authState');
     }
+    hidePassword = true;
+
     signInForm = this.fb.group({
         fiscalCode: ['', [Validators.required]],
         password: ['', [Validators.required]],
@@ -42,13 +44,19 @@ export class LoginComponent {
     errorMessage = '';
     roles: string[] = [];
     valCheck: string[] = ['remember'];
-
+    currentFiscalCode;
+    currentPassword;
+    rememberPassword = false;
     ngOnInit(): void {
         if (this.storageService.isLoggedIn()) {
             this.isLoggedIn = true;
             this.roles = this.storageService.getUser().roles;
         }
+
+        this.currentFiscalCode = localStorage.getItem('fiscalCode');
+        this.currentPassword = localStorage.getItem('password');
     }
+
     get fiscalCode() {
         return this.signInForm.get('fiscalCode');
     }
@@ -57,9 +65,16 @@ export class LoginComponent {
         return this.signInForm.get('password');
     }
 
+    togglePasswordVisibility(): void {
+        this.hidePassword = !this.hidePassword;
+    }
+
     onSubmitSignIn(): void {
         const fiscalCode = this.signInForm.value.fiscalCode || '';
         const password = this.signInForm.value.password || '';
+
+        localStorage.setItem('fiscalCode', fiscalCode);
+        localStorage.setItem('password', password);
 
         const signInData = new LoginRequest(fiscalCode, password);
         this.store.dispatch(login({ request: signInData }));

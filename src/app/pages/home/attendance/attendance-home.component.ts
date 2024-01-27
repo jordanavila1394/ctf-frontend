@@ -236,7 +236,8 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                             );
                         this.loading = false;
                     });
-                this.subscription.add(vehicleServiceSubscription);
+                if (vehicleServiceSubscription)
+                    this.subscription.add(vehicleServiceSubscription);
             });
 
         if (userServiceSubscription && this.subscription)

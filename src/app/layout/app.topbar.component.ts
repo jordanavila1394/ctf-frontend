@@ -68,6 +68,5 @@ export class AppTopBarComponent {
 
     OnClickLogout() {
         this.store.dispatch(logout());
-        localStorage.clear();
     }
 }

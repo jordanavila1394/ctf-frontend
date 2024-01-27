@@ -22,6 +22,7 @@ import Formatter from 'src/app/utils/formatters';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { ROUTES } from 'src/app/utils/constants';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
     templateUrl: './landing-home.component.html',
@@ -52,6 +53,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
     constructor(
         public layoutService: LayoutService,
         private attendanceService: AttendanceService,
+        public router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
         //Init
@@ -123,6 +125,9 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
             const whatsappLink = `https://wa.me/${this.operatorPhoneNumber}`;
             window.open(whatsappLink, '_blank');
         }
+    }
+    openProfile() {
+        this.router.navigate([ROUTES.ROUTE_PROFILE_HOME]);
     }
 
     ngOnDestroy() {

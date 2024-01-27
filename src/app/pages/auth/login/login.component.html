@@ -8,7 +8,7 @@
                     ? 'logo-dark'
                     : 'logo-white'
             }}.svg"
-            alt="Sakai logo"
+            alt="CTF Logo"
             class="mb-5 w-6rem flex-shrink-0"
         />
         <div
@@ -26,20 +26,6 @@
                 class="w-full surface-card py-8 px-5 sm:px-8"
                 style="border-radius: 53px"
             >
-                <!-- <div class="text-center mb-5">
-                    <img
-                        src="assets/shared/images/login/avatar.png"
-                        alt="Image"
-                        height="50"
-                        class="mb-3"
-                    />
-                    <div class="text-900 text-3xl font-medium mb-3">
-                        Benvenuto, Jordan!
-                    </div>
-                    <span class="text-600 font-medium"
-                        >Effettua la login per collegarti</span
-                    >
-                </div> -->
                 <form
                     [formGroup]="signInForm"
                     #form="ngForm"
@@ -54,7 +40,7 @@
                         id="fiscalCode1"
                         name="fiscalCode"
                         formControlName="fiscalCode"
-                        ngModel
+                        [(ngModel)]="currentFiscalCode"
                         type="text"
                         placeholder="Inserisci codice fiscale"
                         pInputText
@@ -70,14 +56,23 @@
                     <input
                         id="password1"
                         name="password"
-                        type="password"
+                        type="{{ hidePassword ? 'password' : 'text' }}"
                         formControlName="password"
-                        ngModel
+                        [(ngModel)]="currentPassword"
                         pInputText
                         placeholder="Password"
                         styleClass="mb-5"
                         class="w-full md:w-30rem"
                     />
+                    <span class="p-input-icon-right">
+                        <i
+                            class="pi pi-eye"
+                            (click)="togglePasswordVisibility()"
+                            [style.cursor]="
+                                hidePassword ? 'pointer' : 'not-allowed'
+                            "
+                        ></i>
+                    </span>
                     <div class="mb-5">
                         <small *ngIf="password.errors?.['minlength']"
                             >La password dev'essere di almeno 6
@@ -88,7 +83,7 @@
                     <div
                         class="flex align-items-center justify-content-between mb-5 gap-5"
                     >
-                        <div class="flex align-items-center">
+                        <div class="flex align-items-center" style="opacity: 0;">
                             <p-checkbox
                                 id="rememberme1"
                                 [binary]="true"

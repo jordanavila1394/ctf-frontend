@@ -32,19 +32,19 @@ export class AuthEffects {
             exhaustMap((auth: LoginRequest) =>
                 this.authService.login(auth.username, auth.password).pipe(
                     map((user) => loginSuccess({ user })),
-                    catchError((error) => of(loginFailure({ error })))
-                )
-            )
-        )
+                    catchError((error) => of(loginFailure({ error }))),
+                ),
+            ),
+        ),
     );
 
     loginSuccess$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(loginSuccess),
-                tap(() => this.router.navigate([ROUTES.ROUTE_HOME]))
+                tap(() => this.router.navigate([ROUTES.ROUTE_HOME])),
             ),
-        { dispatch: false }
+        { dispatch: false },
     );
     loginFailure$ = createEffect(
         () =>
@@ -54,20 +54,20 @@ export class AuthEffects {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: JSON.stringify(res),
-                    })
-                )
+                        detail: res?.error?.error?.message,
+                    }),
+                ),
             ),
-        { dispatch: false }
+        { dispatch: false },
     );
 
     removeLocalStorage$ = createEffect(
         () =>
             this.actions$.pipe(
                 ofType(logout),
-                tap(() => localStorage.removeItem('state'))
+                tap(() => localStorage.removeItem('state')),
             ),
-        { dispatch: false }
+        { dispatch: false },
     );
 
     loginRedirect$ = createEffect(
@@ -76,23 +76,23 @@ export class AuthEffects {
                 ofType(loginRedirect, logout),
                 tap(() => {
                     this.router.navigate([ROUTES.ROUTE_LOGIN]);
-                })
+                }),
             ),
-        { dispatch: false }
+        { dispatch: false },
     );
 
     logoutConfirmation$ = createEffect(() =>
         this.actions$.pipe(
             ofType(logoutConfirmation),
-            map((result) => (result ? logout() : logoutConfirmationDismiss()))
-        )
+            map((result) => (result ? logout() : logoutConfirmationDismiss())),
+        ),
     );
 
     logoutIdleUser$ = createEffect(() =>
         this.actions$.pipe(
             ofType(idleTimeout),
-            map(() => logout())
-        )
+            map(() => logout()),
+        ),
     );
 
     //Register effects
@@ -105,10 +105,10 @@ export class AuthEffects {
                     .register(auth.username, auth.email, auth.password)
                     .pipe(
                         map((user) => registerSuccess({ user })),
-                        catchError((error) => of(registerFailure({ error })))
-                    )
-            )
-        )
+                        catchError((error) => of(registerFailure({ error }))),
+                    ),
+            ),
+        ),
     );
 
     registerSuccess$ = createEffect(
@@ -120,16 +120,16 @@ export class AuthEffects {
                         severity: 'success',
                         summary: 'Success',
                         detail: 'Created User',
-                    })
-                )
+                    }),
+                ),
             ),
-        { dispatch: false }
+        { dispatch: false },
     );
 
     constructor(
         private actions$: Actions,
         private authService: AuthService,
         private router: Router,
-        public messageService: MessageService
+        public messageService: MessageService,
     ) {}
 }

@@ -15,7 +15,7 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-builders/custom-webpack:browser",
+                    "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "outputPath": "dist/sakai-ng",
                         "index": "src/index.html",
@@ -26,25 +26,19 @@
                         "aot": true,
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": ["src/styles.scss"],
-                        "scripts": [
-                            "node_modules/pdfjs-dist/build/pdf.mjs",
-                            "node_modules/pdfjs-dist/build/pdf.worker.mjs"
-                        ],
-                        "customWebpackConfig": {
-                            "path": "src/custom-webpack.config.ts"
-                        },
+                    
                         "allowedCommonJsDependencies": [
-                            "moment",
-                            "file-saver",
-                            "moment",
-                            "dropzone",
-                            "moment",
-                            "pdfjs-dist",
-                            "pdfjs-dist/web/pdf_viewer",
-                            "pako",
-                            "howler",
-                            "aws-sdk"
-                          ]
+                        "moment",
+                        "file-saver",
+                        "moment",
+                        "dropzone",
+                        "moment",
+                        "pdfjs-dist",
+                        "pdfjs-dist/web/pdf_viewer",
+                        "pako",
+                        "howler",
+                        "aws-sdk"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -80,7 +74,7 @@
                     "defaultConfiguration": "production"
                 },
                 "serve": {
-                    "builder": "@angular-builders/custom-webpack:dev-server",
+                    "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
                         "browserTarget": "sakai-ng:build"
                     },
@@ -128,7 +122,6 @@
         }
     },
     "cli": {
-        "analytics": false,
-        "schematicCollections": ["@angular-eslint/schematics"]
+      "analytics": false
     }
 }

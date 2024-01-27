@@ -116,7 +116,8 @@ export class TableVehicleComponent implements OnInit {
                 });
                 this.loading = false;
             });
-        this.subscription.add(vehicleServiceSubscription);
+        if (vehicleServiceSubscription)
+            this.subscription.add(vehicleServiceSubscription);
     }
 
     confirmErase(event: Event, idCompany) {
