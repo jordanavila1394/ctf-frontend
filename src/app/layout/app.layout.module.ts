@@ -20,6 +20,7 @@ import { AppLayoutComponent } from './app.layout.component';
 import { DrodownLanguageModule } from '../shared/components/dropdown-language/dropdown-language.module';
 import { DropdownSelectCompanyModule } from '../shared/components/dropdown-select-company/dropdown-select-company.module';
 import { GeoModalPermissionModule } from '../shared/components/geo-modal-permission/geo-moda-permission.module';
+import { DropdownNotificationsModule } from '../shared/components/dropdown-notifications/dropdown-notifications.module';
 
 @NgModule({
     declarations: [
@@ -39,6 +40,7 @@ import { GeoModalPermissionModule } from '../shared/components/geo-modal-permiss
         SidebarModule,
         BadgeModule,
         DropdownSelectCompanyModule,
+        DropdownNotificationsModule,
         RadioButtonModule,
         InputSwitchModule,
         RippleModule,

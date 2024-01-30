@@ -128,6 +128,7 @@ import { PdfSplitDropzoneModule } from './shared/components/pdf-splitter/pdf-spl
     bootstrap: [AppComponent],
 })
 export class AppModule {
+    
     constructor() {
         registerLocaleData(localeIt, 'it');
         registerLocaleData(localeIt, 'es');

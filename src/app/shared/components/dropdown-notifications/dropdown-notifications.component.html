@@ -1,0 +1,19 @@
+<div class="dropdown">
+    <button class="p-link layout-topbar-button" (click)="toggleDropdown()">
+        <i class="pi pi-bell"></i>
+        <span>Bell</span>
+        <span class="badge badge-pill badge-danger">{{
+            notifications.length
+        }}</span>
+    </button>
+    <div *ngIf="isOpen" class="dropdown-menu">
+        <div *ngIf="notifications.length > 0; else noNotifications">
+            <a class="dropdown-item" *ngFor="let notification of notifications">
+                {{ notification }}
+            </a>
+        </div>
+        <ng-template #noNotifications>
+            <p class="dropdown-item">Nessuna notifica</p>
+        </ng-template>
+    </div>
+</div>

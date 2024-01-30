@@ -85,6 +85,9 @@
             "dashboard": {
                 "menuTitle": "Dashboard"
             },
+            "notification": {
+                "menuTitle": "Notifiche"
+            },
             "landing": {
                 "menuTitle": "Landing",
                 "permission": "Permessi",

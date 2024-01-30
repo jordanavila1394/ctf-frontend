@@ -42,6 +42,18 @@ export class AppMenuComponent implements OnInit {
                 ],
             });
             this.model.push({
+                label: 'Notification',
+                translationCode: 'menu.routes.notification.menuTitle',
+                items: [
+                    {
+                        label: 'Notification',
+                        translationCode: 'menu.routes.notification.menuTitle',
+                        icon: 'pi pi-fw pi-send',
+                        routerLink: [ROUTES.ROUTE_NOTIFICATION],
+                    },
+                ],
+            });
+            this.model.push({
                 label: 'Attendances',
                 translationCode: 'menu.routes.attendance.menuTitle',
                 items: [

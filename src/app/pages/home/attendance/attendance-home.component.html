@@ -28,8 +28,18 @@
                             (onChange)="onChangePlace($event)"
                             [(ngModel)]="selectedPlace"
                             [required]="true"
-                        ></p-dropdown>
+                        >
+                            <ng-template let-place pTemplate="place">
+                                {{ place.name }} - {{ place.address }}
+                            </ng-template>
+                        </p-dropdown>
+                        <div *ngIf="this.selectedPlaceAddress">
+                            <p style="padding: 1rem 0 0 0">
+                                {{ this.selectedPlaceAddress?.address }}
+                            </p>
+                        </div>
                     </div>
+
                     <div class="field col-12 md:col-6">
                         <label htmlFor="user1">Seleziona mezzo</label>
                         <p-dropdown

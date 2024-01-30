@@ -72,6 +72,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     placesItems: any;
 
     selectedVehicle: any;
+    selectedPlaceAddress: any;
     vehiclesItems: any;
 
     checkInForm = this.fb.group({
@@ -245,6 +246,10 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     }
     onChangePlace(event) {
         localStorage.setItem('selectedPlace', this.selectedPlace);
+        this.selectedPlaceAddress = this.placesItems.find(
+            (index) => index.id === this.selectedPlace,
+        );
+
         this.calculateDistance(event.value);
     }
 

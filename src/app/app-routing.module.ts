@@ -25,6 +25,17 @@ import { AuthGuard } from './services/auth.guard';
                             },
                         },
                         {
+                            path: 'notification',
+                            loadChildren: () =>
+                                import(
+                                    './pages/notification/notification.module'
+                                ).then((m) => m.NotificationModule),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
+                        {
                             path: 'home',
                             loadChildren: () =>
                                 import('./pages/home/home.module').then(

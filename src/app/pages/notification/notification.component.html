@@ -1,0 +1,40 @@
+<div class="grid">
+    <div class="col-12 xl:col-6">
+        <div class="card">
+            <h5>Admin to user</h5>
+            <form [formGroup]="messageForm" #form="ngForm">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-12">
+                        <label htmlFor="userId">User Id</label>
+                        <input
+                            pInputText
+                            id="userId"
+                            type="text"
+                            placeholder="User ID"
+                            formControlName="userId"
+                        />
+                    </div>
+                    <div class="field col-12 md:col-12">
+                        <label htmlFor="message1">Message</label>
+                        <textarea
+                            rows="5"
+                            cols="30"
+                            placeholder="Messaggio da inviare"
+                            formControlName="message"
+                            pInputTextarea
+                        ></textarea>
+                    </div>
+                </div>
+
+                <button
+                    pButton
+                    pRipple
+                    label="Salva profilo"
+                    class="w-full p-3 text-xl"
+                    (click)="sendMessageAdmin()"
+                    [disabled]="!messageForm.valid"
+                ></button>
+            </form>
+        </div>
+    </div>
+</div>
