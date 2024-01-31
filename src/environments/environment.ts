@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    endpoint: 'http://localhost:3000/',
+    endpoint: 'https://ctf-node-js.onrender.com/',
     googleMapsApiKey: 'AIzaSyDojCnBqxEPLG3s476r6id2WLGHKalECn4',
     spacesEndpoint: 'fra1.digitaloceanspaces.com',
     accessKeyId: 'DO00R74W2WNVTG49WKFU',
