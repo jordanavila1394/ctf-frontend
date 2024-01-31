@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "sakai-ng": {
+        "ams-frontend": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -17,7 +17,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/sakai-ng",
+                        "outputPath": "public/",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": ["zone.js","src/polyfills.ts"],
@@ -76,14 +76,14 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "sakai-ng:build"
+                        "browserTarget": "ams-frontend:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "sakai-ng:build:production"
+                            "browserTarget": "ams-frontend:build:production"
                         },
                         "development": {
-                            "browserTarget": "sakai-ng:build:development"
+                            "browserTarget": "ams-frontend:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -91,7 +91,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "sakai-ng:build"
+                        "browserTarget": "ams-frontend:build"
                     }
                 },
                 "test": {
