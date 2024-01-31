@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    endpoint: 'ctf-node-js:10000',
+    endpoint: 'http://ctf-node-js:10000/',
     googleMapsApiKey: 'AIzaSyDojCnBqxEPLG3s476r6id2WLGHKalECn4',
     spacesEndpoint: 'fra1.digitaloceanspaces.com',
     accessKeyId: 'DO00R74W2WNVTG49WKFU',
