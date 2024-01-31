@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    endpoint: 'http://ctf-node-js:10000/',
+    endpoint: 'https://ctf-node-js.onrender.com/',
     googleMapsApiKey: 'AIzaSyDojCnBqxEPLG3s476r6id2WLGHKalECn4',
     spacesEndpoint: 'fra1.digitaloceanspaces.com',
     accessKeyId: 'DO00R74W2WNVTG49WKFU',
