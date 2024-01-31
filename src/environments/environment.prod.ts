@@ -6,6 +6,10 @@ export const environment = {
     accessKeyId: 'DO00R74W2WNVTG49WKFU',
     secretAccessKey: 'P3FOkWhN7rm9OFBd3nuPoRpY+HEspRFINBfkqvfkeO0',
     bucketName: 'ctf.images',
-    adminEmails: ['avila@ctfitalia.com', 'avirrueta@ctfitalia.con', ''],
+    adminEmails: [
+        'avila@ctfitalia.com',
+        'avirrueta@ctfitalia.com',
+        'mgutierrez@ctfitalia.com',
+    ],
     operatorPhoneNumber: '+393343129952', //Operator Help desk
 };
