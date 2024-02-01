@@ -22,7 +22,12 @@ import { environment } from 'src/environments/environment';
                 margin-right: 1rem;
                 color: var(--primary-color) !important;
             }
-            
+            .assistance-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem;
+            }
         `,
     ],
 })

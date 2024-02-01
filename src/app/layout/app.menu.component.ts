@@ -22,9 +22,11 @@ export class AppMenuComponent implements OnInit {
     ) {}
 
     userSectionTitle;
+    isProduction: any;
 
     ngOnInit() {
         const userRoles = this.authService.getRoles();
+        this.isProduction = environment?.production;
         if (
             userRoles.includes('ROLE_ADMIN') ||
             userRoles.includes('ROLE_MODERATOR')
@@ -181,7 +183,7 @@ export class AppMenuComponent implements OnInit {
                 ],
             });
         }
-        if (environment.production == false) {
+        if (this.isProduction === false) {
             this.model.push({
                 label: 'UI Components',
                 items: [
