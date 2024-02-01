@@ -5,7 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development",
-    "build": "ng build --configuration=production",
+    "build:prod": "ng build --configuration=production",
+    "build:dev": "ng build --configuration=development",
     "test": "ng test",
     "lint": "npx eslint 'src/**/*.{js,jsx,ts,tsx,html,css,scss}' --quiet --fix",
     "format": "npx prettier 'src/**/*.{js,jsx,ts,tsx,html,css,scss}' --write",
