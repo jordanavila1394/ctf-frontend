@@ -9,6 +9,8 @@ import { login } from '../../../stores/auth/authentication.actions';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginRequest } from 'src/app/models/global.request';
 
+import { environment } from 'src/environments/environment';
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -20,10 +22,14 @@ import { LoginRequest } from 'src/app/models/global.request';
                 margin-right: 1rem;
                 color: var(--primary-color) !important;
             }
+            
         `,
     ],
 })
 export class LoginComponent {
+    //Global variables
+    operatorPhoneNumber: any;
+
     constructor(
         public fb: FormBuilder,
         public layoutService: LayoutService,
@@ -32,6 +38,7 @@ export class LoginComponent {
         private storageService: StorageService,
     ) {
         this.authState$ = store.select('authState');
+        this.operatorPhoneNumber = environment?.operatorPhoneNumber;
     }
     hidePassword = true;
 
@@ -67,6 +74,13 @@ export class LoginComponent {
 
     togglePasswordVisibility(): void {
         this.hidePassword = !this.hidePassword;
+    }
+
+    openWhatsAppChatOperator() {
+        if (this.operatorPhoneNumber) {
+            const whatsappLink = `https://wa.me/${this.operatorPhoneNumber}`;
+            window.open(whatsappLink, '_blank');
+        }
     }
 
     onSubmitSignIn(): void {

@@ -110,7 +110,7 @@ export class ModifyUserComponent implements OnInit {
             this.modifyForm.controls['roleId'].disable({
                 onlySelf: true,
             });
-            this.modifyForm.controls['companyId'].disable({ onlySelf: true });
+            // this.modifyForm.controls['companyId'].disable({ onlySelf: true });
         });
 
         this.userService.getAllCeos().subscribe((ceos) => {

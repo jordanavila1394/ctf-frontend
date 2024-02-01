@@ -41,7 +41,9 @@
                         name="fiscalCode"
                         formControlName="fiscalCode"
                         [(ngModel)]="currentFiscalCode"
-                        (ngModelChange)="currentFiscalCode = $event.toUpperCase()"
+                        (ngModelChange)="
+                            currentFiscalCode = $event.toUpperCase()
+                        "
                         type="text"
                         placeholder="Inserisci codice fiscale"
                         pInputText
@@ -84,7 +86,7 @@
                     <div
                         class="flex align-items-center justify-content-between mb-5 gap-5"
                     >
-                        <div class="flex align-items-center" style="opacity: 0;">
+                        <div class="flex align-items-center" style="opacity: 0">
                             <p-checkbox
                                 id="rememberme1"
                                 [binary]="true"
@@ -105,6 +107,12 @@
                         class="w-full p-3 text-xl"
                     ></button>
                 </form>
+                <div class="assistance-wrapper">
+                    <p>
+                        Hai bisogno di assistenza?
+                        <a (click)="openWhatsAppChatOperator()">Apri chat</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
