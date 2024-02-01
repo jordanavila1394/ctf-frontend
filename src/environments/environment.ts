@@ -1,10 +1,6 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
     production: false,
-    endpoint: 'https://ctf-node-js.onrender.com/',
+    endpoint: 'https://dev-ctf-backend.onrender.com/',
     googleMapsApiKey: 'AIzaSyDojCnBqxEPLG3s476r6id2WLGHKalECn4',
     spacesEndpoint: 'fra1.digitaloceanspaces.com',
     accessKeyId: 'DO00R74W2WNVTG49WKFU',

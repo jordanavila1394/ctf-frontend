@@ -20,24 +20,24 @@
                         "outputPath": "public/",
                         "index": "src/index.html",
                         "main": "src/main.ts",
-                        "polyfills": ["zone.js","src/polyfills.ts"],
+                        "polyfills": ["zone.js", "src/polyfills.ts"],
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
                         "aot": true,
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": ["src/styles.scss"],
-                    
+
                         "allowedCommonJsDependencies": [
-                        "moment",
-                        "file-saver",
-                        "moment",
-                        "dropzone",
-                        "moment",
-                        "pdfjs-dist",
-                        "pdfjs-dist/web/pdf_viewer",
-                        "pako",
-                        "howler",
-                        "aws-sdk"
+                            "moment",
+                            "file-saver",
+                            "moment",
+                            "dropzone",
+                            "moment",
+                            "pdfjs-dist",
+                            "pdfjs-dist/web/pdf_viewer",
+                            "pako",
+                            "howler",
+                            "aws-sdk"
                         ]
                     },
                     "configurations": {
@@ -62,7 +62,7 @@
                             ],
                             "outputHashing": "all"
                         },
-                        "development": {
+                        "staging": {
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -78,12 +78,12 @@
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.dev.ts"
+                                    "with": "src/environments/environment.stage.ts"
                                 }
                             ],
                             "outputHashing": "all"
                         },
-                        "localhost": {
+                        "development": {
                             "buildOptimizer": false,
                             "optimization": false,
                             "vendorChunk": true,
@@ -96,12 +96,12 @@
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
-                    "options": {
-                        "browserTarget": "ams-frontend:build"
-                    },
                     "configurations": {
                         "production": {
                             "browserTarget": "ams-frontend:build:production"
+                        },
+                        "staging": {
+                            "browserTarget": "ams-frontend:build:staging"
                         },
                         "development": {
                             "browserTarget": "ams-frontend:build:development"
@@ -143,6 +143,6 @@
         }
     },
     "cli": {
-      "analytics": false
+        "analytics": false
     }
 }
