@@ -1,4 +1,4 @@
-<div class="layout-topbar">
+<div class="layout-topbar" [ngClass]="isProduction ? 'production' : 'development'">
     <a class="layout-topbar-logo" routerLink="{{ redirectRoute }}">
         <img
             src="assets/layout/images/{{

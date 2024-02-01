@@ -144,7 +144,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     loadServices(selectedCompany) {
         const currentYear =
             parseInt(this.usersAttendancesForm.value.currentYear, 10) || '';
-        const currentMonth = this.selectedCurrentMonth?.code || '';
+        const currentMonth = this.selectedCurrentMonth?.code || 0;
 
         const userServiceSubscription = this.userService
             .getAllUsersWithAttendances(

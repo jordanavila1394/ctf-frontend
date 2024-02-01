@@ -11,7 +11,7 @@ import { CompanyService } from '../services/company.service';
 import { AuthService } from '../services/auth.service';
 import { ROUTES } from '../utils/constants';
 import { Router } from '@angular/router';
-
+import { environment } from '../../environments/environment';
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html',
@@ -33,6 +33,7 @@ export class AppTopBarComponent {
     @ViewChild('topbarmenu') menu!: ElementRef;
 
     redirectRoute: any;
+    isProduction: any
 
     constructor(
         public layoutService: LayoutService,
@@ -43,7 +44,7 @@ export class AppTopBarComponent {
     ) {
         this.authState$ = store.select('authState');
         const userRoles = this.authService.getRoles();
-
+        this.isProduction = environment?.production;
         if (
             userRoles.includes('ROLE_ADMIN') ||
             userRoles.includes('ROLE_MODERATOR')
