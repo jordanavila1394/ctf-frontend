@@ -22,4 +22,24 @@ export class VehicleService {
             httpOptions,
         );
     }
+
+    createVehicle(
+        licensePlate: string,
+        tipology: string,
+        model: string,
+        rentalType: string,
+        driverType: string,
+    ): Observable<any> {
+        return this.http.post(
+            API_URL + 'createVehicle',
+            {
+                licensePlate,
+                tipology,
+                model,
+                rentalType,
+                driverType,
+            },
+            httpOptions,
+        );
+    }
 }

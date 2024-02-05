@@ -145,19 +145,7 @@
                                 ></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
-                                Nome Autista
-                                <p-columnFilter
-                                    type="text"
-                                    field="user.fullName"
-                                    display="menu"
-                                    placeholder="Cerca per nome"
-                                ></p-columnFilter>
-                            </div>
-                        </th>
+
                         <th style="min-width: 13rem">
                             <div
                                 class="flex justify-content-between align-items-center"
@@ -235,13 +223,10 @@
                             {{ vehicle?.driverType }}
                         </td>
                         <td>
-                            {{ vehicle?.user?.fullName }}
-                        </td>
-                        <td>
                             {{ vehicle?.company?.name }}
                         </td>
                         <td>
-                            {{ vehicle?.createdAt | date : "dd/MM/yyyy" }}
+                            {{ vehicle?.createdAt | date: "dd/MM/yyyy" }}
                         </td>
                         <td
                             alignFrozen="right"
