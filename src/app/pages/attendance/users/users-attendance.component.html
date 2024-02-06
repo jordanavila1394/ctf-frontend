@@ -94,6 +94,7 @@
                                 >
                                     <ng-template pTemplate="header">
                                         <tr>
+                                            <th>Id</th>
                                             <th pSortableColumn="checkIn">
                                                 Giorno
                                             </th>
@@ -115,6 +116,9 @@
                                                     attendance?.checkIsWeekend
                                             }"
                                         >
+                                            <td>
+                                                {{ attendance?.id }}
+                                            </td>
                                             <td>
                                                 <div>
                                                     {{

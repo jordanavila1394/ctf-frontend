@@ -1,5 +1,11 @@
 <div class="images-wrapper">
-    <div class="image-wrapper" *ngFor="let file of this.files">
+    <div class="image-wrapper" *ngFor="let file of files" (click)="openFullscreen(getImageUrl(file?.keyFile))">
         <img class="image" [src]="getImageUrl(file?.keyFile)" alt="Immagine" />
     </div>
+</div>
+
+<!-- Fullscreen overlay -->
+<div id="fullscreen-overlay" class="fullscreen-overlay" (click)="closeFullscreen()">
+  <img id="fullscreen-image" class="fullscreen-image" />
+  <span class="close-button" (click)="closeFullscreen()">&times;</span>
 </div>
