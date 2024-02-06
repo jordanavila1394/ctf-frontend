@@ -28,6 +28,13 @@ import { environment } from 'src/environments/environment';
                 justify-content: center;
                 padding: 1rem;
             }
+            .currentdate-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem;
+                font-size: 0.6rem;
+            }
         `,
     ],
 })
@@ -59,6 +66,8 @@ export class LoginComponent {
     currentFiscalCode;
     currentPassword;
     rememberPassword = false;
+    currentDate: Date = new Date();
+
     ngOnInit(): void {
         if (this.storageService.isLoggedIn()) {
             this.isLoggedIn = true;

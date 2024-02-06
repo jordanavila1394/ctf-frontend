@@ -8,6 +8,7 @@ import { CompanyService } from 'src/app/services/company.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { BlobOptions } from 'buffer';
+import { VehicleService } from 'src/app/services/vehicle.service';
 
 @Component({
     templateUrl: './create-vehicle.component.html',
@@ -35,7 +36,7 @@ export class CreateVehicleComponent implements OnInit {
         public fb: FormBuilder,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
-        private userService: UserService,
+        private vehicleService: VehicleService,
         private companyService: CompanyService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
@@ -49,21 +50,33 @@ export class CreateVehicleComponent implements OnInit {
     }
 
     loadServices() {
-        this.userService.getAllCeos().subscribe((ceos) => {
-            this.ceosItems = ceos.map((ceo) => ({
-                ...ceo,
-                fullName: ceo.name + ' ' + ceo.surname,
-            }));
-        });
+        // this.userService.getAllCeos().subscribe((ceos) => {
+        //     this.ceosItems = ceos.map((ceo) => ({
+        //         ...ceo,
+        //         fullName: ceo.name + ' ' + ceo.surname,
+        //     }));
+        // });
     }
 
     createForm = this.fb.group({
-        licensePlate: [''],
+        licensePlate: ['', [Validators.required]],
         tipology: [''],
         model: [''],
         rentalType: [''],
         driverType: [''],
     });
 
-    onSubmit(): void {}
+    onSubmit(): void {
+        this.vehicleService
+            .createVehicle(
+                this.createForm.value.licensePlate,
+                this.createForm.value.tipology,
+                this.createForm.value.model,
+                this.createForm.value.rentalType,
+                this.createForm.value.driverType,
+            )
+            .subscribe((res) =>
+                this.router.navigate([ROUTES.ROUTE_TABLE_VEHICLE]),
+            );
+    }
 }

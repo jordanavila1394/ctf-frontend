@@ -10,6 +10,7 @@ import { SpacesService } from 'src/app/services/spaces.service';
 export class ImagesDialogComponent {
     images: AWS.S3.Object[];
     files: any;
+    fullscreenImage: string | null = null;
 
     constructor(
         public ref: DynamicDialogRef,
@@ -25,5 +26,26 @@ export class ImagesDialogComponent {
             Key: key,
             Expires: 60, // Tempo di scadenza del link in secondi
         });
+    }
+
+    selectedImage: string | null = null;
+
+    openFullscreen(imageUrl: string) {
+        const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+        const fullscreenImage = document.getElementById(
+            'fullscreen-image',
+        ) as HTMLImageElement;
+
+        if (fullscreenOverlay && fullscreenImage) {
+            fullscreenImage.src = imageUrl;
+            fullscreenOverlay.style.display = 'flex';
+        }
+    }
+
+    closeFullscreen() {
+        const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+        if (fullscreenOverlay) {
+            fullscreenOverlay.style.display = 'none';
+        }
     }
 }
