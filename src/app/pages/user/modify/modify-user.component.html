@@ -72,6 +72,27 @@
                             [(ngModel)]="selectedRole"
                         ></p-dropdown>
                     </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="iban1">Indirizzo</label>
+                        <app-default-autocomplete
+                            id="address1"
+                            type="text"
+                            controlName="address"
+                            [defaultAutocompleteForm]="modifyForm"
+                        >
+                        </app-default-autocomplete>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="iban1">IBAN</label>
+                        <input
+                            pInputText
+                            id="iban1"
+                            type="text"
+                            placeholder="IBAN"
+                            formControlName="iban"
+                            ngModel
+                        />
+                    </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="user1">Azienda</label>
                         <p-dropdown
