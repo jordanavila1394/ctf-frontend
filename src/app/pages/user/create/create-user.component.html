@@ -9,7 +9,7 @@
                 <h5>Crea utente</h5>
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="name1">Nome</label>
+                        <label htmlFor="name1">Nome (*)</label>
                         <input
                             pInputText
                             id="name1"
@@ -20,7 +20,7 @@
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="surname1">Cognome</label>
+                        <label htmlFor="surname1">Cognome (*)</label>
                         <input
                             pInputText
                             id="surname1"
@@ -109,6 +109,28 @@
                             [(ngModel)]="selectedRole"
                         ></p-dropdown>
                     </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="iban1">Indirizzo</label>
+                        <app-default-autocomplete
+                            id="address1"
+                            type="text"
+                            controlName="address"
+                            [defaultAutocompleteForm]="createForm"
+                        >
+                        </app-default-autocomplete>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="iban1">IBAN</label>
+                        <input
+                            pInputText
+                            id="iban1"
+                            type="text"
+                            placeholder="IBAN"
+                            formControlName="iban"
+                            ngModel
+                        />
+                    </div>
+
                     <div class="field col-12 md:col-4">
                         <label htmlFor="user1">Azienda</label>
                         <p-dropdown
@@ -148,6 +170,9 @@
                         <p-inputSwitch formControlName="status"></p-inputSwitch>
                     </div>
                 </div>
+                <div>
+                    {{ this.createForm.value | json }}
+                </div>
                 <div
                     class="flex justify-content-center align-items-center gap-2"
                 >
@@ -161,7 +186,6 @@
                         [disabled]="!createForm.valid"
                     ></button>
                 </div>
-               
             </form>
         </div>
     </div>

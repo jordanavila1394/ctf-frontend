@@ -68,14 +68,14 @@ export class CreateUserComponent implements OnInit {
         surname: ['', [Validators.required]],
         email: [
             '',
-            [
-                Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
-            ],
+            [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')],
         ],
-        cellphone: ['', ],
+        cellphone: [''],
         fiscalCode: ['', [Validators.required]],
         workerNumber: [''],
         position: [''],
+        address: [''],
+        iban: [''],
         roleId: ['', [Validators.required]],
         companyId: ['', [Validators.required]],
         status: [true, [Validators.required]],
@@ -100,6 +100,8 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.companyId,
                 this.createForm.value.workerNumber,
                 this.createForm.value.position,
+                this.createForm.value.address,
+                this.createForm.value.iban,
                 this.createForm.value.status,
             )
             .subscribe((res) =>
