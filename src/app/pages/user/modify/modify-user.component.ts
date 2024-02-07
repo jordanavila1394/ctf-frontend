@@ -41,12 +41,14 @@ export class ModifyUserComponent implements OnInit {
         name: ['', [Validators.required]],
         surname: ['', [Validators.required]],
         fiscalCode: ['', [Validators.required]],
-        email: ['', ],
+        email: [''],
         cellphone: [''],
         roleId: ['', [Validators.required]],
         companyId: ['', [Validators.required]],
         workerNumber: [''],
         position: [''],
+        address: [''],
+        iban: [''],
         status: [false, [Validators.required]],
     });
 
@@ -104,6 +106,8 @@ export class ModifyUserComponent implements OnInit {
                     companyId: companyId,
                     workerNumber: user.workerNumber,
                     position: user.position,
+                    address: user.address,
+                    iban: user.iban,
                     status: user.status,
                 });
             });
@@ -142,13 +146,15 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.companyId,
                 this.modifyForm.value.workerNumber,
                 this.modifyForm.value.position,
+                this.modifyForm.value.address,
+                this.modifyForm.value.iban,
                 this.modifyForm.value.status,
             )
             .subscribe((res) => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Avviso',
-                    detail: 'Hai modificato l\'utente con successo',
+                    detail: "Hai modificato l'utente con successo",
                 });
                 this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
             });

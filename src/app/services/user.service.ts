@@ -58,6 +58,8 @@ export class UserService {
         companyId: string,
         workerNumber: string,
         position: string,
+        address: string,
+        iban: string,
         status: boolean,
     ): Observable<any> {
         return this.http.post(
@@ -73,6 +75,8 @@ export class UserService {
                 companyId,
                 workerNumber,
                 position,
+                address,
+                iban,
                 status,
             },
             httpOptions,
@@ -90,6 +94,8 @@ export class UserService {
         companyId: string,
         workerNumber: string,
         position: string,
+        address: string,
+        iban: string,
         status: boolean,
     ): Observable<any> {
         return this.http.patch(
@@ -105,6 +111,8 @@ export class UserService {
                 companyId,
                 workerNumber,
                 position,
+                address,
+                iban,
                 status,
             },
             httpOptions,
