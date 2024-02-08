@@ -36,12 +36,15 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label htmlFor="protocolNumber1">N° Protocollo</label>
-                        <input
-                            pInputText
+                        <textarea
+                            rows="5"
+                            cols="30"
                             id="protocolNumber1"
-                            type="text"
+                            placeholder="Eventuali note"
+                            ngModel
                             formControlName="protocolNumber"
-                        />
+                            pInputTextarea
+                        ></textarea>
                     </div>
                 </div>
 
