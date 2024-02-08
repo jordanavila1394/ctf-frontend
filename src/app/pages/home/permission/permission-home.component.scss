@@ -106,26 +106,38 @@
     .item {
         padding: 1rem;
         border-radius: 5px;
+        &.approved {
+            background-color: rgba(195, 246, 195, 0.64);
+        }
+
+        &.medical {
+            background-color: rgba(217, 192, 242, 0.64);
+        }
+
+        &.waiting {
+            // background-color: rgb(249, 247, 247);
+            // color: white;
+            background-color: rgb(249, 247, 247);
+        }
+
+        &.rejected {
+            background-color: rgba(248, 211, 195, 0.828);
+        }
         .fields {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             align-items: center;
 
-            &.approved {
-                background-color: rgba(195, 246, 195, 0.64);
-            }
-
-            &.medical {
-                background-color: rgba(217, 192, 242, 0.64);
-            }
-
-            &.waiting {
-                background-color: rgb(249, 247, 247);
-            }
-
-            &.rejected {
-                background-color: rgba(248, 211, 195, 0.828);
+            .info-wrapper {
+                .identifier {
+                    span {
+                        padding: 0.4rem;
+                        background-color: white;
+                        border-radius: 10px;
+                        font-weight: 700;
+                    }
+                }
             }
 
             div {
@@ -147,7 +159,7 @@
                     }
 
                     &.waiting {
-                        color: rgb(230, 191, 38);
+                        color: rgb(49, 47, 38);
                     }
 
                     &.rejected {
