@@ -162,7 +162,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     }
     loadServices(storeUser) {
         const userServiceSubscription = this.userService
-            .getUser(storeUser.id)
+            .getUser(storeUser?.id)
             .subscribe((data) => {
                 this.currentUser = data;
                 this.currentCompany = data?.companies[0];
@@ -237,7 +237,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                             );
                         this.loading = false;
                     });
-                if (vehicleServiceSubscription)
+                if (vehicleServiceSubscription && this.subscription)
                     this.subscription.add(vehicleServiceSubscription);
             });
 
@@ -258,9 +258,18 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     }
 
     calculateDistance(placeId) {
+        console.log(placeId);
+        console.log(this.placesItems);
+
         this.currentPlaceMap = this.placesItems.filter(
-            (place) => place.id === placeId,
+            (place) => place.id == placeId,
         )[0];
+        console.log(this.gpsLatitude);
+        console.log(this.gpsLongitude);
+        console.log(this.currentPlaceMap);
+        console.log(this.currentPlaceMap?.latitude);
+        console.log(this.currentPlaceMap?.longitude);
+
         this.distanceBetween = this.getDistanceFromLatLonInKm(
             this.gpsLatitude,
             this.gpsLongitude,
@@ -269,6 +278,10 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         );
 
         this.isNearDistance = this.distanceBetween < 0.3; //300 metri
+        console.log(this.isNearDistance);
+        console.log(this.distanceBetween);
+        console.log(this.distanceBetween);
+
         this.disableButtonCheckIn =
             !this.isNearDistance ||
             this.selectedPlace === null ||
