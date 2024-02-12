@@ -9,6 +9,7 @@ import { ROUTES } from 'src/app/utils/constants';
 import { BlobOptions } from 'buffer';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
+import { DocxService } from 'src/app/services/docx.service';
 
 @Component({
     templateUrl: './detail-user.component.html',
@@ -49,8 +50,11 @@ export class DetailUserComponent implements OnInit {
         companyId: [''],
         workerNumber: [''],
         position: [''],
+        address: [''],
+        iban: [''],
         status: [''],
     });
+    currentUser: any;
 
     constructor(
         public fb: FormBuilder,
@@ -58,6 +62,7 @@ export class DetailUserComponent implements OnInit {
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
         private companyService: CompanyService,
+        private docxService: DocxService,
         private roleService: RoleService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
@@ -77,6 +82,7 @@ export class DetailUserComponent implements OnInit {
                 id: this.idUser,
             });
             this.userService.getUser(this.idUser).subscribe((user) => {
+                this.currentUser = user;
                 this.detailForm.patchValue({
                     id: this.idUser,
                     name: user.name,
@@ -87,6 +93,8 @@ export class DetailUserComponent implements OnInit {
                     companyId: user.companies[0].id,
                     workerNumber: user.workerNumber,
                     position: user.position,
+                    address: user.address,
+                    iban: user.iban,
                     status: user.status,
                 });
             });
@@ -119,6 +127,14 @@ export class DetailUserComponent implements OnInit {
             this.detailForm.controls['workerNumber'].disable({
                 onlySelf: true,
             });
+            this.detailForm.controls['address'].disable({
+                onlySelf: true,
+            });
+
+            this.detailForm.controls['iban'].disable({
+                onlySelf: true,
+            });
+
             this.detailForm.controls['position'].disable({
                 onlySelf: true,
             });
@@ -137,4 +153,22 @@ export class DetailUserComponent implements OnInit {
     }
 
     selectAddress(place: any): void {}
+
+    generateUserDocx() {
+        console.log(this.currentUser);
+        let values: { [key: string]: string } = {
+            Società: this.currentUser?.companies[0]?.name,
+            Nome: this.currentUser.name,
+            Cognome: this.currentUser.surname,
+            Cittadinanza: '',
+            'Codice Fiscale': this.currentUser.fiscalCode,
+            Indirizzo: this.currentUser.address + '',
+            IBAN: this.currentUser.iban + '',
+        };
+
+        this.docxService.createDocx(
+            values,
+            'SCHEDA_ASSUNZIONE' + this.detailForm.value.surname,
+        );
+    }
 }
