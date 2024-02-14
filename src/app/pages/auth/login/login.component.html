@@ -41,9 +41,7 @@
                         name="fiscalCode"
                         formControlName="fiscalCode"
                         [(ngModel)]="currentFiscalCode"
-                        (ngModelChange)="
-                            currentFiscalCode = $event.toUpperCase()
-                        "
+                            (ngModelChange)="onFiscalCodeChange($event)"
                         type="text"
                         placeholder="Inserisci codice fiscale"
                         pInputText

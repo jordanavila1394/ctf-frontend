@@ -107,4 +107,7 @@ export class LoginComponent {
         const signInData = new LoginRequest(fiscalCode, password);
         this.store.dispatch(login({ request: signInData }));
     }
+    onFiscalCodeChange(value: string) {
+        this.currentFiscalCode = value.toUpperCase().replace(/\s/g, ''); // Rimuovi gli spazi vuoti
+    }
 }
