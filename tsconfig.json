@@ -19,19 +19,17 @@
         "experimentalDecorators": true,
         "moduleResolution": "node",
         "importHelpers": true,
-      "target": "ES2022",
-      "module": "ES2022",
+        "target": "ES2022",
+        "module": "ES2022",
         "useDefineForClassFields": false,
-        "lib": [
-            "ES2022",
-            "dom"
-        ]
+        "lib": ["ES2022", "dom"]
     },
     "exclude": ["node_modules", "**/node_modules/*"],
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
-      "strictInjectionParameters": false,
-      "strictInputAccessModifiers": false,
-      "strictTemplates": false
+        "strictInjectionParameters": false,
+        "strictInputAccessModifiers": false,
+        "allowSyntheticDefaultImports": true,
+        "strictTemplates": false
     }
 }

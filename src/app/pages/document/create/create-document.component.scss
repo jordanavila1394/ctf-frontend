@@ -1,0 +1,23 @@
+#dropZone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.pdf-container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+}
+
+.fiscalcodes-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+    .user-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}

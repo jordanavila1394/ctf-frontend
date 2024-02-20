@@ -12,6 +12,7 @@ export const ROUTES = {
     ROUTE_TABLE_USER: '/user/table',
     ROUTE_MODIFY_USER: '/user/modify',
     ROUTE_DETAIL_USER: '/user/detail',
+    ROUTE_CREATE_DOCUMENT: '/document/create',
     ROUTE_DOCUMENTS_USER: '/user/documents',
     ROUTE_CREATE_VEHICLE: '/vehicle/create',
     ROUTE_TABLE_VEHICLE: '/vehicle/table',

@@ -1,0 +1,65 @@
+<div class="grid">
+    <div class="col-12 lg:col-6 xl:col-4">
+        <div class="card mb-0">
+            <button
+                type="button"
+                pButton
+                class="p-button-text p-button-rounded"
+                (click)="splitPdf()"
+                *ngIf="this.fiscalCodesFounded.length == 0"
+            >
+                Split PDF
+            </button>
+            <div
+                class="fiscalcodes-wrapper"
+                *ngIf="this.fiscalCodesFounded.length > 0"
+            >
+                <div class="user-wrapper">
+                    <div>Codice fiscale</div>
+                    <div>Pag.</div>
+                </div>
+                <div
+                    class="user-wrapper"
+                    *ngFor="let item of fiscalCodesFounded; let i = index"
+                >
+                    <div>
+                        {{ item.fiscalCode }}
+                    </div>
+                    <div>
+                        {{ item.page }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-8">
+        <div class="card mb-0">
+            <div>
+                <div
+                    id="dropZone"
+                    (drop)="onFileDropped($event)"
+                    (dragover)="onDragOver($event)"
+                    (click)="openFilePicker()"
+                >
+                    Droppa il pdf qui
+                </div>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    #fileInput
+                    style="display: none"
+                    (change)="onFileSelected($event)"
+                />
+
+                <div *ngIf="pdfSrc" class="pdf-container">
+                    <pdf-viewer
+                        [src]="pdfSrc"
+                        [render-text]="true"
+                        style="height: 60vh"
+                    ></pdf-viewer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
