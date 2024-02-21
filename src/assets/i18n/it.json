@@ -102,8 +102,8 @@
                 "create": "Aggiungi presenza"
             },
             "documents": {
-                "menuTitle": "Documenti",
-                "create": "Aggiungi documenti"
+                "menuTitle": "Cedolini",
+                "create": "Aggiungi cedolini"
             },
             "permission": {
                 "menuTitle": "Permessi e malattie",
