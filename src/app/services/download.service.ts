@@ -23,4 +23,15 @@ export class DownloadService {
             httpOptions,
         );
     }
+
+    getWorkDocumentsByUser(idUser, fiscalCode): Observable<any> {
+        return this.http.post(
+            API_URL + 'getWorkDocumentsByUser',
+            {
+                idUser,
+                fiscalCode,
+            },
+            httpOptions,
+        );
+    }
 }

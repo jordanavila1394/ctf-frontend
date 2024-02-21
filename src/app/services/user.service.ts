@@ -47,6 +47,18 @@ export class UserService {
         return this.http.get(API_URL + 'getUser' + '/' + id);
     }
 
+    checkIfExistUser(
+        fiscalCode: string,
+    ): Observable<any> {
+        return this.http.post(
+            API_URL + 'checkIfExistUser',
+            {
+                fiscalCode,
+            },
+            httpOptions,
+        );
+    }
+
     createUser(
         fiscalCode: string,
         password: string,

@@ -18,6 +18,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 //AutoComplete Google
 import { DefaultAutocompleteModule } from '../../../shared/components/default-autocomplete/default-autocomplete.module';
@@ -27,6 +28,7 @@ import { DocumentsUserComponent } from './documents-user.component';
 import { DocumentsUserRoutingModule } from './documents-user-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { FileUploadModule } from 'primeng/fileupload';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
     imports: [
@@ -45,6 +47,8 @@ import { FileUploadModule } from 'primeng/fileupload';
         MultiSelectModule,
         ProgressBarModule,
         RatingModule,
+        PanelMenuModule,
+        PanelModule,
         ReactiveFormsModule,
         RippleModule,
         SliderModule,
