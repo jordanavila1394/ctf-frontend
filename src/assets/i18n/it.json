@@ -91,7 +91,7 @@
             "landing": {
                 "menuTitle": "Landing",
                 "permission": "Permessi",
-                "medical":"Malattia",
+                "medical": "Malattia",
                 "attendances": "Presenze",
                 "documents": "Documenti"
             },
@@ -100,6 +100,10 @@
                 "table": "Lista presenze",
                 "users": "Lista presenza utenti",
                 "create": "Aggiungi presenza"
+            },
+            "documents": {
+                "menuTitle": "Cedolini",
+                "create": "Aggiungi cedolini"
             },
             "permission": {
                 "menuTitle": "Permessi e malattie",

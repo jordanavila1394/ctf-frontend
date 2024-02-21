@@ -18,17 +18,20 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { PanelMenuModule } from 'primeng/panelmenu';
 
 //AutoComplete Google
 import { DefaultAutocompleteModule } from '../../../shared/components/default-autocomplete/default-autocomplete.module';
 
 // Components
-import { DocumentsUserComponent } from './documents-user.component';
-import { DocumentsUserRoutingModule } from './documents-user-routing.module';
+import { CreateDocumentComponent } from './create-document.component';
+import { CreateDocumentRoutingModule } from './create-document-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
-import { FileUploadModule } from 'primeng/fileupload';
-import { PanelModule } from 'primeng/panel';
+import { CalendarModule } from 'primeng/calendar';
+
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
     imports: [
@@ -39,23 +42,25 @@ import { PanelModule } from 'primeng/panel';
         DialogModule,
         DropdownModule,
         FormsModule,
-        FileUploadModule,
+        CalendarModule,
         InputTextModule,
         InputTextareaModule,
         InputSwitchModule,
-        DocumentsUserRoutingModule,
+        CreateDocumentRoutingModule,
         MultiSelectModule,
         ProgressBarModule,
         RatingModule,
-        PanelMenuModule,
-        PanelModule,
         ReactiveFormsModule,
+        PdfViewerModule,
+        NgxExtendedPdfViewerModule,
         RippleModule,
         SliderModule,
         TableModule,
         ToastModule,
+        DropzoneModule,
+        NgxDropzoneModule,
         ToggleButtonModule,
     ],
-    declarations: [DocumentsUserComponent],
+    declarations: [CreateDocumentComponent],
 })
-export class DocumentsUserModule {}
+export class CreateDocumentModule {}

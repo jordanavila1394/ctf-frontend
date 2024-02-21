@@ -1,0 +1,103 @@
+<div class="grid">
+    <div class="col-12 lg:col-6 xl:col-8">
+        <div class="card mb-0">
+            <div>
+                <div
+                    id="dropZone"
+                    (drop)="onFileDropped($event)"
+                    (dragover)="onDragOver($event)"
+                    (click)="openFilePicker()"
+                >
+                    Trascina il tuo PDF qui
+                </div>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    #fileInput
+                    style="display: none"
+                    (change)="onFileSelected($event)"
+                />
+
+                <div *ngIf="pdfSrc" class="pdf-container">
+                    <pdf-viewer
+                        [src]="pdfSrc"
+                        [render-text]="true"
+                        style="height: 60vh"
+                    ></pdf-viewer>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-4">
+        <div class="card mb-0">
+            <button
+                type="button"
+                pButton
+                class="p-button-outlined p-button-rounded"
+                (click)="splitPdf()"
+                *ngIf="this.fiscalCodesFounded.length == 0"
+            >
+                Analizza PDF
+            </button>
+            <div
+                class="fiscalcodes-wrapper"
+                *ngIf="this.fiscalCodesFounded.length > 0"
+            >
+                <table>
+                    <tr>
+                        <th><strong>Codice fiscale</strong></th>
+                        <th><strong>Pag.</strong></th>
+                        <th>Country</th>
+                    </tr>
+                    <tr *ngFor="let item of fiscalCodesFounded; let i = index">
+                        <td>
+                            {{ item.fiscalCode }}
+                        </td>
+                        <td>
+                            <div class="flex justify-content-center">
+                                {{ item.pageNumber }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    icon="pi pi-image"
+                                    class="p-button-rounded p-button-text"
+                                    (click)="savePageAsImg(item)"
+                                ></button>
+                                <button
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    icon="pi pi-file"
+                                    class="p-button-rounded p-button-text"
+                                    (click)="savePageAsPDF(item)"
+                                ></button>
+                                <button
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    icon="pi pi-send"
+                                    class="p-button-rounded p-button-text"
+                                    (click)="savePageAsDocument(item)"
+                                ></button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <button
+                type="button"
+                pButton
+                class="p-button-outlined p-button-rounded"
+                *ngIf="this.fiscalCodesFounded.length > 1"
+            >
+                Salva documenti
+            </button>
+        </div>
+    </div>
+</div>

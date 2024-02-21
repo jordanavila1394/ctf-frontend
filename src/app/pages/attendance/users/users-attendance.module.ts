@@ -24,7 +24,6 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { UsersAttendanceRoutingModule } from './users-attedance-routing.module';
 import { UsersAttendanceComponent } from './users-attendance.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { PdfSplitDropzoneModule } from 'src/app/shared/components/pdf-splitter/pdf-splitter.module';
 
 @NgModule({
     imports: [
@@ -46,7 +45,6 @@ import { PdfSplitDropzoneModule } from 'src/app/shared/components/pdf-splitter/p
         DropdownModule,
         DynamicDialogModule,
         ProgressBarModule,
-        PdfSplitDropzoneModule,
         MenuModule,
         FormsModule,
         TranslateModule,

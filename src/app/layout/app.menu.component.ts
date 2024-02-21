@@ -104,6 +104,18 @@ export class AppMenuComponent implements OnInit {
                 ],
             });
             this.model.push({
+                label: 'Documents',
+                translationCode: 'menu.routes.documents.menuTitle',
+                items: [
+                    {
+                        label: 'Upload documents',
+                        translationCode: 'menu.routes.documents.create',
+                        icon: 'pi pi-file',
+                        routerLink: [ROUTES.ROUTE_CREATE_DOCUMENT],
+                    },
+                ],
+            });
+            this.model.push({
                 label: 'Aziende',
                 translationCode: 'menu.routes.company.menuTitle',
                 items: [

@@ -72,7 +72,17 @@ import { AuthGuard } from './services/auth.guard';
                                 roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
                             },
                         },
-
+                        {
+                            path: 'document',
+                            loadChildren: () =>
+                                import('./pages/document/document.module').then(
+                                    (m) => m.DocumentModule,
+                                ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
                         {
                             path: 'attendance',
                             loadChildren: () =>

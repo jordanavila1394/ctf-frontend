@@ -91,7 +91,7 @@
             "landing": {
                 "menuTitle": "Landing",
                 "permission": "Permiso",
-                "medical":"Enfermedad",
+                "medical": "Enfermedad",
                 "attendances": "Presencias",
                 "documents": "Documentos"
             },
@@ -100,6 +100,10 @@
                 "table": "Lista presencias",
                 "users": "Lista presencia usuarios",
                 "create": "Agrega presencia"
+            },
+            "documents": {
+                "menuTitle": "Documentos",
+                "create": "Agrega documentos"
             },
             "permission": {
                 "menuTitle": "Permisos",

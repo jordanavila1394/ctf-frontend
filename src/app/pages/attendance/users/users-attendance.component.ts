@@ -38,8 +38,6 @@ import * as moment from 'moment';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ImagesDialogComponent } from 'src/app/shared/components/imagesDialog/images-dialog.component';
 
-import * as pdfjsLib from 'pdfjs-dist';
-
 interface expandedRows {
     [key: string]: boolean;
 }
