@@ -110,7 +110,7 @@ export class DocumentsUserComponent {
         const category = this.selectedCategory?.id
             ? this.selectedCategory?.id
             : 'altro';
-        const expireDate = this.documentsForm.value.userId;
+        const expireDate = this.documentsForm.value.expireDate;
         const fiscalCode = this.documentsForm.value.fiscalCode;
 
         formData.append('userId', userId);
