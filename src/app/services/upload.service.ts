@@ -18,4 +18,8 @@ export class UploadService {
     uploadDocuments(formData: FormData) {
         return this.http.post(API_URL + 'uploadDocuments', formData);
     }
+
+    deleteDocument(file: string) {
+        return this.http.post(API_URL + 'deleteDocument', { key: file });
+    }
 }

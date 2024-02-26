@@ -5,8 +5,10 @@
             <form [formGroup]="documentsForm" #form="ngForm">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="surname1">Seleziona categoria documento/documenti</label>
-                         <p-dropdown
+                        <label htmlFor="surname1"
+                            >Seleziona categoria documento/documenti</label
+                        >
+                        <p-dropdown
                             placeholder="-Seleziona-"
                             [options]="categoriesItems"
                             optionLabel="name"
@@ -14,8 +16,10 @@
                             [(ngModel)]="selectedCategory"
                         ></p-dropdown>
                     </div>
-                     <div class="field col-12 md:col-4">
-                        <label htmlFor="surname1">Aggiungi data di scadenza</label>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="surname1"
+                            >Aggiungi data di scadenza</label
+                        >
                         <p-calendar
                             formControlName="expireDate"
                             placeholder="Seleziona data"
@@ -66,6 +70,15 @@
                 <div class="document-list">
                     <ng-container *ngFor="let file of this.filesWorkDocument">
                         <div class="file-wrapper">
+                            <div class="close-wrapper">
+                                <button
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-times"
+                                    class="p-button-text"
+                                    (click)="deleteDocument(file?.keyFile)"
+                                ></button>
+                            </div>
                             <div class="category">{{ file.category }}</div>
                             <div>
                                 <img
@@ -104,6 +117,15 @@
                 <div class="document-list">
                     <ng-container *ngFor="let file of this.files">
                         <div class="file-wrapper">
+                            <div class="close-wrapper">
+                                <button
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-times"
+                                    class="p-button-text"
+                                    (click)="deleteDocument(file?.keyFile)"
+                                ></button>
+                            </div>
                             <div class="category">{{ file.category }}</div>
                             <div>
                                 <img

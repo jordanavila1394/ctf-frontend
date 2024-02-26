@@ -1,8 +1,8 @@
-.document-list{
+.document-list {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    .file-wrapper{
+    .file-wrapper {
         display: flex;
         position: relative;
         cursor: pointer;
@@ -10,22 +10,32 @@
         gap: 0.5rem;
         justify-content: center;
         align-items: center;
-        height: 170px;
+        height: 190px;
         background-color: aliceblue;
         border-radius: 10px;
-        padding: 1rem;
-        .category{
+        padding: 2rem 1rem 1rem 1rem;
+        .close-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 5;
+            button {
+                width: 20px;
+                height: 20px;
+                background: none;
+                border: none;
+            }
+        }
+        .category {
             text-transform: uppercase;
-           
         }
-        .file-name{
+        .file-name {
             text-overflow: ellipsis;
-                overflow: hidden;
-                width: 150px;
-                white-space: nowrap;
-            
+            overflow: hidden;
+            width: 150px;
+            white-space: nowrap;
         }
-        .link{
+        .link {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -38,8 +48,8 @@
             width: 100%;
             height: inherit;
             justify-content: space-around;
-            div{
-                flex:1 1 0;
+            div {
+                flex: 1 1 0;
                 font-size: 0.6rem;
             }
         }
