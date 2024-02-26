@@ -8,6 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
+import { AttendanceService } from 'src/app/services/attendance.service';
+import { VehicleService } from 'src/app/services/vehicle.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     templateUrl: './modify-user.component.html',
@@ -35,6 +38,19 @@ export class ModifyUserComponent implements OnInit {
     companies: [];
     selectedRole: any;
     selectedCompany: any;
+    selectedPlace: any;
+    placesItems: any;
+
+    selectedVehicle: any;
+    selectedPlaceAddress: any;
+    vehiclesItems: any;
+
+    companyId: any;
+
+    attendanceData: any;
+    attendanceCheckIn: any;
+
+    subscription: Subscription;
 
     modifyForm = this.fb.group({
         id: ['', [Validators.required]],
@@ -63,12 +79,18 @@ export class ModifyUserComponent implements OnInit {
         { validator: this.checkPasswords },
     );
 
+    checkInForm = this.fb.group({
+        placeId: null,
+        vehicleId: null,
+    });
     constructor(
         public fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private ngxGpAutocompleteService: NgxGpAutocompleteService,
         private userService: UserService,
+        private attendanceService: AttendanceService,
+        private vehicleService: VehicleService,
         private messageService: MessageService,
         private companyService: CompanyService,
         private roleService: RoleService,
@@ -90,10 +112,20 @@ export class ModifyUserComponent implements OnInit {
                 id: this.idUser,
             });
             this.userService.getUser(this.idUser).subscribe((user) => {
-                const companyId = user?.companies[0]?.id
+                this.companyId = user?.companies[0]?.id
                     ? user?.companies[0]?.id
                     : '';
+                this.placesItems = user?.companies[0]?.places;
+                this.vehiclesItems = user?.companies[0]?.vehicles;
                 const roleId = user?.roles[0]?.id ? user.roles[0].id : '';
+
+                const vehicleServiceSubscription = this.vehicleService
+                    .getAllVehicles(0)
+                    .subscribe((vehicles) => {
+                        this.vehiclesItems = vehicles;
+                    });
+                if (vehicleServiceSubscription && this.subscription)
+                    this.subscription.add(vehicleServiceSubscription);
 
                 this.modifyForm.patchValue({
                     id: this.idUser,
@@ -103,7 +135,7 @@ export class ModifyUserComponent implements OnInit {
                     email: user.email,
                     cellphone: user.cellphone,
                     roleId: roleId,
-                    companyId: companyId,
+                    companyId: this.companyId,
                     workerNumber: user.workerNumber,
                     position: user.position,
                     address: user.address,
@@ -111,6 +143,15 @@ export class ModifyUserComponent implements OnInit {
                     status: user.status,
                 });
             });
+            const attendanceServiceSubscription = this.attendanceService
+                .getAttendanceByUser(this.idUser)
+                .subscribe((data) => {
+                    this.attendanceData = data;
+                    this.attendanceCheckIn = this.attendanceData?.attendance;
+                });
+            if (attendanceServiceSubscription && this.subscription)
+                this.subscription.add(attendanceServiceSubscription);
+
             this.modifyForm.controls['roleId'].disable({
                 onlySelf: true,
             });
@@ -183,6 +224,35 @@ export class ModifyUserComponent implements OnInit {
                     summary: 'Avviso',
                     detail: 'Hai modificato la password con successo',
                 });
+                this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
+            });
+    }
+
+    onChangePlace(event) {
+        this.selectedPlaceAddress = this.placesItems.find(
+            (index) => index.id === this.selectedPlace,
+        );
+    }
+
+    onChangeVehicle(event) {}
+
+    manualCheckIn() {
+        this.attendanceService
+            .checkInAttendance(
+                this.idUser,
+                this.companyId,
+                this.checkInForm.value.placeId,
+                this.checkInForm.value.vehicleId,
+            )
+            .subscribe((res) => {
+                this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
+            });
+    }
+
+    manualCheckOut() {
+        this.attendanceService
+            .checkOutAttendance(this.attendanceCheckIn?.id, this.idUser)
+            .subscribe((res) => {
                 this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
             });
     }
