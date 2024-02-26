@@ -14,7 +14,7 @@ export class UploadService {
     uploadAttendanceImages(formData: FormData) {
         return this.http.post(API_URL + 'uploadAttendanceImages', formData);
     }
-    
+
     uploadDocuments(formData: FormData) {
         return this.http.post(API_URL + 'uploadDocuments', formData);
     }

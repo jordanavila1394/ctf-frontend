@@ -43,6 +43,7 @@ export class DocumentsUserComponent {
     documentsForm = this.fb.group({
         userId: ['', [Validators.required]],
         category: ['', [Validators.required]],
+        expireDate: ['', [Validators.required]],
         fiscalCode: ['', [Validators.required]],
     });
     currentFiscalCode: any;
@@ -109,10 +110,12 @@ export class DocumentsUserComponent {
         const category = this.selectedCategory?.id
             ? this.selectedCategory?.id
             : 'altro';
+        const expireDate = this.documentsForm.value.userId;
         const fiscalCode = this.documentsForm.value.fiscalCode;
 
         formData.append('userId', userId);
         formData.append('category', category);
+        formData.append('expireDate', expireDate);
         formData.append('fiscalCode', fiscalCode);
 
         this.uploadService.uploadDocuments(formData).subscribe(

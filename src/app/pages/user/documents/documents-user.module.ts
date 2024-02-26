@@ -29,6 +29,7 @@ import { DocumentsUserRoutingModule } from './documents-user-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { FileUploadModule } from 'primeng/fileupload';
 import { PanelModule } from 'primeng/panel';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     imports: [
@@ -48,6 +49,7 @@ import { PanelModule } from 'primeng/panel';
         ProgressBarModule,
         RatingModule,
         PanelMenuModule,
+        CalendarModule,
         PanelModule,
         ReactiveFormsModule,
         RippleModule,

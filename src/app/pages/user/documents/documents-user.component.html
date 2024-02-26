@@ -3,16 +3,23 @@
         <div class="card">
             <h5>Aggiungi documento</h5>
             <form [formGroup]="documentsForm" #form="ngForm">
-                <h5>Seleziona categoria documento/documenti</h5>
-                <div class="p-formgrid grid">
-                    <div class="field col">
-                        <p-dropdown
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="surname1">Seleziona categoria documento/documenti</label>
+                         <p-dropdown
                             placeholder="-Seleziona-"
                             [options]="categoriesItems"
                             optionLabel="name"
                             formControlName="category"
                             [(ngModel)]="selectedCategory"
                         ></p-dropdown>
+                    </div>
+                     <div class="field col-12 md:col-4">
+                        <label htmlFor="surname1">Aggiungi data di scadenza</label>
+                        <p-calendar
+                            formControlName="expireDate"
+                            placeholder="Seleziona data"
+                        ></p-calendar>
                     </div>
                 </div>
                 <div class="p-formgrid grid">
@@ -23,7 +30,7 @@
                             name="files[]"
                             (onSelect)="uploadFiles($event)"
                             [showUploadButton]="false"
-                            [multiple]="true"
+                            [multiple]="false"
                             [maxFileSize]="500000000"
                             label="Seleziona"
                         >
