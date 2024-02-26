@@ -280,13 +280,33 @@
                         class="p-button-outlined mr-2"
                     ></button>
                     <button
-                        *ngIf="attendanceData && attendanceData?.foundCheckIn"
+                        *ngIf="
+                            attendanceData?.foundCheckIn &&
+                            !attendanceData?.attendance?.checkOut
+                        "
                         pButton
                         pRipple
                         label="Fai CheckOut"
                         (click)="manualCheckOut()"
                         class="p-button-outlined mr-2"
                     ></button>
+                    <div
+                        *ngIf="
+                            attendanceData?.foundCheckIn &&
+                            attendanceData?.attendance?.checkOut
+                        "
+                        class="flex flex-column justify-content-center align-items-center gap-3"
+                    >
+                        <div>
+                            <span class="font-bold"
+                                >E' stato già settata la presenza di oggi</span
+                            >
+                        </div>
+
+                        <div>
+                            <img src="assets/icons/like.png" alt="Like" />
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
