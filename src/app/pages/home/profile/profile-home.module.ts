@@ -19,6 +19,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PasswordModule } from 'primeng/password';
+import { DefaultAutocompleteModule } from 'src/app/shared/components/default-autocomplete/default-autocomplete.module';
 
 @NgModule({
     imports: [
@@ -35,6 +36,7 @@ import { PasswordModule } from 'primeng/password';
         InputTextModule,
         InputTextareaModule,
         ReactiveFormsModule,
+        DefaultAutocompleteModule,
         PasswordModule,
         TableModule,
         StyleClassModule,

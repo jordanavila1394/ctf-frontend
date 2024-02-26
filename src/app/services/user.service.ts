@@ -138,6 +138,8 @@ export class UserService {
         fiscalCode: string,
         email: string,
         cellphone: string,
+        address: string,
+        iban: string,
     ): Observable<any> {
         return this.http.patch(
             API_URL + 'saveProfileUser',
@@ -148,6 +150,8 @@ export class UserService {
                 fiscalCode,
                 email,
                 cellphone,
+                address,
+                iban,
             },
             httpOptions,
         );

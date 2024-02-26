@@ -40,6 +40,8 @@ export class ProfileHomeComponent implements OnInit {
         surname: ['', [Validators.required]],
         email: [''],
         cellphone: [''],
+        address: [''],
+        iban: [''],
     });
 
     changePasswordForm = this.fb.group(
@@ -92,6 +94,8 @@ export class ProfileHomeComponent implements OnInit {
                     email: this.currentUser.email,
                     cellphone: this.currentUser.cellphone,
                     fiscalCode: this.currentUser.fiscalCode,
+                    address: this.currentUser.address,
+                    iban: this.currentUser.iban,
                 });
                 this.profileForm.controls['fiscalCode'].disable({
                     onlySelf: true,
@@ -110,6 +114,8 @@ export class ProfileHomeComponent implements OnInit {
                 this.profileForm.value.fiscalCode,
                 this.profileForm.value.email,
                 this.profileForm.value.cellphone,
+                this.profileForm.value.address,
+                this.profileForm.value.iban,
             )
             .subscribe((res) => {
                 this.messageService.add({
