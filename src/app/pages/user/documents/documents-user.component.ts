@@ -46,10 +46,10 @@ export class DocumentsUserComponent {
         expireDate: ['', [Validators.required]],
         fiscalCode: ['', [Validators.required]],
     });
-    currentFiscalCode: any;
     selectedCategory: any;
     subscription: Subscription;
-
+    currentFiscalCode: any;
+    currentUserId: any;
     constructor(
         public fb: FormBuilder,
         private route: ActivatedRoute,
@@ -58,6 +58,8 @@ export class DocumentsUserComponent {
         private spacesService: SpacesService,
     ) {
         this.route.queryParams.subscribe((params) => {
+            this.currentFiscalCode = params['fiscalCode'];
+            this.currentUserId = params['id'];
             this.documentsForm.patchValue({
                 fiscalCode: params['fiscalCode'],
                 userId: params['id'],
@@ -135,5 +137,13 @@ export class DocumentsUserComponent {
             .substring(file.lastIndexOf('/') + 1)
             .split('.')
             .pop();
+    }
+    deleteDocument(file) {
+        this.uploadService.deleteDocument(file).subscribe(
+            (response) => {
+                this.loadServices(this.currentUserId, this.currentFiscalCode);
+            },
+            (error) => {},
+        );
     }
 }

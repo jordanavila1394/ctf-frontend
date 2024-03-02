@@ -37,6 +37,7 @@ import * as FileSaver from 'file-saver';
 import * as moment from 'moment';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ImagesDialogComponent } from 'src/app/shared/components/imagesDialog/images-dialog.component';
+import { AttendanceService } from 'src/app/services/attendance.service';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -89,6 +90,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private companyService: CompanyService,
         public dialogService: DialogService,
+        private attendanceService: AttendanceService,
         private userService: UserService,
         private store: Store<{ companyState: CompanyState }>,
     ) {
@@ -182,6 +184,15 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
             });
         if (this.subscription && userServiceSubscription)
             this.subscription.add(userServiceSubscription);
+    }
+
+    //Validate
+    validateAttendance(attendance) {
+        this.attendanceService
+            .validateAttendance(attendance?.id, attendance?.userId)
+            .subscribe((res) => {
+                this.loadServices(this.selectedCompany);
+            });
     }
 
     //Excel
