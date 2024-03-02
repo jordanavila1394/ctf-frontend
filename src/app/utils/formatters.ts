@@ -86,11 +86,20 @@ export default class Formatter {
     formatAttendancesExcelSheet(attendances) {
         let formattedAttendances = [];
         for (let attendance of attendances) {
+            console.log(attendance);
+            const rowStyle = true
+                ? { font: { color: { rgb: 'FF0000FF' } } }
+                : {};
+
             formattedAttendances.push({
                 Data: moment(attendance?.checkIn).format('DD-MM-YYYY'),
+                Giorno: moment(attendance?.checkIn).format('dddd'),
                 'Check In': moment(attendance?.checkIn).format('HH:mm'),
                 'Check Out': moment(attendance?.checkOut).format('HH:mm'),
+                'Ore precise': attendance?.workedAccurateHours,
                 'Ore Totali': attendance?.workedHours,
+                Stato: attendance?.status,
+                _row: rowStyle, // Assign the style to _row property
             });
         }
 

@@ -25,11 +25,14 @@ import { Company } from 'src/app/models/company';
 //Utils
 import { ROUTES } from 'src/app/utils/constants';
 import { EmailService } from 'src/app/services/email.service';
+import Formatter from 'src/app/utils/formatters';
 
 //Store
 import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+
+import * as FileSaver from 'file-saver';
 
 @Component({
     templateUrl: './table-permission.component.html',
@@ -52,6 +55,8 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
 
     permissions: any;
 
+    formatter!: Formatter;
+
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(
@@ -64,6 +69,7 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
         private store: Store<{ companyState: CompanyState }>,
     ) {
         this.companyState$ = store.select('companyState');
+        this.formatter = new Formatter();
     }
 
     ngOnInit(): void {
@@ -163,6 +169,34 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
                 }
                 this.loadServices(this.selectedCompany);
             });
+    }
+    //Excel
+    exportExcel() {
+        import('xlsx').then((xlsx) => {
+            const worksheet = xlsx.utils.json_to_sheet(this.permissions);
+            const workbook = {
+                Sheets: { data: worksheet },
+                SheetNames: ['data'],
+            };
+            const excelBuffer: any = xlsx.write(workbook, {
+                bookType: 'xlsx',
+                type: 'array',
+            });
+            this.saveAsExcelFile(excelBuffer, 'permessi');
+        });
+    }
+
+    saveAsExcelFile(buffer: any, fileName: string): void {
+        let EXCEL_TYPE =
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        let EXCEL_EXTENSION = '.xlsx';
+        const data: Blob = new Blob([buffer], {
+            type: EXCEL_TYPE,
+        });
+        FileSaver.saveAs(
+            data,
+            fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION,
+        );
     }
 
     //Dialog

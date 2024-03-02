@@ -155,7 +155,6 @@ export class DetailUserComponent implements OnInit {
     selectAddress(place: any): void {}
 
     generateUserDocx() {
-        console.log(this.currentUser);
         let values: { [key: string]: string } = {
             Società: this.currentUser?.companies[0]?.name,
             Nome: this.currentUser.name,
@@ -164,6 +163,14 @@ export class DetailUserComponent implements OnInit {
             'Codice Fiscale': this.currentUser.fiscalCode,
             Indirizzo: this.currentUser.address + '',
             IBAN: this.currentUser.iban + '',
+            'Contratto a tempo determinato': '',
+            'Contratto a tempo': '',
+            Mansione: '',
+            Livello: '',
+            'Tipologia contratto': '',
+            'Orari di lavoro': '',
+            Committente: '',
+            Note: '',
         };
 
         this.docxService.createDocx(

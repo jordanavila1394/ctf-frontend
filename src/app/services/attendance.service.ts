@@ -77,4 +77,15 @@ export class AttendanceService {
             httpOptions,
         );
     }
+
+    validateAttendance(id, userId): Observable<any> {
+        return this.http.post(
+            API_URL + 'validateAttendance',
+            {
+                id,
+                userId,
+            },
+            httpOptions,
+        );
+    }
 }

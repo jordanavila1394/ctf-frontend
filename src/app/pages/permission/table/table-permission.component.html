@@ -3,6 +3,19 @@
         <div class="card">
             <h5>Richieste</h5>
             <p-toast></p-toast>
+            <div style="display: flex; padding: 1rem">
+                <button
+                    type="button"
+                    pButton
+                    pRipple
+                    icon="pi pi-file-excel"
+                    (click)="exportExcel()"
+                    class="p-button-success mr-2"
+                    pTooltip="XLS"
+                    tooltipPosition="bottom"
+                    style="margin-left: auto"
+                ></button>
+            </div>
             <div class="list-permission" *ngIf="permissions?.length > 0">
                 <ng-container *ngFor="let permission of permissions">
                     <div
