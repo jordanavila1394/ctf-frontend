@@ -89,8 +89,8 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
+        private attendanceService:AttendanceService,
         public dialogService: DialogService,
-        private attendanceService: AttendanceService,
         private userService: UserService,
         private store: Store<{ companyState: CompanyState }>,
     ) {
@@ -190,6 +190,14 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     validateAttendance(attendance) {
         this.attendanceService
             .validateAttendance(attendance?.id, attendance?.userId)
+            .subscribe((res) => {
+                this.loadServices(this.selectedCompany);
+            });
+    }
+
+    unvalidateAttendance(attendance) {
+        this.attendanceService
+            .unvalidateAttendance(attendance?.id, attendance?.userId)
             .subscribe((res) => {
                 this.loadServices(this.selectedCompany);
             });

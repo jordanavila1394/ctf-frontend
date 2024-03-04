@@ -94,6 +94,11 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
                 this.permissions = permissions;
                 this.permissions = permissions.map((permission) => ({
                     ...permission,
+                    utente:
+                        permission?.user?.name +
+                        ' ' +
+                        permission?.user?.surname,
+                    codicefiscale: permission?.user?.fiscalCode,
                     datesText: permission?.dates,
                     dates: permission?.dates.split(','),
                 }));

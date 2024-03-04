@@ -172,37 +172,59 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <button
-                                                    *ngIf="
-                                                        attendance?.status ===
-                                                        'Verificare'
+                                                <div
+                                                    style="
+                                                        display: flex;
+                                                        gap: 4px;
                                                     "
-                                                    type="button"
-                                                    (click)="
-                                                        validateAttendance(
+                                                >
+                                                    <button
+                                                        *ngIf="
+                                                            attendance?.status ===
+                                                            'Verificare'
+                                                        "
+                                                        type="button"
+                                                        (click)="
+                                                            validateAttendance(
+                                                                attendance
+                                                            )
+                                                        "
+                                                        pButton
+                                                        class="p-button-outlined p-button-secondary"
+                                                        icon="pi pi-check"
+                                                    ></button>
+                                                    <button
+                                                        *ngIf="
                                                             attendance
-                                                        )
-                                                    "
-                                                    pButton
-                                                    class="p-button-outlined p-button-secondary"
-                                                    icon="pi pi-check"
-                                                ></button>
-                                                <button
-                                                    *ngIf="
-                                                        attendance
-                                                            ?.attendanceImages
-                                                            ?.length > 0
-                                                    "
-                                                    type="button"
-                                                    (click)="
-                                                        showImages(
-                                                            attendance?.attendanceImages
-                                                        )
-                                                    "
-                                                    pButton
-                                                    class="p-button-outlined p-button-secondary"
-                                                    icon="pi pi-images"
-                                                ></button>
+                                                                ?.attendanceImages
+                                                                ?.length > 0
+                                                        "
+                                                        type="button"
+                                                        (click)="
+                                                            showImages(
+                                                                attendance?.attendanceImages
+                                                            )
+                                                        "
+                                                        pButton
+                                                        class="p-button-outlined p-button-secondary"
+                                                        icon="pi pi-images"
+                                                    ></button>
+                                                    <button
+                                                        *ngIf="
+                                                            attendance?.status ===
+                                                            'Presente'
+                                                        "
+                                                        type="button"
+                                                        (click)="
+                                                            unvalidateAttendance(
+                                                                attendance
+                                                            )
+                                                        "
+                                                        pButton
+                                                        class="p-button-outlined p-button-secondary"
+                                                        icon="pi pi-times"
+                                                    ></button>
+                                                </div>
                                             </td>
                                         </tr>
                                     </ng-template>
