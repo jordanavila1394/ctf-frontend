@@ -24,6 +24,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { UsersAttendanceRoutingModule } from './users-attedance-routing.module';
 import { UsersAttendanceComponent } from './users-attendance.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SplitButtonModule } from 'primeng/splitbutton';
 
 @NgModule({
     imports: [
@@ -47,6 +48,7 @@ import { TranslateModule } from '@ngx-translate/core';
         ProgressBarModule,
         MenuModule,
         FormsModule,
+        SplitButtonModule,
         TranslateModule,
         ReactiveFormsModule,
         ToastModule,

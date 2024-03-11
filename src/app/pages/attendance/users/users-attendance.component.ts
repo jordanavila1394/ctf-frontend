@@ -67,7 +67,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     isExpanded: boolean = false;
 
     selectedCurrentMonth: any;
-
+    selectedItem: any;
     monthsItems = [];
 
     imageList: string[] = [];
@@ -83,13 +83,15 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     @ViewChild('filter') filter!: ElementRef;
     visible: boolean;
 
+    items: MenuItem[] = [];
+
     constructor(
         private router: Router,
         public fb: FormBuilder,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
-        private attendanceService:AttendanceService,
+        private attendanceService: AttendanceService,
         public dialogService: DialogService,
         private userService: UserService,
         private store: Store<{ companyState: CompanyState }>,
@@ -99,6 +101,41 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.items = [
+            {
+                label: 'Presente',
+                icon: 'pi pi-check',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Presente');
+                },
+            },
+            {
+                label: 'Verificare',
+                icon: 'pi pi-times',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Verificare');
+                },
+            },
+            {
+                label: 'Malattia',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Malattia');
+                },
+            },
+            {
+                label: 'Ferie',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Ferie');
+                },
+            },
+            {
+                label: 'Permesso/ROL',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Permesso/ROL');
+                },
+            },
+        ];
+
         //Current year
         moment.locale('it');
 
@@ -129,6 +166,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 this.loadServices(this.selectedCompany);
             },
         );
+
         this.subscription.add(companyServiceSubscription);
     }
 
@@ -198,6 +236,27 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     unvalidateAttendance(attendance) {
         this.attendanceService
             .unvalidateAttendance(attendance?.id, attendance?.userId)
+            .subscribe((res) => {
+                this.loadServices(this.selectedCompany);
+            });
+    }
+
+    getButtonStyle(status: string): string {
+        switch (status.trim()) {
+            case 'Presente':
+                return 'p-button-success';
+            case 'Verificare':
+                return 'p-button-warning';
+            case 'CheckOut?':
+                return 'p-button-danger';
+            default:
+                return '';
+        }
+    }
+
+    onStatusChange(attendance, status) {
+        this.attendanceService
+            .changeStatusAttendance(attendance?.id, status)
             .subscribe((res) => {
                 this.loadServices(this.selectedCompany);
             });

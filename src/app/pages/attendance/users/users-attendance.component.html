@@ -155,21 +155,21 @@
                                             </td>
 
                                             <td>
-                                                <span
-                                                    [ngClass]="{
-                                                        success:
-                                                            attendance?.status ===
-                                                            'Presente',
-                                                        warning:
-                                                            attendance?.status ===
-                                                            'Verificare',
-                                                        error:
-                                                            attendance?.status ===
-                                                            'CheckOut?'
-                                                    }"
-                                                >
-                                                    {{ attendance?.status }}
-                                                </span>
+                                                <p-splitButton
+                                                    label="{{
+                                                        attendance?.status
+                                                    }}"
+                                                    [model]="items"
+                                                    (click)="
+                                                        selectedItem =
+                                                            attendance
+                                                    "
+                                                    [styleClass]="
+                                                        getButtonStyle(
+                                                            attendance?.status
+                                                        )
+                                                    "
+                                                ></p-splitButton>
                                             </td>
                                             <td>
                                                 <div

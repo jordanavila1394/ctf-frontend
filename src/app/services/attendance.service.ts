@@ -99,4 +99,15 @@ export class AttendanceService {
             httpOptions,
         );
     }
+
+    changeStatusAttendance(id, status): Observable<any> {
+        return this.http.post(
+            API_URL + 'changeStatusAttendance',
+            {
+                id,
+                status
+            },
+            httpOptions,
+        );
+    }
 }
