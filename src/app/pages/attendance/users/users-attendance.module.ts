@@ -25,6 +25,7 @@ import { UsersAttendanceRoutingModule } from './users-attedance-routing.module';
 import { UsersAttendanceComponent } from './users-attendance.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
     imports: [
@@ -46,6 +47,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
         DropdownModule,
         DynamicDialogModule,
         ProgressBarModule,
+        InputTextareaModule,
         MenuModule,
         FormsModule,
         SplitButtonModule,
