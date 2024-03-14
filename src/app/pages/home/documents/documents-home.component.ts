@@ -38,6 +38,10 @@ export class DocumentsHomeComponent {
             id: 'permesso-soggiorno',
         },
         {
+            name: 'Contratto lavoro',
+            id: 'contratto-lavoro',
+        },
+        {
             name: 'Altro',
             id: 'altro',
         },
