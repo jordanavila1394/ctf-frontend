@@ -26,6 +26,10 @@ export class DocumentsHomeComponent {
             id: 'cedolino',
         },
         {
+            name: 'CUD',
+            id: 'cud',
+        },
+        {
             name: 'Documenti Identità',
             id: 'documento-identita',
         },
