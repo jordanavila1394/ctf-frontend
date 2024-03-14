@@ -35,8 +35,16 @@ export class DocumentsUserComponent {
             id: 'patente',
         },
         {
+            name: 'Patente ADR',
+            id: 'patente-adr',
+        },
+        {
             name: 'Permesso soggiorno',
             id: 'permesso-soggiorno',
+        },
+        {
+            name: 'Contratto lavoro',
+            id: 'contratto-lavoro',
         },
         {
             name: 'Altro',

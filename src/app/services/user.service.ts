@@ -47,9 +47,7 @@ export class UserService {
         return this.http.get(API_URL + 'getUser' + '/' + id);
     }
 
-    checkIfExistUser(
-        fiscalCode: string,
-    ): Observable<any> {
+    checkIfExistUser(fiscalCode: string): Observable<any> {
         return this.http.post(
             API_URL + 'checkIfExistUser',
             {
@@ -72,6 +70,8 @@ export class UserService {
         position: string,
         address: string,
         iban: string,
+        birthCountry: string,
+        birthDate: string,
         status: boolean,
     ): Observable<any> {
         return this.http.post(
@@ -89,6 +89,8 @@ export class UserService {
                 position,
                 address,
                 iban,
+                birthCountry,
+                birthDate,
                 status,
             },
             httpOptions,
@@ -108,6 +110,8 @@ export class UserService {
         position: string,
         address: string,
         iban: string,
+        birthCountry: string,
+        birthDate: string,
         status: boolean,
     ): Observable<any> {
         return this.http.patch(
@@ -125,6 +129,8 @@ export class UserService {
                 position,
                 address,
                 iban,
+                birthCountry,
+                birthDate,
                 status,
             },
             httpOptions,
@@ -140,6 +146,8 @@ export class UserService {
         cellphone: string,
         address: string,
         iban: string,
+        birthCountry: string,
+        birthDate: string,
     ): Observable<any> {
         return this.http.patch(
             API_URL + 'saveProfileUser',
@@ -152,6 +160,8 @@ export class UserService {
                 cellphone,
                 address,
                 iban,
+                birthCountry,
+                birthDate,
             },
             httpOptions,
         );

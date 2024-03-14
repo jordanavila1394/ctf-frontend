@@ -12,6 +12,7 @@ import { AuthState } from 'src/app/stores/auth/authentication.reducer';
 
 //Libraies
 import * as moment from 'moment';
+import { getData } from 'country-list';
 
 //Utils
 import Formatter from 'src/app/utils/formatters';
@@ -34,11 +35,15 @@ export class ProfileHomeComponent implements OnInit {
     authState$: Observable<AuthState>;
     currentUser: any;
 
+    countryItems: { name: string; code: string }[] = [];
+
     profileForm = this.fb.group({
         fiscalCode: [''],
         name: ['', [Validators.required]],
         surname: ['', [Validators.required]],
         email: [''],
+        birthCountry: [''],
+        birthDate: [''],
         cellphone: [''],
         address: [''],
         iban: [''],
@@ -70,6 +75,7 @@ export class ProfileHomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.fetchCountries();
         this.authState$.subscribe((authS) => {
             this.currentUser = authS?.user || '';
             this.loadServices(this.currentUser);
@@ -82,6 +88,33 @@ export class ProfileHomeComponent implements OnInit {
             this.subscription.add(layourServiceSubscription);
         }
     }
+
+    fetchCountries() {
+        const allCountries = new getData();
+        const priorityCountries = ['Italy', 'Peru', 'Ecuador', 'El Salvador'];
+
+        // Add priority countries first
+        priorityCountries.forEach((country) => {
+            const foundCountry = allCountries.find((c) => c.name === country);
+            if (foundCountry) {
+                this.countryItems.push({
+                    name: foundCountry.name,
+                    code: foundCountry.code,
+                });
+            }
+        });
+
+        // Add remaining countries
+        allCountries.forEach((country) => {
+            if (!priorityCountries.includes(country.name)) {
+                this.countryItems.push({
+                    name: country.name,
+                    code: country.code,
+                });
+            }
+        });
+    }
+
     loadServices(currentUser) {
         const userServiceSubscription = this.userService
             .getUser(currentUser.id)
@@ -96,6 +129,8 @@ export class ProfileHomeComponent implements OnInit {
                     fiscalCode: this.currentUser.fiscalCode,
                     address: this.currentUser.address,
                     iban: this.currentUser.iban,
+                    birthCountry: this.currentUser.birthCountry,
+                    birthDate: this.currentUser.birthDate,
                 });
                 this.profileForm.controls['fiscalCode'].disable({
                     onlySelf: true,
@@ -116,6 +151,8 @@ export class ProfileHomeComponent implements OnInit {
                 this.profileForm.value.cellphone,
                 this.profileForm.value.address,
                 this.profileForm.value.iban,
+                this.profileForm.value.birthCountry,
+                this.profileForm.value.birthDate,
             )
             .subscribe((res) => {
                 this.messageService.add({

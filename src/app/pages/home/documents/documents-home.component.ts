@@ -26,12 +26,20 @@ export class DocumentsHomeComponent {
             id: 'cedolino',
         },
         {
+            name: 'CUD',
+            id: 'cud',
+        },
+        {
             name: 'Documenti Identità',
             id: 'documento-identita',
         },
         {
             name: 'Patente',
             id: 'patente',
+        },
+        {
+            name: 'Patente ADR',
+            id: 'patente-adr',
         },
         {
             name: 'Permesso soggiorno',

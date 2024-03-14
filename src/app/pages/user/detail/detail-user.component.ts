@@ -10,6 +10,7 @@ import { BlobOptions } from 'buffer';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
 import { DocxService } from 'src/app/services/docx.service';
+import { getData } from 'country-list';
 
 @Component({
     templateUrl: './detail-user.component.html',
@@ -25,6 +26,7 @@ export class DetailUserComponent implements OnInit {
 
     selectedLegalForm: any = null;
     selectedCeo: any = null;
+    countryItems: { name: string; code: string }[] = [];
 
     legalFormItems = [
         {
@@ -52,6 +54,8 @@ export class DetailUserComponent implements OnInit {
         position: [''],
         address: [''],
         iban: [''],
+        birthCountry: [''],
+        birthDate: [''],
         status: [''],
     });
     currentUser: any;
@@ -72,6 +76,7 @@ export class DetailUserComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.fetchCountries();
         this.loadServices();
     }
 
@@ -96,6 +101,8 @@ export class DetailUserComponent implements OnInit {
                     address: user.address,
                     iban: user.iban,
                     status: user.status,
+                    birthCountry: user.birthCountry,
+                    birthDate: user.birthDate,
                 });
             });
 
@@ -142,14 +149,41 @@ export class DetailUserComponent implements OnInit {
             this.detailForm.controls['status'].disable({
                 onlySelf: true,
             });
+
+            this.detailForm.controls['birthCountry'].disable({
+                onlySelf: true,
+            });
+
+            this.detailForm.controls['birthDate'].disable({
+                onlySelf: true,
+            });
+        });
+    }
+
+    fetchCountries() {
+        const allCountries = new getData();
+        const priorityCountries = ['Italy', 'Peru', 'Ecuador', 'El Salvador'];
+
+        // Add priority countries first
+        priorityCountries.forEach((country) => {
+            const foundCountry = allCountries.find((c) => c.name === country);
+            if (foundCountry) {
+                this.countryItems.push({
+                    name: foundCountry.name,
+                    code: foundCountry.code,
+                });
+            }
         });
 
-        // this.userService.getAllCeos().subscribe((ceos) => {
-        //     this.ceosItems = ceos.map((ceo) => ({
-        //         ...ceo,
-        //         fullName: ceo.name + ' ' + ceo.surname,
-        //     }));
-        // });
+        // Add remaining countries
+        allCountries.forEach((country) => {
+            if (!priorityCountries.includes(country.name)) {
+                this.countryItems.push({
+                    name: country.name,
+                    code: country.code,
+                });
+            }
+        });
     }
 
     selectAddress(place: any): void {}

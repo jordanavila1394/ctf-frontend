@@ -119,6 +119,34 @@
                         >
                         </app-default-autocomplete>
                     </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="country1">Paese</label>
+                        <p-dropdown
+                            [options]="countryItems"
+                            optionLabel="name"
+                            optionValue="name"
+                            formControlName="birthCountry"
+                            placeholder="Seleziona paese"
+                            [required]="true"
+                        >
+                            <ng-template let-country pTemplate="country">
+                                {{ country.name }}
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="birthDate1">Data di nascita</label>
+                        <input
+                            pInputText
+                            id="birthDate1"
+                            type="date"
+                            formControlName="birthDate"
+                            ngModel
+                        />
+                    </div>
+                    
+                    
                     <div class="field col-12 md:col-6">
                         <label htmlFor="iban1">IBAN</label>
                         <input

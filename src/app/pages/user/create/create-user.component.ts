@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { RoleService } from 'src/app/services/role.service';
 import { CompanyService } from 'src/app/services/company.service';
+import { getData } from 'country-list';
 
 @Component({
     templateUrl: './create-user.component.html',
@@ -34,6 +35,7 @@ export class CreateUserComponent implements OnInit {
     companies: [];
     selectedRole: any;
     selectedCompany: any;
+    countryItems: { name: string; code: string }[] = [];
 
     constructor(
         public fb: FormBuilder,
@@ -50,6 +52,7 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.fetchCountries();
         this.loadServices();
     }
 
@@ -75,6 +78,8 @@ export class CreateUserComponent implements OnInit {
         workerNumber: [''],
         position: [''],
         address: [''],
+        birthCountry: [''],
+        birthDate: [''],
         iban: [''],
         roleId: ['', [Validators.required]],
         companyId: ['', [Validators.required]],
@@ -85,6 +90,32 @@ export class CreateUserComponent implements OnInit {
 
     forceLower(strInput) {
         strInput.value = strInput.value.toLowerCase();
+    }
+
+    fetchCountries() {
+        const allCountries = new getData();
+        const priorityCountries = ['Italy', 'Peru', 'Ecuador', 'El Salvador'];
+
+        // Add priority countries first
+        priorityCountries.forEach((country) => {
+            const foundCountry = allCountries.find((c) => c.name === country);
+            if (foundCountry) {
+                this.countryItems.push({
+                    name: foundCountry.name,
+                    code: foundCountry.code,
+                });
+            }
+        });
+
+        // Add remaining countries
+        allCountries.forEach((country) => {
+            if (!priorityCountries.includes(country.name)) {
+                this.countryItems.push({
+                    name: country.name,
+                    code: country.code,
+                });
+            }
+        });
     }
 
     onSubmit(): void {
@@ -102,6 +133,8 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.position,
                 this.createForm.value.address,
                 this.createForm.value.iban,
+                this.createForm.value.birthCountry,
+                this.createForm.value.birthDate,
                 this.createForm.value.status,
             )
             .subscribe((res) =>
