@@ -7273,6 +7273,15 @@
         "hash": "sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA=="
       }
     },
+    "npm:country-list": {
+      "type": "npm",
+      "name": "npm:country-list",
+      "data": {
+        "version": "2.3.0",
+        "packageName": "country-list",
+        "hash": "sha512-qZk66RlmQm7fQjMYWku1AyjlKPogjPEorAZJG88owPExoPV8EsyCcuFLvO2afTXHEhi9liVOoyd+5A6ZS5QwaA=="
+      }
+    },
     "npm:crc-32": {
       "type": "npm",
       "name": "npm:crc-32",

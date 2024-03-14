@@ -41,6 +41,7 @@
         "@types/tesseract.js": "^2.0.0",
         "aws-sdk": "^2.1516.0",
         "chart.js": "^3.3.2",
+        "country-list": "^2.3.0",
         "docx": "^8.5.0",
         "file-saver": "^2.0.5",
         "firebase": "^10.7.2",

@@ -10,6 +10,7 @@ export const environment = {
         'avila@ctfitalia.com',
         'avirrueta@ctfitalia.com',
         'mgutierrez@ctfitalia.com',
+        'personale@ctfitalia.com',
     ],
     operatorPhoneNumber: '+393343129952', //Operator Help desk
 };

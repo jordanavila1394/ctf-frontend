@@ -11,6 +11,7 @@ import { RoleService } from 'src/app/services/role.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { VehicleService } from 'src/app/services/vehicle.service';
 import { Subscription } from 'rxjs';
+import { getData } from 'country-list';
 
 @Component({
     templateUrl: './modify-user.component.html',
@@ -52,6 +53,8 @@ export class ModifyUserComponent implements OnInit {
 
     subscription: Subscription;
 
+    countryItems: { name: string; code: string }[] = [];
+
     modifyForm = this.fb.group({
         id: ['', [Validators.required]],
         name: ['', [Validators.required]],
@@ -64,6 +67,8 @@ export class ModifyUserComponent implements OnInit {
         workerNumber: [''],
         position: [''],
         address: [''],
+        birthCountry: [''],
+        birthDate: [''],
         iban: [''],
         status: [false, [Validators.required]],
     });
@@ -102,7 +107,34 @@ export class ModifyUserComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.fetchCountries();
         this.loadServices();
+    }
+
+    fetchCountries() {
+        const allCountries = new getData();
+        const priorityCountries = ['Italy', 'Peru', 'Ecuador', 'El Salvador'];
+
+        // Add priority countries first
+        priorityCountries.forEach((country) => {
+            const foundCountry = allCountries.find((c) => c.name === country);
+            if (foundCountry) {
+                this.countryItems.push({
+                    name: foundCountry.name,
+                    code: foundCountry.code,
+                });
+            }
+        });
+
+        // Add remaining countries
+        allCountries.forEach((country) => {
+            if (!priorityCountries.includes(country.name)) {
+                this.countryItems.push({
+                    name: country.name,
+                    code: country.code,
+                });
+            }
+        });
     }
 
     loadServices() {
@@ -140,6 +172,8 @@ export class ModifyUserComponent implements OnInit {
                     position: user.position,
                     address: user.address,
                     iban: user.iban,
+                    birthCountry: user.birthCountry,
+                    birthDate: user.birthDate,
                     status: user.status,
                 });
             });
@@ -189,6 +223,8 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.position,
                 this.modifyForm.value.address,
                 this.modifyForm.value.iban,
+                this.modifyForm.value.birthCountry,
+                this.modifyForm.value.birthDate,
                 this.modifyForm.value.status,
             )
             .subscribe((res) => {

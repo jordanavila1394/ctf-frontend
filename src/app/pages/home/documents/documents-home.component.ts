@@ -38,6 +38,10 @@ export class DocumentsHomeComponent {
             id: 'patente',
         },
         {
+            name: 'Patente ADR',
+            id: 'patente-adr',
+        },
+        {
             name: 'Permesso soggiorno',
             id: 'permesso-soggiorno',
         },
