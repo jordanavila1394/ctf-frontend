@@ -47,7 +47,7 @@ export class DocumentsUserComponent {
     documentsForm = this.fb.group({
         userId: ['', [Validators.required]],
         category: ['', [Validators.required]],
-        expireDate: ['', [Validators.required]],
+        expireDate: [''],
         fiscalCode: ['', [Validators.required]],
     });
     selectedCategory: any;

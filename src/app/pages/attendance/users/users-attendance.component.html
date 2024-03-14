@@ -257,9 +257,20 @@
                         pButton
                         pRipple
                         icon="pi pi-file-excel"
-                        (click)="exportExcel()"
+                        (click)="exportExcelVertical()"
                         class="p-button-success mr-2"
-                        pTooltip="XLS"
+                        pTooltip="XLS Verticale"
+                        tooltipPosition="bottom"
+                        style="margin-left: 1rem"
+                    ></button>
+                    <button
+                        type="button"
+                        pButton
+                        pRipple
+                        icon="pi pi-file-excel"
+                        (click)="exportExcelHorizontal()"
+                        class="p-button-success mr-2"
+                        pTooltip="XLS Orizzontale"
                         tooltipPosition="bottom"
                         style="margin-left: 1rem"
                     ></button>
