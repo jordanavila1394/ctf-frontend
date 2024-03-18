@@ -18,7 +18,8 @@ export class DocumentsUserComponent {
     uploadedFiles: any[] = [];
     filesSpaces: AWS.S3.Object[];
     files: any;
-    filesWorkDocument: any;
+    filesCedoliniDocument: any;
+    filesCUDDocument: any
     //Language
     locale: string;
 
@@ -91,22 +92,31 @@ export class DocumentsUserComponent {
             });
             this.loadServices(params['id'], params['fiscalCode']);
         });
+        moment.locale(this.locale);
         this.monthsItems = this.getAllMonths();
         this.yearsItems = this.getLast5Years();
     }
 
     loadServices(idUser, fiscalCode) {
+        moment.locale(this.locale);
         const downloadServiceSubscription = this.downloadService
             .getDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
                 this.files = files;
             });
 
-        const downloadWorkDocumentServiceSubscription = this.downloadService
-            .getWorkDocumentsByUser(idUser, fiscalCode)
+        const downloadCedoliniDocumentServiceSubscription = this.downloadService
+            .getCedoliniDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
-                this.filesWorkDocument = files;
+                this.filesCedoliniDocument = files;
             });
+        
+        const downloadCUDDocumentServiceSubscription = this.downloadService
+            .getCUDDocumentsByUser(idUser, fiscalCode)
+            .subscribe((files) => {
+                this.filesCUDDocument = files;
+            });
+        
         const translateServiceSubscription =
             this.translateService.onLangChange.subscribe(
                 (langChangeEvent: LangChangeEvent) => {
@@ -116,8 +126,10 @@ export class DocumentsUserComponent {
             );
         if (downloadServiceSubscription && this.subscription)
             this.subscription.add(downloadServiceSubscription);
-        if (downloadWorkDocumentServiceSubscription && this.subscription)
-            this.subscription.add(downloadWorkDocumentServiceSubscription);
+        if (downloadCedoliniDocumentServiceSubscription && this.subscription)
+            this.subscription.add(downloadCedoliniDocumentServiceSubscription);
+         if (downloadCUDDocumentServiceSubscription && this.subscription)
+             this.subscription.add(downloadCUDDocumentServiceSubscription);
         if (translateServiceSubscription && this.subscription)
             this.subscription.add(translateServiceSubscription);
     }
@@ -141,15 +153,16 @@ export class DocumentsUserComponent {
     }
 
     onChangeCategoryDocument() {
-        moment.locale(this.locale);
         if (
             this.selectedCategory?.id === 'cud' ||
             this.selectedCategory?.id === 'cedolino'
         ) {
-            const currentMonth = moment().month() + 1;
-            this.selectedReleaseMonth = this.monthsItems.find(
-                (month) => month.value === currentMonth,
-            );
+            if (this.selectedCategory?.id === 'cedolino') {
+                const currentMonth = moment().month() + 1;
+                this.selectedReleaseMonth = this.monthsItems.find(
+                    (month) => month.value === currentMonth,
+                );
+            }
 
             const currentYear = moment().year();
             this.selectedReleaseYear = this.yearsItems.find(

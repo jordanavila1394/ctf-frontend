@@ -24,9 +24,19 @@ export class DownloadService {
         );
     }
 
-    getWorkDocumentsByUser(idUser, fiscalCode): Observable<any> {
+    getCedoliniDocumentsByUser(idUser, fiscalCode): Observable<any> {
         return this.http.post(
-            API_URL + 'getWorkDocumentsByUser',
+            API_URL + 'getCedoliniDocumentsByUser',
+            {
+                idUser,
+                fiscalCode,
+            },
+            httpOptions,
+        );
+    }
+    getCUDDocumentsByUser(idUser, fiscalCode): Observable<any> {
+        return this.http.post(
+            API_URL + 'getCUDDocumentsByUser',
             {
                 idUser,
                 fiscalCode,
