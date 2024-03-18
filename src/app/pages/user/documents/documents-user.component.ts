@@ -184,8 +184,8 @@ export class DocumentsUserComponent {
             : 'altro';
         const expireDate = this.documentsForm.value.expireDate;
         const fiscalCode = this.documentsForm.value.fiscalCode;
-        const releaseYear = this.selectedReleaseYear?.value;
-        const releaseMonth = this.selectedReleaseMonth?.value;
+        const releaseYear = this.selectedReleaseYear?.name;
+        const releaseMonth = this.selectedReleaseMonth?.name;
 
         formData.append('userId', userId);
         formData.append('category', category);
