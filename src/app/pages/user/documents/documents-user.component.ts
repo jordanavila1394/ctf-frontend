@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { DownloadService } from 'src/app/services/download.service';
 import { SpacesService } from 'src/app/services/spaces.service';
 import { UploadService } from 'src/app/services/upload.service';
+import * as moment from 'moment';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-documents-user',
@@ -17,6 +19,9 @@ export class DocumentsUserComponent {
     filesSpaces: AWS.S3.Object[];
     files: any;
     filesWorkDocument: any;
+    //Language
+    locale: string;
+
     categoriesItems = [
         {
             name: 'Cedolino',
@@ -52,10 +57,17 @@ export class DocumentsUserComponent {
         },
     ];
 
+    monthsItems: any[] = [];
+    yearsItems: any[] = [];
+    selectedReleaseMonth;
+    selectedReleaseYear;
+
     documentsForm = this.fb.group({
         userId: ['', [Validators.required]],
         category: ['', [Validators.required]],
         expireDate: [''],
+        releaseMonth: [''],
+        releaseYear: [''],
         fiscalCode: ['', [Validators.required]],
     });
     selectedCategory: any;
@@ -66,6 +78,7 @@ export class DocumentsUserComponent {
         public fb: FormBuilder,
         private route: ActivatedRoute,
         private uploadService: UploadService,
+        public translateService: TranslateService,
         private downloadService: DownloadService,
         private spacesService: SpacesService,
     ) {
@@ -78,6 +91,8 @@ export class DocumentsUserComponent {
             });
             this.loadServices(params['id'], params['fiscalCode']);
         });
+        this.monthsItems = this.getAllMonths();
+        this.yearsItems = this.getLast5Years();
     }
 
     loadServices(idUser, fiscalCode) {
@@ -92,13 +107,56 @@ export class DocumentsUserComponent {
             .subscribe((files) => {
                 this.filesWorkDocument = files;
             });
-
+        const translateServiceSubscription =
+            this.translateService.onLangChange.subscribe(
+                (langChangeEvent: LangChangeEvent) => {
+                    this.locale = langChangeEvent.lang;
+                    moment.locale(this.locale);
+                },
+            );
         if (downloadServiceSubscription && this.subscription)
             this.subscription.add(downloadServiceSubscription);
         if (downloadWorkDocumentServiceSubscription && this.subscription)
             this.subscription.add(downloadWorkDocumentServiceSubscription);
+        if (translateServiceSubscription && this.subscription)
+            this.subscription.add(translateServiceSubscription);
     }
 
+    getAllMonths(): any[] {
+        const months: any[] = [];
+        for (let i = 0; i < 12; i++) {
+            const monthName = moment().month(i).format('MMMM');
+            months.push({ name: monthName, value: i + 1 }); // Adjust value if needed
+        }
+        return months;
+    }
+
+    getLast5Years(): any[] {
+        const years: any[] = [];
+        const currentYear = moment().year();
+        for (let i = 0; i < 5; i++) {
+            years.push({ name: currentYear - i, value: currentYear - i });
+        }
+        return years;
+    }
+
+    onChangeCategoryDocument() {
+        moment.locale(this.locale);
+        if (
+            this.selectedCategory?.id === 'cud' ||
+            this.selectedCategory?.id === 'cedolino'
+        ) {
+            const currentMonth = moment().month() + 1;
+            this.selectedReleaseMonth = this.monthsItems.find(
+                (month) => month.value === currentMonth,
+            );
+
+            const currentYear = moment().year();
+            this.selectedReleaseYear = this.yearsItems.find(
+                (year) => year.value === currentYear,
+            );
+        }
+    }
     getFileUrl(key: string): string {
         return this.spacesService.s3.getSignedUrl('getObject', {
             Bucket: this.spacesService.bucketName,
@@ -126,11 +184,15 @@ export class DocumentsUserComponent {
             : 'altro';
         const expireDate = this.documentsForm.value.expireDate;
         const fiscalCode = this.documentsForm.value.fiscalCode;
+        const releaseYear = this.documentsForm.value.releaseYear;
+        const releaseMonth = this.documentsForm.value.releaseMonth;
 
         formData.append('userId', userId);
         formData.append('category', category);
         formData.append('expireDate', expireDate);
         formData.append('fiscalCode', fiscalCode);
+        formData.append('releaseYear', releaseYear);
+        formData.append('releaseMonth', releaseMonth);
 
         this.uploadService.uploadDocuments(formData).subscribe(
             (response) => {

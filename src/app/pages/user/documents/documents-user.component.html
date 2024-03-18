@@ -5,7 +5,7 @@
             <form [formGroup]="documentsForm" #form="ngForm">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="surname1"
+                        <label htmlFor="category1"
                             >Seleziona categoria documento/documenti</label
                         >
                         <p-dropdown
@@ -14,10 +14,62 @@
                             optionLabel="name"
                             formControlName="category"
                             [(ngModel)]="selectedCategory"
+                            (onChange)="onChangeCategoryDocument()"
                         ></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-4">
-                        <label htmlFor="surname1"
+                    <div
+                        class="field col-12 md:col-4"
+                        *ngIf="
+                            selectedCategory?.id &&
+                            (
+                                selectedCategory?.id === 'cud' ||
+                                selectedCategory?.id === 'cedolino'
+                            )
+                        "
+                    >
+                        <label htmlFor="releaseMonth1"
+                            >Aggiungi mese</label
+                        >
+                        <p-dropdown
+                            placeholder="-Seleziona-"
+                            [options]="monthsItems"
+                            optionLabel="name"
+                            formControlName="releaseMonth"
+                            [(ngModel)]="selectedReleaseMonth"
+                        ></p-dropdown>
+                    </div>
+                    <div
+                        class="field col-12 md:col-4"
+                        *ngIf="
+                            selectedCategory?.id &&
+                            (
+                                selectedCategory?.id === 'cud' ||
+                                selectedCategory?.id === 'cedolino'
+                            )
+                        "
+                    >
+                        <label htmlFor="releaseYear1"
+                            >Aggiungi anno</label
+                        >
+                        <p-dropdown
+                            placeholder="-Seleziona-"
+                            [options]="yearsItems"
+                            optionLabel="name"
+                            formControlName="releaseYear"
+                            [(ngModel)]="selectedReleaseYear"
+                        ></p-dropdown>
+                    </div>
+                    <div
+                        class="field col-12 md:col-4"
+                        *ngIf="
+                            selectedCategory?.id &&
+                            !(
+                                selectedCategory?.id === 'cud' ||
+                                selectedCategory?.id === 'cedolino'
+                            )
+                        "
+                    >
+                        <label htmlFor="expireDate1"
                             >Aggiungi data di scadenza</label
                         >
                         <p-calendar
