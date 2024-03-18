@@ -19,7 +19,9 @@ export class DocumentsHomeComponent {
     uploadedFiles: any[] = [];
     filesSpaces: AWS.S3.Object[];
     files: any;
-    filesWorkDocument: any;
+    filesCedoliniDocument: any;
+    filesCUDDocument: any;
+
     categoriesItems = [
         {
             name: 'Cedolino',
@@ -90,16 +92,23 @@ export class DocumentsHomeComponent {
             .subscribe((files) => {
                 this.files = files;
             });
-        const downloadWorkDocumentServiceSubscription = this.downloadService
-            .getWorkDocumentsByUser(idUser, fiscalCode)
+        const downloadCedoliniDocumentServiceSubscription = this.downloadService
+            .getCedoliniDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
-                this.filesWorkDocument = files;
+                this.filesCedoliniDocument = files;
+            });
+        const downloadCUDDocumentServiceSubscription = this.downloadService
+            .getCedoliniDocumentsByUser(idUser, fiscalCode)
+            .subscribe((files) => {
+                this.filesCUDDocument = files;
             });
 
         if (downloadServiceSubscription && this.subscription)
             this.subscription.add(downloadServiceSubscription);
-        if (downloadWorkDocumentServiceSubscription && this.subscription)
-            this.subscription.add(downloadWorkDocumentServiceSubscription);
+        if (downloadCedoliniDocumentServiceSubscription && this.subscription)
+            this.subscription.add(downloadCedoliniDocumentServiceSubscription);
+         if (downloadCUDDocumentServiceSubscription && this.subscription)
+             this.subscription.add(downloadCUDDocumentServiceSubscription);
     }
 
     getFileUrl(key: string): string {
