@@ -11,6 +11,7 @@ import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
 import { DocxService } from 'src/app/services/docx.service';
 import { getData } from 'country-list';
+import * as moment from 'moment';
 
 @Component({
     templateUrl: './detail-user.component.html',
@@ -193,7 +194,8 @@ export class DetailUserComponent implements OnInit {
             Società: this.currentUser?.companies[0]?.name,
             Nome: this.currentUser.name,
             Cognome: this.currentUser.surname,
-            Cittadinanza: '',
+            Cittadinanza: this.currentUser.birthCountry,
+            'Data di nascita': moment(this.currentUser.birthDate).format("DD/MM/YYYY") ,
             'Codice Fiscale': this.currentUser.fiscalCode,
             Indirizzo: this.currentUser.address + '',
             IBAN: this.currentUser.iban + '',
