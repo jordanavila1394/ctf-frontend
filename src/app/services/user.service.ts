@@ -42,7 +42,6 @@ export class UserService {
             httpOptions,
         );
     }
-
     getUser(id: string): Observable<any> {
         return this.http.get(API_URL + 'getUser' + '/' + id);
     }

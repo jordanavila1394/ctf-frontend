@@ -3,7 +3,9 @@
         <div class="card">
             <p-panel header="Cedolini" [toggleable]="true">
                 <div class="document-list">
-                    <ng-container *ngFor="let file of this.filesCedoliniDocument">
+                    <ng-container
+                        *ngFor="let file of this.filesCedoliniDocument"
+                    >
                         <div class="file-wrapper">
                             <div class="category">{{ file.category }}</div>
                             <div>
@@ -14,7 +16,10 @@
                                 />
                             </div>
                             <div>
-                                {{ file.releaseMonth }} {{ file.releaseYear }}
+                                <strong
+                                    >{{ file.releaseMonth }}
+                                    {{ file.releaseYear }}</strong
+                                >
                             </div>
                             <div>
                                 {{
@@ -45,15 +50,6 @@
                 <div class="document-list">
                     <ng-container *ngFor="let file of this.filesCUDDocument">
                         <div class="file-wrapper">
-                            <div class="close-wrapper">
-                                <button
-                                    pButton
-                                    pRipple
-                                    icon="pi pi-times"
-                                    class="p-button-text"
-                                    (click)="deleteDocument(file?.keyFile)"
-                                ></button>
-                            </div>
                             <div class="category">{{ file.category }}</div>
                             <div>
                                 <img

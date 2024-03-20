@@ -50,7 +50,7 @@ interface expandedRows {
 })
 export class UsersAttendanceComponent implements OnInit, OnDestroy {
     users: any;
-
+    usersAttendaceSummary: any;
     rowGroupMetadata: any;
 
     loading: boolean = true;
@@ -220,8 +220,21 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                     ),
                 }));
             });
+        const userServiceAttendanceSummarySubscription = this.attendanceService
+            .getUserAttendanceSummaryByMonth(
+                selectedCompany.id,
+                currentYear,
+                currentMonth,
+            )
+            .subscribe((users) => {
+                this.usersAttendaceSummary = users.map((user) => ({
+                    ...user,
+                }));
+            });
         if (this.subscription && userServiceSubscription)
             this.subscription.add(userServiceSubscription);
+        if (this.subscription && userServiceAttendanceSummarySubscription)
+            this.subscription.add(userServiceAttendanceSummarySubscription);
     }
 
     //Validate
@@ -308,13 +321,34 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
 
     exportExcelHorizontal() {
         import('xlsx').then((xlsx) => {
-            this.users = this.users.map((user) => ({
-                name: user?.name,
-                surname: user?.surname,
-                fiscalCode: user?.fiscalCode,
-                company: user?.company[0]?.name,
-            }));
-            const worksheet = xlsx.utils.json_to_sheet(this.users);
+            const usersSummary = this.usersAttendaceSummary.map(
+                (attendance) => {
+                    return {
+                        name: attendance.name,
+                        surname: attendance.surname,
+                        fiscalCode: attendance.fiscalCode,
+                        attendanceCount: attendance.attendanceCount,
+                        ...attendance,
+                    };
+                },
+            );
+
+            const worksheet = xlsx.utils.json_to_sheet(usersSummary);
+
+            // Aggiungi stili alle prime tre colonne
+            const range = xlsx.utils.decode_range(worksheet['!ref']);
+            for (let R = range.s.r; R <= range.e.r; ++R) {
+                for (let C = range.s.c; C <= 2; ++C) {
+                    // Applica stile alle prime tre colonne
+                    const cell_address = { c: C, r: R };
+                    const cell_ref = xlsx.utils.encode_cell(cell_address);
+                    const cell = worksheet[cell_ref];
+
+                    if (!cell || !cell.s) cell.s = {}; // Assicurati che la cella abbia un oggetto stili
+                    cell.s.fill = { fgColor: { rgb: 'FFFF00' } }; // Imposta il colore di sfondo a giallo
+                }
+            }
+
             const workbook = {
                 Sheets: { Presenze: worksheet },
                 SheetNames: ['Presenze'],
@@ -323,7 +357,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 bookType: 'xlsx',
                 type: 'array',
             });
-            this.saveAsExcelHorizontalFile(excelBuffer, 'utenze');
+            this.saveAsExcelHorizontalFile(excelBuffer, 'presenzeOrizzontale');
         });
     }
 
