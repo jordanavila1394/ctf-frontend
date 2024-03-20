@@ -55,6 +55,19 @@ export class AttendanceService {
         );
     }
 
+    getUserAttendanceSummaryByMonth(idCompany, year, month): Observable<any> {
+        return this.http.post(
+            API_URL + 'getUserAttendanceSummaryByMonth',
+            {
+                idCompany,
+                year,
+                month,
+            },
+            httpOptions,
+        );
+    }
+    
+
     checkInAttendance(userId, companyId, placeId, vehicleId): Observable<any> {
         return this.http.post(
             API_URL + 'checkInAttendance',
@@ -105,7 +118,7 @@ export class AttendanceService {
             API_URL + 'changeStatusAttendance',
             {
                 id,
-                status
+                status,
             },
             httpOptions,
         );
