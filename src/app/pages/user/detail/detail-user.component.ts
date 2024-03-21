@@ -52,6 +52,7 @@ export class DetailUserComponent implements OnInit {
         roleId: [''],
         companyId: [''],
         workerNumber: [''],
+        associatedClient: [''],
         position: [''],
         address: [''],
         iban: [''],
@@ -98,6 +99,7 @@ export class DetailUserComponent implements OnInit {
                     roleId: user.roles[0].id,
                     companyId: user.companies[0].id,
                     workerNumber: user.workerNumber,
+                    associatedClient: user.associatedClient,
                     position: user.position,
                     address: user.address,
                     iban: user.iban,
@@ -133,6 +135,9 @@ export class DetailUserComponent implements OnInit {
                 onlySelf: true,
             });
             this.detailForm.controls['workerNumber'].disable({
+                onlySelf: true,
+            });
+            this.detailForm.controls['associatedClient'].disable({
                 onlySelf: true,
             });
             this.detailForm.controls['address'].disable({
@@ -195,7 +200,9 @@ export class DetailUserComponent implements OnInit {
             Nome: this.currentUser.name,
             Cognome: this.currentUser.surname,
             Cittadinanza: this.currentUser.birthCountry,
-            'Data di nascita': moment(this.currentUser.birthDate).format("DD/MM/YYYY") ,
+            'Data di nascita': moment(this.currentUser.birthDate).format(
+                'DD/MM/YYYY',
+            ),
             'Codice Fiscale': this.currentUser.fiscalCode,
             Indirizzo: this.currentUser.address + '',
             IBAN: this.currentUser.iban + '',
