@@ -1,0 +1,126 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 20px;
+    .operations {
+        display: flex;
+        justify-content: center;
+        .year-dropdown {
+            margin-left: auto;
+        }
+    }
+    .months {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .month {
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #333;
+            transition: background-color 0.3s;
+
+            &.active {
+                border: 2px solid #007bff;
+                color: #000;
+            }
+
+            // &:hover {
+            //     border: 1px solid #007bff;
+            //     color: #000;
+            // }
+            .importpayed {
+                position: absolute;
+                height: 69.697%;
+                background: #2eed3a47;
+                width: 100%;
+                display: block;
+                bottom: 0;
+            }
+        }
+    }
+
+    .year-dropdown {
+        width: 150px;
+    }
+}
+.table-deadlines {
+    width: 100%;
+    border-collapse: collapse;
+    th,
+    td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .inner-table {
+        width: 100%;
+        border-collapse: collapse;
+        th,
+        td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+
+            .remainingdays {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 10px;
+                padding: 0.5rem;
+                font-size: 1rem;
+                font-weight: 900;
+                &.danger {
+                    background-color: #fff;
+                    color: rgb(198, 23, 23);
+                    border: 2px solid rgb(198, 23, 23);
+                }
+                &.warning {
+                    background-color: #fff;
+                    color: rgb(238, 159, 14);
+                    border: 2px solid rgb(238, 159, 14);
+                }
+            }
+            .deadlinestatus {
+                select {
+                    font-size: 1rem;
+                    font-weight: 900;
+                    border-radius: 10px;
+                    padding: 0.5rem;
+                    width: 100%;
+                    border: none;
+                    color: #fff;
+                }
+                &.danger {
+                    select {
+                        background-color: rgb(
+                            246,
+                            48,
+                            48
+                        ); /* Cambia il colore del testo per le scadenze non pagate */
+                    }
+                }
+
+                &.payed {
+                    select {
+                        background-color: rgb(
+                            85,
+                            203,
+                            85
+                        ); /* Cambia il colore del testo per le scadenze pagate */
+                    }
+                }
+            }
+        }
+    }
+}

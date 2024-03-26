@@ -101,6 +101,10 @@
                 "users": "Lista presencia usuarios",
                 "create": "Agrega presencia"
             },
+            "deadlines": {
+                "menuTitle": "Plazos",
+                "table": "Lista plazos"
+            },
             "documents": {
                 "menuTitle": "Documentos",
                 "create": "Agrega documentos"

@@ -106,6 +106,17 @@ import { AuthGuard } from './services/auth.guard';
                             },
                         },
                         {
+                            path: 'deadlines',
+                            loadChildren: () =>
+                                import(
+                                    './pages/deadlines/deadlines.module'
+                                ).then((m) => m.DeadlinesModule),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
+                        {
                             path: 'vehicle',
                             loadChildren: () =>
                                 import('./pages/vehicle/vehicle.module').then(
