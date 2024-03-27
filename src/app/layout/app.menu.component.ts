@@ -86,6 +86,19 @@ export class AppMenuComponent implements OnInit {
                 ],
             });
             this.model.push({
+                label: 'Deadlines',
+                translationCode: 'menu.routes.deadlines.menuTitle',
+                items: [
+                    {
+                        label: 'Deadlines list',
+                        translationCode: 'menu.routes.deadlines.table',
+                        icon: 'pi pi-list',
+                        routerLink: [ROUTES.ROUTE_TABLE_DEADLINES],
+                    },
+                ],
+            });
+
+            this.model.push({
                 label: 'Users',
                 translationCode: 'menu.routes.user.menuTitle',
                 items: [

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
-import { PDFPageProxy } from 'pdfjs-dist';
 import { UploadService } from 'src/app/services/upload.service';
 import { UserService } from 'src/app/services/user.service';
-import { Observable, catchError, from, map, of, switchMap, take } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
+import * as moment from 'moment';
 
 @Component({
     templateUrl: './create-document.component.html',
@@ -21,16 +21,77 @@ export class CreateDocumentComponent {
         '^[A-Za-z]{6}[0-9]{2}[A-Za-z]{1}[0-9]{2}[A-Za-z]{1}[0-9]{3}[A-Za-z]{1}$';
     fiscalCodesFounded: any = [];
 
-    constructor(
-        private uploadService: UploadService,
-        private userService: UserService,
-    ) {} // Inject UploadService
+    monthsItems: any[] = [];
+    yearsItems: any[] = [];
+    selectedReleaseMonth;
+    selectedReleaseYear;
 
+    constructor(
+        public fb: FormBuilder,
+        private uploadService: UploadService,
+        private messageService: MessageService,
+        private userService: UserService,
+    ) {
+        moment.locale('it');
+        this.monthsItems = this.getAllMonths();
+        this.yearsItems = this.getLast5Years();
+
+        const currentMonth = moment().month() + 1;
+        this.selectedReleaseMonth = this.monthsItems.find(
+            (month) => month.value === currentMonth,
+        );
+
+        const currentYear = moment().year();
+        this.selectedReleaseYear = this.yearsItems.find(
+            (year) => year.value === currentYear,
+        );
+    } // Inject UploadService
+    documentsForm = this.fb.group({
+        userId: ['', [Validators.required]],
+        category: ['', [Validators.required]],
+        expireDate: [''],
+        releaseMonth: [''],
+        releaseYear: [''],
+        fiscalCode: ['', [Validators.required]],
+    });
+
+    getAllMonths(): any[] {
+        const months: any[] = [];
+        for (let i = 0; i < 12; i++) {
+            const monthName = moment().month(i).format('MMMM');
+            months.push({ name: monthName, value: i + 1 }); // Adjust value if needed
+        }
+        return months;
+    }
+
+    getLast5Years(): any[] {
+        const years: any[] = [];
+        const currentYear = moment().year();
+        for (let i = 0; i < 5; i++) {
+            years.push({ name: currentYear - i, value: currentYear - i });
+        }
+        return years;
+    }
     openFilePicker(): void {
         const fileInput = document.getElementById(
             'fileInput',
         ) as HTMLInputElement;
         fileInput.click();
+    }
+
+    uploadAllCedolini() {
+        if (this.fiscalCodesFounded.length === 0) {
+            alert(
+                'No fiscal codes found to upload. ' + this.fiscalCodesFounded,
+            );
+            return;
+        }
+
+        // Cicla attraverso ogni item in fiscalCodesFounded
+        this.fiscalCodesFounded.forEach(async (item: any) => {
+            console.log('caricamento ');
+            await this.savePageAsDocument(item); // Chiama savePageAsDocument per salvare il documento
+        });
     }
 
     onFileSelected(event: Event): void {
@@ -165,16 +226,18 @@ export class CreateDocumentComponent {
 
     async savePageAsDocument(item: any): Promise<void> {
         if (this.fiscalCodesFounded.length === 0) {
-            alert('No fiscal codes found in the PDF.');
+            alert('Nessun codice fiscale trovato.');
             return;
         }
         const userExists = await this.checkIfExistUser(item.fiscalCode);
-        console.log(userExists)
+        console.log(userExists);
         if (!userExists) {
-            alert('User with the provided fiscal code does not exist.');
-            return;
+            this.messageService.add({
+                severity: 'error',
+                summary: item.fiscalCode,
+                detail: 'Non esiste utente ',
+            });
         }
-
 
         const pdfDoc = await PDFDocument.create();
         const srcDoc = await PDFDocument.load(this.pdfSrc);
@@ -193,9 +256,14 @@ export class CreateDocumentComponent {
             `CEDOLINO_${item.fiscalCode}.pdf`,
         );
 
+        const releaseYear = this.selectedReleaseYear?.name;
+        const releaseMonth = this.selectedReleaseMonth?.name;
+
         formData.append('userId', '0');
         formData.append('category', 'cedolino');
         formData.append('fiscalCode', item.fiscalCode);
+        formData.append('releaseYear', releaseYear);
+        formData.append('releaseMonth', releaseMonth);
 
         this.uploadService.uploadDocuments(formData).subscribe(
             (response) => {

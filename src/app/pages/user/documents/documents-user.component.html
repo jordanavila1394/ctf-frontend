@@ -111,7 +111,9 @@
         <div class="card">
             <p-panel header="Cedolini" [toggleable]="true">
                 <div class="document-list">
-                    <ng-container *ngFor="let file of this.filesCedoliniDocument">
+                    <ng-container
+                        *ngFor="let file of this.filesCedoliniDocument"
+                    >
                         <div class="file-wrapper">
                             <div class="close-wrapper">
                                 <button
@@ -133,8 +135,8 @@
                             <div>
                                 <strong
                                     >{{ file.releaseMonth | titlecase }}
-                                    {{ file.releaseYear }}</strong
-                                >
+                                    {{ file.releaseYear }}
+                                </strong>
                             </div>
                             <div>
                                 {{
@@ -183,10 +185,9 @@
                                 />
                             </div>
                             <div>
-                                <strong
-                                    >{{ file.releaseMonth | titlecase }}
-                                    {{ file.releaseYear }}</strong
-                                >
+                                <strong>
+                                    {{ file.releaseYear }}
+                                </strong>
                             </div>
                             <div>
                                 {{
@@ -237,8 +238,8 @@
                             <div>
                                 <strong
                                     >{{ file.releaseMonth | titlecase }}
-                                    {{ file.releaseYear }}</strong
-                                >
+                                    {{ file.releaseYear }}
+                                </strong>
                             </div>
                             <div>
                                 {{

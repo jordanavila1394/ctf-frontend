@@ -1,0 +1,170 @@
+<div class="grid">
+    <div class="col-12 lg:col-12 xl:col-12">
+        <div class="card">
+            <div class="container">
+                <div class="operations">
+                    <div>
+                        <input
+                            type="checkbox"
+                            [(ngModel)]="selectAllMonths"
+                            (change)="onSelectAllMonths()"
+                        />
+                        <label for="selectAllMonths">Seleziona tutto</label>
+                    </div>
+
+                    <div class="year-dropdown">
+                        <p-dropdown
+                            [options]="years"
+                            [(ngModel)]="selectedYear"
+                            (onChange)="onYearChange($event.value)"
+                            placeholder="Select Year"
+                        ></p-dropdown>
+                    </div>
+                </div>
+                <div class="months">
+                    <div
+                        class="month"
+                        *ngFor="let month of months"
+                        [class.active]="isMonthSelected(month)"
+                        (click)="toggleMonthSelection(month)"
+                    >
+                        <div
+                            class="importpayed"
+                            [style.height.%]="month?.importPayedPerc"
+                        ></div>
+                        {{ month?.name | uppercase }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="top-table-operations">
+                <div class="import-csv">
+                    <button
+                        pButton
+                        class="p-button-text"
+                        type="button"
+                        (click)="openImportModal()"
+                    >
+                        Importa CSV
+                    </button>
+                </div>
+            </div>
+            <table class="table-deadlines">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Identificatore</th>
+                        <th>Azienda</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container
+                        *ngFor="let entity of entities; let i = index"
+                    >
+                        <tr (click)="toggleExpand(i)">
+                            <td>{{ entity.name }}</td>
+                            <td>{{ entity.identifier }}</td>
+                            <td>{{ entity.company.name }}</td>
+                        </tr>
+                        <tr *ngIf="isExpanded(i)">
+                            <td colspan="3">
+                                <table class="inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>N°Rata</th>
+                                            <th>Importo da pagare</th>
+                                            <th>Note</th>
+                                            <th>Giorni rimanenti/scaduti</th>
+                                            <th>Data scadenza</th>
+                                            <th>Stato</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="
+                                                let deadline of entity.deadlines
+                                            "
+                                        >
+                                            <td>{{ deadline.loanNumber }}</td>
+                                            <td>
+                                                {{
+                                                    deadline.importToPay
+                                                        | currency: "EUR"
+                                                }}
+                                            </td>
+                                            <td>{{ deadline.note }}</td>
+                                            <td>
+                                                <div
+                                                    class="remainingdays"
+                                                    [ngClass]="
+                                                        deadline.diffDaysStyle
+                                                    "
+                                                >
+                                                    {{ deadline.diffDays }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{
+                                                    deadline.expireDate
+                                                        | date: "dd/MM/yyyy"
+                                                }}
+                                            </td>
+                                            <td>
+                                                <div
+                                                    class="deadlinestatus"
+                                                    [ngClass]="{
+                                                        danger:
+                                                            deadline.status ===
+                                                            'Non pagato',
+                                                        payed:
+                                                            deadline.status ===
+                                                            'Pagato'
+                                                    }"
+                                                >
+                                                    <select
+                                                        [(ngModel)]="
+                                                            deadline.status
+                                                        "
+                                                        (change)="
+                                                            onStatusChange(
+                                                                entity,
+                                                                deadline
+                                                            )
+                                                        "
+                                                    >
+                                                        <option value="Pagato">
+                                                            PAGATO
+                                                        </option>
+                                                        <option
+                                                            value="Non pagato"
+                                                        >
+                                                            NON PAGATO
+                                                        </option>
+                                                        <!-- Aggiungi altri stati se necessario -->
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<p-dialog
+    #importModal
+    header="Import CSV"
+    [(visible)]="importModal.visible"
+    [style]="{ width: '50%' }"
+>
+    <div></div>
+    <div class="p-d-flex p-jc-end">
+        <button type="button" (click)="closeImportModal()">Cancella</button>
+        <button type="button" (click)="importCSV()">Importa</button>
+    </div>
+</p-dialog>

@@ -101,6 +101,10 @@
                 "users": "Lista presenza utenti",
                 "create": "Aggiungi presenza"
             },
+            "deadlines": {
+                "menuTitle": "Scadenziario",
+                "table": "Lista scadenze"
+            },
             "documents": {
                 "menuTitle": "Cedolini",
                 "create": "Aggiungi cedolini"

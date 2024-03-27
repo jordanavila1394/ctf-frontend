@@ -101,6 +101,10 @@
                 "users": "Attendance users list",
                 "create": "Add attendance"
             },
+            "deadlines": {
+                "menuTitle": "DeadLines",
+                "table": "Deadlines"
+            },
             "documents": {
                 "menuTitle": "Documents",
                 "create": "Add documents"
