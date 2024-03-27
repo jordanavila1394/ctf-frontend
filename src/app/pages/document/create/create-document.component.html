@@ -1,6 +1,6 @@
 <div class="grid">
     <div class="col-12 lg:col-6 xl:col-8">
-        <div class="card mb-0">
+        <div class="card">
             <div>
                 <div
                     id="dropZone"
@@ -30,7 +30,44 @@
         </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-4">
-        <div class="card mb-0">
+        <div class="card" *ngIf="this.fiscalCodesFounded.length > 1">
+            <form
+                [formGroup]="documentsForm"
+                #form="ngForm"
+                *ngIf="this.fiscalCodesFounded.length > 1"
+            >
+                <div class="grid">
+                    <div class="field col-6 md:col-6">
+                        <p-dropdown
+                            placeholder="-Seleziona-"
+                            [options]="monthsItems"
+                            optionLabel="name"
+                            formControlName="releaseMonth"
+                            [(ngModel)]="selectedReleaseMonth"
+                        ></p-dropdown>
+                    </div>
+                    <div class="field col-6 md:col-6">
+                        <p-dropdown
+                            placeholder="-Seleziona-"
+                            [options]="yearsItems"
+                            optionLabel="name"
+                            formControlName="releaseYear"
+                            [(ngModel)]="selectedReleaseYear"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </form>
+            <button
+                type="button"
+                pButton
+                class="p-button-outlined p-button-rounded"
+                *ngIf="this.fiscalCodesFounded.length > 1"
+                (click)="uploadAllCedolini()"
+            >
+                Salva documenti
+            </button>
+        </div>
+        <div class="card">
             <button
                 type="button"
                 pButton
@@ -90,14 +127,6 @@
                     </tr>
                 </table>
             </div>
-            <button
-                type="button"
-                pButton
-                class="p-button-outlined p-button-rounded"
-                *ngIf="this.fiscalCodesFounded.length > 1"
-            >
-                Salva documenti
-            </button>
         </div>
     </div>
 </div>

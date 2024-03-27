@@ -17,9 +17,9 @@
                             </div>
                             <div>
                                 <strong
-                                    >{{ file.releaseMonth }}
-                                    {{ file.releaseYear }}</strong
-                                >
+                                    >{{ file.releaseMonth | titlecase }}
+                                    {{ file.releaseYear }}
+                                </strong>
                             </div>
                             <div>
                                 {{
@@ -59,10 +59,9 @@
                                 />
                             </div>
                             <div>
-                                <strong
-                                    >{{ file.releaseMonth | titlecase }}
-                                    {{ file.releaseYear }}</strong
-                                >
+                                <strong>
+                                    {{ file.releaseYear }}
+                                </strong>
                             </div>
                             <div>
                                 {{
