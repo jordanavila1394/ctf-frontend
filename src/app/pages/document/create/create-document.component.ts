@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
-import { PDFPageProxy } from 'pdfjs-dist';
 import { UploadService } from 'src/app/services/upload.service';
 import { UserService } from 'src/app/services/user.service';
-import { Observable, catchError, from, map, of, switchMap, take } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 import * as moment from 'moment';
@@ -31,6 +29,7 @@ export class CreateDocumentComponent {
     constructor(
         public fb: FormBuilder,
         private uploadService: UploadService,
+        private messageService: MessageService,
         private userService: UserService,
     ) {
         moment.locale('it');
@@ -227,14 +226,17 @@ export class CreateDocumentComponent {
 
     async savePageAsDocument(item: any): Promise<void> {
         if (this.fiscalCodesFounded.length === 0) {
-            alert('No fiscal codes found in the PDF.');
+            alert('Nessun codice fiscale trovato.');
             return;
         }
         const userExists = await this.checkIfExistUser(item.fiscalCode);
         console.log(userExists);
         if (!userExists) {
-            alert('User with the provided fiscal code does not exist.');
-            return;
+            this.messageService.add({
+                severity: 'error',
+                summary: item.fiscalCode,
+                detail: 'Non esiste utente ',
+            });
         }
 
         const pdfDoc = await PDFDocument.create();
