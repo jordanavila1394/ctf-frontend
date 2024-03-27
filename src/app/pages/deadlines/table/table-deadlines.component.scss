@@ -6,10 +6,12 @@
     .operations {
         display: flex;
         justify-content: center;
+        align-items: center;
         .year-dropdown {
             margin-left: auto;
         }
     }
+
     .months {
         display: flex;
         flex-wrap: wrap;
@@ -83,12 +85,10 @@
                 &.danger {
                     background-color: #fff;
                     color: rgb(198, 23, 23);
-                    border: 2px solid rgb(198, 23, 23);
                 }
                 &.warning {
                     background-color: #fff;
                     color: rgb(238, 159, 14);
-                    border: 2px solid rgb(238, 159, 14);
                 }
             }
             .deadlinestatus {
@@ -122,5 +122,14 @@
                 }
             }
         }
+    }
+}
+.top-table-operations {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    .import-csv {
+        margin-left: auto;
     }
 }

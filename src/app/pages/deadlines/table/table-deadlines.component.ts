@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { DeadlinesService } from 'src/app/services/deadlines.service';
 import * as moment from 'moment';
 import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
     templateUrl: './table-deadlines.component.html',
@@ -12,6 +13,8 @@ import { Store } from '@ngrx/store';
     providers: [MessageService, ConfirmationService],
 })
 export class TableDeadlinesComponent implements OnInit {
+    @ViewChild('importModal') importModal: Dialog;
+
     entities: any[];
     monthlySummary: any;
     expandedRows: number[] = [];
@@ -69,7 +72,12 @@ export class TableDeadlinesComponent implements OnInit {
                     this.entities = response.map((entity) => {
                         // Per ogni entità nel response
                         entity.deadlines = entity.deadlines
-                            .sort((a, b) => a.loanNumber - b.loanNumber)
+                            .sort(
+                                (a, b) =>
+                                    new Date(a.expireDate).getTime() -
+                                    new Date(b.expireDate).getTime(),
+                            ) // Converti le date in oggetti Date e poi sottrai i timestamp
+                            // Modifica il sorting per la data di scadenza
                             .map((deadline) => {
                                 // Aggiungi il campo diffDays alla scadenza
                                 return {
@@ -119,11 +127,23 @@ export class TableDeadlinesComponent implements OnInit {
                 },
             );
     }
+    openImportModal(): void {
+        this.importModal.visible = true;
+    }
+
+    closeImportModal(): void {
+        this.importModal.visible = false;
+    }
+    importCSV(): void {
+        console.log('erro');
+    }
+
     onStatusChange(entity: any, deadline: any): void {
-        // Puoi implementare la logica qui per gestire il cambio di stato
-        console.log(
-            `Stato della scadenza ${deadline.loanNumber} cambiato in: ${deadline.status}`,
-        );
+        this.deadlinesService
+            .changeStatusDeadline(deadline?.id, deadline?.status)
+            .subscribe((res) => {
+                this.loadServices(this.selectedCompany);
+            });
     }
     generateMonthObjects(): { name: string; id: number }[] {
         const momentMonths = moment.months(); // Ottieni i nomi dei mesi usando moment.js
@@ -170,7 +190,9 @@ export class TableDeadlinesComponent implements OnInit {
         } else {
             this.selectedMonths.splice(index, 1);
         }
-        this.loadServices(this.selectedCompany);
+        console.log(this.selectedCompany);
+        if (this.selectedCompany || this.selectedCompany == 0)
+            this.loadServices(this.selectedCompany);
     }
 
     isMonthSelected(month): boolean {

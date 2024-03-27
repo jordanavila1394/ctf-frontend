@@ -11,6 +11,7 @@
                         />
                         <label for="selectAllMonths">Seleziona tutto</label>
                     </div>
+
                     <div class="year-dropdown">
                         <p-dropdown
                             [options]="years"
@@ -37,11 +38,24 @@
             </div>
         </div>
         <div class="card">
+            <div class="top-table-operations">
+                <div class="import-csv">
+                    <button
+                        pButton
+                        class="p-button-text"
+                        type="button"
+                        (click)="openImportModal()"
+                    >
+                        Importa CSV
+                    </button>
+                </div>
+            </div>
             <table class="table-deadlines">
                 <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Identificatore</th>
+                        <th>Azienda</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,9 +65,10 @@
                         <tr (click)="toggleExpand(i)">
                             <td>{{ entity.name }}</td>
                             <td>{{ entity.identifier }}</td>
+                            <td>{{ entity.company.name }}</td>
                         </tr>
                         <tr *ngIf="isExpanded(i)">
-                            <td colspan="2">
+                            <td colspan="3">
                                 <table class="inner-table">
                                     <thead>
                                         <tr>
@@ -75,7 +90,7 @@
                                             <td>
                                                 {{
                                                     deadline.importToPay
-                                                        | currency: "EUR" : true
+                                                        | currency: "EUR"
                                                 }}
                                             </td>
                                             <td>{{ deadline.note }}</td>
@@ -141,3 +156,15 @@
         </div>
     </div>
 </div>
+<p-dialog
+    #importModal
+    header="Import CSV"
+    [(visible)]="importModal.visible"
+    [style]="{ width: '50%' }"
+>
+    <div></div>
+    <div class="p-d-flex p-jc-end">
+        <button type="button" (click)="closeImportModal()">Cancella</button>
+        <button type="button" (click)="importCSV()">Importa</button>
+    </div>
+</p-dialog>

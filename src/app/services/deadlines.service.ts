@@ -24,6 +24,16 @@ export class DeadlinesService {
             httpOptions,
         );
     }
+    changeStatusDeadline(id, status): Observable<any> {
+        return this.http.post(
+            API_URL + 'changeStatusDeadline',
+            {
+                id,
+                status,
+            },
+            httpOptions,
+        );
+    }
     monthlySummary(idCompany, year, months): Observable<any> {
         return this.http.post(
             API_URL + 'monthlySummary',

@@ -1,10 +1,6 @@
 //Angular
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-//PrimeNg
-
-//Models
-
 //Services
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
