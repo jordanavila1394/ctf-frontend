@@ -6,6 +6,9 @@ import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-se
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Dialog } from 'primeng/dialog';
+import { CompanyService } from 'src/app/services/company.service';
+import { FormBuilder } from '@angular/forms';
+import { EntityService } from 'src/app/services/entity.service';
 
 @Component({
     templateUrl: './table-deadlines.component.html',
@@ -13,9 +16,11 @@ import { Dialog } from 'primeng/dialog';
     providers: [MessageService, ConfirmationService],
 })
 export class TableDeadlinesComponent implements OnInit {
-    @ViewChild('importModal') importModal: Dialog;
+    @ViewChild('importModal', { static: false }) importModal: Dialog; // Assuming Dialog is the correct type
+    @ViewChild('entitiesModal', { static: false }) entitiesModal: Dialog; // Assuming Dialog is the correct type
 
     entities: any[];
+    modalEntities: any[];
     monthlySummary: any;
     expandedRows: number[] = [];
     currentMonth: string;
@@ -23,17 +28,38 @@ export class TableDeadlinesComponent implements OnInit {
     selectedMonths: string[] = [];
     selectAllMonths: boolean = false;
     selectedCompany: any;
+    companies: [];
     years: number[];
     companyState$: Observable<CompanyState>;
     subscription: Subscription = new Subscription();
     months: { name: string; id: number }[]; // Dichiarazione di months come un array di oggetti con proprietà 'nome' e 'id'
     statusOptions: string[] = ['Pagato', 'Non pagato']; // Aggiungi altri stati se necessario
 
+    /*TOTALS*/
+    totalImportNotPayedSum;
+    totalImportToPaySum;
+    totalImportSum;
+    createEntityForm;
+
+    fileUploadExcel: File;
+
+    rowsInsert;
+    rowsUpdate;
+    errorEntity;
     constructor(
         private deadlinesService: DeadlinesService,
+        private companyService: CompanyService,
+        private entityService: EntityService,
+        private messageService: MessageService,
+        public fb: FormBuilder,
         private store: Store<{ companyState: CompanyState }>,
     ) {
         this.companyState$ = store.select('companyState');
+        this.createEntityForm = this.fb.group({
+            companyId: [''],
+            name: [''],
+            identifier: [''],
+        });
     }
 
     ngOnInit(): void {
@@ -56,11 +82,25 @@ export class TableDeadlinesComponent implements OnInit {
                 this.loadServices(this.selectedCompany);
             },
         );
+        this.companyService.getAllCompanies().subscribe((companies) => {
+            this.companies = companies;
+        });
 
         this.subscription.add(companyServiceSubscription);
     }
 
     loadServices(selectedCompany) {
+        if (selectedCompany == null) {
+            selectedCompany = 0;
+        }
+        const entityServiceSubscription = this.entityService
+            .getAllEntities(selectedCompany)
+            .subscribe((entities) => {
+                this.modalEntities = entities;
+            });
+        if (this.subscription && entityServiceSubscription)
+            this.subscription.add(entityServiceSubscription);
+
         this.deadlinesService
             .allDeadlines(
                 selectedCompany,
@@ -69,7 +109,7 @@ export class TableDeadlinesComponent implements OnInit {
             )
             .subscribe(
                 (response) => {
-                    this.entities = response.map((entity) => {
+                    this.entities = response.entities.map((entity) => {
                         // Per ogni entità nel response
                         entity.deadlines = entity.deadlines
                             .sort(
@@ -95,6 +135,11 @@ export class TableDeadlinesComponent implements OnInit {
                         return entity;
                     });
                     this.expandedRows = this.entities.map((_, index) => index);
+
+                    this.totalImportNotPayedSum =
+                        response.totalImportNotPayedSum;
+                    this.totalImportToPaySum = response.totalImportToPaySum;
+                    this.totalImportSum = response.totalImportSum;
                 },
                 (error) => {
                     console.error('Upload failed', error);
@@ -134,8 +179,100 @@ export class TableDeadlinesComponent implements OnInit {
     closeImportModal(): void {
         this.importModal.visible = false;
     }
-    importCSV(): void {
-        console.log('erro');
+    openEntitiesModal(): void {
+        this.entitiesModal.visible = true;
+    }
+
+    closeEntitiesModal(): void {
+        this.entitiesModal.visible = false;
+    }
+
+    // onDialogHide() {
+    //     this.fileUploadExcel = null; // Reset fileUploadExcel
+    //     const fileInput = document.getElementById(
+    //         'fileInput',
+    //     ) as HTMLInputElement;
+    //     if (fileInput) {
+    //         fileInput.value = '';
+    //     }
+    //     this.rowsInsert = null;
+    //     this.rowsUpdate = null;
+    // }
+
+    addEntity(): void {
+        this.entityService
+            .createEntity(
+                this.createEntityForm.value.companyId,
+                this.createEntityForm.value.name,
+                this.createEntityForm.value.identifier,
+            )
+            .subscribe((res) => {
+                this.loadServices(this.selectedCompany);
+            });
+    }
+
+    onFileSelected(event: any): void {
+        // Ensure that files were selected
+        if (event.target.files.length > 0) {
+            this.fileUploadExcel = event.target.files[0] as File;
+            console.log('File selected:', this.fileUploadExcel);
+        } else {
+            console.error('No file selected.');
+        }
+    }
+    downloadSampleXlsx(): void {
+        // Crea un URL per il tuo file XLSX di esempio
+        const sampleXlsxUrl = 'assets/xlsx/template.xlsx';
+
+        // Crea un link temporaneo per il download del file
+        const link = document.createElement('a');
+        link.href = sampleXlsxUrl;
+        link.download = 'template.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    uploadExcelToBackend(): void {
+        // Assuming you have a service method in DeadlinesService to handle CSV upload
+        if (!this.fileUploadExcel) {
+            console.error('No file selected.');
+            return;
+        }
+        this.deadlinesService
+            .uploadDeadlinesExcel(this.fileUploadExcel)
+            .subscribe(
+                (response) => {
+                    // Handle success response
+                    const { rowsInsert, rowsUpdate, entityNotExist } = response;
+                    // Refresh data or do anything else as needed
+                    this.rowsInsert = rowsInsert;
+                    this.rowsUpdate = rowsUpdate;
+                    this.errorEntity = entityNotExist;
+                    this.loadServices(this.selectedCompany);
+                },
+                (error) => {
+                    // Handle error response
+                },
+            );
+    }
+
+    onPaymentPaymentDateChange(paymentDate: string, deadline: any) {
+        // Handle the change if necessary
+        this.deadlinesService
+            .changePaymentDateDeadline(deadline?.id, paymentDate)
+            .subscribe((res) => {
+                this.loadServices(this.selectedCompany);
+            });
+    }
+    onPaymentExpireDateChange(newDate: string, deadline: any) {
+        // Handle the change if necessary
+    }
+
+    deleteEntity(entityId: string) {
+        this.entityService.deleteEntity(entityId).subscribe((res) => {
+            this.loadServices(this.selectedCompany);
+        });
     }
 
     onStatusChange(entity: any, deadline: any): void {
@@ -190,9 +327,7 @@ export class TableDeadlinesComponent implements OnInit {
         } else {
             this.selectedMonths.splice(index, 1);
         }
-        console.log(this.selectedCompany);
-        if (this.selectedCompany || this.selectedCompany == 0)
-            this.loadServices(this.selectedCompany);
+        this.loadServices(this.selectedCompany);
     }
 
     isMonthSelected(month): boolean {
