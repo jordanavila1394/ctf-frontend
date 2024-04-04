@@ -5,6 +5,7 @@
                 <div class="operations">
                     <div>
                         <input
+                            id="selectAllMonths"
                             type="checkbox"
                             [(ngModel)]="selectAllMonths"
                             (change)="onSelectAllMonths()"
@@ -44,44 +45,71 @@
                         pButton
                         class="p-button-text"
                         type="button"
+                        (click)="openEntitiesModal()"
+                    >
+                        Aggiungi Ente
+                    </button>
+                </div>
+                <div class="import-csv">
+                    <button
+                        pButton
+                        class="p-button-text"
+                        type="button"
                         (click)="openImportModal()"
                     >
-                        Importa CSV
+                        Importa XLSX
                     </button>
                 </div>
             </div>
             <table class="table-deadlines">
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Nome</th>
                         <th>Identificatore</th>
                         <th>Azienda</th>
+                        <th>Tot. Importo Pagato</th>
+                        <th>Tot. Importo Non pagato</th>
+                        <th>Tot. Importo Rate</th>
                     </tr>
                 </thead>
                 <tbody>
                     <ng-container
                         *ngFor="let entity of entities; let i = index"
                     >
-                        <tr (click)="toggleExpand(i)">
+                        <tr class="entity" (click)="toggleExpand(i)">
+                            <td>{{ entity.id }}</td>
                             <td>{{ entity.name }}</td>
                             <td>{{ entity.identifier }}</td>
                             <td>{{ entity.company.name }}</td>
+                            <td>
+                                {{ entity.totalImportToPay | currency: "EUR" }}
+                            </td>
+                            <td>
+                                {{
+                                    entity.totalImportNotPayed | currency: "EUR"
+                                }}
+                            </td>
+                            <td>
+                                {{ entity.totalImportSum | currency: "EUR" }}
+                            </td>
                         </tr>
                         <tr *ngIf="isExpanded(i)">
-                            <td colspan="3">
+                            <td colspan="7">
                                 <table class="inner-table">
                                     <thead>
                                         <tr>
                                             <th>N°Rata</th>
-                                            <th>Importo da pagare</th>
-                                            <th>Note</th>
-                                            <th>Giorni rimanenti/scaduti</th>
                                             <th>Data scadenza</th>
+                                            <th>Giorni rimanenti</th>
+                                            <th>Importo da pagare</th>
                                             <th>Stato</th>
+                                            <th>Data pagamento</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr
+                                            class="deadline"
                                             *ngFor="
                                                 let deadline of entity.deadlines
                                             "
@@ -89,11 +117,10 @@
                                             <td>{{ deadline.loanNumber }}</td>
                                             <td>
                                                 {{
-                                                    deadline.importToPay
-                                                        | currency: "EUR"
+                                                    deadline.expireDate
+                                                        | date: "dd/MM/yyyy"
                                                 }}
                                             </td>
-                                            <td>{{ deadline.note }}</td>
                                             <td>
                                                 <div
                                                     class="remainingdays"
@@ -106,10 +133,11 @@
                                             </td>
                                             <td>
                                                 {{
-                                                    deadline.expireDate
-                                                        | date: "dd/MM/yyyy"
+                                                    deadline.importToPay
+                                                        | currency: "EUR"
                                                 }}
                                             </td>
+                                            <!-- <td>{{ deadline.note }}</td> -->
                                             <td>
                                                 <div
                                                     class="deadlinestatus"
@@ -145,6 +173,22 @@
                                                     </select>
                                                 </div>
                                             </td>
+                                            <td>
+                                                <p-calendar
+                                                    [ngModel]="
+                                                        deadline.paymentDate
+                                                            | date: 'dd/MM/yyyy'
+                                                    "
+                                                    [showIcon]="true"
+                                                    (ngModelChange)="
+                                                        onPaymentPaymentDateChange(
+                                                            $event,
+                                                            deadline
+                                                        )
+                                                    "
+                                                    dateFormat="dd/mm/yy"
+                                                ></p-calendar>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -153,18 +197,214 @@
                     </ng-container>
                 </tbody>
             </table>
+            <div class="table-totals-wrapper">
+                <table class="table-totals">
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{ this.totalImportToPaySum | currency: "EUR" }}
+                            </td>
+                            <td>Importo Totale Pagato</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{
+                                    this.totalImportNotPayedSum
+                                        | currency: "EUR"
+                                }}
+                            </td>
+                            <td>Importo Totale Non Pagato</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ this.totalImportSum | currency: "EUR" }}
+                            </td>
+                            <td>Importo Totale</td>
+                        </tr>
+                        <!-- <tr>
+                        <td>C</td>
+                        <td>
+                            {{ this.totalImportSum | currency: "EUR" }}
+                        </td>
+                    </tr> -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 <p-dialog
     #importModal
-    header="Import CSV"
+    header="Import xlsx"
     [(visible)]="importModal.visible"
     [style]="{ width: '50%' }"
 >
-    <div></div>
+    <div style="margin-top: 1rem; margin-bottom: 1rem">
+        <button
+            type="button"
+            pButton
+            class="p-button-text"
+            (click)="downloadSampleXlsx()"
+        >
+            Scarica file XLSX di esempio
+        </button>
+        <hr />
+        <div>
+            <input
+                type="file"
+                id="fileInput"
+                #fileInput
+                style="display: none"
+                (change)="onFileSelected($event)"
+            />
+            <!-- Button to trigger file input field -->
+            <button
+                type="button"
+                pButton
+                class="p-button-text"
+                (click)="fileInput.click()"
+                *ngIf="!this.fileUploadExcel?.name"
+            >
+                Carica file xlsx compilato
+            </button>
+            <div *ngIf="this.fileUploadExcel?.name">
+                <h4>{{ this.fileUploadExcel?.name }}</h4>
+            </div>
+            <div class="import-deadlines-wrapper">
+                <div class="deadlines" *ngIf="errorEntity">
+                    <div class="deadline error">
+                        {{ errorEntity }}
+                    </div>
+                </div>
+                <div class="deadlines">
+                    <div class="deadline insert" *ngFor="let row of rowsInsert">
+                        Scadenza creata con id entita: {{ row.entityId }} e
+                        numero rata: {{ row.loanNumber }}
+                    </div>
+                </div>
+                <div class="deadlines">
+                    <div class="deadline update" *ngFor="let row of rowsUpdate">
+                        Scadenza aggiornata con id entita: {{ row.entityId }} e
+                        numero rata: {{ row.loanNumber }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="p-d-flex p-jc-end">
-        <button type="button" (click)="closeImportModal()">Cancella</button>
-        <button type="button" (click)="importCSV()">Importa</button>
+        <button
+            type="button"
+            pButton
+            class="p-button-text"
+            (click)="closeImportModal()"
+        >
+            Cancella
+        </button>
+        <button
+            type="button"
+            pButton
+            class="p-button-text"
+            (click)="uploadExcelToBackend()"
+        >
+            Importa
+        </button>
+    </div>
+</p-dialog>
+
+<p-dialog
+    #entitiesModal
+    header="Aggiungi Ente"
+    [(visible)]="entitiesModal.visible"
+    [style]="{ width: '50%' }"
+>
+    <form [formGroup]="createEntityForm" #form="ngForm">
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-3">
+                <p-dropdown
+                    [options]="companies"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Seleziona un azienda"
+                    [showClear]="true"
+                    formControlName="companyId"
+                    [(ngModel)]="selectedCompany"
+                ></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3">
+                <input
+                    pInputText
+                    id="name1"
+                    type="text"
+                    placeholder="es.INPS"
+                    formControlName="name"
+                    ngModel
+                />
+            </div>
+            <div class="field col-12 md:col-3">
+                <input
+                    pInputText
+                    id="identifier1"
+                    type="text"
+                    placeholder="es. 8933234"
+                    formControlName="identifier"
+                    ngModel
+                />
+            </div>
+            <div class="field col-12 md:col-3">
+                <button
+                    type="button"
+                    pButton
+                    class="p-button-text"
+                    (click)="addEntity()"
+                >
+                    Aggiungi Ente
+                </button>
+            </div>
+        </div>
+    </form>
+    <hr />
+    <div class="list-entities">
+        <table class="table-entities">
+            <thead>
+                <tr>
+                    <th>Id Ente</th>
+                    <th>Id Azienda</th>
+                    <th>Nome</th>
+                    <th>Identificatore</th>
+                    <th>Azienda</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let entity of modalEntities">
+                    <td>{{ entity.id }}</td>
+                    <td>{{ entity.company?.id }}</td>
+                    <td>{{ entity.name }}</td>
+                    <td>{{ entity.identifier }}</td>
+                    <td>{{ entity.company?.name }}</td>
+                    <td>
+                        <div class="actions">
+                            <button (click)="deleteEntity(entity.id)">
+                                <img
+                                    src="assets/icons/delete.png"
+                                    alt="Delete"
+                                    title="Elimina entità"
+                                />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-d-flex p-jc-end">
+        <button
+            type="button"
+            pButton
+            class="p-button-text"
+            (click)="closeEntitiesModal()"
+        >
+            Chiudi
+        </button>
     </div>
 </p-dialog>

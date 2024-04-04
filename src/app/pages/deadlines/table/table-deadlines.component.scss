@@ -65,6 +65,14 @@
         text-align: left;
     }
 
+    tr.entity {
+        cursor: pointer;
+        background-color: rgb(248, 247, 247);
+    }
+
+    tr.entity:hover {
+        background-color: #f3f0f0;
+    }
     .inner-table {
         width: 100%;
         border-collapse: collapse;
@@ -131,5 +139,76 @@
     padding: 1rem 0;
     .import-csv {
         margin-left: auto;
+    }
+}
+.table-totals-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    .table-totals {
+        margin: 1rem 0;
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    }
+}
+.list-entities {
+    .table-entities {
+        width: 100%;
+        th,
+        td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .actions {
+            button {
+                background: none;
+                border: none;
+                img {
+                    cursor: pointer;
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}
+.import-deadlines-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    .deadlines {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        .deadline {
+            display: flex;
+            background-color: rgb(227, 225, 225);
+            padding: 0.4rem;
+            border-radius: 10px;
+            &.insert {
+                background-color: rgb(168, 247, 168);
+                color: #349905;
+                border: 1px solid #13b304;
+            }
+            &.update {
+                background-color: rgb(251, 241, 174);
+                color: #c47d04;
+                border: 1px solid #f09d0d;
+            }
+            &.error {
+                background-color: rgb(251, 174, 174);
+                color: #c42104;
+                border: 1px solid #f03a0d;
+            }
+        }
     }
 }

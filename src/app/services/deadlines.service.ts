@@ -34,6 +34,18 @@ export class DeadlinesService {
             httpOptions,
         );
     }
+
+    changePaymentDateDeadline(id, paymentDate): Observable<any> {
+        return this.http.post(
+            API_URL + 'changePaymentDateDeadline',
+            {
+                id,
+                paymentDate,
+            },
+            httpOptions,
+        );
+    }
+
     monthlySummary(idCompany, year, months): Observable<any> {
         return this.http.post(
             API_URL + 'monthlySummary',
@@ -44,5 +56,11 @@ export class DeadlinesService {
             },
             httpOptions,
         );
+    }
+    uploadDeadlinesExcel(file: File): Observable<any> {
+        const formData: FormData = new FormData();
+        formData.append('file', file, file.name);
+
+        return this.http.post(API_URL + 'uploadDeadlinesExcel', formData);
     }
 }
