@@ -110,6 +110,9 @@ export class AppLayoutComponent implements OnDestroy, OnInit {
         ) {
             this.router.navigate([ROUTES.ROUTE_DASHBOARD]);
         }
+        if (userRoles.includes('ROLE_ACCOUNTING')) {
+            this.router.navigate([ROUTES.ROUTE_TABLE_DEADLINES]);
+        }
         if (userRoles.includes('ROLE_WORKER')) {
             this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
         }
