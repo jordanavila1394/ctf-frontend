@@ -98,7 +98,7 @@ export class DocumentsHomeComponent {
                 this.filesCedoliniDocument = files;
             });
         const downloadCUDDocumentServiceSubscription = this.downloadService
-            .getCedoliniDocumentsByUser(idUser, fiscalCode)
+            .getCUDDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
                 this.filesCUDDocument = files;
             });
