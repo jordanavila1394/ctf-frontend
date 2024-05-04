@@ -351,8 +351,9 @@ export class TableDeadlinesComponent implements OnInit {
     getLastFiveYears(): number[] {
         const currentYear = moment().year();
         const years = [];
-        for (let i = 0; i < 5; i++) {
-            years.push(currentYear - i);
+        const yearPlusFive = currentYear + 5;
+        for (let i = 0; i < 10; i++) {
+            years.push(yearPlusFive - i);
         }
         return years;
     }
