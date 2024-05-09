@@ -1,4 +1,4 @@
-#modal-geo-permission{
+#modal-geo-permission {
     position: absolute;
     width: 100%;
     height: 100vh;
@@ -7,16 +7,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    .card{
+    .card {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         width: 80%;
-        height: 30vh;
-        img{
+        gap: 1rem;
+        img {
             width: 65px;
             height: 65px;
+        }
+        .close-btn {
+            cursor: pointer;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #333; // adjust as needed
+            border: 1px solid #333;
         }
     }
 }
