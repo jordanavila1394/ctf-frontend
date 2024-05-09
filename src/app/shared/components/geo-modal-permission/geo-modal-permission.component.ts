@@ -27,4 +27,8 @@ export class GeoModalPermissionComponent implements OnInit {
             this.isModalVisible = true;
         }
     }
+
+    closeModal() {
+        this.isModalVisible = false;
+    }
 }
