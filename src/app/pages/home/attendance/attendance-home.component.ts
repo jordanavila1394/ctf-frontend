@@ -21,7 +21,7 @@ import * as moment from 'moment';
 import Formatter from 'src/app/utils/formatters';
 import { AuthService } from '../../../services/auth.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
@@ -78,7 +78,17 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     checkInForm = this.fb.group({
         placeId: null,
         vehicleId: null,
+        includeFacchinaggio: null,
+        facchinaggioNameClient: '',
+        facchinaggioAddressClient: '',
+        facchinaggioValue: null,
+        includeViaggioExtra: null,
+        viaggioExtraNameClient: '',
+        viaggioExtraAddressClient: '',
+        viaggioExtraValue: null,
     });
+    includeFacchinaggio: null;
+    includeViaggioExtra: null;
     currentPlaceMap: any;
     currentAddress: string;
     distanceBetween: number;
@@ -107,7 +117,6 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     ) {
         //Init
         this.authState$ = store.select('authState');
-
         this.formatter = new Formatter();
     }
 
@@ -115,6 +124,52 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         this.authState$.subscribe((authS) => {
             this.storeUser = authS?.user || '';
             this.getLocation(this.storeUser);
+        });
+        this.checkInForm.get('includeFacchinaggio').valueChanges.subscribe((includeFacchinaggio) => {
+            if (includeFacchinaggio) {
+                // Set validators for required fields when includeFacchinaggio is true
+                this.checkInForm.get('facchinaggioNameClient').setValidators([Validators.required]);
+                this.checkInForm.get('facchinaggioAddressClient').setValidators([Validators.required]);
+                this.checkInForm.get('facchinaggioValue').setValidators([Validators.required]);
+            } else {
+                // Remove validators when includeFacchinaggio is false
+                this.checkInForm.get('facchinaggioNameClient').clearValidators();
+                this.checkInForm.get('facchinaggioAddressClient').clearValidators();
+                this.checkInForm.get('facchinaggioValue').clearValidators();
+                this.checkInForm.patchValue({
+                    facchinaggioNameClient: null,
+                    facchinaggioAddressClient: null,
+                    facchinaggioValue: null
+                });
+
+            }
+            // Update form controls validity
+            this.checkInForm.get('facchinaggioNameClient').updateValueAndValidity();
+            this.checkInForm.get('facchinaggioAddressClient').updateValueAndValidity();
+            this.checkInForm.get('facchinaggioValue').updateValueAndValidity();
+        });
+
+        this.checkInForm.get('includeViaggioExtra').valueChanges.subscribe((includeViaggioExtra) => {
+            if (includeViaggioExtra) {
+                // Set validators for required fields when includeViaggioExtra is true
+                this.checkInForm.get('viaggioExtraNameClient').setValidators([Validators.required]);
+                this.checkInForm.get('viaggioExtraAddressClient').setValidators([Validators.required]);
+                this.checkInForm.get('viaggioExtraValue').setValidators([Validators.required]);
+            } else {
+                // Remove validators when includeViaggioExtra is false
+                this.checkInForm.get('viaggioExtraNameClient').clearValidators();
+                this.checkInForm.get('viaggioExtraAddressClient').clearValidators();
+                this.checkInForm.get('viaggioExtraValue').clearValidators();
+                this.checkInForm.patchValue({
+                    viaggioExtraNameClient: null,
+                    viaggioExtraAddressClient: null,
+                    viaggioExtraValue: null
+                });
+            }
+            // Update form controls validity
+            this.checkInForm.get('viaggioExtraNameClient').updateValueAndValidity();
+            this.checkInForm.get('viaggioExtraAddressClient').updateValueAndValidity();
+            this.checkInForm.get('viaggioExtraValue').updateValueAndValidity();
         });
 
         const layourServiceSubscription =
@@ -258,17 +313,10 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     }
 
     calculateDistance(placeId) {
-        console.log(placeId);
-        console.log(this.placesItems);
 
         this.currentPlaceMap = this.placesItems.filter(
             (place) => place.id == placeId,
         )[0];
-        console.log(this.gpsLatitude);
-        console.log(this.gpsLongitude);
-        console.log(this.currentPlaceMap);
-        console.log(this.currentPlaceMap?.latitude);
-        console.log(this.currentPlaceMap?.longitude);
 
         this.distanceBetween = this.getDistanceFromLatLonInKm(
             this.gpsLatitude,
@@ -278,9 +326,6 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         );
 
         this.isNearDistance = this.distanceBetween < 0.3; //300 metri
-        console.log(this.isNearDistance);
-        console.log(this.distanceBetween);
-        console.log(this.distanceBetween);
 
         this.disableButtonCheckIn =
             !this.isNearDistance ||
@@ -296,9 +341,9 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         var a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(this.deg2rad(lat1)) *
-                Math.cos(this.deg2rad(lat2)) *
-                Math.sin(dLon / 2) *
-                Math.sin(dLon / 2);
+            Math.cos(this.deg2rad(lat2)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var d = R * c; // Distance in km
         return d;
@@ -350,14 +395,23 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             formData.append('licensePlate', licensePlate);
 
             this.uploadService.uploadAttendanceImages(formData).subscribe(
-                (response) => {},
-                (error) => {},
+                (response) => { },
+                (error) => { },
             );
 
             this.attendanceService
                 .checkOutAttendance(
                     this.attendanceCheckIn?.id,
                     this.currentUser?.id,
+                    this.checkInForm.value.includeFacchinaggio,
+                    this.checkInForm.value.facchinaggioNameClient,
+                    this.checkInForm.value.facchinaggioAddressClient,
+                    this.checkInForm.value.facchinaggioValue,
+                    this.checkInForm.value.includeViaggioExtra,
+                    this.checkInForm.value.viaggioExtraNameClient,
+                    this.checkInForm.value.viaggioExtraAddressClient,
+                    this.checkInForm.value.viaggioExtraValue,
+
                 )
                 .subscribe((res) => {
                     this.playSoundButton();
