@@ -290,7 +290,7 @@ export class ModifyUserComponent implements OnInit {
 
     manualCheckOut() {
         this.attendanceService
-            .checkOutAttendance(this.attendanceCheckIn?.id, this.idUser)
+            .checkOutAttendance(this.attendanceCheckIn?.id, this.idUser, null, null, null, null, null, null, null, null)
             .subscribe((res) => {
                 this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
             });

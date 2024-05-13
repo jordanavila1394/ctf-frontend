@@ -3,8 +3,7 @@
         <div class="card">
             <div class="welcome-container">
                 <span class="font-bold">
-                    {{ currentUser?.name }} {{ currentUser?.surname }}</span
-                >
+                    {{ currentUser?.name }} {{ currentUser?.surname }}</span>
                 <br />
                 <div>
                     <span class="font-bold">Azienda: </span>
@@ -19,16 +18,9 @@
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label htmlFor="user1">Seleziona sede</label>
-                        <p-dropdown
-                            [options]="placesItems"
-                            optionLabel="name"
-                            optionValue="id"
-                            formControlName="placeId"
-                            placeholder="--Sede--"
-                            (onChange)="onChangePlace($event)"
-                            [(ngModel)]="selectedPlace"
-                            [required]="true"
-                        >
+                        <p-dropdown [options]="placesItems" optionLabel="name" optionValue="id"
+                            formControlName="placeId" placeholder="--Sede--" (onChange)="onChangePlace($event)"
+                            [(ngModel)]="selectedPlace" [required]="true">
                             <ng-template let-place pTemplate="place">
                                 {{ place.name }} - {{ place.address }}
                             </ng-template>
@@ -42,24 +34,12 @@
 
                     <div class="field col-12 md:col-6">
                         <label htmlFor="user1">Seleziona mezzo</label>
-                        <p-dropdown
-                            [options]="vehiclesItems"
-                            [(ngModel)]="selectedVehicle"
-                            optionLabel="licensePlate"
-                            optionValue="id"
-                            [filter]="true"
-                            filterBy="licensePlate"
-                            [showClear]="true"
-                            placeholder="--Veicolo--"
-                            formControlName="vehicleId"
-                            (onChange)="onChangeVehicle($event)"
-                            [required]="true"
-                        >
+                        <p-dropdown [options]="vehiclesItems" [(ngModel)]="selectedVehicle" optionLabel="licensePlate"
+                            optionValue="id" [filter]="true" filterBy="licensePlate" [showClear]="true"
+                            placeholder="--Veicolo--" formControlName="vehicleId" (onChange)="onChangeVehicle($event)"
+                            [required]="true">
                             <ng-template let-vehicle pTemplate="selectedItem">
-                                <div
-                                    class="flex align-items-center gap-2"
-                                    *ngIf="selectedVehicle"
-                                >
+                                <div class="flex align-items-center gap-2" *ngIf="selectedVehicle">
                                     <div>
                                         {{ vehicle.licensePlate }}
                                     </div>
@@ -72,42 +52,23 @@
                             </ng-template>
                         </p-dropdown>
                     </div>
-                    <div
-                        class="field col-12 md:col-12"
-                        *ngIf="
+                    <div class="field col-12 md:col-12" *ngIf="
                             attendanceData &&
                             attendanceData?.foundCheckIn &&
                             currentAddress
-                        "
-                    >
+                        ">
                         <label htmlFor="images1">Aggiungi immagini</label>
-                        <p-fileUpload
-                            #fileUpload
-                            [customUpload]="true"
-                            name="files[]"
-                            [multiple]="true"
-                            accept="image/*"
-                            [maxFileSize]="10000000"
-                            (onSelect)="uploadFiles($event)"
-                            [showUploadButton]="false"
-                            label="Seleziona"
-                        >
+                        <p-fileUpload #fileUpload [customUpload]="true" name="files[]" [multiple]="true"
+                            accept="image/*" [maxFileSize]="10000000" (onSelect)="uploadFiles($event)"
+                            [showUploadButton]="false" label="Seleziona">
                             <ng-template let-file pTemplate="file">
                                 <div class="ui-fileupload-row">
                                     <div>
-                                        <img
-                                            [src]="file.objectURL"
-                                            width="100"
-                                        />
+                                        <img [src]="file.objectURL" width="100" />
                                     </div>
                                     <div>
-                                        <button
-                                            type="button"
-                                            icon="pi pi-times"
-                                            pButton
-                                            (click)="remove($event, file)"
-                                            style="padding: 0.5rem"
-                                        ></button>
+                                        <button type="button" icon="pi pi-times" pButton (click)="remove($event, file)"
+                                            style="padding: 0.5rem"></button>
                                     </div>
                                 </div>
                             </ng-template>
@@ -120,6 +81,86 @@
                             </ng-template> -->
                         </p-fileUpload>
                     </div>
+                    <div class="field col-12 md:col-6" *ngIf="
+                            attendanceData &&
+                            attendanceData?.foundCheckIn &&
+                            currentAddress
+                        ">
+                        <p-accordion>
+                            <p-accordionTab header="Opzioni avanzate">
+                                <!--Facchinaggio-->
+                                <!-- chebox fachinaggio-->
+                                <!-- fai vedere -->
+                                <div class="field col-12 md:col-6 m-0">
+                                    <p-checkbox [binary]="true" inputId="includeFacchinaggio" [(ngModel)]="includeFacchinaggio"
+                                        formControlName="includeFacchinaggio" label="Include Facchinaggio" />
+                                </div>
+                                <div class="field col-12 md:col-6 m-0" *ngIf="includeFacchinaggio">
+                                    <label htmlFor="facchinaggioNameClient">Nome cliente</label>
+                                    <input pInputText id="facchinaggioNameClient" placeholder="Nome" type="text"
+                                        formControlName="facchinaggioNameClient" ngModel />
+                                    <div *ngIf="checkInForm.get('facchinaggioNameClient').errors && checkInForm.get('facchinaggioNameClient').errors.required"
+                                        class="error-message">Il nome del cliente è obbligatorio</div> <!-- Error message -->
+                                </div>
+                                <div class="field col-12 md:col-6 m-0" *ngIf="includeFacchinaggio">
+                                    <label htmlFor="facchinaggioAddressClient">Indirizzo cliente</label>
+                                    <input pInputText id="facchinaggioAddressClient" placeholder="Indirizzo" type="text"
+                                        formControlName="facchinaggioAddressClient" ngModel />
+                                    <div *ngIf="checkInForm.get('facchinaggioAddressClient').errors && checkInForm.get('facchinaggioAddressClient').errors.required"
+                                        class="error-message">L'indirizzo è obbligatorio</div>
+                                </div>
+                                <div class="field col-12 md:col-6 m-0" *ngIf="includeFacchinaggio">
+                                    <label htmlFor="facchinaggioValue">Compenso concordato:</label>
+                                    <p-inputNumber formControlName="facchinaggioValue" [(ngModel)]="facchinaggioValue"
+                                        [showButtons]="true" buttonLayout="horizontal" inputId="horizontal"
+                                        spinnerMode="horizontal" [step]="10" decrementButtonClass="p-button-danger"
+                                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                                        decrementButtonIcon="pi pi-minus" mode="currency" currency="EUR" [min]="10"
+                                        [max]="100" />
+                                    <div *ngIf="checkInForm.get('facchinaggioValue').errors && checkInForm.get('facchinaggioValue').errors.required"
+                                        class="error-message">Il compenso è obbligatorio</div> <!-- Error message -->
+                                </div>
+
+                                <hr>
+                                <div class="field col-12 md:col-6 m-0">
+                                    <p-checkbox [binary]="true" inputId="includeViaggioExtra" [(ngModel)]="includeViaggioExtra"
+                                        formControlName="includeViaggioExtra" label="Include ViaggioExtra" />
+                                </div>
+                                <div class="field col-12 md:col-6 m-0" *ngIf="includeViaggioExtra">
+                                    <label htmlFor="viaggioExtraNameClient">Nome cliente</label>
+                                    <input pInputText id="viaggioExtraNameClient" placeholder="Nome" type="text"
+                                        formControlName="viaggioExtraNameClient" ngModel />
+                                    <div *ngIf="checkInForm.get('viaggioExtraNameClient').invalid && checkInForm.get('viaggioExtraNameClient').touched"
+                                        class="text-danger">
+                                        Il cliente è obbligatorio
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 m-0" *ngIf="includeViaggioExtra">
+                                    <label htmlFor="viaggioExtraAddressClient">Indirizzo cliente</label>
+                                    <input pInputText id="viaggioExtraAddressClient" placeholder="Indirizzo" type="text"
+                                        formControlName="viaggioExtraAddressClient" ngModel />
+                                    <div *ngIf="checkInForm.get('viaggioExtraAddressClient').invalid && checkInForm.get('viaggioExtraAddressClient').touched"
+                                        class="text-danger">
+                                        L'indirizzo è obbligatorio
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6 m-0" *ngIf="includeViaggioExtra">
+                                    <label htmlFor="viaggioExtraValue">Compenso concordato:</label>
+                                    <p-inputNumber formControlName="viaggioExtraValue" [(ngModel)]="viaggioExtraValue"
+                                        [showButtons]="true" buttonLayout="horizontal" inputId="horizontal"
+                                        spinnerMode="horizontal" [step]="5" decrementButtonClass="p-button-danger"
+                                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                                        decrementButtonIcon="pi pi-minus" mode="currency" currency="EUR" [min]="15"
+                                        [max]="100" />
+                                    <div *ngIf="checkInForm.get('viaggioExtraValue').invalid && checkInForm.get('viaggioExtraValue').touched"
+                                        class="text-danger">
+                                        Il compenso  è obbligatorio
+                                    </div>
+                                </div>
+                            </p-accordionTab>
+                        </p-accordion>
+                    </div>
+
                 </div>
             </form>
         </div>
@@ -128,35 +169,25 @@
         <div>
             <div class="attendance-button-wrapper">
                 <p-progressSpinner *ngIf="!currentAddress"></p-progressSpinner>
-                <button
-                    *ngIf="
+                <button *ngIf="
                         !(attendanceData && attendanceData?.foundCheckIn) &&
                         currentAddress
-                    "
-                    [ngClass]="
+                    " [ngClass]="
                         isNearDistance
                             ? 'attendance-button active-checkin'
                             : 'attendance-button disabled'
-                    "
-                    [disabled]="!isNearDistance"
-                    (click)="saveCheckIn()"
-                >
+                    " [disabled]="!isNearDistance" (click)="saveCheckIn()">
                     <span>Checkin</span>
                 </button>
-                <button
-                    *ngIf="
+                <button *ngIf="
                         attendanceData &&
                         attendanceData?.foundCheckIn &&
                         currentAddress
-                    "
-                    [ngClass]="
+                    " [ngClass]="
                         isNearDistance
                             ? 'attendance-button active-checkout'
                             : 'attendance-button disabled'
-                    "
-                    [disabled]="!isNearDistance"
-                    (click)="saveCheckOut()"
-                >
+                    " [disabled]="!isNearDistance" (click)="saveCheckOut()">
                     <span>Checkout</span>
                 </button>
             </div>

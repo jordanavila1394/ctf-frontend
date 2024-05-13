@@ -11,7 +11,7 @@ const httpOptions = {
     providedIn: 'root',
 })
 export class AttendanceService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getAllAttendances(idCompany): Observable<any> {
         return this.http.post(
@@ -66,7 +66,7 @@ export class AttendanceService {
             httpOptions,
         );
     }
-    
+
 
     checkInAttendance(userId, companyId, placeId, vehicleId): Observable<any> {
         return this.http.post(
@@ -80,12 +80,20 @@ export class AttendanceService {
             httpOptions,
         );
     }
-    checkOutAttendance(id, userId): Observable<any> {
+    checkOutAttendance(id, userId, includeFacchinaggio, facchinaggioNameClient, facchinaggioAddressClient, facchinaggioValue, includeViaggioExtra, viaggioExtraNameClient, viaggioExtraAddressClient, viaggioExtraValue): Observable<any> {
         return this.http.post(
             API_URL + 'checkOutAttendance',
             {
                 id,
                 userId,
+                includeFacchinaggio,
+                facchinaggioNameClient,
+                facchinaggioAddressClient,
+                facchinaggioValue,
+                includeViaggioExtra,
+                viaggioExtraNameClient,
+                viaggioExtraAddressClient,
+                viaggioExtraValue
             },
             httpOptions,
         );

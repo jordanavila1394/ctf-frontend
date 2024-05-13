@@ -15,6 +15,10 @@ import { AttendanceHomeRoutingModule } from './attendance-home-routing.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { GoogleMapsDemoModule } from 'src/app/shared/components/google-map/google-maps.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { AccordionModule } from 'primeng/accordion';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
     imports: [
@@ -32,6 +36,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         StyleClassModule,
         PanelMenuModule,
         ButtonModule,
+        InputNumberModule,
+        CheckboxModule,
+        InputTextModule,
+        AccordionModule,
         TranslateModule,
     ],
     declarations: [AttendanceHomeComponent],
