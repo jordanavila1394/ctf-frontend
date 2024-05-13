@@ -9,24 +9,60 @@
         margin-right: 20px;
     }
 }
-tr.is-weekend{
- background-color: rgb(231, 230, 230);
-    
+tr.is-weekend {
+    background-color: rgb(231, 230, 230);
 }
-span{
+span {
     padding: 0.4rem;
     border-radius: 5px;
     font-weight: 500;
-    &.success{
+    &.success {
         background-color: rgb(14, 153, 14);
         color: white;
     }
-    &.warning{
+    &.warning {
         background-color: rgb(230, 191, 38);
         color: white;
     }
-    &.error{
+    &.error {
         background-color: rgb(220, 87, 29);
         color: white;
+    }
+}
+.extras-container {
+    display: flex;
+    gap: 1rem;
+    .extra {
+        position: relative;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .details {
+            display: none;
+            background-color: white;
+            padding: 1rem;
+            z-index: 1;
+            position: absolute;
+            flex-direction: column;
+            width: 10vw;
+            top: 0;
+            left: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Set the box shadow with equal spread on all sides */
+            .title{
+                font-size: 1rem;
+                font-weight: 600;
+            }
+            span {
+                font-size: 0.8rem;
+                padding: 0;
+            }
+        }
+        &:hover {
+            .details {
+                display: flex;
+            }
+        }
     }
 }
