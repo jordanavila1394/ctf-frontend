@@ -75,6 +75,10 @@ export class PermissionHomeComponent implements OnInit {
             name: 'Ferie',
             value: 'Ferie',
         },
+        {
+            name: 'Giorno non retribuito',
+            value: 'Giorno non retribuito',
+        },
     ];
     permissions: any;
     adminEmails: any;
@@ -203,9 +207,9 @@ export class PermissionHomeComponent implements OnInit {
             .sendEmail(
                 this.adminEmails,
                 'CTF - Richiesta permesso - ' +
-                    this.currentUser?.name +
-                    ' ' +
-                    this.currentUser?.surname,
+                this.currentUser?.name +
+                ' ' +
+                this.currentUser?.surname,
                 messageEmail,
             )
             .subscribe(

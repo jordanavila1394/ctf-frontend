@@ -6,22 +6,12 @@
                 <div class="p-formgrid grid">
                     <div class="field col">
                         <label htmlFor="year1">Anno</label>
-                        <input
-                            pInputText
-                            id="year1"
-                            type="text"
-                            formControlName="currentYear"
-                        />
+                        <input pInputText id="year1" type="text" formControlName="currentYear" />
                     </div>
                     <div class="field col">
                         <label htmlFor="month1">Mese</label>
-                        <p-dropdown
-                            [options]="monthsItems"
-                            optionLabel="name"
-                            formControlName="currentMonth"
-                            [(ngModel)]="selectedCurrentMonth"
-                            (onChange)="onChangeMonth($event)"
-                        ></p-dropdown>
+                        <p-dropdown [options]="monthsItems" optionLabel="name" formControlName="currentMonth"
+                            [(ngModel)]="selectedCurrentMonth" (onChange)="onChangeMonth($event)"></p-dropdown>
                     </div>
                 </div>
             </form>
@@ -35,13 +25,9 @@
                     <div><span>Stato</span></div>
                     <div><span>Ore totali</span></div>
                 </div>
-                <div
-                    class="attendance"
-                    [ngClass]="{
+                <div class="attendance" [ngClass]="{
                         'is-weekend': attendance?.checkIsWeekend
-                    }"
-                    *ngFor="let attendance of attendances"
-                >
+                    }" *ngFor="let attendance of attendances">
                     <div class="currentdate">
                         <div>
                             {{ attendance?.checkIn | date: "d" }}
@@ -67,7 +53,14 @@
                             <span class="error" *ngSwitchCase="'CheckOut?'">
                                 {{ attendance?.status }}
                             </span>
+                            <span class="error" *ngSwitchCase="'Sciopero'">
+                                {{ attendance?.status }}
+                            </span>
+                            <span class="default" *ngSwitchDefault>
+                                {{ attendance?.status }}
+                            </span>
                         </div>
+
                     </div>
                     <div class="workedHours">
                         {{ attendance?.workedHours }}
@@ -79,17 +72,9 @@
             </div>
         </div>
         <div class="card">
-            <button
-                type="button"
-                pButton
-                pRipple
-                icon="pi pi-file-excel"
-                (click)="exportExcel()"
-                class="p-button-success mr-2"
-                pTooltip="XLS"
-                tooltipPosition="bottom"
-                style="margin-left: auto"
-            ></button>
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"
+                style="margin-left: auto"></button>
         </div>
     </div>
 </div>
