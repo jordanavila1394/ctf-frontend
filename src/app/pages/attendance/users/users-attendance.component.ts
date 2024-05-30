@@ -133,7 +133,20 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 command: () => {
                     this.onStatusChange(this.selectedItem, 'Permesso/ROL');
                 },
+            }
+            ,
+            {
+                label: 'Sciopero',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Sciopero');
+                },
             },
+            {
+                label: 'Non lavorato',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Non lavorato');
+                },
+            }
         ];
 
         //Current year
