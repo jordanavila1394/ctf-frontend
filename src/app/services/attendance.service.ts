@@ -132,12 +132,14 @@ export class AttendanceService {
         );
     }
 
-    synchronizeAttendances(idUser, idCompany): Observable<any> {
+    synchronizeAttendances(idUser, idCompany, month, year): Observable<any> {
         return this.http.post(
             API_URL + 'synchronizeAttendances',
             {
                 idUser,
                 idCompany,
+                month,
+                year
             },
             httpOptions,
         );
