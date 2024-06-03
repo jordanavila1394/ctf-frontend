@@ -472,10 +472,13 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
         this.filter.nativeElement.value = '';
     }
 
-    syncronizeAttendances() {
+    synchronizeAttendances() {
+        const currentYear = parseInt(this.usersAttendancesForm.value.currentYear, 10) || moment().year();
+        const currentMonth = this.selectedCurrentMonth?.code || moment().month();
+
         this.users = this.users.map((user) =>
             this.attendanceService
-                .synchronizeAttendances(user.id, this.selectedCompany.id)
+                .synchronizeAttendances(user.id, this.selectedCompany.id, currentMonth, currentYear)
                 .subscribe((res) => {
                 })
         );
