@@ -161,17 +161,16 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
             code: moment().month(),
         };
 
-        //Current month
-        this.monthsItems.push({
-            name: moment().format('MMMM'),
-            code: moment().month(),
-        });
+        // Initialize monthsItems with all months of the year
+        for (let i = 0; i < 12; i++) {
+            this.monthsItems.push({
+                name: moment().month(i).format('MMMM'),
+                code: i,
+            });
+        }
 
-        //Previous month
-        this.monthsItems.push({
-            name: moment().subtract(1, 'month').format('MMMM'),
-            code: moment().subtract(1, 'month').month(),
-        });
+        this.selectedCurrentMonth = this.monthsItems[moment().month()];
+
 
         const companyServiceSubscription = this.companyState$.subscribe(
             (company) => {
@@ -471,5 +470,15 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
+    }
+
+    syncronizeAttendances() {
+        this.users = this.users.map((user) =>
+            this.attendanceService
+                .synchronizeAttendances(user.id, this.selectedCompany.id)
+                .subscribe((res) => {
+                })
+        );
+        this.loadServices(this.selectedCompany);
     }
 }
