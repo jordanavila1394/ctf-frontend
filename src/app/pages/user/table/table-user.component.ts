@@ -104,7 +104,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
                         },
                     },
                     {
-                        label: 'Delete',
+                        label: 'Elimina',
                         icon: 'pi pi-trash',
                         command: () => {
                             // this.delete();
