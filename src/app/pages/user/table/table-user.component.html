@@ -1,33 +1,17 @@
 <div class="grid">
     <div class="col-12">
+        <p-confirmDialog header="Confirmation" width="425"></p-confirmDialog>
         <div class="card">
             <div class="flex" style="margin: 1rem">
                 <h5>{{ "menu.routes.user.table" | translate }}</h5>
 
-                <button
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-file-excel"
-                    (click)="exportExcel()"
-                    class="p-button-success mr-2"
-                    pTooltip="XLS"
-                    tooltipPosition="bottom"
-                    style="margin-left: auto"
-                ></button>
+                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                    class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"
+                    style="margin-left: auto"></button>
             </div>
 
-            <p-table
-                #dt1
-                [value]="users"
-                scrollDirection="horizontal"
-                [scrollable]="true"
-                dataKey="id"
-                [rows]="100"
-                [loading]="loading"
-                [rowHover]="true"
-                [paginator]="true"
-                [globalFilterFields]="[
+            <p-table #dt1 [value]="users" scrollDirection="horizontal" [scrollable]="true" dataKey="id" [rows]="100"
+                [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="[
                     'id',
                     'name',
                     'surname',
@@ -36,191 +20,97 @@
                     'position',
                     'role',
                     'company'
-                ]"
-                responsiveLayout="scroll"
-                [styleClass]="selectedSize"
-                sortMode="multiple"
-                [multiSortMeta]="[{ field: 'role', order: 1 }]"
-            >
+                ]" responsiveLayout="scroll" [styleClass]="selectedSize" sortMode="multiple"
+                [multiSortMeta]="[{ field: 'role', order: 1 }]">
                 <ng-template pTemplate="caption">
-                    <div
-                        class="flex justify-content-between flex-column sm:flex-row"
-                    >
-                        <button
-                            pButton
-                            label="{{ 'table.actions.clean' | translate }}"
-                            class="p-button-outlined mb-2"
-                            icon="pi pi-filter-slash"
-                            (click)="clear(dt1)"
-                        ></button>
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <button pButton label="{{ 'table.actions.clean' | translate }}" class="p-button-outlined mb-2"
+                            icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
                         <div class="flex justify-content-center mb-3">
-                            <p-selectButton
-                                [options]="sizes"
-                                [(ngModel)]="selectedSize"
-                                [multiple]="false"
-                                optionLabel="name"
-                                optionValue="class"
-                            ></p-selectButton>
+                            <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" [multiple]="false"
+                                optionLabel="name" optionValue="class"></p-selectButton>
                         </div>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
-                            <input
-                                pInputText
-                                type="text"
-                                #filter
-                                (input)="onGlobalFilter(dt1, $event)"
-                                placeholder="Cerca parola chiave"
-                                class="w-full"
-                            />
+                            <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)"
+                                placeholder="Cerca parola chiave" class="w-full" />
                         </span>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th
-                            style="min-width: 13rem"
-                            pFrozenColumn
-                            [frozen]="actionsFrozen"
-                        >
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                        <th style="min-width: 13rem" pFrozenColumn [frozen]="actionsFrozen">
+                            <div class="flex justify-content-between align-items-center">
                                 Codice Fiscale
-                                <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="fiscalCode"
-                                    placeholder="Cerca per codice fiscale"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="name" display="fiscalCode"
+                                    placeholder="Cerca per codice fiscale"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Nome
-                                <p-columnFilter
-                                    type="text"
-                                    field="name"
-                                    display="menu"
-                                    placeholder="Cerca per nome"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="name" display="menu"
+                                    placeholder="Cerca per nome"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Cognome
-                                <p-columnFilter
-                                    type="text"
-                                    field="surname"
-                                    display="menu"
-                                    placeholder="Cerca per cognome"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="surname" display="menu"
+                                    placeholder="Cerca per cognome"></p-columnFilter>
                             </div>
                         </th>
 
                         <th style="min-width: 12rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Ruoli
-                                <p-columnFilter
-                                    type="text"
-                                    field="role"
-                                    display="menu"
-                                    placeholder="Cerca per ruolo"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="role" display="menu"
+                                    placeholder="Cerca per ruolo"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Posizione
-                                <p-columnFilter
-                                    type="text"
-                                    field="position"
-                                    display="menu"
-                                    placeholder="Cerca per posizione"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="position" display="menu"
+                                    placeholder="Cerca per posizione"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Cliente associato
-                                <p-columnFilter
-                                    type="text"
-                                    field="associatedClient"
-                                    display="menu"
-                                    placeholder="Cerca per cliente associato"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="associatedClient" display="menu"
+                                    placeholder="Cerca per cliente associato"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Company
-                                <p-columnFilter
-                                    type="text"
-                                    field="company"
-                                    display="menu"
-                                    placeholder="Cerca per company"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="company" display="menu"
+                                    placeholder="Cerca per company"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Email
-                                <p-columnFilter
-                                    type="text"
-                                    field="email"
-                                    display="menu"
-                                    placeholder="Cerca per email"
-                                ></p-columnFilter>
+                                <p-columnFilter type="text" field="email" display="menu"
+                                    placeholder="Cerca per email"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 3rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Stato utente
-                                <p-columnFilter
-                                    type="boolean"
-                                    field="status"
-                                    display="menu"
-                                ></p-columnFilter>
+                                <p-columnFilter type="boolean" field="status" display="menu"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 10rem">
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                            <div class="flex justify-content-between align-items-center">
                                 Date creazione
-                                <p-columnFilter
-                                    type="date"
-                                    field="createdAt"
-                                    display="menu"
-                                    dateFormat="dd.mm.yy"
-                                >
+                                <p-columnFilter type="date" field="createdAt" display="menu" dateFormat="dd.mm.yy">
                                 </p-columnFilter>
                             </div>
                         </th>
-                        <th
-                            style="min-width: 5rem"
-                            alignFrozen="right"
-                            pFrozenColumn
-                            [frozen]="actionsFrozen"
-                        >
-                            <div
-                                class="flex justify-content-between align-items-center"
-                            >
+                        <th style="min-width: 5rem" alignFrozen="right" pFrozenColumn [frozen]="actionsFrozen">
+                            <div class="flex justify-content-between align-items-center">
                                 Azioni
                             </div>
                         </th>
@@ -228,11 +118,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-user>
                     <tr>
-                        <td
-                            class="font-bold"
-                            pFrozenColumn
-                            [frozen]="actionsFrozen"
-                        >
+                        <td class="font-bold" pFrozenColumn [frozen]="actionsFrozen">
                             {{ user?.fiscalCode }}
                         </td>
                         <td>
@@ -242,13 +128,11 @@
                             {{ user?.surname }}
                         </td>
                         <td>
-                            <span
-                                class="user-badge {{
+                            <span class="user-badge {{
                                     user?.mainRole?.name
                                         ? user?.mainRole?.name
                                         : ' default'
-                                }}"
-                            >
+                                }}">
                                 {{ user?.role }}
                             </span>
                         </td>
@@ -259,46 +143,29 @@
                             {{ user?.email }}
                         </td>
                         <td class="text-center">
-                            <i
-                                class="pi"
-                                [ngClass]="{
+                            <i class="pi" [ngClass]="{
                                     'true-icon pi-check-circle text-green-500':
                                         user.status,
                                     'false-icon pi-times-circle text-pink-500':
                                         !user.status
-                                }"
-                            ></i>
+                                }"></i>
                         </td>
                         <td>
                             <span>{{
                                 user.createdAt
-                                    | date
-                                        : "fullDate"
-                                        : ""
-                                        : translateService.currentLang
-                            }}</span>
+                                | date
+                                : "fullDate"
+                                : ""
+                                : translateService.currentLang
+                                }}</span>
                         </td>
-                        <td
-                            alignFrozen="right"
-                            pFrozenColumn
-                            [frozen]="actionsFrozen"
-                        >
+                        <td alignFrozen="right" pFrozenColumn [frozen]="actionsFrozen">
                             <ng-container>
-                                <p-menu
-                                    #menuOptions
-                                    [model]="items"
-                                    [popup]="true"
-                                    appendTo="body"
-                                ></p-menu>
-                                <button
-                                    pButton
-                                    type="button"
-                                    (click)="
+                                <p-menu #menuOptions [model]="items" [popup]="true" appendTo="body"></p-menu>
+                                <button pButton type="button" (click)="
                                         selectedUser = user;
                                         menuOptions.toggle($event)
-                                    "
-                                    icon="pi pi-bars"
-                                ></button>
+                                    " icon="pi pi-bars"></button>
                                 <p-toast></p-toast>
                             </ng-container>
 
@@ -333,13 +200,9 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
-                    <p-toggleButton
-                        [(ngModel)]="actionsFrozen"
-                        [onIcon]="'pi pi-lock'"
-                        offIcon="pi pi-lock-open"
+                    <p-toggleButton [(ngModel)]="actionsFrozen" [onIcon]="'pi pi-lock'" offIcon="pi pi-lock-open"
                         [onLabel]="'table.actions.unlock' | translate"
-                        offLabel="{{ 'table.actions.lock' | translate }}"
-                    ></p-toggleButton>
+                        offLabel="{{ 'table.actions.lock' | translate }}"></p-toggleButton>
                 </ng-template>
 
                 <ng-template pTemplate="emptymessage">
