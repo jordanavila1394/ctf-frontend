@@ -65,7 +65,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
 
     constructor(
         private router: Router,
-        private confirmationService: ConfirmationService,
+        public confirmationService: ConfirmationService,
         public translateService: TranslateService,
         private messageService: MessageService,
         private userService: UserService,
@@ -104,7 +104,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
                         },
                     },
                     {
-                        label: 'Delete',
+                        label: 'Elimina',
                         icon: 'pi pi-trash',
                         command: () => {
                             // this.delete();
@@ -163,9 +163,10 @@ export class TableUserComponent implements OnInit, OnDestroy {
     }
 
     confirmErase(idUser) {
+        console.log("confirm erase")
         this.confirmationService.confirm({
-            message: 'Do you want to delete this record?',
-            header: 'Delete Confirmation',
+            message: 'Vuoi eliminare questo utente?',
+            header: 'Elimina conferma',
             icon: 'pi pi-info-circle',
             accept: () => {
                 this.messageService.add({
