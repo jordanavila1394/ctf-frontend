@@ -18,6 +18,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
     imports: [
@@ -37,6 +38,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         TableModule,
         StyleClassModule,
         PanelMenuModule,
+        InputNumberModule,
         ButtonModule,
         TranslateModule,
     ],

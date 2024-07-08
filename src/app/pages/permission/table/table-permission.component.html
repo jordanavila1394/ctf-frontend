@@ -129,6 +129,10 @@
                                 ></button>
                             </div>
                         </div>
+                        <div class="hours" *ngIf="permission.hours > 0">
+                            <strong>Ore: </strong> {{ permission.hours }}
+                        </div>
+
                         <div class="note" *ngIf="permission.note">
                             <strong>Note: </strong> {{ permission.note }}
                         </div>

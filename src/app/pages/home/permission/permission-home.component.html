@@ -25,9 +25,13 @@
                             [minDate]="minimumDate"
                         ></p-calendar>
                     </div>
+                    <div class="field col-12 md:col-6 optional-field">
+                        <label htmlFor="hours1">Ore <span class="optional">(Opzionale)</span>:</label>
+                        <p-inputNumber formControlName="hours"    [showButtons]="true"  step="1" min="1" max="8" placeholder="Ore"></p-inputNumber>
+                    </div>
 
-                    <div class="field col-12 md:col-6">
-                        <label htmlFor="dates1">Note</label>
+                    <div class="field col-12 md:col-6 optional-field">
+                        <label htmlFor="dates1">Note <span class="optional">(Opzionale)</span>:</label>
                         <textarea
                             rows="5"
                             cols="30"
@@ -145,6 +149,9 @@
                                 </span>
                             </div>
                         </div>
+                    </div>
+                    <div class="hours" *ngIf="permission.hours >0">
+                        <strong>Ore: </strong> {{ permission.hours }}
                     </div>
                     <div class="note" *ngIf="permission.note">
                         <strong>Note: </strong> {{ permission.note }}

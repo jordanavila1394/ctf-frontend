@@ -56,6 +56,7 @@ export class PermissionHomeComponent implements OnInit {
     permissionForm = this.fb.group({
         typology: ['', [Validators.required]],
         dates: ['', [Validators.required]],
+        hours: [''],
         note: [''],
     });
 
@@ -103,6 +104,7 @@ export class PermissionHomeComponent implements OnInit {
     ngOnInit(): void {
         //Current year
         moment.locale('it');
+        
         this.myPermissionsForm.patchValue({
             currentYear: moment().year() + '',
         });
@@ -188,6 +190,7 @@ export class PermissionHomeComponent implements OnInit {
                 this.currentCompany?.id,
                 this.permissionForm.value.typology,
                 datesInString,
+                this.permissionForm.value.hours,
                 this.permissionForm.value.note,
             )
             .subscribe((res) => {

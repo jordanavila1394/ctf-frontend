@@ -96,6 +96,7 @@ export class PermissionService {
         companyId,
         typology,
         dates,
+        hours,
         note,
     ): Observable<any> {
         return this.http.post(
@@ -105,6 +106,7 @@ export class PermissionService {
                 companyId,
                 typology,
                 dates,
+                hours,
                 note,
             },
             httpOptions,
