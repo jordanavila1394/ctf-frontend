@@ -92,6 +92,9 @@
                 <div class="document-list">
                     <ng-container *ngFor="let file of this.files">
                         <div class="file-wrapper">
+                            <div class="close-wrapper">
+                                <button pButton pRipple icon="pi pi-times" class="p-button-text" (click)="deleteDocument(file?.keyFile)"></button>
+                            </div>
                             <div class="category">{{ file.category }}</div>
                             <div>
                                 <img

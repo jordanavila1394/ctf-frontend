@@ -44,4 +44,14 @@ export class DownloadService {
             httpOptions,
         );
     }
+
+    getDocumentsExpiringSoonByUser(userId): Observable<any> {
+        return this.http.post(
+            API_URL + 'getDocumentsExpiringSoonByUser',
+            {
+                userId,
+            },
+            httpOptions,
+        );
+    }
 }
