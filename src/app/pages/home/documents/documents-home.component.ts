@@ -115,7 +115,7 @@ export class DocumentsHomeComponent {
         return this.spacesService.s3.getSignedUrl('getObject', {
             Bucket: this.spacesService.bucketName,
             Key: key,
-            Expires: 60, // Tempo di scadenza del link in secondi
+            Expires: 3600, // Tempo di scadenza del link in secondi
         });
     }
 
@@ -147,6 +147,14 @@ export class DocumentsHomeComponent {
                 this.loadServices(userId, fiscalCode);
             },
             (error) => {},
+        );
+    }
+    deleteDocument(file) {
+        this.uploadService.deleteDocument(file).subscribe(
+            (response) => {
+                this.loadServices(this.documentsForm.value.userId, this.documentsForm.value.fiscalCode);
+            },
+            (error) => { },
         );
     }
 

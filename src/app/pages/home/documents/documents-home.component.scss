@@ -16,6 +16,18 @@
         border-radius: 10px;
         padding: 1rem;
 
+         .close-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 5;
+            button {
+                width: 20px;
+                height: 20px;
+                background: none;
+                border: none;
+            }
+        }
         .category {
             text-transform: uppercase;
 

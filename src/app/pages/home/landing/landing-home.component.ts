@@ -23,6 +23,8 @@ import { AttendanceService } from 'src/app/services/attendance.service';
 import { ROUTES } from 'src/app/utils/constants';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { DownloadService } from 'src/app/services/download.service';
+import { SpacesService } from 'src/app/services/spaces.service';
 
 @Component({
     templateUrl: './landing-home.component.html',
@@ -46,6 +48,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
     menuItems: any;
     loading: boolean;
     attendanceData: any;
+    documentsExpiring: any;
 
     //Global variables
     operatorPhoneNumber: any;
@@ -53,6 +56,8 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
     constructor(
         public layoutService: LayoutService,
         private attendanceService: AttendanceService,
+        private spacesService: SpacesService,
+        private downloadService: DownloadService,
         public router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
@@ -117,8 +122,16 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
                 this.attendanceData = data;
                 this.loading = false;
             });
+        
+        const downloadServiceSubscription = this.downloadService.getDocumentsExpiringSoonByUser(currentUser.id)
+            .subscribe((data) => {
+                this.documentsExpiring = data;
+                this.loading = false;
+            });
         if (this.subscription && attendanceServiceSubscription)
             this.subscription.add(attendanceServiceSubscription);
+        if (this.subscription && downloadServiceSubscription)
+            this.subscription.add(downloadServiceSubscription);
     }
     openWhatsAppChatOperator() {
         if (this.operatorPhoneNumber) {
@@ -126,8 +139,19 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
             window.open(whatsappLink, '_blank');
         }
     }
+    getFileUrl(key: string): string {
+        return this.spacesService.s3.getSignedUrl('getObject', {
+            Bucket: this.spacesService.bucketName,
+            Key: key,
+            Expires: 3600, // Tempo di scadenza del link in secondi
+        });
+    }
+
     openProfile() {
         this.router.navigate([ROUTES.ROUTE_PROFILE_HOME]);
+    }
+    openDocument() {
+        this.router.navigate([ROUTES.ROUTE_DOCUMENTS_HOME]);
     }
 
     ngOnDestroy() {

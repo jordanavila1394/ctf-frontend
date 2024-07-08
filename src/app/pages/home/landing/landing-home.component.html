@@ -3,35 +3,30 @@
         <div class="card">
             <div class="welcome-container">
                 Ciao,
-                <span class="font-bold"
-                    >{{ currentUser.name }} {{ currentUser.surname }}</span
-                >.
+                <span class="font-bold">{{ currentUser.name }} {{ currentUser.surname }}</span>.
                 <br />
                 Benvenuto su CTF Cloud
             </div>
         </div>
     </div>
-    <div
-        class="col-12"
-        *ngIf="
+    <div class="col-12" *ngIf="
             attendanceData?.foundCheckIn &&
             !attendanceData?.attendance?.checkOut
-        "
-    >
+        ">
         <div class="card">
             <div class="checkin-wrapper">
                 <div class="title">Ultimo Check In</div>
                 <div class="content">
                     <div class="day">
                         {{
-                            attendanceData?.attendance?.checkIn
-                                | date: "EEEE, MMMM dd, yyyy"
+                        attendanceData?.attendance?.checkIn
+                        | date: "EEEE, MMMM dd, yyyy"
                         }}
                     </div>
                     <div class="hours">
                         {{
-                            attendanceData?.attendance?.checkIn
-                                | date: "HH:mm:ss a"
+                        attendanceData?.attendance?.checkIn
+                        | date: "HH:mm:ss a"
                         }}
                     </div>
                 </div>
@@ -40,46 +35,23 @@
     </div>
     <div class="col-12">
         <div class="card">
-            <div
-                class="attendance-wrapper"
-                *ngIf="!attendanceData?.foundCheckIn"
-            >
-                <button
-                    pButton
-                    pRipple
-                    label="Procedi con il Check In"
-                    class="p-button-success p-button-lg"
-                    size="large"
-                    [routerLink]="['/home/attendance']"
-                ></button>
+            <div class="attendance-wrapper" *ngIf="!attendanceData?.foundCheckIn">
+                <button pButton pRipple label="Procedi con il Check In" class="p-button-success p-button-lg"
+                    size="large" [routerLink]="['/home/attendance']"></button>
             </div>
-            <div
-                class="attendance-wrapper"
-                *ngIf="
+            <div class="attendance-wrapper" *ngIf="
                     attendanceData?.foundCheckIn &&
                     !attendanceData?.attendance?.checkOut
-                "
-            >
-                <button
-                    pButton
-                    pRipple
-                    label="Devi fare il checkout "
-                    class="p-button-warning p-button-lg"
-                    size="large"
-                    [routerLink]="['/home/attendance']"
-                ></button>
+                ">
+                <button pButton pRipple label="Devi fare il checkout " class="p-button-warning p-button-lg" size="large"
+                    [routerLink]="['/home/attendance']"></button>
             </div>
-            <div
-                *ngIf="
+            <div *ngIf="
                     attendanceData?.foundCheckIn &&
                     attendanceData?.attendance?.checkOut
-                "
-                class="flex flex-column justify-content-center align-items-center gap-3"
-            >
+                " class="flex flex-column justify-content-center align-items-center gap-3">
                 <div>
-                    <span class="font-bold"
-                        >Hai gia inviato la tua presenza oggi</span
-                    >
+                    <span class="font-bold">Hai gia inviato la tua presenza oggi</span>
                 </div>
 
                 <div>
@@ -96,14 +68,41 @@
             </p>
         </div>
     </div>
+    <div class="col-12" *ngIf="documentsExpiring?.length >0">
+        <div class="card" style="display: flex; justify-content: center">
+            <div class="expire-document-wrapper">
+                <div class="title">
+                    I seguenti documenti stanno scadendo entro 30 giorni:
+                </div>
+                <ng-container class="list-document" *ngFor="let document of this.documentsExpiring">
+                    <div class="document">
+                        <a href="{{ getFileUrl(document?.keyFile) }}">
+                            <ng-container [ngSwitch]="document.category">
+                                <span *ngSwitchCase="'cedolino'"> Cedolino</span>
+                                <span *ngSwitchCase="'cud'">CUD</span>
+                                <span *ngSwitchCase="'documento-identita'">Documento Identità</span>
+                                <span *ngSwitchCase="'patente'">Patente</span>
+                                <span *ngSwitchCase="'patente-adr'">Patente ADR</span>
+                                <span *ngSwitchCase="'permesso-soggiorno'">Permesso soggiorno</span>
+                                <span *ngSwitchCase="'contratto-lavoro'">Contratto lavoro</span>
+                                <span *ngSwitchCase="'altro'">Altro</span>
+                                <span *ngSwitchDefault>Altro</span>
+                            </ng-container>
+                        </a>
+                        scade il <strong>{{document.expireDate | date}}</strong> 
+                    </div>
+                </ng-container>
+                <div style="padding: 1rem 0;">
+                    Scrivi ad assistenza e aggiorna documenti. Clicca su <a (click)="openWhatsAppChatOperator()">Assistenza</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-12">
         <div>
             <div class="items-actions">
                 <div class="item-circle" *ngFor="let menu of menuItems">
-                    <a
-                        routerLink="{{ menu?.linkRoute }}"
-                        [class.disabled]="!menu?.linkRoute ? true : null"
-                    >
+                    <a routerLink="{{ menu?.linkRoute }}" [class.disabled]="!menu?.linkRoute ? true : null">
                         <div class="item">
                             <div class="image-wrapper">
                                 <img src="{{ menu?.source }}" class="" />
@@ -116,10 +115,7 @@
                     <a (click)="openWhatsAppChatOperator()">
                         <div class="item">
                             <div class="image-wrapper">
-                                <img
-                                    src="assets/icons/customer-service.png"
-                                    class=""
-                                />
+                                <img src="assets/icons/customer-service.png" class="" />
                             </div>
                             <span>Supporto</span>
                         </div>

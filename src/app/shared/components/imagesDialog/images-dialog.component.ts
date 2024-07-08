@@ -24,7 +24,7 @@ export class ImagesDialogComponent {
         return this.spacesService.s3.getSignedUrl('getObject', {
             Bucket: this.spacesService.bucketName,
             Key: key,
-            Expires: 60, // Tempo di scadenza del link in secondi
+            Expires: 3600, // Tempo di scadenza del link in secondi
         });
     }
 
