@@ -184,6 +184,7 @@ export class ListMedicalHomeComponent implements OnInit {
                 this.currentCompany?.id,
                 this.medicalForm.value.typology,
                 datesInString,
+                0,
                 this.medicalForm.value.note,
             )
             .subscribe((res) => {

@@ -203,3 +203,11 @@
         }
     }
 }
+.field {
+    &.optional-field {
+        span {
+            font-size: 0.7rem;
+            color: rgb(177, 174, 174);
+        }
+    }
+}
