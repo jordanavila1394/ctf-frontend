@@ -26,6 +26,7 @@ type AbsenceType = 'Malattia' | 'Ferie' | 'Permesso' | 'Permesso ROL';
 })
 export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('centerPane') centerPaneRef: ElementRef | undefined;
+    userId: number = 1; // ID dell'utente per il quale pulire i permessi
 
     allMonths: string[] = [];
     allDays: Date[] = [];
@@ -90,6 +91,23 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     ngOnDestroy(): void {
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
+    }
+
+    cleanUserPermissions(): void {
+        if (this.userId > 0) {
+            this.permissionService.cleanPermissions(this.userId).subscribe(
+                response => {
+                    console.log('Permissions cleaned successfully', response);
+                    alert('Permissions cleaned successfully');
+                },
+                error => {
+                    console.error('Error cleaning permissions', error);
+                    alert('Error cleaning permissions');
+                }
+            );
+        } else {
+            alert('Please enter a valid user ID');
+        }
     }
 
     getAllPermissionsByClient() {
