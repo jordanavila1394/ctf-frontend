@@ -13,6 +13,14 @@
                                 </ng-template>
                             </p-dropdown>
                         </div>
+                        <div class="field col-12 md:col-3">
+                            <label for="startDate">Data di Inizio</label>
+                            <p-calendar formControlName="startDate" placeholder="Seleziona data"></p-calendar>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label for="endDate">Data di Fine</label>
+                            <p-calendar formControlName="endDate" placeholder="Seleziona data"></p-calendar>
+                        </div>
                     </div>
                 </form>
                 <div class="table-container">
@@ -70,6 +78,73 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="permessi-rol-pane">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Permessi ROL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let user of calculatePermissionROLTotals()">
+                                    <td><span class="count">{{ user.permissionROLCount }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>{{ totalPermissionROL }}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="ferie-pane">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ferie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let user of calculateFerieTotals()">
+                                    <td><span class="count">{{ user.ferieCount }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>{{ totalFerie }}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="malattie-pane">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Malattia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let user of calculateMalattieTotals()">
+                                    <td><span class="count">{{ user.malattieCount }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>{{ totalMalattie }}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

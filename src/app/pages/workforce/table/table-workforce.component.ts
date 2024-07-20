@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 interface User {
     id: number;
     name: string;
+    surname: any;
     absences: Absence[];
 }
 
@@ -34,15 +35,21 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     workForceForm: FormGroup;
     selectedClient: string | null = null;
     userPermissions: any;
+    totalFerie: number = 0;
+    totalMalattie: number = 0;
+    totalPermissionROL: number = 0;
     private ngUnsubscribe: Subject<void> = new Subject<void>();
 
     constructor(
         private userService: UserService,
         private permissionService: PermissionService,
+        private cdRef: ChangeDetectorRef,
         private fb: FormBuilder,
     ) {
         this.workForceForm = this.fb.group({
             associatedClient: [null, Validators.required],
+            startDate: [new Date(this.currentYear, 0, 1), Validators.required],
+            endDate: [new Date(this.currentYear, 11, 31), Validators.required]
         });
     }
 
@@ -55,6 +62,21 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(selectedClient => {
                 this.selectedClient = selectedClient;
+                this.getAllPermissionsByClient();
+            });
+
+        // Listen for changes to the startDate and endDate and regenerate days
+        this.workForceForm.get('startDate')?.valueChanges
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe(() => {
+                this.generateMonthsAndDays();
+                this.getAllPermissionsByClient();
+            });
+
+        this.workForceForm.get('endDate')?.valueChanges
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe(() => {
+                this.generateMonthsAndDays();
                 this.getAllPermissionsByClient();
             });
 
@@ -71,7 +93,9 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     getAllPermissionsByClient() {
-        this.permissionService.getPermissionsByClient(this.selectedClient)
+        const startDate = this.workForceForm.get('startDate')?.value;
+        const endDate = this.workForceForm.get('endDate')?.value;
+        this.permissionService.getPermissionsByClient(this.selectedClient, startDate, endDate)
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(data => this.userPermissions = data);
     }
@@ -86,15 +110,16 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     generateMonthsAndDays() {
-        const currentYear = this.currentYear;
-        for (let month = 0; month < 12; month++) {
-            const monthDate = new Date(currentYear, month);
-            const monthName = monthDate.toLocaleDateString('it-IT', { month: 'long' });
-            this.allMonths.push(monthName);
+        this.allMonths = [];
+        this.allDays = [];
+        const startDate = new Date(this.workForceForm.get('startDate')?.value || new Date(this.currentYear, 0, 1));
+        const endDate = new Date(this.workForceForm.get('endDate')?.value || new Date(this.currentYear, 11, 31));
 
-            const daysInMonth = this.getDaysInMonth(currentYear, month);
-            for (let day = 1; day <= daysInMonth; day++) {
-                this.allDays.push(new Date(currentYear, month, day));
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            this.allDays.push(new Date(d));
+            if (d.getDate() === 1) {
+                const monthName = d.toLocaleDateString('it-IT', { month: 'long' });
+                this.allMonths.push(monthName);
             }
         }
     }
@@ -157,22 +182,86 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
             date.getDate() === today.getDate();
     }
 
+    calculateFerieTotals() {
+        this.totalFerie = 0;
+        const startDate = new Date(this.workForceForm.get('startDate')?.value);
+        const endDate = new Date(this.workForceForm.get('endDate')?.value);
+
+        return this.userPermissions?.map((user: User) => {
+            const ferieCount = user.absences
+                .filter(absence => absence.type === 'Ferie')
+                .reduce((count, absence) => {
+                    const dates = absence.date.split(',');
+                    return count + dates
+                        .map(dateStr => {
+                            const [day, month, year] = dateStr.trim().split('-').map(Number);
+                            const date = new Date(year, month - 1, day);
+                            return (date >= startDate && date <= endDate) ? 1 : 0;
+                        })
+                        .reduce((a, b) => a + b, 0);
+                }, 0);
+
+            this.totalFerie += ferieCount;
+            return { ferieCount };
+        });
+    }
+
+
+    calculatePermissionROLTotals() {
+        this.totalFerie = 0;
+        const startDate = new Date(this.workForceForm.get('startDate')?.value);
+        const endDate = new Date(this.workForceForm.get('endDate')?.value);
+
+        return this.userPermissions?.map((user: User) => {
+            const permissionROLCount = user.absences
+                .filter(absence => absence.type === 'Permesso ROL')
+                .reduce((count, absence) => {
+                    const dates = absence.date.split(',');
+                    return count + dates
+                        .map(dateStr => {
+                            const [day, month, year] = dateStr.trim().split('-').map(Number);
+                            const date = new Date(year, month - 1, day);
+                            return (date >= startDate && date <= endDate) ? 1 : 0;
+                        })
+                        .reduce((a, b) => a + b, 0);
+                }, 0);
+
+            this.totalPermissionROL += permissionROLCount;
+            return { permissionROLCount };
+        });
+    }
+
+
+    calculateMalattieTotals() {
+        this.totalMalattie = 0;
+        const startDate = new Date(this.workForceForm.get('startDate')?.value);
+        const endDate = new Date(this.workForceForm.get('endDate')?.value);
+        return this.userPermissions?.map((user: User) => {
+            const malattieCount = user.absences.filter(absence => absence.type === 'Malattia')
+                
+                .reduce((count, absence) => {
+                    const dates = absence.date.split(',');
+                    return count + dates
+                        .map(dateStr => {
+                            const [day, month, year] = dateStr.trim().split('-').map(Number);
+                            const date = new Date(year, month - 1, day);
+                            return (date >= startDate && date <= endDate) ? 1 : 0;
+                        })
+                        .reduce((a, b) => a + b, 0);
+                }, 0);
+            this.totalMalattie += malattieCount;
+            return { malattieCount };
+        });
+    }
+
     scrollCenterPaneToCurrentDate() {
-        console.log('Scrolling to current date');
         if (this.centerPaneRef && this.centerPaneRef.nativeElement) {
             const currentDayElement = this.centerPaneRef.nativeElement.querySelector('.current-day');
-            console.log('Current day element:', currentDayElement);
             if (currentDayElement) {
                 const paneWidth = this.centerPaneRef.nativeElement.clientWidth;
                 const dayWidth = currentDayElement.clientWidth;
                 const dayLeftOffset = currentDayElement.offsetLeft;
-
-                console.log('Pane width:', paneWidth);
-                console.log('Day width:', dayWidth);
-                console.log('Day left offset:', dayLeftOffset);
-
                 const scrollPosition = dayLeftOffset - (paneWidth / 2) + (dayWidth / 2);
-                console.log('Scroll position:', scrollPosition);
                 this.centerPaneRef.nativeElement.scrollLeft = scrollPosition;
             } else {
                 console.log('Element with class .current-day not found.');
