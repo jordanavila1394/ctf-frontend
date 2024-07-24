@@ -105,6 +105,10 @@
                 "menuTitle": "DeadLines",
                 "table": "Deadlines"
             },
+            "workforce": {
+                "menuTitle": "Calendar",
+                "table": "Table"
+            },
             "documents": {
                 "menuTitle": "Documents",
                 "create": "Add documents"

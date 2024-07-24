@@ -170,6 +170,18 @@ export class AppMenuComponent implements OnInit {
                     },
                 ],
             });
+            this.model.push({
+                label: 'Workforce',
+                translationCode: 'menu.routes.workforce.menuTitle',
+                items: [
+                    {
+                        label: 'Workforce list',
+                        translationCode: 'menu.routes.workforce.table',
+                        icon: 'pi pi-calendar',
+                        routerLink: [ROUTES.ROUTE_TABLE_WORKFORCE],
+                    },
+                ],
+            });
         }
 
         if (

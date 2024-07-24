@@ -117,6 +117,17 @@ import { AuthGuard } from './services/auth.guard';
                             },
                         },
                         {
+                            path: 'workforce',
+                            loadChildren: () =>
+                                import(
+                                    './pages/workforce/workforce.module'
+                                ).then((m) => m.WorkforceModule),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_ACCOUNTING'],
+                            },
+                        },
+                        {
                             path: 'vehicle',
                             loadChildren: () =>
                                 import('./pages/vehicle/vehicle.module').then(

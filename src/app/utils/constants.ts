@@ -25,6 +25,7 @@ export const ROUTES = {
     ROUTE_DETAIL_ATTENDANCE: '/attendance/detail',
     ROUTE_TABLE_PERMISSION: '/permission/table',
     ROUTE_TABLE_DEADLINES: '/deadlines/table',
+    ROUTE_TABLE_WORKFORCE: '/workforce/table',
     ROUTE_LANDING_HOME: '/home/landing',
     ROUTE_ATTENDANCE_HOME: '/home/attendance',
     ROUTE_MYATTENDANCES_HOME: '/home/my-attendances',

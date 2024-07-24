@@ -105,6 +105,10 @@
                 "menuTitle": "Plazos",
                 "table": "Lista plazos"
             },
+            "workforce": {
+                "menuTitle": "Calendario",
+                "table": "Tabla"
+            },
             "documents": {
                 "menuTitle": "Documentos",
                 "create": "Agrega documentos"

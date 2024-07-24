@@ -105,6 +105,10 @@
                 "menuTitle": "Scadenziario",
                 "table": "Lista scadenze"
             },
+            "workforce": {
+                "menuTitle": "Calendario utenti",
+                "table": "Tabella"
+            },
             "documents": {
                 "menuTitle": "Cedolini",
                 "create": "Aggiungi cedolini"

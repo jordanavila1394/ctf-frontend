@@ -53,6 +53,18 @@ export class PermissionService {
         );
     }
 
+    getPermissionsByClient(associatedClient, startDate, endDate): Observable<any> {
+        return this.http.post(
+            API_URL + 'permissionsByClient',
+            {
+                associatedClient,
+                startDate,
+                endDate
+            },
+            httpOptions,
+        );
+    }
+
     getMyMedicalLeave(idUser, year, month): Observable<any> {
         return this.http.post(
             API_URL + 'getMyMedicalLeave',
@@ -133,4 +145,5 @@ export class PermissionService {
             httpOptions,
         );
     }
+    
 }

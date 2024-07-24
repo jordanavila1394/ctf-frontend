@@ -11,10 +11,14 @@ const httpOptions = {
     providedIn: 'root',
 })
 export class UserService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getAllCeos(): Observable<any> {
         return this.http.get(API_URL + 'allCeos', httpOptions);
+    }
+
+    getAllAssociatedClients(): Observable<any> {
+        return this.http.get(API_URL + 'getAllAssociatedClients', httpOptions);
     }
 
     getAllCeosByCompany(id: string): Observable<any> {

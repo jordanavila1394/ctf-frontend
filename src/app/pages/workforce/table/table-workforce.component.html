@@ -1,0 +1,153 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="container">
+                <form [formGroup]="workForceForm" #form="ngForm">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field col-12 md:col-6">
+                            <label for="associatedClient">Seleziona Cliente Associato</label>
+                            <p-dropdown [options]="associatedClients" formControlName="associatedClient"
+                                placeholder="--Cliente--" [(ngModel)]="selectedClient" [required]="true">
+                                <ng-template let-client pTemplate="item">
+                                    {{ client }}
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label for="startDate">Data di Inizio</label>
+                            <p-calendar formControlName="startDate" placeholder="Seleziona data"></p-calendar>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label for="endDate">Data di Fine</label>
+                            <p-calendar formControlName="endDate" placeholder="Seleziona data"></p-calendar>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="table-container">
+                    <div class="left-pane">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let user of userPermissions">
+                                    <td><span class="user-name">{{ user.name }} {{ user.surname }}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="center-pane" #centerPane>
+                        <div class="excel-table">
+                            <table>
+                                <thead class="sticky-header">
+                                    <tr class="months-row">
+                                        <ng-container *ngFor="let month of allMonths; let i = index">
+                                            <th [ngClass]="getMonthHeaderClasses(i)"
+                                                [attr.colspan]="getDaysInMonth(currentYear, i)">
+                                                {{ month }} {{ currentYear }}
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="day-cell" style="height: 50px;">
+                                        <ng-container *ngFor="let day of allDays">
+                                            <th [ngClass]="getDayHeaderClasses(day)">
+                                                {{ day.getDate() }}
+                                                {{day | date :"EEE"}}
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+
+                                    <ng-container *ngFor="let user of userPermissions">
+                                        <tr>
+                                            <ng-container *ngFor="let day of allDays; let isLast = last">
+                                                <td [ngClass]="getDayClasses(user, day)">
+                                                    {{ getAbsenceSymbol(user, day) }}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="permessi-rol-pane">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Permessi ROL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let user of calculatePermissionROLTotals()">
+                                    <td><span class="count">{{ user.permissionROLCount }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>{{ calculateTotal('permissionROLCount') }}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ferie-pane">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ferie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let user of calculateFerieTotals()">
+                                    <td><span class="count">{{ user.ferieCount }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>{{ calculateTotal('ferieCount') }}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="malattie-pane">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Malattia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let user of calculateMalattieTotals()">
+                                    <td><span class="count">{{ user.malattieCount }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>{{ calculateTotal('malattieCount') }}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,35 +4,20 @@
             <div class="container">
                 <div class="operations">
                     <div>
-                        <input
-                            id="selectAllMonths"
-                            type="checkbox"
-                            [(ngModel)]="selectAllMonths"
-                            (change)="onSelectAllMonths()"
-                        />
+                        <input id="selectAllMonths" type="checkbox" [(ngModel)]="selectAllMonths"
+                            (change)="onSelectAllMonths()" />
                         <label for="selectAllMonths">Seleziona tutto</label>
                     </div>
 
                     <div class="year-dropdown">
-                        <p-dropdown
-                            [options]="years"
-                            [(ngModel)]="selectedYear"
-                            (onChange)="onYearChange($event.value)"
-                            placeholder="Select Year"
-                        ></p-dropdown>
+                        <p-dropdown [options]="years" [(ngModel)]="selectedYear" (onChange)="onYearChange($event.value)"
+                            placeholder="Select Year"></p-dropdown>
                     </div>
                 </div>
                 <div class="months">
-                    <div
-                        class="month"
-                        *ngFor="let month of months"
-                        [class.active]="isMonthSelected(month)"
-                        (click)="toggleMonthSelection(month)"
-                    >
-                        <div
-                            class="importpayed"
-                            [style.height.%]="month?.importPayedPerc"
-                        ></div>
+                    <div class="month" *ngFor="let month of months" [class.active]="isMonthSelected(month)"
+                        (click)="toggleMonthSelection(month)">
+                        <div class="importpayed" [style.height.%]="month?.importPayedPerc"></div>
                         {{ month?.name | uppercase }}
                     </div>
                 </div>
@@ -41,22 +26,12 @@
         <div class="card">
             <div class="top-table-operations">
                 <div class="import-csv">
-                    <button
-                        pButton
-                        class="p-button-text"
-                        type="button"
-                        (click)="openEntitiesModal()"
-                    >
+                    <button pButton class="p-button-text" type="button" (click)="openEntitiesModal()">
                         Aggiungi Ente
                     </button>
                 </div>
                 <div class="import-csv">
-                    <button
-                        pButton
-                        class="p-button-text"
-                        type="button"
-                        (click)="openImportModal()"
-                    >
+                    <button pButton class="p-button-text" type="button" (click)="openImportModal()">
                         Importa XLSX
                     </button>
                 </div>
@@ -68,26 +43,40 @@
                         <th>Nome</th>
                         <th>Identificatore</th>
                         <th>Azienda</th>
+                        <th>Pagatore</th>
                         <th>Tot. Importo Pagato</th>
                         <th>Tot. Importo Non pagato</th>
                         <th>Tot. Importo Rate</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <ng-container
-                        *ngFor="let entity of entities; let i = index"
-                    >
+                    <ng-container *ngFor="let entity of entities; let i = index">
                         <tr class="entity" (click)="toggleExpand(i)">
                             <td>{{ entity.id }}</td>
                             <td>{{ entity.name }}</td>
                             <td>{{ entity.identifier }}</td>
                             <td>{{ entity.company.name }}</td>
                             <td>
+                                <div class="payer-edit-wrapper">
+                                    <ng-container 
+                                        *ngIf="editingIndex === i; else nonEditable">
+                                        <input type="text" [(ngModel)]="editedPayer" />
+                                        <i class="pi pi-save" (click)="savePayer($event,i)"></i>
+                                        <i class="pi pi-times" (click)="cancelEdit($event)"></i>
+
+                                    </ng-container>
+                                    <ng-template #nonEditable>
+                                        {{ entity.payer }}
+                                        <i (click)="toggleEditPayer(i)" class="pi pi-pencil"></i>
+                                    </ng-template>
+                                </div>
+                            </td>
+                            <td>
                                 {{ entity.totalImportToPay | currency: "EUR" }}
                             </td>
                             <td>
                                 {{
-                                    entity.totalImportNotPayed | currency: "EUR"
+                                entity.totalImportNotPayed | currency: "EUR"
                                 }}
                             </td>
                             <td>
@@ -108,65 +97,51 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            class="deadline"
-                                            *ngFor="
+                                        <tr class="deadline" *ngFor="
                                                 let deadline of entity.deadlines
-                                            "
-                                        >
+                                            ">
                                             <td>{{ deadline.loanNumber }}</td>
                                             <td>
                                                 {{
-                                                    deadline.expireDate
-                                                        | date: "dd/MM/yyyy"
+                                                deadline.expireDate
+                                                | date: "dd/MM/yyyy"
                                                 }}
                                             </td>
                                             <td>
-                                                <div
-                                                    class="remainingdays"
-                                                    [ngClass]="
+                                                <div class="remainingdays" [ngClass]="
                                                         deadline.diffDaysStyle
-                                                    "
-                                                >
+                                                    ">
                                                     {{ deadline.diffDays }}
                                                 </div>
                                             </td>
                                             <td>
                                                 {{
-                                                    deadline.importToPay
-                                                        | currency: "EUR"
+                                                deadline.importToPay
+                                                | currency: "EUR"
                                                 }}
                                             </td>
                                             <!-- <td>{{ deadline.note }}</td> -->
                                             <td>
-                                                <div
-                                                    class="deadlinestatus"
-                                                    [ngClass]="{
+                                                <div class="deadlinestatus" [ngClass]="{
                                                         danger:
                                                             deadline.status ===
                                                             'Non pagato',
                                                         payed:
                                                             deadline.status ===
                                                             'Pagato'
-                                                    }"
-                                                >
-                                                    <select
-                                                        [(ngModel)]="
+                                                    }">
+                                                    <select [(ngModel)]="
                                                             deadline.status
-                                                        "
-                                                        (change)="
+                                                        " (change)="
                                                             onStatusChange(
                                                                 entity,
                                                                 deadline
                                                             )
-                                                        "
-                                                    >
+                                                        ">
                                                         <option value="Pagato">
                                                             PAGATO
                                                         </option>
-                                                        <option
-                                                            value="Non pagato"
-                                                        >
+                                                        <option value="Non pagato">
                                                             NON PAGATO
                                                         </option>
                                                         <!-- Aggiungi altri stati se necessario -->
@@ -174,20 +149,15 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p-calendar
-                                                    [ngModel]="
+                                                <p-calendar [ngModel]="
                                                         deadline.paymentDate
                                                             | date: 'dd/MM/yyyy'
-                                                    "
-                                                    [showIcon]="true"
-                                                    (ngModelChange)="
+                                                    " [showIcon]="true" (ngModelChange)="
                                                         onPaymentPaymentDateChange(
                                                             $event,
                                                             deadline
                                                         )
-                                                    "
-                                                    dateFormat="dd/mm/yy"
-                                                ></p-calendar>
+                                                    " dateFormat="dd/mm/yy"></p-calendar>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -209,8 +179,8 @@
                         <tr>
                             <td>
                                 {{
-                                    this.totalImportNotPayedSum
-                                        | currency: "EUR"
+                                this.totalImportNotPayedSum
+                                | currency: "EUR"
                                 }}
                             </td>
                             <td>Importo Totale Non Pagato</td>
@@ -233,38 +203,17 @@
         </div>
     </div>
 </div>
-<p-dialog
-    #importModal
-    header="Import xlsx"
-    [(visible)]="importModal.visible"
-    [style]="{ width: '50%' }"
->
+<p-dialog #importModal header="Import xlsx" [(visible)]="importModal.visible" [style]="{ width: '50%' }">
     <div style="margin-top: 1rem; margin-bottom: 1rem">
-        <button
-            type="button"
-            pButton
-            class="p-button-text"
-            (click)="downloadSampleXlsx()"
-        >
+        <button type="button" pButton class="p-button-text" (click)="downloadSampleXlsx()">
             Scarica file XLSX di esempio
         </button>
         <hr />
         <div>
-            <input
-                type="file"
-                id="fileInput"
-                #fileInput
-                style="display: none"
-                (change)="onFileSelected($event)"
-            />
+            <input type="file" id="fileInput" #fileInput style="display: none" (change)="onFileSelected($event)" />
             <!-- Button to trigger file input field -->
-            <button
-                type="button"
-                pButton
-                class="p-button-text"
-                (click)="fileInput.click()"
-                *ngIf="!this.fileUploadExcel?.name"
-            >
+            <button type="button" pButton class="p-button-text" (click)="fileInput.click()"
+                *ngIf="!this.fileUploadExcel?.name">
                 Carica file xlsx compilato
             </button>
             <div *ngIf="this.fileUploadExcel?.name">
@@ -292,71 +241,36 @@
         </div>
     </div>
     <div class="p-d-flex p-jc-end">
-        <button
-            type="button"
-            pButton
-            class="p-button-text"
-            (click)="closeImportModal()"
-        >
+        <button type="button" pButton class="p-button-text" (click)="closeImportModal()">
             Cancella
         </button>
-        <button
-            type="button"
-            pButton
-            class="p-button-text"
-            (click)="uploadExcelToBackend()"
-        >
+        <button type="button" pButton class="p-button-text" (click)="uploadExcelToBackend()">
             Importa
         </button>
     </div>
 </p-dialog>
 
-<p-dialog
-    #entitiesModal
-    header="Aggiungi Ente"
-    [(visible)]="entitiesModal.visible"
-    [style]="{ width: '50%' }"
->
+<p-dialog #entitiesModal header="Aggiungi Ente" [(visible)]="entitiesModal.visible" [style]="{ width: '50%' }">
     <form [formGroup]="createEntityForm" #form="ngForm">
         <div class="p-fluid p-formgrid grid">
-            <div class="field col-12 md:col-3">
-                <p-dropdown
-                    [options]="companies"
-                    optionLabel="name"
-                    optionValue="id"
-                    placeholder="Seleziona un azienda"
-                    [showClear]="true"
-                    formControlName="companyId"
-                    [(ngModel)]="selectedCompany"
-                ></p-dropdown>
+            <div class="field col-12 md:col-2">
+                <p-dropdown [options]="companies" optionLabel="name" optionValue="id" placeholder="Seleziona un azienda"
+                    [showClear]="true" formControlName="companyId" [(ngModel)]="selectedCompany"></p-dropdown>
             </div>
-            <div class="field col-12 md:col-3">
-                <input
-                    pInputText
-                    id="name1"
-                    type="text"
-                    placeholder="es.INPS"
-                    formControlName="name"
-                    ngModel
-                />
+            <div class="field col-12 md:col-2">
+                <input pInputText id="name1" type="text" placeholder="es.INPS" formControlName="name" ngModel />
             </div>
-            <div class="field col-12 md:col-3">
-                <input
-                    pInputText
-                    id="identifier1"
-                    type="text"
-                    placeholder="es. 8933234"
-                    formControlName="identifier"
-                    ngModel
-                />
+
+            <div class="field col-12 md:col-2">
+                <input pInputText id="identifier1" type="text" placeholder="es. 8933234" formControlName="identifier"
+                    ngModel />
             </div>
-            <div class="field col-12 md:col-3">
-                <button
-                    type="button"
-                    pButton
-                    class="p-button-text"
-                    (click)="addEntity()"
-                >
+            <div class="field col-12 md:col-2">
+                <input pInputText id="payer1" type="text" placeholder="es. Marco Rossi" formControlName="payer"
+                    ngModel />
+            </div>
+            <div class="field col-12 md:col-2">
+                <button type="button" pButton class="p-button-text" (click)="addEntity()">
                     Aggiungi Ente
                 </button>
             </div>
@@ -372,6 +286,7 @@
                     <th>Nome</th>
                     <th>Identificatore</th>
                     <th>Azienda</th>
+                    <th>Pagatore</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -382,14 +297,11 @@
                     <td>{{ entity.name }}</td>
                     <td>{{ entity.identifier }}</td>
                     <td>{{ entity.company?.name }}</td>
+                    <td>{{ entity.payer}}</td>
                     <td>
                         <div class="actions">
                             <button (click)="deleteEntity(entity.id)">
-                                <img
-                                    src="assets/icons/delete.png"
-                                    alt="Delete"
-                                    title="Elimina entità"
-                                />
+                                <img src="assets/icons/delete.png" alt="Delete" title="Elimina entità" />
                             </button>
                         </div>
                     </td>
@@ -398,12 +310,7 @@
         </table>
     </div>
     <div class="p-d-flex p-jc-end">
-        <button
-            type="button"
-            pButton
-            class="p-button-text"
-            (click)="closeEntitiesModal()"
-        >
+        <button type="button" pButton class="p-button-text" (click)="closeEntitiesModal()">
             Chiudi
         </button>
     </div>

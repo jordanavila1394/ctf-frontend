@@ -27,6 +27,8 @@ export class EntityService {
         companyId: string,
         name: string,
         identifier: string,
+        payer: string,
+
     ): Observable<any> {
         return this.http.post(
             API_URL + 'createEntity',
@@ -34,8 +36,17 @@ export class EntityService {
                 companyId,
                 name,
                 identifier,
+                payer,
             },
             httpOptions,
+        );
+    }
+    
+    updatePayerEntity(id: string, updatedData: any): Observable<any> {
+        return this.http.put(
+            API_URL + 'updatePayerEntity/' + id,
+            updatedData,
+            httpOptions
         );
     }
 
