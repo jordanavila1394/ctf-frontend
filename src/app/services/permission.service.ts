@@ -146,11 +146,4 @@ export class PermissionService {
         );
     }
     
-    cleanPermissions(userId: number): Observable<any> {
-        return this.http.post(
-            API_URL + 'cleanPermissions',
-            { userId },
-            httpOptions,
-        );
-    }
 }

@@ -68,6 +68,12 @@
     tr.entity {
         cursor: pointer;
         background-color: rgb(248, 247, 247);
+
+        .payer-edit-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
     }
 
     tr.entity:hover {

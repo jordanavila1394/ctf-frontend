@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Dialog } from 'primeng/dialog';
 import { CompanyService } from 'src/app/services/company.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { EntityService } from 'src/app/services/entity.service';
 
 @Component({
@@ -35,6 +35,9 @@ export class TableDeadlinesComponent implements OnInit {
     months: { name: string; id: number }[]; // Dichiarazione di months come un array di oggetti con proprietà 'nome' e 'id'
     statusOptions: string[] = ['Pagato', 'Non pagato']; // Aggiungi altri stati se necessario
 
+    editingIndex: number | null = null;
+    editedPayer: string = '';
+
     /*TOTALS*/
     totalImportNotPayedSum;
     totalImportToPaySum;
@@ -56,9 +59,10 @@ export class TableDeadlinesComponent implements OnInit {
     ) {
         this.companyState$ = store.select('companyState');
         this.createEntityForm = this.fb.group({
-            companyId: [''],
-            name: [''],
-            identifier: [''],
+            companyId: [null, Validators.required],
+            name: ['', Validators.required],
+            identifier: ['', Validators.required],
+            payer: [''],
         });
     }
 
@@ -200,15 +204,20 @@ export class TableDeadlinesComponent implements OnInit {
     // }
 
     addEntity(): void {
-        this.entityService
-            .createEntity(
-                this.createEntityForm.value.companyId,
-                this.createEntityForm.value.name,
-                this.createEntityForm.value.identifier,
-            )
-            .subscribe((res) => {
-                this.loadServices(this.selectedCompany);
-            });
+
+        if (this.createEntityForm.valid) {
+            this.entityService
+                .createEntity(
+                    this.createEntityForm.value.companyId,
+                    this.createEntityForm.value.name,
+                    this.createEntityForm.value.identifier,
+                    this.createEntityForm.value.payer,
+                )
+                .subscribe((res) => {
+                    this.loadServices(this.selectedCompany);
+                });
+        }
+        
     }
 
     onFileSelected(event: any): void {
@@ -342,6 +351,38 @@ export class TableDeadlinesComponent implements OnInit {
         } else {
             this.expandedRows.push(index);
         }
+    }
+
+    toggleEditPayer(index: number): void {
+      
+        if (this.editingIndex === null || this.editingIndex !== index) {
+            this.editingIndex = index;
+            this.editedPayer = this.entities[index].payer; // Pre-carica il valore corrente
+        }
+    }
+
+    savePayer(event: Event, index: number): void {
+        event.stopPropagation();
+        this.entities[index].payer = this.editedPayer;
+        this.entityService.updatePayerEntity(this.entities[index].id, {
+            payer: this.editedPayer
+        }).subscribe(
+            (res) => {
+                console.log('Entity updated successfully', res);
+                this.loadServices(this.selectedCompany);
+            },
+            (error) => {
+                console.error('Error updating entity', error);
+            }
+        );
+
+        this.editingIndex = null; // Esci dalla modalità di modifica
+
+    }
+
+    cancelEdit(event: Event): void {
+        event.stopPropagation();
+        this.editingIndex = null; // Annulla la modifica
     }
 
     isExpanded(index: number): boolean {

@@ -36,9 +36,7 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     workForceForm: FormGroup;
     selectedClient: string | null = null;
     userPermissions: any;
-    totalFerie: number = 0;
-    totalMalattie: number = 0;
-    totalPermissionROL: number = 0;
+   
     private ngUnsubscribe: Subject<void> = new Subject<void>();
 
     constructor(
@@ -93,22 +91,6 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
         this.ngUnsubscribe.complete();
     }
 
-    cleanUserPermissions(): void {
-        if (this.userId > 0) {
-            this.permissionService.cleanPermissions(this.userId).subscribe(
-                response => {
-                    console.log('Permissions cleaned successfully', response);
-                    alert('Permissions cleaned successfully');
-                },
-                error => {
-                    console.error('Error cleaning permissions', error);
-                    alert('Error cleaning permissions');
-                }
-            );
-        } else {
-            alert('Please enter a valid user ID');
-        }
-    }
 
     getAllPermissionsByClient() {
         const startDate = this.workForceForm.get('startDate')?.value;
@@ -201,7 +183,6 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     calculateFerieTotals() {
-        this.totalFerie = 0;
         const startDate = new Date(this.workForceForm.get('startDate')?.value);
         const endDate = new Date(this.workForceForm.get('endDate')?.value);
 
@@ -219,14 +200,12 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
                         .reduce((a, b) => a + b, 0);
                 }, 0);
 
-            this.totalFerie += ferieCount;
             return { ferieCount };
         });
     }
 
 
     calculatePermissionROLTotals() {
-        this.totalFerie = 0;
         const startDate = new Date(this.workForceForm.get('startDate')?.value);
         const endDate = new Date(this.workForceForm.get('endDate')?.value);
 
@@ -244,14 +223,12 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
                         .reduce((a, b) => a + b, 0);
                 }, 0);
 
-            this.totalPermissionROL += permissionROLCount;
             return { permissionROLCount };
         });
     }
 
 
     calculateMalattieTotals() {
-        this.totalMalattie = 0;
         const startDate = new Date(this.workForceForm.get('startDate')?.value);
         const endDate = new Date(this.workForceForm.get('endDate')?.value);
         return this.userPermissions?.map((user: User) => {
@@ -267,9 +244,62 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
                         })
                         .reduce((a, b) => a + b, 0);
                 }, 0);
-            this.totalMalattie += malattieCount;
             return { malattieCount };
         });
+    }
+
+    calculateTotal(absenceType: 'permissionROLCount' | 'ferieCount' | 'malattieCount'): number {
+        return this.userPermissions?.reduce((total, user) => {
+            const count = this.calculateCountForUser(user, absenceType);
+            return total + count;
+        }, 0) || 0;
+    }
+
+    private calculateCountForUser(user: User, absenceType: 'permissionROLCount' | 'ferieCount' | 'malattieCount'): number {
+        switch (absenceType) {
+            case 'permissionROLCount':
+                return user.absences
+                    .filter(absence => absence.type === 'Permesso ROL')
+                    .reduce((count, absence) => {
+                        const dates = absence.date.split(',');
+                        return count + dates
+                            .map(dateStr => {
+                                const [day, month, year] = dateStr.trim().split('-').map(Number);
+                                const date = new Date(year, month - 1, day);
+                                return (date >= new Date(this.workForceForm.get('startDate')?.value) &&
+                                    date <= new Date(this.workForceForm.get('endDate')?.value)) ? 1 : 0;
+                            })
+                            .reduce((a, b) => a + b, 0);
+                    }, 0);
+            case 'ferieCount':
+                return user.absences
+                    .filter(absence => absence.type === 'Ferie')
+                    .reduce((count, absence) => {
+                        const dates = absence.date.split(',');
+                        return count + dates
+                            .map(dateStr => {
+                                const [day, month, year] = dateStr.trim().split('-').map(Number);
+                                const date = new Date(year, month - 1, day);
+                                return (date >= new Date(this.workForceForm.get('startDate')?.value) &&
+                                    date <= new Date(this.workForceForm.get('endDate')?.value)) ? 1 : 0;
+                            })
+                            .reduce((a, b) => a + b, 0);
+                    }, 0);
+            case 'malattieCount':
+                return user.absences
+                    .filter(absence => absence.type === 'Malattia')
+                    .reduce((count, absence) => {
+                        const dates = absence.date.split(',');
+                        return count + dates
+                            .map(dateStr => {
+                                const [day, month, year] = dateStr.trim().split('-').map(Number);
+                                const date = new Date(year, month - 1, day);
+                                return (date >= new Date(this.workForceForm.get('startDate')?.value) &&
+                                    date <= new Date(this.workForceForm.get('endDate')?.value)) ? 1 : 0;
+                            })
+                            .reduce((a, b) => a + b, 0);
+                    }, 0);
+        }
     }
 
     scrollCenterPaneToCurrentDate() {
