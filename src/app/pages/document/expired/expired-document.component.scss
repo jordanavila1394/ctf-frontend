@@ -1,0 +1,74 @@
+.grid {
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+
+        .container {
+            padding: 16px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+
+            thead {
+                background-color: #f4f4f4;
+
+                th {
+                    padding: 12px;
+                    text-align: left;
+                    font-weight: bold;
+                    color: #333;
+                    border-bottom: 2px solid #ddd;
+                }
+            }
+
+            tbody {
+                tr {
+                    &:nth-child(even) {
+                        background-color: #f9f9f9;
+                    }
+
+                    td {
+                        padding: 12px;
+                        border-bottom: 1px solid #ddd;
+
+                        .link {
+                            color: #007bff;
+                            text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+
+                        .expired-actions {
+                            display: flex;
+                            gap: 8px;
+
+                            a {
+                                display: inline-block;
+                                transition: transform 0.2s;
+
+                                &:hover {
+                                    transform: scale(1.1);
+                                }
+                            }
+
+                            img {
+                                vertical-align: middle;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

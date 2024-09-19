@@ -114,6 +114,12 @@ export class AppMenuComponent implements OnInit {
                         icon: 'pi pi-file',
                         routerLink: [ROUTES.ROUTE_CREATE_DOCUMENT],
                     },
+                    {
+                        label: 'Documents',
+                        translationCode: 'menu.routes.documents.table',
+                        icon: 'pi pi-file',
+                        routerLink: [ROUTES.ROUTE_EXPIRED_DOCUMENT],
+                    },
                 ],
             });
             this.model.push({

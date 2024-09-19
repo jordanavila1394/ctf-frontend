@@ -25,6 +25,7 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { DownloadService } from 'src/app/services/download.service';
 import { SpacesService } from 'src/app/services/spaces.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     templateUrl: './landing-home.component.html',
@@ -45,6 +46,9 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
 
     //Variables
     currentUser: any;
+    currentEmail: string;
+    currentIBAN: string;
+    currentCellphone: string;
     menuItems: any;
     loading: boolean;
     attendanceData: any;
@@ -57,6 +61,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
         public layoutService: LayoutService,
         private attendanceService: AttendanceService,
         private spacesService: SpacesService,
+        private userService: UserService,
         private downloadService: DownloadService,
         public router: Router,
         private store: Store<{ authState: AuthState }>,
@@ -116,13 +121,24 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
     }
 
     loadServices(currentUser) {
+        const userServiceSubscription = this.userService
+            .getUser(currentUser?.id)
+            .subscribe((data) => {
+                this.currentCellphone = data?.cellphone;
+                this.currentEmail = data?.email;
+                this.currentIBAN = data?.iban;
+            });
+
+        if (userServiceSubscription && this.subscription)
+            this.subscription.add(userServiceSubscription);
+
         const attendanceServiceSubscription = this.attendanceService
             .getAttendanceByUser(currentUser.id)
             .subscribe((data) => {
                 this.attendanceData = data;
                 this.loading = false;
             });
-        
+
         const downloadServiceSubscription = this.downloadService.getDocumentsExpiringSoonByUser(currentUser.id)
             .subscribe((data) => {
                 this.documentsExpiring = data;

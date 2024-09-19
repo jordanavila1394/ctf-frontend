@@ -12,6 +12,14 @@ import { RouterModule } from '@angular/router';
                     import('./create/create-document.module').then(
                         (m) => m.CreateDocumentModule
                     ),
+            },
+            {
+                path: 'expired',
+                data: { breadcrumb: 'Expire' },
+                loadChildren: () =>
+                    import('./expired/expired-document.module').then(
+                        (m) => m.ExpiredDocumentModule
+                    ),
             }
 
         ]),
