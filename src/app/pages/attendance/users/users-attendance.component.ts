@@ -480,6 +480,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
             this.attendanceService
                 .synchronizeAttendances(user.id, this.selectedCompany.id, currentMonth, currentYear)
                 .subscribe((res) => {
+                    console.log(res)
                 })
         );
         this.loadServices(this.selectedCompany);

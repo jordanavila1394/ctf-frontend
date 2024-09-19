@@ -60,10 +60,26 @@
             </div>
         </div>
     </div>
-    <div class="col-12" *ngIf="!currentUser.email">
+    <div class="col-12" *ngIf="currentEmail.length==0">
         <div class="card" style="display: flex; justify-content: center">
             <p style="font-size: 0.7rem; color: orange">
                 <strong>email</strong> mancante, aggiungila per
+                ricevere notifiche. Clicca su <a (click)="openProfile()">Profilo</a>
+            </p>
+        </div>
+    </div>
+    <div class="col-12" *ngIf="currentIBAN.length==0">
+        <div class="card" style="display: flex; justify-content: center">
+            <p style="font-size: 0.7rem; color: orange">
+                <strong>IBAN</strong> mancante, aggiungila per
+                ricevere notifiche. Clicca su <a (click)="openProfile()">Profilo</a>
+            </p>
+        </div>
+    </div>
+    <div class="col-12" *ngIf="currentCellphone.length==0">
+        <div class="card" style="display: flex; justify-content: center">
+            <p style="font-size: 0.7rem; color: orange">
+                <strong>cellulare</strong> mancante, aggiungila per
                 ricevere notifiche. Clicca su <a (click)="openProfile()">Profilo</a>
             </p>
         </div>
@@ -89,11 +105,12 @@
                                 <span *ngSwitchDefault>Altro</span>
                             </ng-container>
                         </a>
-                        scade il <strong>{{document.expireDate | date}}</strong> 
+                        scade il <strong>{{document.expireDate | date}}</strong>
                     </div>
                 </ng-container>
                 <div style="padding: 1rem 0;">
-                    Scrivi ad assistenza e aggiorna documenti. Clicca su <a (click)="openWhatsAppChatOperator()">Assistenza</a>
+                    Scrivi ad assistenza e aggiorna documenti. Clicca su <a
+                        (click)="openWhatsAppChatOperator()">Assistenza</a>
                 </div>
             </div>
         </div>
