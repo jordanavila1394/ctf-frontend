@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12" *ngIf="currentEmail.length==0">
+    <div class="col-12" *ngIf="!currentEmail">
         <div class="card" style="display: flex; justify-content: center">
             <p style="font-size: 0.7rem; color: orange">
                 <strong>email</strong> mancante, aggiungila per
@@ -68,14 +68,14 @@
             </p>
         </div>
     </div>
-    <div class="col-12" *ngIf="currentIBAN.length==0">
+    <!-- <div class="col-12" *ngIf="!currentIBAN">
         <div class="card" style="display: flex; justify-content: center">
             <p style="font-size: 0.7rem; color: orange">
                 <strong>IBAN</strong> mancante, aggiungila per
                 ricevere notifiche. Clicca su <a (click)="openProfile()">Profilo</a>
             </p>
         </div>
-    </div>
+    </div> -->
     <div class="col-12" *ngIf="currentCellphone.length==0">
         <div class="card" style="display: flex; justify-content: center">
             <p style="font-size: 0.7rem; color: orange">
