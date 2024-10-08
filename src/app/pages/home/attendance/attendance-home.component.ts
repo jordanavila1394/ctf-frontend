@@ -325,7 +325,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             this.currentPlaceMap?.longitude,
         );
 
-        this.isNearDistance = this.distanceBetween < 0.3; //300 metri
+        this.isNearDistance = this.distanceBetween < 0.5; //300 metri
 
         this.disableButtonCheckIn =
             !this.isNearDistance ||
