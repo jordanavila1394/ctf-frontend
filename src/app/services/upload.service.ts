@@ -19,6 +19,10 @@ export class UploadService {
         return this.http.post(API_URL + 'uploadDocuments', formData);
     }
 
+    uploadEntityDocuments(formData: FormData) {
+        return this.http.post(API_URL + 'uploadEntityDocuments', formData);
+    }
+
     deleteDocument(file: string) {
         return this.http.post(API_URL + 'deleteDocument', { key: file });
     }
