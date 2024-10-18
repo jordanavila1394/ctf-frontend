@@ -9,6 +9,9 @@ import { Dialog } from 'primeng/dialog';
 import { CompanyService } from 'src/app/services/company.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { EntityService } from 'src/app/services/entity.service';
+import { UploadService } from 'src/app/services/upload.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SpacesService } from 'src/app/services/spaces.service';
 
 @Component({
     templateUrl: './table-deadlines.component.html',
@@ -49,11 +52,22 @@ export class TableDeadlinesComponent implements OnInit {
     rowsInsert;
     rowsUpdate;
     errorEntity;
+
+    documentModalVisible: boolean = false;
+    selectedEntityDocuments: any[] = [];
+    currentDocumentUrl: SafeResourceUrl | null = null;  // URL for the currently selected document
+
+    uploadedFiles: any[] = [];
+
+
     constructor(
         private deadlinesService: DeadlinesService,
         private companyService: CompanyService,
         private entityService: EntityService,
         private messageService: MessageService,
+        private uploadService: UploadService,
+        private sanitizer: DomSanitizer,
+        private spacesService: SpacesService,
         public fb: FormBuilder,
         private store: Store<{ companyState: CompanyState }>,
     ) {
@@ -91,6 +105,8 @@ export class TableDeadlinesComponent implements OnInit {
         });
 
         this.subscription.add(companyServiceSubscription);
+
+
     }
 
     loadServices(selectedCompany) {
@@ -191,18 +207,6 @@ export class TableDeadlinesComponent implements OnInit {
         this.entitiesModal.visible = false;
     }
 
-    // onDialogHide() {
-    //     this.fileUploadExcel = null; // Reset fileUploadExcel
-    //     const fileInput = document.getElementById(
-    //         'fileInput',
-    //     ) as HTMLInputElement;
-    //     if (fileInput) {
-    //         fileInput.value = '';
-    //     }
-    //     this.rowsInsert = null;
-    //     this.rowsUpdate = null;
-    // }
-
     addEntity(): void {
 
         if (this.createEntityForm.valid) {
@@ -217,7 +221,7 @@ export class TableDeadlinesComponent implements OnInit {
                     this.loadServices(this.selectedCompany);
                 });
         }
-        
+
     }
 
     onFileSelected(event: any): void {
@@ -265,6 +269,28 @@ export class TableDeadlinesComponent implements OnInit {
                 },
             );
     }
+
+    uploadFiles(event) {
+        for (let file of event.files) {
+            this.uploadedFiles.push(file);
+        }
+    }
+
+    saveDocument(entity) {
+        const formData = new FormData();
+
+        for (let file of this.uploadedFiles) {
+            formData.append('files', file);
+        }
+        formData.append('entityId', entity.id);
+        this.uploadService.uploadEntityDocuments(formData).subscribe(
+            (response) => {
+                console.log(response)
+            },
+            (error) => { },
+        );
+    }
+
 
     onPaymentPaymentDateChange(paymentDate: string, deadline: any) {
         // Handle the change if necessary
@@ -354,7 +380,7 @@ export class TableDeadlinesComponent implements OnInit {
     }
 
     toggleEditPayer(index: number): void {
-      
+
         if (this.editingIndex === null || this.editingIndex !== index) {
             this.editingIndex = index;
             this.editedPayer = this.entities[index].payer; // Pre-carica il valore corrente
@@ -403,4 +429,13 @@ export class TableDeadlinesComponent implements OnInit {
         this.selectedYear = year;
         this.loadServices(this.selectedCompany);
     }
+    openModalDocument(entityDocuments: any[]): void {
+        console.log(entityDocuments)
+        this.selectedEntityDocuments = entityDocuments; // Set the documents to display in the modal
+        this.documentModalVisible = true;
+
+    }
+
+
+
 }

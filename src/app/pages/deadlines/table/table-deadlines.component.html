@@ -44,22 +44,23 @@
                         <th>Identificatore</th>
                         <th>Azienda</th>
                         <th>Pagatore</th>
+                        <th>Documento</th>
                         <th>Tot. Importo Pagato</th>
                         <th>Tot. Importo Non pagato</th>
                         <th>Tot. Importo Rate</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let entity of entities; let i = index">
-                        <tr class="entity" (click)="toggleExpand(i)">
+                        <tr class="entity">
                             <td>{{ entity.id }}</td>
                             <td>{{ entity.name }}</td>
                             <td>{{ entity.identifier }}</td>
                             <td>{{ entity.company.name }}</td>
                             <td>
                                 <div class="payer-edit-wrapper">
-                                    <ng-container 
-                                        *ngIf="editingIndex === i; else nonEditable">
+                                    <ng-container *ngIf="editingIndex === i; else nonEditable">
                                         <input type="text" [(ngModel)]="editedPayer" />
                                         <i class="pi pi-save" (click)="savePayer($event,i)"></i>
                                         <i class="pi pi-times" (click)="cancelEdit($event)"></i>
@@ -72,6 +73,9 @@
                                 </div>
                             </td>
                             <td>
+                                <i (click)="openModalDocument(entity.entityDocuments)" class="pi pi-file"></i>
+                            </td>
+                            <td>
                                 {{ entity.totalImportToPay | currency: "EUR" }}
                             </td>
                             <td>
@@ -82,9 +86,13 @@
                             <td>
                                 {{ entity.totalImportSum | currency: "EUR" }}
                             </td>
+                            <td (click)="toggleExpand(i)">
+                                <i *ngIf="!isExpanded(i)" class="pi pi-arrow-circle-down"></i>
+                                <i *ngIf="isExpanded(i)" class="pi pi-arrow-circle-up"></i>
+                            </td>
                         </tr>
                         <tr *ngIf="isExpanded(i)">
-                            <td colspan="7">
+                            <td colspan="10">
                                 <table class="inner-table">
                                     <thead>
                                         <tr>
@@ -270,6 +278,9 @@
                     ngModel />
             </div>
             <div class="field col-12 md:col-2">
+
+            </div>
+            <div class="field col-12 md:col-2">
                 <button type="button" pButton class="p-button-text" (click)="addEntity()">
                     Aggiungi Ente
                 </button>
@@ -287,6 +298,7 @@
                     <th>Identificatore</th>
                     <th>Azienda</th>
                     <th>Pagatore</th>
+                    <th>Aggiungi documenti</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -298,6 +310,19 @@
                     <td>{{ entity.identifier }}</td>
                     <td>{{ entity.company?.name }}</td>
                     <td>{{ entity.payer}}</td>
+                    <td>
+                        <div class="document-upload-container">
+                            <p-fileUpload #fileUpload [customUpload]="true" name="files[]"
+                                (onSelect)="uploadFiles($event)" [showUploadButton]="false" [multiple]="false"
+                                [maxFileSize]="500000000" label="Seleziona">
+                            </p-fileUpload>
+                            <button (click)="saveDocument(entity)">
+                                <img src="assets/icons/document-entity.png" alt="Aggiungi documento"
+                                    title="documento" />
+                            </button>
+                        </div>
+
+                    </td>
                     <td>
                         <div class="actions">
                             <button (click)="deleteEntity(entity.id)">
@@ -313,5 +338,18 @@
         <button type="button" pButton class="p-button-text" (click)="closeEntitiesModal()">
             Chiudi
         </button>
+    </div>
+</p-dialog>
+<p-dialog #documentModal header="Document Viewer" [(visible)]="documentModalVisible" [style]="{ width: '70%' }">
+    <div *ngIf="selectedEntityDocuments?.length > 0">
+        <ul>
+            <li *ngFor="let document of selectedEntityDocuments">
+
+                <a [href]="spacesService.getDocumentUrl(document.keyFile)" target="_blank">{{ document.keyFile }}</a>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="!selectedEntityDocuments || selectedEntityDocuments.length === 0">
+        <p>No documents available for this entity.</p>
     </div>
 </p-dialog>

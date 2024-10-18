@@ -20,4 +20,13 @@ export class SpacesService {
     listObjects(): Promise<AWS.S3.ListObjectsOutput> {
         return this.s3.listObjects({ Bucket: this.bucketName }).promise();
     }
+
+    getDocumentUrl(key: string): string {
+        const url = this.s3.getSignedUrl('getObject', {
+            Bucket: this.bucketName,
+            Key: key,
+            Expires: 3600 // URL expires in 1 hour (3600 seconds)
+        });
+        return url;
+    }
 }

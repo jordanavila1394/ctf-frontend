@@ -22,6 +22,7 @@ import { MenuModule } from 'primeng/menu';
 import { TableDeadlinesRoutingModule } from './table-deadlines-routing.module';
 import { TableDeadlinesComponent } from './table-deadlines.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
     imports: [
@@ -40,6 +41,7 @@ import { TranslateModule } from '@ngx-translate/core';
         RippleModule,
         MultiSelectModule,
         DropdownModule,
+        FileUploadModule,
         ProgressBarModule,
         MenuModule,
         FormsModule,
