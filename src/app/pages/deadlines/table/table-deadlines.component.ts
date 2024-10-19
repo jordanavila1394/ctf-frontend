@@ -276,7 +276,7 @@ export class TableDeadlinesComponent implements OnInit {
         }
     }
 
-    saveDocument(entity) {
+    saveDocument(entity, fileUpload) {
         const formData = new FormData();
 
         for (let file of this.uploadedFiles) {
@@ -286,6 +286,8 @@ export class TableDeadlinesComponent implements OnInit {
         this.uploadService.uploadEntityDocuments(formData).subscribe(
             (response) => {
                 console.log(response)
+                this.uploadedFiles = []; // Clear the uploaded files array
+                fileUpload.clear(); 
             },
             (error) => { },
         );
