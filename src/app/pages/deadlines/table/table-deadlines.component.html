@@ -73,7 +73,7 @@
                                 </div>
                             </td>
                             <td>
-                                <i (click)="openModalDocument(entity.entityDocuments)" class="pi pi-file"></i>
+                                <i *ngIf="entity.entityDocuments.length>0" (click)="openModalDocument(entity.entityDocuments)" class="pi pi-file"></i>
                             </td>
                             <td>
                                 {{ entity.totalImportToPay | currency: "EUR" }}
@@ -258,7 +258,7 @@
     </div>
 </p-dialog>
 
-<p-dialog #entitiesModal header="Aggiungi Ente" [(visible)]="entitiesModal.visible" [style]="{ width: '50%' }">
+<p-dialog #entitiesModal header="Aggiungi Ente" [(visible)]="entitiesModal.visible" [style]="{ width: '90%' }">
     <form [formGroup]="createEntityForm" #form="ngForm">
         <div class="p-fluid p-formgrid grid">
             <div class="field col-12 md:col-2">
