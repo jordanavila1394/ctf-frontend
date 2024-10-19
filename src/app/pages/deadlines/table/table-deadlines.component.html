@@ -73,7 +73,10 @@
                                 </div>
                             </td>
                             <td>
-                                <i (click)="openModalDocument(entity.entityDocuments)" class="pi pi-file"></i>
+                                <div style="width: 100%;" (click)="openModalDocument(entity.entityDocuments)">
+                                    <i *ngIf="entity.entityDocuments.length>0"
+                                        (click)="openModalDocument(entity.entityDocuments)" class="pi pi-file"></i>
+                                </div>
                             </td>
                             <td>
                                 {{ entity.totalImportToPay | currency: "EUR" }}
@@ -258,7 +261,7 @@
     </div>
 </p-dialog>
 
-<p-dialog #entitiesModal header="Aggiungi Ente" [(visible)]="entitiesModal.visible" [style]="{ width: '50%' }">
+<p-dialog #entitiesModal header="Aggiungi Ente" [(visible)]="entitiesModal.visible" [style]="{ width: '90%' }">
     <form [formGroup]="createEntityForm" #form="ngForm">
         <div class="p-fluid p-formgrid grid">
             <div class="field col-12 md:col-2">
@@ -293,7 +296,6 @@
             <thead>
                 <tr>
                     <th>Id Ente</th>
-                    <th>Id Azienda</th>
                     <th>Nome</th>
                     <th>Identificatore</th>
                     <th>Azienda</th>
@@ -305,22 +307,19 @@
             <tbody>
                 <tr *ngFor="let entity of modalEntities">
                     <td>{{ entity.id }}</td>
-                    <td>{{ entity.company?.id }}</td>
                     <td>{{ entity.name }}</td>
                     <td>{{ entity.identifier }}</td>
                     <td>{{ entity.company?.name }}</td>
                     <td>{{ entity.payer}}</td>
                     <td>
-                        <div class="document-upload-container">
-                            <p-fileUpload #fileUpload [customUpload]="true" name="files[]"
-                                (onSelect)="uploadFiles($event)" [showUploadButton]="false" [multiple]="false"
-                                [maxFileSize]="500000000" label="Seleziona">
-                            </p-fileUpload>
-                            <button (click)="saveDocument(entity)">
-                                <img src="assets/icons/document-entity.png" alt="Aggiungi documento"
-                                    title="documento" />
-                            </button>
-                        </div>
+                    <div class="document-upload-container">
+                        <p-fileUpload #fileUpload [customUpload]="true" name="files[]" (onSelect)="uploadFiles($event)"
+                            [showUploadButton]="false" [multiple]="true" [maxFileSize]="500000000">
+                        </p-fileUpload>
+                        <button class="small-button"(click)="saveDocument(entity, fileUpload)">
+                            <img class="small-image" src="assets/icons/document-entity.png" alt="Aggiungi documento" title="documento" />
+                        </button>
+                    </div>
 
                     </td>
                     <td>
