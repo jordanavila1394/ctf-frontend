@@ -21,6 +21,7 @@ import { DrodownLanguageModule } from '../shared/components/dropdown-language/dr
 import { DropdownSelectCompanyModule } from '../shared/components/dropdown-select-company/dropdown-select-company.module';
 import { GeoModalPermissionModule } from '../shared/components/geo-modal-permission/geo-moda-permission.module';
 import { DropdownNotificationsModule } from '../shared/components/dropdown-notifications/dropdown-notifications.module';
+import { ModalMissingEmailModule } from '../shared/components/modal-missing-email/modal-missing-email.module';
 
 @NgModule({
     declarations: [
@@ -47,6 +48,7 @@ import { DropdownNotificationsModule } from '../shared/components/dropdown-notif
         RouterModule,
         DrodownLanguageModule,
         GeoModalPermissionModule,
+        ModalMissingEmailModule,
         AppConfigModule,
     ],
     exports: [AppLayoutComponent],
