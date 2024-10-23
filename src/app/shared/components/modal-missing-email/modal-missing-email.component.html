@@ -1,0 +1,12 @@
+<div class="modal" *ngIf="isModalOpen"> <!-- Conditionally render the modal based on isOpen -->
+    <div class="modal-content">
+        <h2>Email mancante</h2>
+        <p>Per favore aggiungi email mancante</p>
+        <form>
+            <input type="email" placeholder="Scrivi email" #emailInput required class="email-input" />
+            <button type="button" (click)="saveEmail(emailInput.value)">Aggiungi</button>
+        </form>
+
+        <!-- <button class="close-btn" (click)="closeModal()">Chiudi</button> -->
+    </div>
+</div>
