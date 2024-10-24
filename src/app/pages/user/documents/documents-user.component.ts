@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -8,6 +8,7 @@ import { SpacesService } from 'src/app/services/spaces.service';
 import { UploadService } from 'src/app/services/upload.service';
 import * as moment from 'moment';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { FileUpload } from 'primeng/fileupload'; // Import the FileUpload class from PrimeNG
 
 @Component({
     selector: 'app-documents-user',
@@ -15,6 +16,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
     styleUrls: ['./documents-user.component.scss'],
 })
 export class DocumentsUserComponent {
+    @ViewChild('fileUpload') fileUpload: FileUpload; // Declare ViewChild to reference the fileUpload component
     uploadedFiles: any[] = [];
     filesSpaces: AWS.S3.Object[];
     files: any;
@@ -110,13 +112,13 @@ export class DocumentsUserComponent {
             .subscribe((files) => {
                 this.filesCedoliniDocument = files;
             });
-        
+
         const downloadCUDDocumentServiceSubscription = this.downloadService
             .getCUDDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
                 this.filesCUDDocument = files;
             });
-        
+
         const translateServiceSubscription =
             this.translateService.onLangChange.subscribe(
                 (langChangeEvent: LangChangeEvent) => {
@@ -128,8 +130,8 @@ export class DocumentsUserComponent {
             this.subscription.add(downloadServiceSubscription);
         if (downloadCedoliniDocumentServiceSubscription && this.subscription)
             this.subscription.add(downloadCedoliniDocumentServiceSubscription);
-         if (downloadCUDDocumentServiceSubscription && this.subscription)
-             this.subscription.add(downloadCUDDocumentServiceSubscription);
+        if (downloadCUDDocumentServiceSubscription && this.subscription)
+            this.subscription.add(downloadCUDDocumentServiceSubscription);
         if (translateServiceSubscription && this.subscription)
             this.subscription.add(translateServiceSubscription);
     }
@@ -184,6 +186,7 @@ export class DocumentsUserComponent {
         }
     }
     saveDocument() {
+        console.log(this.uploadFiles);
         const formData = new FormData();
 
         for (let file of this.uploadedFiles) {
@@ -210,8 +213,10 @@ export class DocumentsUserComponent {
         this.uploadService.uploadDocuments(formData).subscribe(
             (response) => {
                 this.loadServices(userId, fiscalCode);
+                this.fileUpload.clear();
+                this.uploadedFiles = [];
             },
-            (error) => {},
+            (error) => { },
         );
     }
 
@@ -230,7 +235,7 @@ export class DocumentsUserComponent {
             (response) => {
                 this.loadServices(this.currentUserId, this.currentFiscalCode);
             },
-            (error) => {},
+            (error) => { },
         );
     }
 }

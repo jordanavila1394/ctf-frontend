@@ -77,7 +77,7 @@
                             name="files[]"
                             (onSelect)="uploadFiles($event)"
                             [showUploadButton]="false"
-                            [multiple]="false"
+                            [multiple]="true"
                             [maxFileSize]="500000000"
                             label="Seleziona"
                         >
@@ -125,20 +125,20 @@
                                 ></button>
                             </div>
                             <div class="category">{{ file.category }}</div>
-                            <div>
+                            <div class="image-png">
                                 <img
                                     src="assets/icons/{{ file.category }}.png"
                                     class="w-3rem h-3rem"
                                     alt="Ferie"
                                 />
                             </div>
-                            <div>
-                                <strong
-                                    >{{ file.releaseMonth | titlecase }}
-                                    {{ file.releaseYear }}
+                            <div class="releaseDate">
+                                <strong>
+                                    <span *ngIf="file.releaseMonth !== 'undefined'">{{ file.releaseMonth | titlecase }} </span>
+                                    <span *ngIf="file.releaseYear !== 'undefined'">{{ file.releaseYear }}</span>
                                 </strong>
                             </div>
-                            <div>
+                            <div class="createAt">
                                 {{
                                     file.createdAt | date: "EEEE, MMMM dd, yyyy"
                                 }}
@@ -184,11 +184,10 @@
                                     alt="Ferie"
                                 />
                             </div>
-                            <div>
-                                <strong>
-                                    {{ file.releaseYear }}
-                                </strong>
-                            </div>
+                        <strong>
+                            <span *ngIf="file.releaseMonth !== 'undefined'">{{ file.releaseMonth | titlecase }} </span>
+                            <span *ngIf="file.releaseYear !== 'undefined'">{{ file.releaseYear }}</span>
+                        </strong>
                             <div>
                                 {{
                                     file.createdAt | date: "EEEE, MMMM dd, yyyy"
@@ -236,10 +235,10 @@
                                 />
                             </div>
                             <div>
-                                <strong
-                                    >{{ file.releaseMonth | titlecase }}
-                                    {{ file.releaseYear }}
-                                </strong>
+                            <strong>
+                                <span *ngIf="file.releaseMonth !== 'undefined'">{{ file.releaseMonth | titlecase }} </span>
+                                <span *ngIf="file.releaseYear !== 'undefined'">{{ file.releaseYear }}</span>
+                            </strong>
                             </div>
                             <div>
                                 {{
