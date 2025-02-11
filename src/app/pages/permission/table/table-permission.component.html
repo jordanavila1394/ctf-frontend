@@ -4,143 +4,101 @@
             <h5>Richieste</h5>
             <p-toast></p-toast>
             <div style="display: flex; padding: 1rem">
-                <button
-                    type="button"
-                    pButton
-                    pRipple
-                    icon="pi pi-file-excel"
-                    (click)="exportExcel()"
-                    class="p-button-success mr-2"
-                    pTooltip="XLS"
-                    tooltipPosition="bottom"
-                    style="margin-left: auto"
-                ></button>
+                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                    class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"
+                    style="margin-left: auto"></button>
             </div>
-            <div class="list-permission" *ngIf="permissions?.length > 0">
-                <ng-container *ngFor="let permission of permissions">
-                    <div
-                        class="item"
-                        [ngClass]="{
-                            approved: permission?.status === 'Approvato',
-                            waiting: permission?.status === 'In Attesa',
-                            rejected: permission?.status === 'Negato',
-                            medical: permission?.typology === 'Malattia'
-                        }"
-                    >
-                        <div class="fields">
-                            <div class="info-wrapper">
-                                <div class="identifier">
-                                    <span>{{ permission?.id }}</span>
-                                </div>
-                                <div>
-                                    <span>{{
-                                        permission?.createdAt
-                                            | date: "dd/MM/yyyy"
-                                    }}</span>
-                                </div>
-                                <div>
-                                    <span>{{
-                                        permission?.createdAt | date: "H:mm"
-                                    }}</span>
-                                </div>
-                            </div>
-                            <div class="icon">
-                                <div [ngSwitch]="permission?.typology">
-                                    <span *ngSwitchCase="'Malattia'">
-                                        <img
-                                            src="assets/icons/flu.png"
-                                            class="w-3rem h-3rem"
-                                            alt="Malattia"
-                                        />
-                                    </span>
-                                    <span *ngSwitchCase="'Ferie'">
-                                        <img
-                                            src="assets/icons/holiday.png"
-                                            class="w-3rem h-3rem"
-                                            alt="Ferie"
-                                        />
-                                    </span>
-                                    <span *ngSwitchCase="'Permesso ROL'">
-                                        <img
-                                            src="assets/icons/permit.png"
-                                            class="w-3rem h-3rem"
-                                            alt="Ferie"
-                                        />
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="status">
-                                <span
-                                    [ngClass]="{
-                                        approved:
-                                            permission?.status === 'Approvato',
-                                        waiting:
-                                            permission?.status === 'In Attesa',
-                                        rejected:
-                                            permission?.status === 'Negato'
-                                    }"
-                                    >{{ permission?.status }}</span
-                                >
-                            </div>
-                            <div class="message">
-                                <strong>
-                                    <a
-                                        href="https://wa.me/{{
-                                            permission?.user?.cellphone
-                                        }}"
-                                        >{{ permission?.user.name }}
-                                        {{ permission?.user.surname }}</a
-                                    >
-                                </strong>
-                                <br />
-                                ha richiesto:
-                            </div>
-                            <div class="typology">
-                                <strong>{{ permission?.typology }}</strong>
-                            </div>
-                            <div class="dates">
-                                <div class="days">
-                                    <span
-                                        class="day"
-                                        *ngFor="let data of permission?.dates"
-                                    >
-                                        {{ data }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="actions">
-                                <button
-                                    pButton
-                                    pRipple
-                                    type="button"
-                                    icon="pi pi-check"
-                                    class="p-button-rounded p-button-success p-button-text"
-                                    (click)="approvePermission(permission)"
-                                    *ngIf="permission?.typology !== 'Malattia'"
-                                ></button>
-                                <button
-                                    pButton
-                                    pRipple
-                                    type="button"
-                                    icon="pi pi-times"
-                                    class="p-button-rounded p-button-danger p-button-text"
-                                    (click)="rejectPermission(permission)"
-                                    *ngIf="permission?.typology !== 'Malattia'"
-                                ></button>
-                            </div>
-                        </div>
-                        <div class="hours" *ngIf="permission.hours > 0">
-                            <strong>Ore: </strong> {{ permission.hours }}
-                        </div>
 
-                        <div class="note" *ngIf="permission.note">
-                            <strong>Note: </strong> {{ permission.note }}
+            <div class="list-permission" *ngIf="permissions?.length > 0">
+                <ng-container *ngFor="let group of permissions">
+                    <!-- Intestazione del mese -->
+                    <h3 class="month-header">{{ group.month | date: 'MMMM yyyy' : 'it-IT' }}</h3>
+
+                    <!-- Iterazione sulle autorizzazioni -->
+                    <ng-container class="permissions" *ngFor="let permission of group.permissions">
+                        <div class="item" [ngClass]="{
+                                approved: permission?.status === 'Approvato',
+                                waiting: permission?.status === 'In Attesa',
+                                rejected: permission?.status === 'Negato',
+                                medical: permission?.typology === 'Malattia'
+                            }">
+                            <div class="fields">
+                                <div class="info-wrapper">
+                                    <div class="identifier">
+                                        <span>{{ permission?.id }}</span>
+                                    </div>
+                                    <div>
+                                        <span>{{ permission?.createdAt | date: "dd/MM/yyyy" }}</span>
+                                    </div>
+                                    <div>
+                                        <span>{{ permission?.createdAt | date: "H:mm" }}</span>
+                                    </div>
+                                </div>
+                                <div class="icon">
+                                    <div [ngSwitch]="permission?.typology">
+                                        <span *ngSwitchCase="'Malattia'">
+                                            <img src="assets/icons/flu.png" class="w-3rem h-3rem" alt="Malattia" />
+                                        </span>
+                                        <span *ngSwitchCase="'Ferie'">
+                                            <img src="assets/icons/holiday.png" class="w-3rem h-3rem" alt="Ferie" />
+                                        </span>
+                                        <span *ngSwitchCase="'Permesso ROL'">
+                                            <img src="assets/icons/permit.png" class="w-3rem h-3rem"
+                                                alt="Permesso ROL" />
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="status">
+                                    <span [ngClass]="{
+                                            approved: permission?.status === 'Approvato',
+                                            waiting: permission?.status === 'In Attesa',
+                                            rejected: permission?.status === 'Negato'
+                                        }">
+                                        {{ permission?.status }}
+                                    </span>
+                                </div>
+                                <div class="message">
+                                    <strong>
+                                        <a href="https://wa.me/{{ permission?.user?.cellphone }}">
+                                            {{ permission?.utente }}
+                                        </a>
+                                    </strong>
+                                    <br />
+                                    ha richiesto:
+                                </div>
+                                <div class="typology">
+                                    <strong>{{ permission?.typology }}</strong>
+                                </div>
+                                <div class="dates">
+                                    <div class="days">
+                                        <span class="day" *ngFor="let data of permission?.dates">
+                                            {{ data }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="actions">
+                                    <button pButton pRipple type="button" icon="pi pi-check"
+                                        class="p-button-rounded p-button-success p-button-text"
+                                        (click)="approvePermission(permission)"
+                                        *ngIf="permission?.typology !== 'Malattia'"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-times"
+                                        class="p-button-rounded p-button-danger p-button-text"
+                                        (click)="rejectPermission(permission)"
+                                        *ngIf="permission?.typology !== 'Malattia'"></button>
+                                </div>
+                            </div>
+                            <div class="hours" *ngIf="permission.hours > 0">
+                                <strong>Ore: </strong> {{ permission.hours }}
+                            </div>
+                            <div class="note" *ngIf="permission.note">
+                                <strong>Note: </strong> {{ permission.note }}
+                            </div>
+                            <div *ngIf="permission?.protocolNumber">
+                                N° protocollo:
+                                <strong>{{ permission?.protocolNumber }}</strong>
+                            </div>
                         </div>
-                        <div *ngIf="permission?.protocolNumber">
-                            N° protocollo:
-                            <strong>{{ permission?.protocolNumber }}</strong>
-                        </div>
-                    </div>
+                    </ng-container>
                 </ng-container>
             </div>
             <div *ngIf="permissions?.length === 0">

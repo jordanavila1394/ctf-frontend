@@ -89,24 +89,36 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
 
     loadServices(currentCompany) {
         const permissionServiceSubscription = this.permissionService
-            .getAllPermissions(currentCompany.id | 0)
-            .subscribe((permissions) => {
-                this.permissions = permissions;
-                this.permissions = permissions.map((permission) => ({
-                    ...permission,
-                    utente:
-                        permission?.user?.name +
-                        ' ' +
-                        permission?.user?.surname,
-                    codicefiscale: permission?.user?.fiscalCode,
-                    datesText: permission?.dates,
-                    dates: permission?.dates.split(','),
+            .allPermissionsByMonth(currentCompany.id | 0)
+            .subscribe((groupedPermissions: { [month: string]: any[] }) => {
+
+                this.permissions = Object.entries(groupedPermissions).map(([month, permissions]) => ({
+                    month,
+                    permissions: permissions.map((permission) => ({
+                        ...permission,
+                        utente:
+                            permission?.user?.name +
+                            ' ' +
+                            permission?.user?.surname,
+                        codicefiscale: permission?.user?.fiscalCode,
+                        datesText: permission?.dates,
+                        dates: permission?.dates?.split(','),
+                    })),
                 }));
+                console.log(this.permissions)
+
                 this.loading = false;
             });
-        if (this.subscription && permissionServiceSubscription)
+
+        if (this.subscription && permissionServiceSubscription) {
             this.subscription.add(permissionServiceSubscription);
+        }
     }
+
+    getMonths(): string[] {
+        return this.permissions ? Object.keys(this.permissions) : [];
+    }
+
 
     approvePermission(permission) {
         this.permissionService
