@@ -22,6 +22,16 @@ export class PermissionService {
             httpOptions,
         );
     }
+    allPermissionsByMonth(idCompany): Observable<any> {
+        return this.http.post(
+            API_URL + 'allPermissionsByMonth',
+            {
+                idCompany,
+            },
+            httpOptions,
+        );
+    }
+    
     getPermissionById(idPermission): Observable<any> {
         return this.http.post(
             API_URL + 'getPermissionById',
