@@ -10,9 +10,14 @@ interface User {
     name: string;
     surname: any;
     absences: Absence[];
+    attendances: any[];
 }
 
 interface Absence {
+    date: string;
+    type: AbsenceType;
+}
+interface Attendances {
     date: string;
     type: AbsenceType;
 }
@@ -24,7 +29,7 @@ type AbsenceType = 'Malattia' | 'Ferie' | 'Permesso' | 'Permesso ROL';
     templateUrl: './table-workforce.component.html',
     styleUrls: ['./table-workforce.component.scss']
 })
-export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TableWorkforceComponent implements OnInit, OnDestroy {
     @ViewChild('centerPane') centerPaneRef: ElementRef | undefined;
     userId: number = 1; // ID dell'utente per il quale pulire i permessi
 
@@ -36,8 +41,29 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     workForceForm: FormGroup;
     selectedClient: string | null = null;
     userPermissions: any;
-   
+    selectedMonth: number | null = null;
+    selectedMonthLabel: string = '';
+    selectedYear: any;
+    years: { label: string, value: number }[] = [
+        { label: `${this.currentYear}`, value: this.currentYear },
+        { label: `${this.currentYear - 1}`, value: this.currentYear - 1 }
+    ];
+    months: { label: string, value: number }[] = [
+        { label: 'Gennaio', value: 0 },
+        { label: 'Febbraio', value: 1 },
+        { label: 'Marzo', value: 2 },
+        { label: 'Aprile', value: 3 },
+        { label: 'Maggio', value: 4 },
+        { label: 'Giugno', value: 5 },
+        { label: 'Luglio', value: 6 },
+        { label: 'Agosto', value: 7 },
+        { label: 'Settembre', value: 8 },
+        { label: 'Ottobre', value: 9 },
+        { label: 'Novembre', value: 10 },
+        { label: 'Dicembre', value: 11 }
+    ];
     private ngUnsubscribe: Subject<void> = new Subject<void>();
+    isLoading: boolean;
 
     constructor(
         private userService: UserService,
@@ -47,14 +73,25 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     ) {
         this.workForceForm = this.fb.group({
             associatedClient: [null, Validators.required],
-            startDate: [new Date(this.currentYear, 0, 1), Validators.required],
-            endDate: [new Date(this.currentYear, 11, 31), Validators.required]
+            selectedMonth: [null, Validators.required],
+            selectedYear: [null, Validators.required]
         });
     }
 
     ngOnInit(): void {
         this.getAllAssociatedClients();
-        this.generateMonthsAndDays();
+
+        // Set current year and month
+        const currentMonth = new Date().getMonth(); // 0-based index (0 = January)
+        const currentYear = new Date().getFullYear(); // Current year
+
+        // Initialize the form with the current month and year
+        this.workForceForm.patchValue({
+            selectedMonth: currentMonth,
+            selectedYear: currentYear
+        });
+        this.selectedMonth = currentMonth;
+        this.selectedYear = currentYear;
 
         // Listen for changes to the selectedClient and fetch new permissions
         this.workForceForm.get('associatedClient')?.valueChanges
@@ -64,27 +101,32 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
                 this.getAllPermissionsByClient();
             });
 
-        // Listen for changes to the startDate and endDate and regenerate days
-        this.workForceForm.get('startDate')?.valueChanges
+        // Listen for changes to the selectedMonth and update the days
+        this.workForceForm.get('selectedMonth')?.valueChanges
             .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(() => {
-                this.generateMonthsAndDays();
+            .subscribe(month => {
+                console.log(month)
+                this.selectedMonth = month;
+                this.selectedMonthLabel = this.months.find(m => m.value === month)?.label || '';
+                this.generateDaysForMonth(month);
                 this.getAllPermissionsByClient();
             });
 
-        this.workForceForm.get('endDate')?.valueChanges
+        // Listen for changes to the selectedYear and update the days
+        this.workForceForm.get('selectedYear')?.valueChanges
             .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(() => {
-                this.generateMonthsAndDays();
+            .subscribe(year => {
+                console.log(year)
+                this.selectedYear = year;
+                this.generateDaysForMonth(this.selectedMonth);
                 this.getAllPermissionsByClient();
             });
 
-        // Initial load of permissions
+        // Initial load of permissions and day generation
+        this.generateDaysForMonth(currentMonth);
         this.getAllPermissionsByClient();
     }
 
-    ngAfterViewInit(): void {
-    }
 
     ngOnDestroy(): void {
         this.ngUnsubscribe.next();
@@ -93,12 +135,43 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
 
 
     getAllPermissionsByClient() {
-        const startDate = this.workForceForm.get('startDate')?.value;
-        const endDate = this.workForceForm.get('endDate')?.value;
-        this.permissionService.getPermissionsByClient(this.selectedClient, startDate, endDate)
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(data => this.userPermissions = data);
+        console.log(this.selectedMonth);
+        console.log(this.selectedYear);
+
+        // Ensure selectedMonth and selectedYear are not null
+        if (this.selectedMonth !== null && this.selectedYear !== null) {
+            this.isLoading = true; // Start loading
+
+            // Adjust the startDate and endDate based on the selected month and year
+            const startOfMonth = new Date(this.selectedYear, this.selectedMonth, 1);
+            const endOfMonth = new Date(this.selectedYear, this.selectedMonth + 1, 0);
+
+            // Set the end of the month to the last moment (23:59:59.999)
+            endOfMonth.setHours(23, 59, 59, 999);
+
+            // Call the service to get permissions
+            this.permissionService.getPermissionsByClient(
+                this.selectedClient,
+                startOfMonth,
+                endOfMonth
+            )
+                .pipe(takeUntil(this.ngUnsubscribe))
+                .subscribe({
+                    next: (data) => {
+                        this.userPermissions = data;
+                        this.isLoading = false; // Stop loading
+                    },
+                    error: (error) => {
+                        console.error('Error fetching permissions:', error);
+                        this.isLoading = false; // Stop loading on error
+                    }
+                });
+        } else {
+            console.warn('Selected month or year is not set.');
+        }
     }
+
+
 
     getAllAssociatedClients() {
         this.userService.getAllAssociatedClients()
@@ -109,18 +182,28 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
             );
     }
 
-    generateMonthsAndDays() {
-        this.allMonths = [];
+    // generateMonthsAndDays(selectedMonth: number) {
+    //     this.allMonths = [];
+    //     this.allDays = [];
+    //     const startDate = new Date(this.workForceForm.get('startDate')?.value || new Date(this.currentYear, 0, 1));
+    //     const endDate = new Date(this.workForceForm.get('endDate')?.value || new Date(this.currentYear, 11, 31));
+
+    //     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+    //         this.allDays.push(new Date(d));
+    //         if (d.getDate() === 1) {
+    //             const monthName = d.toLocaleDateString('it-IT', { month: 'long' });
+    //             this.allMonths.push(monthName);
+    //         }
+    //     }
+    // }
+
+    generateDaysForMonth(month: number) {
         this.allDays = [];
-        const startDate = new Date(this.workForceForm.get('startDate')?.value || new Date(this.currentYear, 0, 1));
-        const endDate = new Date(this.workForceForm.get('endDate')?.value || new Date(this.currentYear, 11, 31));
+        const startDate = new Date(this.selectedYear, month, 1);
+        const endDate = new Date(this.selectedYear, month + 1, 0);
 
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
             this.allDays.push(new Date(d));
-            if (d.getDate() === 1) {
-                const monthName = d.toLocaleDateString('it-IT', { month: 'long' });
-                this.allMonths.push(monthName);
-            }
         }
     }
 
@@ -128,8 +211,11 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
         return new Date(year, month + 1, 0).getDate();
     }
 
-    getAbsenceType(user: User, day: Date): string {
+    getAbsenceOrAttendancesType(user: User, day: Date): string {
+
         const dayTime = new Date(day.setHours(0, 0, 0, 0)).getTime();
+
+        // Controlla prima nelle assenze
         const absence = user.absences.find(absence =>
             absence.date.split(',').some(dateStr => {
                 const [day, month, year] = dateStr.trim().split('-').map(Number);
@@ -137,11 +223,29 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
                 return absenceDate === dayTime;
             })
         );
-        return absence ? absence.type : '';
+
+
+        if (absence) {
+            return absence.type;
+        }
+
+        // Se non c'è assenza, controlla se è presente nelle presenze
+        const attendance = user.attendances.find(attendance =>
+            attendance.date.split(',').some(dateStr => {
+                const [day, month, year] = dateStr.trim().split('-').map(Number);
+                const attendanceDate = new Date(year, month - 1, day).getTime();
+                return attendanceDate === dayTime;
+            })
+        );
+        if (attendance) {
+            return attendance.type;
+        }
+        return ''
     }
 
+
     getDayClasses(user: User, day: Date): any {
-        const absenceType = this.getAbsenceType(user, day);
+        const absenceType = this.getAbsenceOrAttendancesType(user, day);
         const isToday = this.isToday(day);
         return {
             'current-day': isToday,
@@ -154,13 +258,17 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     getAbsenceSymbol(user: User, day: Date): string {
-        const absenceType = this.getAbsenceType(user, day);
-        switch (absenceType) {
+        const absenceOrAttendanceType = this.getAbsenceOrAttendancesType(user, day);
+        switch (absenceOrAttendanceType) {
             case 'Malattia': return 'M';
             case 'Ferie': return 'F';
             case 'Permesso': return 'P';
             case 'Permesso ROL': return 'Pr';
-            default: return '';
+            case 'Presente': return '8';
+            case 'Verificare': return '-';
+            case 'CheckOut?': return '?';
+
+            default: return absenceOrAttendanceType.slice(0, 2).toUpperCase();
         }
     }
 
@@ -233,7 +341,7 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
         const endDate = new Date(this.workForceForm.get('endDate')?.value);
         return this.userPermissions?.map((user: User) => {
             const malattieCount = user.absences.filter(absence => absence.type === 'Malattia')
-                
+
                 .reduce((count, absence) => {
                     const dates = absence.date.split(',');
                     return count + dates

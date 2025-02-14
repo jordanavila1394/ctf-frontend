@@ -13,18 +13,32 @@
                                 </ng-template>
                             </p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-3">
+                        <!-- <div class="field col-12 md:col-3">
                             <label for="startDate">Data di Inizio</label>
                             <p-calendar formControlName="startDate" placeholder="Seleziona data"></p-calendar>
                         </div>
                         <div class="field col-12 md:col-3">
                             <label for="endDate">Data di Fine</label>
                             <p-calendar formControlName="endDate" placeholder="Seleziona data"></p-calendar>
+                        </div> -->
+                        <div class="field col-12 md:col-3">
+                            <label for="year">Seleziona Anno:</label>
+                            <p-dropdown [options]="years" formControlName="selectedYear" [(ngModel)]="selectedYear"
+                                placeholder="Select Year"></p-dropdown>
                         </div>
+                        
+                        <div class="field col-12 md:col-3">
+                            <label for="month">Seleziona Mese:</label>
+                            <p-dropdown [options]="months" formControlName="selectedMonth" [(ngModel)]="selectedMonth"
+                                placeholder="Select Month"></p-dropdown>
+                        </div>
+
+
                     </div>
                 </form>
+                <p-progressSpinner *ngIf="isLoading"></p-progressSpinner>
                 
-                <div class="table-container">
+                <div class="table-container" *ngIf="!isLoading">
                     <div class="left-pane">
                         <table>
                             <thead>
@@ -33,9 +47,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td></td>
-                                </tr>
+                               
                                 <tr *ngFor="let user of userPermissions">
                                     <td><span class="user-name">{{ user.name }} {{ user.surname }}</span></td>
                                 </tr>
@@ -67,10 +79,12 @@
                                 <tbody>
 
                                     <ng-container *ngFor="let user of userPermissions">
+                                        
                                         <tr>
                                             <ng-container *ngFor="let day of allDays; let isLast = last">
                                                 <td [ngClass]="getDayClasses(user, day)">
                                                     {{ getAbsenceSymbol(user, day) }}
+
                                                 </td>
                                             </ng-container>
                                         </tr>
@@ -80,7 +94,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="permessi-rol-pane">
+                    <!-- <div class="permessi-rol-pane">
                         <table>
                             <thead>
                                 <tr>
@@ -145,7 +159,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
