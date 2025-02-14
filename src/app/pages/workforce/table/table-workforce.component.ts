@@ -10,9 +10,14 @@ interface User {
     name: string;
     surname: any;
     absences: Absence[];
+    attendances: any[];
 }
 
 interface Absence {
+    date: string;
+    type: AbsenceType;
+}
+interface Attendances {
     date: string;
     type: AbsenceType;
 }
@@ -36,7 +41,7 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     workForceForm: FormGroup;
     selectedClient: string | null = null;
     userPermissions: any;
-   
+
     private ngUnsubscribe: Subject<void> = new Subject<void>();
 
     constructor(
@@ -128,8 +133,11 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
         return new Date(year, month + 1, 0).getDate();
     }
 
-    getAbsenceType(user: User, day: Date): string {
+    getAbsenceOrAttendancesType(user: User, day: Date): string {
+
         const dayTime = new Date(day.setHours(0, 0, 0, 0)).getTime();
+
+        // Controlla prima nelle assenze
         const absence = user.absences.find(absence =>
             absence.date.split(',').some(dateStr => {
                 const [day, month, year] = dateStr.trim().split('-').map(Number);
@@ -137,11 +145,29 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
                 return absenceDate === dayTime;
             })
         );
-        return absence ? absence.type : '';
+
+
+        if (absence) {
+            return absence.type;
+        }
+
+        // Se non c'è assenza, controlla se è presente nelle presenze
+        const attendance = user.attendances.find(attendance =>
+            attendance.date.split(',').some(dateStr => {
+                const [day, month, year] = dateStr.trim().split('-').map(Number);
+                const attendanceDate = new Date(year, month - 1, day).getTime();
+                return attendanceDate === dayTime;
+            })
+        );
+        if (attendance) {
+            return attendance.type;
+        }
+        return ''
     }
 
+
     getDayClasses(user: User, day: Date): any {
-        const absenceType = this.getAbsenceType(user, day);
+        const absenceType = this.getAbsenceOrAttendancesType(user, day);
         const isToday = this.isToday(day);
         return {
             'current-day': isToday,
@@ -154,12 +180,14 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     getAbsenceSymbol(user: User, day: Date): string {
-        const absenceType = this.getAbsenceType(user, day);
-        switch (absenceType) {
+        const absenceOrAttendanceType = this.getAbsenceOrAttendancesType(user, day);
+        switch (absenceOrAttendanceType) {
             case 'Malattia': return 'M';
             case 'Ferie': return 'F';
             case 'Permesso': return 'P';
             case 'Permesso ROL': return 'Pr';
+            case 'Presente': return '8';
+            case 'Verificare': return '-';
             default: return '';
         }
     }
@@ -233,7 +261,7 @@ export class TableWorkforceComponent implements OnInit, AfterViewInit, OnDestroy
         const endDate = new Date(this.workForceForm.get('endDate')?.value);
         return this.userPermissions?.map((user: User) => {
             const malattieCount = user.absences.filter(absence => absence.type === 'Malattia')
-                
+
                 .reduce((count, absence) => {
                     const dates = absence.date.split(',');
                     return count + dates

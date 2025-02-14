@@ -67,10 +67,12 @@
                                 <tbody>
 
                                     <ng-container *ngFor="let user of userPermissions">
+                                        
                                         <tr>
                                             <ng-container *ngFor="let day of allDays; let isLast = last">
                                                 <td [ngClass]="getDayClasses(user, day)">
                                                     {{ getAbsenceSymbol(user, day) }}
+                                                    
                                                 </td>
                                             </ng-container>
                                         </tr>
