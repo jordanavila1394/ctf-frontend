@@ -18,6 +18,7 @@ import { DefaultAutocompleteModule } from 'src/app/shared/components/default-aut
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MenuModule } from 'primeng/menu';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { TableWorkforceRoutingModule } from './table-workforce-routing.module';
 import { TableWorkforceComponent } from './table-workforce.component';
@@ -45,6 +46,7 @@ import { TranslateModule } from '@ngx-translate/core';
         FormsModule,
         TranslateModule,
         ReactiveFormsModule,
+        ProgressSpinnerModule,
         ToastModule,
     ],
     declarations: [TableWorkforceComponent],
