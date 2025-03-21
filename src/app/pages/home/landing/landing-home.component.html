@@ -76,7 +76,7 @@
             </p>
         </div>
     </div> -->
-    <div class="col-12" *ngIf="currentCellphone.length==0">
+    <div class="col-12" *ngIf="currentCellphone && currentCellphone?.length===0">
         <div class="card" style="display: flex; justify-content: center">
             <p style="font-size: 0.7rem; color: orange">
                 <strong>cellulare</strong> mancante, aggiungila per
