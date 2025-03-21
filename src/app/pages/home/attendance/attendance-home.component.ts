@@ -326,7 +326,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         );
 
         if (this.storeUser.fiscalCode === 'SKRYHN82S12Z154G') {
-            this.isNearDistance = this.distanceBetween < 100;
+            this.isNearDistance = true;
         } else {
             this.isNearDistance = this.distanceBetween < 1;
         }
