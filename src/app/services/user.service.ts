@@ -21,6 +21,10 @@ export class UserService {
         return this.http.get(API_URL + 'getAllAssociatedClients', httpOptions);
     }
 
+    getAllAssociatedBranchs(): Observable<any> {
+        return this.http.get(API_URL + 'getAllAssociatedBranchs', httpOptions);
+    }
+
     getAllCeosByCompany(id: string): Observable<any> {
         return this.http.get(API_URL + 'allCeosByCompany' + '/' + id);
     }
@@ -71,6 +75,7 @@ export class UserService {
         companyId: string,
         workerNumber: string,
         associatedClient: string,
+        associatedBranch: string,
         position: string,
         address: string,
         iban: string,
@@ -91,6 +96,7 @@ export class UserService {
                 companyId,
                 workerNumber,
                 associatedClient,
+                associatedBranch,
                 position,
                 address,
                 iban,
@@ -113,6 +119,7 @@ export class UserService {
         companyId: string,
         workerNumber: string,
         associatedClient: string,
+        associatedBranch: string,
         position: string,
         address: string,
         iban: string,
@@ -133,6 +140,7 @@ export class UserService {
                 companyId,
                 workerNumber,
                 associatedClient,
+                associatedBranch,
                 position,
                 address,
                 iban,

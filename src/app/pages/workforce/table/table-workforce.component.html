@@ -6,10 +6,19 @@
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12 md:col-6">
                             <label for="associatedClient">Seleziona Cliente Associato</label>
-                            <p-dropdown [options]="associatedClients" formControlName="associatedClient"
+                            <p-dropdown (onChange)="onChangeClient($event)" [options]="associatedClients" formControlName="associatedClient"
                                 placeholder="--Cliente--" [(ngModel)]="selectedClient" [required]="true">
                                 <ng-template let-client pTemplate="item">
                                     {{ client }}
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label for="associatedClient">Seleziona Filiale Associato</label>
+                            <p-dropdown (onChange)="onChangeBranch($event)" [options]="associatedBranchs" formControlName="associatedBranch" placeholder="--Filiale--"
+                                [(ngModel)]="selectedBranch" [required]="true">
+                                <ng-template let-branch pTemplate="item">
+                                    {{ branch }}
                                 </ng-template>
                             </p-dropdown>
                         </div>
@@ -23,13 +32,13 @@
                         </div> -->
                         <div class="field col-12 md:col-3">
                             <label for="year">Seleziona Anno:</label>
-                            <p-dropdown [options]="years" formControlName="selectedYear" [(ngModel)]="selectedYear"
+                            <p-dropdown (onChange)="onChangeAnno($event)"  [options]="years" formControlName="selectedYear" [(ngModel)]="selectedYear"
                                 placeholder="Select Year"></p-dropdown>
                         </div>
                         
                         <div class="field col-12 md:col-3">
                             <label for="month">Seleziona Mese:</label>
-                            <p-dropdown [options]="months" formControlName="selectedMonth" [(ngModel)]="selectedMonth"
+                            <p-dropdown (onChange)="onChangeMese($event)" [options]="months" formControlName="selectedMonth" [(ngModel)]="selectedMonth"
                                 placeholder="Select Month"></p-dropdown>
                         </div>
 
