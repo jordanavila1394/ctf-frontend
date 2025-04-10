@@ -77,6 +77,7 @@ export class CreateUserComponent implements OnInit {
         fiscalCode: ['', [Validators.required]],
         workerNumber: [''],
         associatedClient: [''],
+        associatedBranch: [''],
         position: [''],
         address: [''],
         birthCountry: [''],
@@ -87,7 +88,7 @@ export class CreateUserComponent implements OnInit {
         status: [true, [Validators.required]],
     });
 
-    selectAddress(place: any): void {}
+    selectAddress(place: any): void { }
 
     forceLower(strInput) {
         strInput.value = strInput.value.toLowerCase();
@@ -132,6 +133,7 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.companyId,
                 this.createForm.value.workerNumber,
                 this.createForm.value.associatedClient,
+                this.createForm.value.associatedBranch,
                 this.createForm.value.position,
                 this.createForm.value.address,
                 this.createForm.value.iban,

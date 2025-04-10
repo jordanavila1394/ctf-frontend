@@ -38,8 +38,10 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     currentYear: number = new Date().getFullYear();
     currentDate: Date = new Date();
     associatedClients: any[] = [];
+    associatedBranchs: any[] = [];
     workForceForm: FormGroup;
     selectedClient: string | null = null;
+    selectedBranch: string | null = null;
     userPermissions: any;
     selectedMonth: number | null = null;
     selectedMonthLabel: string = '';
@@ -80,7 +82,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.getAllAssociatedClients();
-
+        this.getAllAssociatedBranchs();
         // Set current year and month
         const currentMonth = new Date().getMonth(); // 0-based index (0 = January)
         const currentYear = new Date().getFullYear(); // Current year
@@ -93,38 +95,45 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
         this.selectedMonth = currentMonth;
         this.selectedYear = currentYear;
 
-        // Listen for changes to the selectedClient and fetch new permissions
-        this.workForceForm.get('associatedClient')?.valueChanges
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(selectedClient => {
-                this.selectedClient = selectedClient;
-                this.getAllPermissionsByClient();
-            });
-
-        // Listen for changes to the selectedMonth and update the days
-        this.workForceForm.get('selectedMonth')?.valueChanges
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(month => {
-                console.log(month)
-                this.selectedMonth = month;
-                this.selectedMonthLabel = this.months.find(m => m.value === month)?.label || '';
-                this.generateDaysForMonth(month);
-                this.getAllPermissionsByClient();
-            });
-
-        // Listen for changes to the selectedYear and update the days
-        this.workForceForm.get('selectedYear')?.valueChanges
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(year => {
-                console.log(year)
-                this.selectedYear = year;
-                this.generateDaysForMonth(this.selectedMonth);
-                this.getAllPermissionsByClient();
-            });
-
         // Initial load of permissions and day generation
         this.generateDaysForMonth(currentMonth);
-        this.getAllPermissionsByClient();
+        this.getAllPermissionsByClientAndBranch();
+    }
+
+    onChangeClient(event: any) {
+        console.log(event.value);
+        this.selectedClient = event.value;
+        this.workForceForm.patchValue({
+            associatedClient: event.value
+        });
+        this.getAllPermissionsByClientAndBranch();
+    }
+
+    onChangeBranch(event: any) {
+        console.log(event.value);
+        this.selectedBranch = event.value;
+        this.workForceForm.patchValue({
+            selectedBranch: event.value
+        });
+        this.getAllPermissionsByClientAndBranch();
+    }
+
+    onChangeMese(event: any) {
+        console.log(event.value);
+        this.selectedMonth = event.value;
+        this.workForceForm.patchValue({
+            selectedMonth: event.value
+        });
+        this.getAllPermissionsByClientAndBranch();
+    }
+
+    onChangeAnno(event: any) {
+        console.log(event.value);
+        this.selectedYear = event.value;
+        this.workForceForm.patchValue({
+            selectedYear: event.value
+        });
+        this.getAllPermissionsByClientAndBranch();
     }
 
 
@@ -134,9 +143,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     }
 
 
-    getAllPermissionsByClient() {
-        console.log(this.selectedMonth);
-        console.log(this.selectedYear);
+    getAllPermissionsByClientAndBranch() {
 
         // Ensure selectedMonth and selectedYear are not null
         if (this.selectedMonth !== null && this.selectedYear !== null) {
@@ -150,8 +157,9 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             endOfMonth.setHours(23, 59, 59, 999);
 
             // Call the service to get permissions
-            this.permissionService.getPermissionsByClient(
+            this.permissionService.getAllPermissionsByClientAndBranch(
                 this.selectedClient,
+                this.selectedBranch,
                 startOfMonth,
                 endOfMonth
             )
@@ -182,21 +190,16 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             );
     }
 
-    // generateMonthsAndDays(selectedMonth: number) {
-    //     this.allMonths = [];
-    //     this.allDays = [];
-    //     const startDate = new Date(this.workForceForm.get('startDate')?.value || new Date(this.currentYear, 0, 1));
-    //     const endDate = new Date(this.workForceForm.get('endDate')?.value || new Date(this.currentYear, 11, 31));
+    getAllAssociatedBranchs() {
+        this.userService.getAllAssociatedBranchs()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe(
+                branchs => this.associatedBranchs = branchs,
+                error => console.error('Error fetching associated clients:', error)
+            );
+    }
 
-    //     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    //         this.allDays.push(new Date(d));
-    //         if (d.getDate() === 1) {
-    //             const monthName = d.toLocaleDateString('it-IT', { month: 'long' });
-    //             this.allMonths.push(monthName);
-    //         }
-    //     }
-    // }
-
+  
     generateDaysForMonth(month: number) {
         this.allDays = [];
         const startDate = new Date(this.selectedYear, month, 1);
