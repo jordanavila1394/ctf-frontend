@@ -255,6 +255,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             'malattia': absenceType === 'Malattia',
             'permesso': absenceType === 'Permesso',
             'permesso-rol': absenceType === 'Permesso ROL',
+            'congedo-parentale': absenceType === 'Congedo parentale',
             'ferie': absenceType === 'Ferie',
             'weekend': day.getDay() === 0 || day.getDay() === 6
         };
@@ -267,6 +268,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             case 'Ferie': return 'F';
             case 'Permesso': return 'P';
             case 'Permesso ROL': return 'Pr';
+            case 'Congedo parentale': return 'CP';
             case 'Presente': return '8';
             case 'Verificare': return '-';
             case 'CheckOut?': return '?';

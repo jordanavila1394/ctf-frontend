@@ -80,6 +80,10 @@ export class PermissionHomeComponent implements OnInit {
             name: 'Giorno non retribuito',
             value: 'Giorno non retribuito',
         },
+        {
+            name: 'Congedo parentale',
+            value: 'Congedo parentale',
+        },
     ];
     permissions: any;
     adminEmails: any;
