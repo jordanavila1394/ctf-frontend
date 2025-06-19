@@ -4,7 +4,8 @@ import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PermissionService } from 'src/app/services/permission.service';
 import { UserService } from 'src/app/services/user.service';
-
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 interface User {
     id: number;
     name: string;
@@ -66,6 +67,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     ];
     private ngUnsubscribe: Subject<void> = new Subject<void>();
     isLoading: boolean;
+
+    EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 
     constructor(
         private userService: UserService,
@@ -201,7 +204,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             );
     }
 
-  
+
     generateDaysForMonth(month: number) {
         this.allDays = [];
         const startDate = new Date(this.selectedYear, month, 1);
@@ -432,5 +435,79 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
         } else {
             console.log('centerPaneRef or its nativeElement is null or undefined.');
         }
+    }
+
+    exportToExcelWithColors(): void {
+        const ws: XLSX.WorkSheet = {};
+        const range = { s: { r: 0, c: 0 }, e: { r: 0, c: 0 } };
+
+        // Header
+        const headers = ['Nome'].concat(this.allDays.map(day => day.toLocaleDateString('it-IT')));
+        headers.forEach((header, i) => {
+            const cellRef = XLSX.utils.encode_cell({ r: 0, c: i });
+            ws[cellRef] = {
+                v: header,
+                t: 's',
+                s: {
+                    font: { bold: true },
+                    fill: { fgColor: { rgb: 'D9E1F2' } }
+                }
+            };
+        });
+
+        // Body
+        this.userPermissions.forEach((user, rowIndex) => {
+            const fullName = `${user.name} ${user.surname}`;
+            const row = rowIndex + 1;
+
+            // Nome
+            const nameCell = XLSX.utils.encode_cell({ r: row, c: 0 });
+            ws[nameCell] = { v: fullName, t: 's' };
+
+            // Giorni
+            this.allDays.forEach((day, dayIndex) => {
+                const col = dayIndex + 1;
+                const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+                const symbol = this.getAbsenceSymbol(user, day);
+                const color = this.getColorForSymbol(symbol);
+
+                ws[cellRef] = {
+                    v: symbol,
+                    t: 's',
+                    s: {
+                        fill: { fgColor: { rgb: color } }
+                    }
+                };
+            });
+        });
+
+        ws['!ref'] = XLSX.utils.encode_range({
+            s: { r: 0, c: 0 },
+            e: { r: this.userPermissions.length, c: this.allDays.length }
+        });
+
+        const wb: XLSX.WorkBook = { SheetNames: ['Assenze'], Sheets: { 'Assenze': ws } };
+        const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const client = this.workForceForm.value.associatedClient || 'cliente';
+        const month = this.workForceForm.value.selectedMonth || 'mese';
+        const year = this.workForceForm.value.selectedYear || 'anno';
+
+        const filename = `workforce_report_${client}_${month}_${year}`;
+        this.saveAsExcelFile(excelBuffer, filename);
+
+    }
+
+    getColorForSymbol(symbol: string): string {
+        switch (symbol) {
+            case 'F': return 'FFEB9C'; // giallo (ferie)
+            case 'M': return 'FFC7CE'; // rosso chiaro (malattia)
+            case 'R': return 'C6EFCE'; // verde chiaro (ROL)
+            default: return 'FFFFFF';  // bianco
+        }
+    }
+
+    private saveAsExcelFile(buffer: any, fileName: string): void {
+        const data: Blob = new Blob([buffer], { type: this.EXCEL_TYPE });
+        FileSaver.saveAs(data, `${fileName}.xlsx`);
     }
 }

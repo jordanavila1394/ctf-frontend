@@ -6,8 +6,9 @@
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12 md:col-6">
                             <label for="associatedClient">Seleziona Cliente Associato</label>
-                            <p-dropdown (onChange)="onChangeClient($event)" [options]="associatedClients" formControlName="associatedClient"
-                                placeholder="--Cliente--" [(ngModel)]="selectedClient" [required]="true">
+                            <p-dropdown (onChange)="onChangeClient($event)" [options]="associatedClients"
+                                formControlName="associatedClient" placeholder="--Cliente--"
+                                [(ngModel)]="selectedClient" [required]="true">
                                 <ng-template let-client pTemplate="item">
                                     {{ client }}
                                 </ng-template>
@@ -15,7 +16,8 @@
                         </div>
                         <div class="field col-12 md:col-6">
                             <label for="associatedClient">Seleziona Filiale Associato</label>
-                            <p-dropdown (onChange)="onChangeBranch($event)" [options]="associatedBranchs" formControlName="associatedBranch" placeholder="--Filiale--"
+                            <p-dropdown (onChange)="onChangeBranch($event)" [options]="associatedBranchs"
+                                formControlName="associatedBranch" placeholder="--Filiale--"
                                 [(ngModel)]="selectedBranch" [required]="true">
                                 <ng-template let-branch pTemplate="item">
                                     {{ branch }}
@@ -32,21 +34,28 @@
                         </div> -->
                         <div class="field col-12 md:col-3">
                             <label for="year">Seleziona Anno:</label>
-                            <p-dropdown (onChange)="onChangeAnno($event)"  [options]="years" formControlName="selectedYear" [(ngModel)]="selectedYear"
+                            <p-dropdown (onChange)="onChangeAnno($event)" [options]="years"
+                                formControlName="selectedYear" [(ngModel)]="selectedYear"
                                 placeholder="Select Year"></p-dropdown>
                         </div>
-                        
+
                         <div class="field col-12 md:col-3">
                             <label for="month">Seleziona Mese:</label>
-                            <p-dropdown (onChange)="onChangeMese($event)" [options]="months" formControlName="selectedMonth" [(ngModel)]="selectedMonth"
+                            <p-dropdown (onChange)="onChangeMese($event)" [options]="months"
+                                formControlName="selectedMonth" [(ngModel)]="selectedMonth"
                                 placeholder="Select Month"></p-dropdown>
                         </div>
+                        <div class="field col-12 md:col-3">
+                            <button pButton type="button" label="Esporta in Excel" icon="pi pi-file-excel"
+                                (click)="exportToExcelWithColors()"></button>
+                        </div>
+
 
 
                     </div>
                 </form>
                 <p-progressSpinner *ngIf="isLoading"></p-progressSpinner>
-                
+
                 <div class="table-container" *ngIf="!isLoading">
                     <div class="left-pane">
                         <table>
@@ -56,9 +65,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               
+
                                 <tr *ngFor="let user of userPermissions">
-                                    <td><span class="user-name">{{ user.name }} {{ user.surname }}</span></td>
+                                    <td style="text-align: left;"><span class="user-name">{{ user.name }} <br>{{
+                                            user.surname }}</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -88,7 +98,7 @@
                                 <tbody>
 
                                     <ng-container *ngFor="let user of userPermissions">
-                                        
+
                                         <tr>
                                             <ng-container *ngFor="let day of allDays; let isLast = last">
                                                 <td [ngClass]="getDayClasses(user, day)">
