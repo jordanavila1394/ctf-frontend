@@ -124,6 +124,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
         this.workForceForm.patchValue({
             selectedMonth: event.value
         });
+        this.generateDaysForMonth(this.selectedMonth);
         this.getAllPermissionsByClientAndBranch();
     }
 
@@ -133,6 +134,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
         this.workForceForm.patchValue({
             selectedYear: event.value
         });
+        this.generateDaysForMonth(this.selectedMonth);
         this.getAllPermissionsByClientAndBranch();
     }
 
