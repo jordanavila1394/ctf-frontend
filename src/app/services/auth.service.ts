@@ -35,6 +35,33 @@ export class AuthService {
         );
     }
 
+    loginWithPIN(pin: string): Observable<any> {
+        return this.http.post(
+            API_URL + 'signin-pin',
+            { pin },
+            httpOptions
+        );
+    }
+      
+
+    generaPIN(id: string,): Observable<any> {
+        return this.http.post(
+            API_URL + 'generate-pin',
+            {
+                id,
+            },
+            httpOptions
+        );
+    }
+    getUserPin(id: string): Observable<any> {
+        return this.http.get(
+            API_URL + `user-pin/${id}`,
+            httpOptions
+        );
+    }
+    
+
+
     register(
         fiscalCode: string,
         email: string,

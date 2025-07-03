@@ -8,6 +8,14 @@ export class LoginRequest {
   }
 }
 
+export class LoginPINRequest {
+  public pin: string;
+
+  constructor (pin: string) {
+    this.pin = pin;
+  }
+} 
+
 export class RegisterRequest {
   public username: string;
   public email: string;

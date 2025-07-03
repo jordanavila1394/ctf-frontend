@@ -1,4 +1,4 @@
-import { LoginRequest, RegisterRequest } from './../../models/global.request';
+import { LoginPINRequest, LoginRequest, RegisterRequest } from './../../models/global.request';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
@@ -16,6 +16,7 @@ import {
     register,
     registerSuccess,
     registerFailure,
+    loginWithPin,
 } from './authentication.actions';
 
 import { AuthService } from '../../services/auth.service';
@@ -31,6 +32,19 @@ export class AuthEffects {
             map((action) => action.request),
             exhaustMap((auth: LoginRequest) =>
                 this.authService.login(auth.username, auth.password).pipe(
+                    map((user) => loginSuccess({ user })),
+                    catchError((error) => of(loginFailure({ error }))),
+                ),
+            ),
+        ),
+    );
+    
+    loginWithPin$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loginWithPin),
+            map((action) => action.request),
+            exhaustMap((auth: LoginPINRequest) =>
+                this.authService.loginWithPIN(auth.pin).pipe(
                     map((user) => loginSuccess({ user })),
                     catchError((error) => of(loginFailure({ error }))),
                 ),

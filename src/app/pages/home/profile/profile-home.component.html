@@ -202,5 +202,16 @@
                 ></button>
             </form>
         </div>
+        <div class="card">
+            <h5>PIN</h5>
+            <p>Il PIN è un codice che serve per fare la login</p>
+        
+            <div>
+                <p>{{ pinMessage }}</p>
+        
+                <button pButton pRipple label="Genera pin" class="w-full p-3 text-xl" (click)="generaPIN()"></button>
+            </div>
+        
+        </div>
     </div>
 </div>

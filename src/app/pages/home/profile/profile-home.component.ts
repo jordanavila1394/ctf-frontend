@@ -24,6 +24,7 @@ import { PermissionService } from 'src/app/services/permission.service';
 import { MessageService } from 'primeng/api';
 import { EmailService } from 'src/app/services/email.service';
 import { environment } from 'src/environments/environment';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     templateUrl: './profile-home.component.html',
@@ -60,12 +61,17 @@ export class ProfileHomeComponent implements OnInit {
         { validator: this.checkPasswords },
     );
 
+    pinMessage: string = '';
+    hasPin: boolean = false;
+
+
     constructor(
         public fb: FormBuilder,
         public layoutService: LayoutService,
         private permissionService: PermissionService,
         private messageService: MessageService,
         private userService: UserService,
+        private authService: AuthService,
         private emailService: EmailService,
         private router: Router,
         private store: Store<{ authState: AuthState }>,
@@ -78,6 +84,7 @@ export class ProfileHomeComponent implements OnInit {
         this.fetchCountries();
         this.authState$.subscribe((authS) => {
             this.currentUser = authS?.user || '';
+            
             this.loadServices(this.currentUser);
         });
         const layourServiceSubscription =
@@ -120,6 +127,16 @@ export class ProfileHomeComponent implements OnInit {
             .getUser(currentUser.id)
             .subscribe((data) => {
                 this.currentUser = data;
+                this.authService.getUserPin(this.currentUser.id).subscribe((pin) => {
+                    let resultPin = pin?.pin || '';
+                    if (resultPin) {
+                        this.pinMessage = `PIN: ${pin.pin}`;
+                        this.hasPin = true;
+                    } else {
+                        this.pinMessage = "Non è stato generato un PIN per questo utente";
+                        this.hasPin = false;
+                    }
+                });
 
                 this.profileForm.patchValue({
                     name: this.currentUser.name,
@@ -184,5 +201,22 @@ export class ProfileHomeComponent implements OnInit {
                 });
                 this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
             });
+    }
+
+    generaPIN() {
+        this.authService
+            .generaPIN(
+                this.currentUser.id,
+            )
+            .subscribe((res) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Avviso',
+                    detail: 'Hai generato il PIN con successo',
+                });
+                this.loadServices(this.currentUser);
+
+            }
+        );
     }
 }
