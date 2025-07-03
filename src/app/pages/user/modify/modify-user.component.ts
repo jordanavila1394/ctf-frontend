@@ -12,12 +12,14 @@ import { AttendanceService } from 'src/app/services/attendance.service';
 import { VehicleService } from 'src/app/services/vehicle.service';
 import { Subscription } from 'rxjs';
 import { getData } from 'country-list';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     templateUrl: './modify-user.component.html',
     providers: [MessageService, ConfirmationService],
 })
 export class ModifyUserComponent implements OnInit {
+
     idUser: string;
 
     selectedLegalForm: any = null;
@@ -90,6 +92,10 @@ export class ModifyUserComponent implements OnInit {
         placeId: null,
         vehicleId: null,
     });
+
+    pinMessage: string = '';
+    hasPin: boolean = false;
+
     constructor(
         public fb: FormBuilder,
         private route: ActivatedRoute,
@@ -100,6 +106,7 @@ export class ModifyUserComponent implements OnInit {
         private vehicleService: VehicleService,
         private messageService: MessageService,
         private companyService: CompanyService,
+        private authService: AuthService,
         private roleService: RoleService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
@@ -193,6 +200,16 @@ export class ModifyUserComponent implements OnInit {
             this.modifyForm.controls['roleId'].disable({
                 onlySelf: true,
             });
+            this.authService.getUserPin(this.idUser).subscribe((pin) => {
+                let resultPin = pin?.pin || '';
+                if (resultPin) {
+                    this.pinMessage = `PIN: ${pin.pin}`;
+                    this.hasPin = true;
+                } else {
+                    this.pinMessage = "Non è stato generato un PIN per questo utente";
+                    this.hasPin = false;
+                }
+            });
             // this.modifyForm.controls['companyId'].disable({ onlySelf: true });
         });
 
@@ -210,7 +227,7 @@ export class ModifyUserComponent implements OnInit {
         });
     }
 
-    selectAddress(place: any): void {}
+    selectAddress(place: any): void { }
 
     updateUser(): void {
         this.userService
@@ -276,7 +293,7 @@ export class ModifyUserComponent implements OnInit {
         );
     }
 
-    onChangeVehicle(event) {}
+    onChangeVehicle(event) { }
 
     manualCheckIn() {
         this.attendanceService
@@ -298,4 +315,22 @@ export class ModifyUserComponent implements OnInit {
                 this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
             });
     }
+
+    generaPIN() {
+        this.authService
+            .generaPIN(
+                this.idUser,
+            )
+            .subscribe((res) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Avviso',
+                    detail: 'Hai generato il PIN con successo',
+                });
+                this.loadServices();
+            }
+            );
+    }
+
+
 }

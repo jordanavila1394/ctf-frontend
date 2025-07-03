@@ -1,4 +1,4 @@
-import { RegisterRequest } from 'src/app/models/global.request';
+import { LoginPINRequest, RegisterRequest } from 'src/app/models/global.request';
 import { LoginRequest } from './../../models/global.request';
 import { createAction } from '@ngrx/store';
 import { props } from '@ngrx/store';
@@ -26,6 +26,12 @@ export const login = createAction(
     '[Login Page] Login',
     props<{ request: LoginRequest }>()
 );
+
+export const loginWithPin = createAction(
+    '[Login Page] Login PIN',
+    props<{ request: LoginPINRequest }>()
+);
+
 
 //Register
 

@@ -5,7 +5,7 @@ import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AuthState } from '../../../stores/auth/authentication.reducer';
-import { login } from '../../../stores/auth/authentication.actions';
+import { login, loginWithPin } from '../../../stores/auth/authentication.actions';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginRequest } from 'src/app/models/global.request';
 
@@ -58,6 +58,15 @@ export class LoginComponent {
         fiscalCode: ['', [Validators.required]],
         password: ['', [Validators.required]],
     });
+    pinForm = this.fb.group({
+        pin: ['', [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.maxLength(5),
+            Validators.pattern(/^\d+$/) // solo numeri
+        ]]
+    });
+
     authState$: Observable<AuthState>;
     isLoggedIn = false;
     errorMessage = '';
@@ -67,6 +76,8 @@ export class LoginComponent {
     currentPassword;
     rememberPassword = false;
     currentDate: Date = new Date();
+    usePin = false;
+
 
     ngOnInit(): void {
         if (this.storageService.isLoggedIn()) {
@@ -107,6 +118,23 @@ export class LoginComponent {
         const signInData = new LoginRequest(fiscalCode, password);
         this.store.dispatch(login({ request: signInData }));
     }
+
+    onSubmitPinLogin(): void {
+        if (this.pinForm.invalid) {
+            this.pinForm.markAllAsTouched(); // mostra gli errori
+            return;
+        }
+
+        const pinValue = this.pinForm.value.pin;
+        // Esegui login con il PIN
+        console.log('PIN:', pinValue);
+        
+        this.store.dispatch(loginWithPin({ request: { pin: pinValue } }));
+
+        // Qui chiama il tuo servizio o logica di login
+    }
+
+
     onFiscalCodeChange(value: string) {
         this.currentFiscalCode = value.toUpperCase().replace(/\s/g, ''); // Rimuovi gli spazi vuoti
     }

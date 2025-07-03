@@ -6,92 +6,44 @@
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
                         <label htmlFor="name1">Nome</label>
-                        <input
-                            pInputText
-                            id="name1"
-                            type="text"
-                            placeholder="Nome"
-                            formControlName="name"
-                            ngModel
-                        />
+                        <input pInputText id="name1" type="text" placeholder="Nome" formControlName="name" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="surname1">Cognome</label>
-                        <input
-                            pInputText
-                            id="surname1"
-                            type="text"
-                            placeholder="Cognome"
-                            formControlName="surname"
-                            ngModel
-                        />
+                        <input pInputText id="surname1" type="text" placeholder="Cognome" formControlName="surname"
+                            ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="email1">Email</label>
-                        <input
-                            pInputText
-                            id="email1"
-                            type="text"
-                            placeholder="Email"
-                            formControlName="email"
-                            ngModel
-                        />
+                        <input pInputText id="email1" type="text" placeholder="Email" formControlName="email" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="cellphone1">Cellulare</label>
-                        <input
-                            pInputText
-                            id="cellphone1"
-                            type="text"
-                            placeholder="Cellulare"
-                            formControlName="cellphone"
-                            ngModel
-                        />
+                        <input pInputText id="cellphone1" type="text" placeholder="Cellulare"
+                            formControlName="cellphone" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="fiscalCode1">Codice Fiscale</label>
-                        <input
-                            pInputText
-                            id="fiscalCode1"
-                            type="text"
-                            placeholder="CodiceFiscale"
-                            formControlName="fiscalCode"
-                            ngModel
-                        />
+                        <input pInputText id="fiscalCode1" type="text" placeholder="CodiceFiscale"
+                            formControlName="fiscalCode" ngModel />
                     </div>
 
                     <div class="field col-12 md:col-4">
                         <label htmlFor="user1">Ruolo</label>
-                        <p-dropdown
-                            [options]="roles"
-                            optionLabel="label"
-                            optionValue="id"
-                            placeholder="Seleziona un ruolo"
-                            [showClear]="true"
-                            formControlName="roleId"
-                            [(ngModel)]="selectedRole"
-                        ></p-dropdown>
+                        <p-dropdown [options]="roles" optionLabel="label" optionValue="id"
+                            placeholder="Seleziona un ruolo" [showClear]="true" formControlName="roleId"
+                            [(ngModel)]="selectedRole"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label htmlFor="iban1">Indirizzo</label>
-                        <app-default-autocomplete
-                            id="address1"
-                            type="text"
-                            controlName="address"
-                            [defaultAutocompleteForm]="modifyForm"
-                        >
+                        <app-default-autocomplete id="address1" type="text" controlName="address"
+                            [defaultAutocompleteForm]="modifyForm">
                         </app-default-autocomplete>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label htmlFor="country1">Paese</label>
-                        <p-dropdown
-                            [options]="countryItems"
-                            optionLabel="name"
-                            optionValue="name"
-                            formControlName="birthCountry"
-                            placeholder="Seleziona paese"
-                            [required]="true"
-                        >
+                        <p-dropdown [options]="countryItems" optionLabel="name" optionValue="name"
+                            formControlName="birthCountry" placeholder="Seleziona paese" [required]="true">
                             <ng-template let-country pTemplate="country">
                                 {{ country.name }}
                             </ng-template>
@@ -99,59 +51,28 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="birthDate1">Data di nascita</label>
-                        <input
-                            pInputText
-                            id="birthDate1"
-                            type="date"
-                            formControlName="birthDate"
-                            ngModel
-                        />
+                        <input pInputText id="birthDate1" type="date" formControlName="birthDate" ngModel />
                     </div>
-                    
+
                     <div class="field col-12 md:col-6">
                         <label htmlFor="iban1">IBAN</label>
-                        <input
-                            pInputText
-                            id="iban1"
-                            type="text"
-                            placeholder="IBAN"
-                            formControlName="iban"
-                            ngModel
-                        />
+                        <input pInputText id="iban1" type="text" placeholder="IBAN" formControlName="iban" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="user1">Azienda</label>
-                        <p-dropdown
-                            [options]="companies"
-                            optionLabel="name"
-                            optionValue="id"
-                            placeholder="Seleziona un azienda"
-                            [showClear]="true"
-                            formControlName="companyId"
-                            [(ngModel)]="selectedCompany"
-                        ></p-dropdown>
+                        <p-dropdown [options]="companies" optionLabel="name" optionValue="id"
+                            placeholder="Seleziona un azienda" [showClear]="true" formControlName="companyId"
+                            [(ngModel)]="selectedCompany"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="workerNumber1">Numero lavoratore</label>
-                        <input
-                            pInputText
-                            id="workerNumber1"
-                            type="text"
-                            placeholder="Numero lavoratore"
-                            formControlName="workerNumber"
-                            ngModel
-                        />
+                        <input pInputText id="workerNumber1" type="text" placeholder="Numero lavoratore"
+                            formControlName="workerNumber" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="associatedClient1">Cliente associato</label>
-                        <input
-                            pInputText
-                            id="associatedClient1"
-                            type="text"
-                            placeholder="Cliente associato"
-                            formControlName="associatedClient"
-                            ngModel
-                        />
+                        <input pInputText id="associatedClient1" type="text" placeholder="Cliente associato"
+                            formControlName="associatedClient" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="associatedBranch1">Filiale associato</label>
@@ -160,45 +81,22 @@
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="position1">Posizione</label>
-                        <input
-                            pInputText
-                            id="position1"
-                            type="text"
-                            placeholder="Posizione"
-                            formControlName="position"
-                            ngModel
-                        />
+                        <input pInputText id="position1" type="text" placeholder="Posizione" formControlName="position"
+                            ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="status1">Attiva/Disattiva</label> <br />
                         <p-inputSwitch formControlName="status"></p-inputSwitch>
                     </div>
                 </div>
-                <div
-                    class="flex justify-content-center align-items-center gap-2"
-                >
+                <div class="flex justify-content-center align-items-center gap-2">
                     <p-toast></p-toast>
 
-                    <button
-                        pButton
-                        pRipple
-                        type="submit"
-                        class="p-button-outlined p-button-secondary"
-                        label="Annulla"
-                        (click)="goToTableUser()"
-                        icon="pi pi-times"
-                    ></button>
+                    <button pButton pRipple type="submit" class="p-button-outlined p-button-secondary" label="Annulla"
+                        (click)="goToTableUser()" icon="pi pi-times"></button>
 
-                    <button
-                        pButton
-                        pRipple
-                        type="submit"
-                        class="p-button-success"
-                        label="Salva"
-                        (click)="updateUser()"
-                        icon="pi pi-save"
-                        [disabled]="!modifyForm.valid"
-                    ></button>
+                    <button pButton pRipple type="submit" class="p-button-success" label="Salva" (click)="updateUser()"
+                        icon="pi pi-save" [disabled]="!modifyForm.valid"></button>
                 </div>
             </form>
         </div>
@@ -209,47 +107,25 @@
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label for="newPassword">Nuova Password</label>
-                        <input
-                            pInputText
-                            id="newPassword"
-                            formControlName="newPassword"
-                            required
-                            ngModel
-                        />
+                        <input pInputText id="newPassword" formControlName="newPassword" required ngModel />
                     </div>
 
                     <div class="field col-12 md:col-6">
-                        <label for="confirmPassword"
-                            >Conferma nuova password</label
-                        >
-                        <input
-                            pInputText
-                            id="confirmPassword"
-                            formControlName="confirmPassword"
-                            required
-                            ngModel
-                        />
-                        <div
-                            *ngIf="
+                        <label for="confirmPassword">Conferma nuova password</label>
+                        <input pInputText id="confirmPassword" formControlName="confirmPassword" required ngModel />
+                        <div *ngIf="
                                 changePasswordForm.hasError('notSame') &&
                                 !changePasswordForm
                                     .get('confirmPassword')
                                     .hasError('required')
-                            "
-                        >
+                            ">
                             Le password non corrispondono.
                         </div>
                     </div>
                 </div>
 
-                <button
-                    pButton
-                    pRipple
-                    label="Salva password"
-                    class="w-full p-3 text-xl"
-                    (click)="savePassword()"
-                    [disabled]="!changePasswordForm.valid"
-                ></button>
+                <button pButton pRipple label="Salva password" class="w-full p-3 text-xl" (click)="savePassword()"
+                    [disabled]="!changePasswordForm.valid"></button>
             </form>
         </div>
         <div class="card">
@@ -258,16 +134,9 @@
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label htmlFor="user1">Seleziona sede</label>
-                        <p-dropdown
-                            [options]="placesItems"
-                            optionLabel="name"
-                            optionValue="id"
-                            formControlName="placeId"
-                            placeholder="--Sede--"
-                            (onChange)="onChangePlace($event)"
-                            [(ngModel)]="selectedPlace"
-                            [required]="true"
-                        >
+                        <p-dropdown [options]="placesItems" optionLabel="name" optionValue="id"
+                            formControlName="placeId" placeholder="--Sede--" (onChange)="onChangePlace($event)"
+                            [(ngModel)]="selectedPlace" [required]="true">
                             <ng-template let-place pTemplate="place">
                                 {{ place.name }} - {{ place.address }}
                             </ng-template>
@@ -280,24 +149,12 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label htmlFor="user1">Seleziona mezzo</label>
-                        <p-dropdown
-                            [options]="vehiclesItems"
-                            [(ngModel)]="selectedVehicle"
-                            optionLabel="licensePlate"
-                            optionValue="id"
-                            [filter]="true"
-                            filterBy="licensePlate"
-                            [showClear]="true"
-                            placeholder="--Veicolo--"
-                            formControlName="vehicleId"
-                            (onChange)="onChangeVehicle($event)"
-                            [required]="true"
-                        >
+                        <p-dropdown [options]="vehiclesItems" [(ngModel)]="selectedVehicle" optionLabel="licensePlate"
+                            optionValue="id" [filter]="true" filterBy="licensePlate" [showClear]="true"
+                            placeholder="--Veicolo--" formControlName="vehicleId" (onChange)="onChangeVehicle($event)"
+                            [required]="true">
                             <ng-template let-vehicle pTemplate="selectedItem">
-                                <div
-                                    class="flex align-items-center gap-2"
-                                    *ngIf="selectedVehicle"
-                                >
+                                <div class="flex align-items-center gap-2" *ngIf="selectedVehicle">
                                     <div>
                                         {{ vehicle.licensePlate }}
                                     </div>
@@ -312,36 +169,19 @@
                     </div>
                 </div>
                 <div class="mt-3 lg:mt-0">
-                    <button
-                        *ngIf="!attendanceData?.foundCheckIn"
-                        pButton
-                        pRipple
-                        (click)="manualCheckIn()"
-                        label="Fai CheckIn"
-                        class="p-button-outlined mr-2"
-                    ></button>
-                    <button
-                        *ngIf="
+                    <button *ngIf="!attendanceData?.foundCheckIn" pButton pRipple (click)="manualCheckIn()"
+                        label="Fai CheckIn" class="p-button-outlined mr-2"></button>
+                    <button *ngIf="
                             attendanceData?.foundCheckIn &&
                             !attendanceData?.attendance?.checkOut
-                        "
-                        pButton
-                        pRipple
-                        label="Fai CheckOut"
-                        (click)="manualCheckOut()"
-                        class="p-button-outlined mr-2"
-                    ></button>
-                    <div
-                        *ngIf="
+                        " pButton pRipple label="Fai CheckOut" (click)="manualCheckOut()"
+                        class="p-button-outlined mr-2"></button>
+                    <div *ngIf="
                             attendanceData?.foundCheckIn &&
                             attendanceData?.attendance?.checkOut
-                        "
-                        class="flex flex-column justify-content-center align-items-center gap-3"
-                    >
+                        " class="flex flex-column justify-content-center align-items-center gap-3">
                         <div>
-                            <span class="font-bold"
-                                >E' stato già settata la presenza di oggi</span
-                            >
+                            <span class="font-bold">E' stato già settata la presenza di oggi</span>
                         </div>
 
                         <div>
@@ -351,5 +191,18 @@
                 </div>
             </form>
         </div>
+        <div class="card">
+            <h5>PIN</h5>
+            <p>Il PIN è un codice che serve per fare la login</p>
+
+            <div>
+                <p>{{ pinMessage }}</p>
+
+                <button pButton pRipple label="Genera pin" class="w-full p-3 text-xl" (click)="generaPIN()"></button>
+            </div>
+
+        </div>
+
+
     </div>
 </div>
