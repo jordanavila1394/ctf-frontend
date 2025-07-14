@@ -12,9 +12,10 @@
 
     <div class="chat-messages">
         <div *ngFor="let msg of messages" [ngClass]="['chat-message', msg.sender]">
-            {{ msg.text }}
+            <div [innerHTML]="msg.text"></div>
         </div>
     </div>
+      
       
 
     <div class="chat-input">

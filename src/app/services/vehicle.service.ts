@@ -42,4 +42,10 @@ export class VehicleService {
             httpOptions,
         );
     }
+
+    getVehicleInfo(licensePlate: string): Observable<any> {
+        // Encode per sicurezza in URL
+        const plateEncoded = encodeURIComponent(licensePlate);
+        return this.http.get(API_URL + `info/plate/${plateEncoded}`, httpOptions);
+    }
 }
