@@ -68,31 +68,31 @@ export class ChatAiComponent {
       return true;
     }
 
-    // Comando info cognome
-    // if (lower.startsWith('info cognome ')) {
-    //   const surname = message.substring(13).trim();
-    //   if (!surname) {
-    //     this.messages.push({ sender: 'ai', text: 'Per favore inserisci un cognome dopo "info cognome".' });
-    //     return true;
-    //   }
-    //   this.messages.push({ sender: 'ai', text: `Sto cercando le informazioni per il cognome "${surname}"...` });
+    // ✅ Nuovo comando: status targa
+    if (lower.startsWith('status targa ')) {
+      const plate = message.substring(13).trim();
+      if (!plate) {
+        this.messages.push({ sender: 'ai', text: 'Per favore inserisci una targa dopo "status targa".' });
+        return true;
+      }
+      this.messages.push({ sender: 'ai', text: `Verifico lo stato per la targa "${plate}"...` });
 
-    //   this.vehicleService.getVehicleBySurname(surname).subscribe({
-    //     next: (data) => {
-    //       const infoText = this.formatVehicleInfo(data);
-    //       this.messages.push({ sender: 'ai', text: infoText });
-    //     },
-    //     error: () => {
-    //       this.messages.push({ sender: 'ai', text: 'Spiacente, non sono riuscito a trovare informazioni per questo cognome.' });
-    //     }
-    //   });
-    //   return true;
-    // }
-
-    // altri comandi...
+      this.vehicleService.getVehicleInfo(plate).subscribe({
+        next: (data) => {
+          const statusText = this.formatVehicleStatus(data);
+          this.messages.push({ sender: 'ai', text: statusText });
+        },
+        error: () => {
+          this.messages.push({ sender: 'ai', text: 'Spiacente, non sono riuscito a recuperare lo stato per questa targa.' });
+        }
+      });
+      return true;
+    }
 
     return false;
   }
+  
+
 
   generateResponse(message: string): string {
     const lower = message.toLowerCase();
@@ -114,12 +114,12 @@ export class ChatAiComponent {
 
   private formatVehicleInfo(data: any): string {
     if (!data || Object.keys(data).length === 0) {
-      return '<p>Nessuna informazione disponibile.</p>';
+      return '<p class="no-info">Nessuna informazione disponibile.</p>';
     }
 
     return `
-      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; font-family: Arial, sans-serif;">
-        <thead style="background-color: #f2f2f2;">
+      <table class="vehicle-info-table">
+        <thead>
           <tr>
             <th>Campo</th>
             <th>Informazione</th>
@@ -170,5 +170,89 @@ export class ChatAiComponent {
       </table>
     `.trim();
   }
+  
+  private formatVehicleStatus(data: any): string {
+    if (!data || Object.keys(data).length === 0) {
+      return '<p class="no-info">Nessuna informazione di stato disponibile.</p>';
+    }
+
+    return `
+      <table class="vehicle-status-table">
+        <thead>
+          <tr>
+            <th>Parametro</th>
+            <th>Valore</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Chilometraggio</td>
+            <td>${data.mileage ?? 'N/D'} km</td>
+          </tr>
+          <tr>
+            <td>Ultimo intervento</td>
+            <td>${data.lastMaintenanceDate ? new Date(data.lastMaintenanceDate).toLocaleDateString() : 'N/D'}</td>
+          </tr>
+          <tr>
+            <td>Prossima manutenzione</td>
+            <td>${data.nextMaintenanceDue ? new Date(data.nextMaintenanceDue).toLocaleDateString() : 'N/D'}</td>
+          </tr>
+          <tr>
+            <td>Salute motore</td>
+            <td>${data.engineHealth || 'N/D'}</td>
+          </tr>
+          <tr>
+            <td>Voltaggio batteria</td>
+            <td>${data.batteryVoltage ?? 'N/D'} V</td>
+          </tr>
+          <tr>
+            <td>Livello olio</td>
+            <td>${data.oilLevel ?? 'N/D'}</td>
+          </tr>
+          <tr>
+            <td>Pressione pneumatico anteriore sinistro</td>
+            <td>${data.tirePressureFL ?? 'N/D'} psi</td>
+          </tr>
+          <tr>
+            <td>Pressione pneumatico anteriore destro</td>
+            <td>${data.tirePressureFR ?? 'N/D'} psi</td>
+          </tr>
+          <tr>
+            <td>Pressione pneumatico posteriore sinistro</td>
+            <td>${data.tirePressureRL ?? 'N/D'} psi</td>
+          </tr>
+          <tr>
+            <td>Pressione pneumatico posteriore destro</td>
+            <td>${data.tirePressureRR ?? 'N/D'} psi</td>
+          </tr>
+          <tr>
+            <td>Latitudine GPS</td>
+            <td>${data.gpsLatitude ?? 'N/D'}</td>
+          </tr>
+          <tr>
+            <td>Longitudine GPS</td>
+            <td>${data.gpsLongitude ?? 'N/D'}</td>
+          </tr>
+          <tr>
+            <td>Velocità attuale</td>
+            <td>${data.speed ?? 'N/D'} km/h</td>
+          </tr>
+          <tr>
+            <td>Motore acceso</td>
+            <td>${data.isEngineOn ? 'Sì' : 'No'}</td>
+          </tr>
+          <tr>
+            <td>Codice allarme</td>
+            <td>${data.alertCode || 'N/D'}</td>
+          </tr>
+          <tr>
+            <td>Ultima sincronizzazione</td>
+            <td>${data.lastSync ? new Date(data.lastSync).toLocaleString() : 'N/D'}</td>
+          </tr>
+        </tbody>
+      </table>
+    `.trim();
+  }
+  
   
 }
