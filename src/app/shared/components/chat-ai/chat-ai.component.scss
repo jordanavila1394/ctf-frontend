@@ -3,12 +3,15 @@
     bottom: 20px;
     right: 20px;
     z-index: 10000;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Floating Icon Button */
 .chat-toggle {
-    background-color: #7e3ff2; // purple
+    position: fixed;
+    z-index: 10000;
+    right: 15px;
+    bottom: 15px;
+    background-color: #7e3ff2; /* purple */
     color: white;
     border: none;
     border-radius: 50%;
@@ -30,7 +33,10 @@
 
 /* Chat Window */
 .chat-window {
-    position: relative;
+    position: fixed;
+    z-index: 10000;
+    right: 15px;
+    bottom: 15px;
     width: 420px;
     height: 420px;
     background: #fff;
@@ -171,6 +177,7 @@
     }
 }
 
+/* Vehicle Info & Status Tables */
 .vehicle-info-table,
 .vehicle-status-table {
     width: 100%;
@@ -178,28 +185,80 @@
     font-family: Arial, sans-serif;
     font-size: 14px;
     border: 1px solid #ccc;
-}
 
-.vehicle-info-table th,
-.vehicle-info-table td,
-.vehicle-status-table th,
-.vehicle-status-table td {
-    padding: 8px;
-    border: 1px solid #ccc;
-    text-align: left;
-}
+    th,
+    td {
+        padding: 8px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
 
-.vehicle-info-table thead,
-.vehicle-status-table thead {
-    background-color: #f2f2f2;
+    thead {
+        background-color: #f2f2f2;
+    }
 }
 
 .vehicle-status-table thead {
     background-color: #e0e0e0;
 }
 
+/* No Info Text */
 .no-info {
     font-family: Arial, sans-serif;
     font-size: 14px;
     color: #555;
+}
+
+/* Tire Pressure Block */
+.chat-block {
+    background-color: transparent;
+
+    .tire-pressure-diagram {
+        position: relative;
+        margin: 20px auto;
+        background: #f9f9f9;
+
+        .vehicle-body {
+            position: absolute;
+            top: 20%;
+            left: 25%;
+            width: 50%;
+            height: 60%;
+            object-fit: contain;
+            z-index: 1;
+        }
+
+        .tire {
+            position: absolute;
+            font-weight: bold;
+            color: #222;
+            background: #fff;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 15px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+
+            &.top-left {
+                top: 40px;
+                left: 5px;
+            }
+
+            &.top-right {
+                top: 40px;
+                right: 5px;
+            }
+
+            &.bottom-left {
+                bottom: 40px;
+                left: 5px;
+            }
+
+            &.bottom-right {
+                bottom: 40px;
+                right: 5px;
+            }
+        }
+    }
 }
