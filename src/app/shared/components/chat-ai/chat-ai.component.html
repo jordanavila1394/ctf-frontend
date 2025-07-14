@@ -10,7 +10,7 @@
         <button class="close-btn" (click)="toggleChat()">✖</button>
     </div>
 
-    <div class="chat-messages">
+    <div class="chat-messages"  #chatMessages>
         <div *ngFor="let msg of messages" [ngClass]="['chat-message', msg.sender]">
             <div class="chat-block" [innerHTML]="msg.text"></div>
         </div>

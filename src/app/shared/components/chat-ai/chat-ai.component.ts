@@ -1,61 +1,118 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { VehicleService } from 'src/app/services/vehicle.service';
 
 @Component({
   selector: 'app-chat-ai',
   templateUrl: './chat-ai.component.html',
   styleUrls: ['./chat-ai.component.scss'],
-  encapsulation: ViewEncapsulation.None })
+  encapsulation: ViewEncapsulation.None
+})
 export class ChatAiComponent {
   isOpen = false;
   newMessage = '';
   messages: { sender: 'user' | 'ai'; text: string }[] = [];
 
-  constructor(private vehicleService: VehicleService) { }
+  @ViewChild('chatMessages') private chatMessagesContainer!: ElementRef;
+
+
+  private readonly storageKey = 'chatAiMessages';
+  private readonly expiryKey = 'chatAiExpiry';
+  private readonly ttl = 1000 * 60 * 60 * 24 * 30; // 30 giorni
+
+  constructor(private vehicleService: VehicleService) {
+    this.loadMessages();
+  }
 
   toggleChat() {
     this.isOpen = !this.isOpen;
     if (this.isOpen && this.messages.length === 0) {
       this.messages.push({
         sender: 'ai',
-        text: 'Ciao! Sono il tuo assistente AI 😊',
+        text: 'Ciao! Sono il tuo assistente AI 😊'
       });
+      this.saveMessages();
+  
     }
+    this.scrollToBottom();
+
   }
 
+
   sendMessage() {
-    const message = this.newMessage.trim();
+    const message = this.newMessage?.trim();
     if (!message) return;
 
     this.messages.push({ sender: 'user', text: message });
     this.newMessage = '';
+    this.saveMessages();
 
+    this.scrollToBottom();
+
+    // gestione risposte AI o comandi
     if (this.handleCommands(message)) return;
 
     setTimeout(() => {
       const response = this.generateResponse(message);
       this.messages.push({ sender: 'ai', text: response });
+      this.saveMessages();
+      this.scrollToBottom();
     }, 500);
   }
 
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      try {
+        this.chatMessagesContainer.nativeElement.scrollTop = this.chatMessagesContainer.nativeElement.scrollHeight;
+      } catch (err) {
+        console.error('Errore nello scroll automatico:', err);
+      }
+    }, 50);
+  }
+
+  private saveMessages() {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.messages));
+    localStorage.setItem(this.expiryKey, Date.now().toString());
+  }
+
+  private loadMessages() {
+    const stored = localStorage.getItem(this.storageKey);
+    const expiry = localStorage.getItem(this.expiryKey);
+
+    if (stored && expiry) {
+      const expired = Date.now() - parseInt(expiry, 10) > this.ttl;
+      if (!expired) {
+        this.messages = JSON.parse(stored);
+      } else {
+        localStorage.removeItem(this.storageKey);
+        localStorage.removeItem(this.expiryKey);
+      }
+    }
+  }
+
   private handleCommands(message: string): boolean {
+    const addAiMessage = (text: string) => {
+      this.messages.push({ sender: 'ai', text });
+      this.saveMessages();
+      this.scrollToBottom();
+    };
+
     const infoMatch = message.match(/^info targa\s+(.+)$/i);
     if (infoMatch) {
       const plate = infoMatch[1].trim();
       if (!plate) {
-        this.messages.push({ sender: 'ai', text: 'Per favore inserisci una targa dopo "info targa".' });
+        addAiMessage('Per favore inserisci una targa dopo "info targa".');
         return true;
       }
 
-      this.messages.push({ sender: 'ai', text: `Sto cercando le informazioni per la targa "${plate}"...` });
+      addAiMessage(`Sto cercando le informazioni per la targa "${plate}"...`);
 
       this.vehicleService.getVehicleInfo(plate).subscribe({
         next: (data) => {
           const infoText = this.formatVehicleInfo(data);
-          this.messages.push({ sender: 'ai', text: infoText });
+          addAiMessage(infoText);
         },
         error: () => {
-          this.messages.push({ sender: 'ai', text: 'Spiacente, non sono riuscito a trovare informazioni per questa targa.' });
+          addAiMessage('Spiacente, non sono riuscito a trovare informazioni per questa targa.');
         }
       });
 
@@ -66,19 +123,19 @@ export class ChatAiComponent {
     if (statusMatch) {
       const plate = statusMatch[1].trim();
       if (!plate) {
-        this.messages.push({ sender: 'ai', text: 'Per favore inserisci una targa dopo "status targa".' });
+        addAiMessage('Per favore inserisci una targa dopo "status targa".');
         return true;
       }
 
-      this.messages.push({ sender: 'ai', text: `Verifico lo stato per la targa "${plate}"...` });
+      addAiMessage(`Verifico lo stato per la targa "${plate}"...`);
 
       this.vehicleService.getVehicleInfo(plate).subscribe({
         next: (data) => {
           const statusText = this.formatVehicleStatus(data);
-          this.messages.push({ sender: 'ai', text: statusText });
+          addAiMessage(statusText);
         },
         error: () => {
-          this.messages.push({ sender: 'ai', text: 'Spiacente, non sono riuscito a recuperare lo stato per questa targa.' });
+          addAiMessage('Spiacente, non sono riuscito a recuperare lo stato per questa targa.');
         }
       });
 
@@ -89,19 +146,19 @@ export class ChatAiComponent {
     if (tiresMatch) {
       const plate = tiresMatch[1].trim();
       if (!plate) {
-        this.messages.push({ sender: 'ai', text: 'Per favore inserisci una targa dopo "tires targa".' });
+        addAiMessage('Per favore inserisci una targa dopo "tires targa".');
         return true;
       }
 
-      this.messages.push({ sender: 'ai', text: `Recupero lo stato delle gomme per la targa "${plate}"...` });
+      addAiMessage(`Recupero lo stato delle gomme per la targa "${plate}"...`);
 
       this.vehicleService.getVehicleInfo(plate).subscribe({
         next: (data) => {
           const tiresText = this.formatTireStatus(data);
-          this.messages.push({ sender: 'ai', text: tiresText });
+          addAiMessage(tiresText);
         },
         error: () => {
-          this.messages.push({ sender: 'ai', text: 'Errore nel recupero delle informazioni sulle gomme per questa targa.' });
+          addAiMessage('Errore nel recupero delle informazioni sulle gomme per questa targa.');
         }
       });
 
@@ -112,29 +169,29 @@ export class ChatAiComponent {
     if (mapMatch) {
       const plate = mapMatch[1].trim();
       if (!plate) {
-        this.messages.push({ sender: 'ai', text: 'Per favore inserisci una targa dopo "map targa".' });
+        addAiMessage('Per favore inserisci una targa dopo "map targa".');
         return true;
       }
 
-      this.messages.push({ sender: 'ai', text: `Recupero la posizione per la targa "${plate}"...` });
+      addAiMessage(`Recupero la posizione per la targa "${plate}"...`);
 
       this.vehicleService.getVehicleInfo(plate).subscribe({
         next: (data) => {
-          this.formatMapVehicle(data).then((tiresText) => {
-            this.messages.push({ sender: 'ai', text: tiresText });
+          this.formatMapVehicle(data).then((mapText) => {
+            addAiMessage(mapText);
           });
         },
         error: () => {
-          this.messages.push({ sender: 'ai', text: 'Errore nel recupero delle informazioni sulla posizione.' });
+          addAiMessage('Errore nel recupero delle informazioni sulla posizione.');
         }
       });
 
       return true;
     }
 
-
     return false;
   }
+
 
   generateResponse(message: string): string {
     const lower = message.toLowerCase();
@@ -280,5 +337,5 @@ export class ChatAiComponent {
       });
     });
   }
-  
+
 }
