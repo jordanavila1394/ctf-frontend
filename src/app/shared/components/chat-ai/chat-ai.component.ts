@@ -108,6 +108,31 @@ export class ChatAiComponent {
       return true;
     }
 
+    const mapMatch = message.match(/^map targa\s+(.+)$/i);
+    if (mapMatch) {
+      const plate = mapMatch[1].trim();
+      if (!plate) {
+        this.messages.push({ sender: 'ai', text: 'Per favore inserisci una targa dopo "map targa".' });
+        return true;
+      }
+
+      this.messages.push({ sender: 'ai', text: `Recupero la posizione per la targa "${plate}"...` });
+
+      this.vehicleService.getVehicleInfo(plate).subscribe({
+        next: (data) => {
+          this.formatMapVehicle(data).then((tiresText) => {
+            this.messages.push({ sender: 'ai', text: tiresText });
+          });
+        },
+        error: () => {
+          this.messages.push({ sender: 'ai', text: 'Errore nel recupero delle informazioni sulla posizione.' });
+        }
+      });
+
+      return true;
+    }
+
+
     return false;
   }
 
@@ -202,4 +227,58 @@ export class ChatAiComponent {
       </div>
     `;
   }
+
+  formatMapVehicle(data: any): Promise<string> {
+    return new Promise((resolve) => {
+      if (!data.gpsLatitude || !data.gpsLongitude) {
+        return resolve('<p class="no-info">Coordinate GPS non disponibili.</p>');
+      }
+
+      const lat = parseFloat(data.gpsLatitude);
+      const lng = parseFloat(data.gpsLongitude);
+      const latLng = { lat, lng };
+      const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+
+      const geocoder = new google.maps.Geocoder();
+
+      geocoder.geocode({ location: latLng }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          const address = results[0].formatted_address;
+
+          resolve(`
+            <div class="vehicle-map-info">
+              <p><strong>Indirizzo:</strong> ${address}</p>
+              <p><strong>Coordinate:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}</p>
+              <p><a href="${mapsLink}" target="_blank">Visualizza su Google Maps</a></p>
+              <iframe
+                width="100%"
+                height="250"
+                frameborder="0"
+                style="border:0; border-radius: 8px;"
+                src="https://www.google.com/maps/embed/v1/view?key=YOUR_GOOGLE_MAPS_API_KEY&center=${lat},${lng}&zoom=15"
+                allowfullscreen>
+              </iframe>
+            </div>
+          `);
+        } else {
+          resolve(`
+            <div class="vehicle-map-info">
+              <p class="no-info">Indirizzo non disponibile per queste coordinate.</p>
+              <p><strong>Coordinate:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}</p>
+              <p><a href="${mapsLink}" target="_blank">Visualizza su Google Maps</a></p>
+              <iframe
+                width="100%"
+                height="250"
+                frameborder="0"
+                style="border:0; border-radius: 8px;"
+                src="https://www.google.com/maps/embed/v1/view?key=YOUR_GOOGLE_MAPS_API_KEY&center=${lat},${lng}&zoom=15"
+                allowfullscreen>
+              </iframe>
+            </div>
+          `);
+        }
+      });
+    });
+  }
+  
 }
