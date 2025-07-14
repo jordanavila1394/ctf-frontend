@@ -11,14 +11,15 @@
     </div>
 
     <div class="chat-messages">
-        <div *ngFor="let msg of messages" class="chat-message">
-            {{ msg }}
+        <div *ngFor="let msg of messages" [ngClass]="['chat-message', msg.sender]">
+            {{ msg.text }}
         </div>
     </div>
+      
 
     <div class="chat-input">
-        <input [(ngModel)]="newMessage" placeholder="Write a message..." (keydown.enter)="sendMessage()" />
-        <button (click)="sendMessage()">Send</button>
+        <input [(ngModel)]="newMessage" placeholder="Scrivi un messaggio..." (keydown.enter)="sendMessage()" />
+        <button (click)="sendMessage()">Invia</button>
     </div>
 </div>
   
