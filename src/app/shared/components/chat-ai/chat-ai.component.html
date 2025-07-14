@@ -1,0 +1,24 @@
+<!-- Chat Toggle Button -->
+<button class="chat-toggle" (click)="toggleChat()">
+    💬
+</button>
+
+<!-- Chat Window -->
+<div class="chat-window" *ngIf="isOpen">
+    <div class="chat-header">
+        <span>Chat AI</span>
+        <button class="close-btn" (click)="toggleChat()">✖</button>
+    </div>
+
+    <div class="chat-messages">
+        <div *ngFor="let msg of messages" class="chat-message">
+            {{ msg }}
+        </div>
+    </div>
+
+    <div class="chat-input">
+        <input [(ngModel)]="newMessage" placeholder="Write a message..." (keydown.enter)="sendMessage()" />
+        <button (click)="sendMessage()">Send</button>
+    </div>
+</div>
+  

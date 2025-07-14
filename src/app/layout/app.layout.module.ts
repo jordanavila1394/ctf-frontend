@@ -22,6 +22,7 @@ import { DropdownSelectCompanyModule } from '../shared/components/dropdown-selec
 import { GeoModalPermissionModule } from '../shared/components/geo-modal-permission/geo-moda-permission.module';
 import { DropdownNotificationsModule } from '../shared/components/dropdown-notifications/dropdown-notifications.module';
 import { ModalMissingEmailModule } from '../shared/components/modal-missing-email/modal-missing-email.module';
+import { ChatAiModule } from '../shared/components/chat-ai/chat-ai.module';
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import { ModalMissingEmailModule } from '../shared/components/modal-missing-emai
         DrodownLanguageModule,
         GeoModalPermissionModule,
         ModalMissingEmailModule,
+        ChatAiModule,
         AppConfigModule,
     ],
     exports: [AppLayoutComponent],
