@@ -184,7 +184,7 @@
             "hello": "Ciao",
             "welcome": "Benvenuto su CTF Cloud",
             "description": "Piattaforma per la gestione di aziende e mezzi",
-            "lastChekin": "Ultimo check-in",
+            "lastCheckin": "Ultimo check-in",
             "goOnWithCheckin": "Procedi con il check-in",
             "youMustCheckOut": "Devi effettuare il check-out",
             "sickness": "Malattia",
@@ -196,7 +196,12 @@
         },
         "attendance":{
             "yourCompany": "La tua azienda è ",
-            "currentLocation": "Posizione attuale"
+            "currentLocation": "Posizione attuale",
+            "distanceMessage": "Sei a",
+            "distanceFromOffice": "dalla sede selezionata",
+            "canCheckIn": "Puoi effettuare il check",
+            "cannotCheckIn": "Non puoi effettuare il check.",
+            "enterRadiusAndReload": "Entra nel raggio di 300m e ricarica la pagina"
         }
     },
     "generic": {

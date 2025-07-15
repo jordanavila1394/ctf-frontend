@@ -195,7 +195,12 @@
             "support": "Support"
         },
         "attendance":{
-            "currentLocation": "Current location"
+            "currentLocation": "Current location",
+            "distanceMessage": "Estás a",
+            "distanceFromOffice": "de la sede seleccionada",
+            "canCheckIn": "Puedes registrarte",
+            "cannotCheckIn": "No puedes registrarte.",
+            "enterRadiusAndReload": "Entra dentro de un radio de 300m y recarga la página"
         }
     },
     "generic": {

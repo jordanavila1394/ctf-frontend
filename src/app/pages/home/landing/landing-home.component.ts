@@ -15,7 +15,7 @@ import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-se
 import { AuthState } from 'src/app/stores/auth/authentication.reducer';
 
 //Libraies
-import * as moment from 'moment';
+import { formatDate } from '@angular/common';
 
 //Utils
 import Formatter from 'src/app/utils/formatters';
@@ -34,9 +34,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LandingHomeComponent implements OnInit, OnDestroy {
     authState$: Observable<AuthState>;
-
-    //Language
-    locale: string;
 
     //Utils
     formatter!: Formatter;
@@ -57,6 +54,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
 
     //Global variables
     operatorPhoneNumber: any;
+    locale: string = 'it-IT';
 
     constructor(
         public layoutService: LayoutService,
@@ -104,7 +102,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
                 icon: 'pi pi-fw pi-home',
             },
         ];
-          
+
         this.formatter = new Formatter();
     }
 
@@ -163,6 +161,22 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
             Key: key,
             Expires: 3600, // Tempo di scadenza del link in secondi
         });
+    }
+  
+
+    formatDateCheckIn(date: string | Date): string {
+        const lang = this.getAngularLocale(this.translateService.currentLang || 'it');
+        console.log(lang);
+        return formatDate(date, 'EEEE, MMMM dd, yyyy', lang);
+    }
+
+    getAngularLocale(lang: string): string {
+        switch (lang) {
+            case 'it': return 'it-IT';
+            case 'en': return 'en-US';
+            case 'es': return 'es-ES';
+            default: return 'it-IT';
+        }
     }
 
     openProfile() {

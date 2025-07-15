@@ -196,7 +196,12 @@
         },
         "attendance":{
             "yourCompany": "Tu empresa es ",
-            "currentLocation": "Tu ubicación actual es "
+            "currentLocation": "Tu ubicación actual es ",
+            "distanceMessage": "You are",
+            "distanceFromOffice": "from the selected office",
+            "canCheckIn": "You can check in",
+            "cannotCheckIn": "You cannot check in.",
+            "enterRadiusAndReload": "Enter within 300m radius and reload the page"
         }
     },
     "generic": {

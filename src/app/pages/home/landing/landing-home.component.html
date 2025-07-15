@@ -16,12 +16,11 @@
         ">
         <div class="card">
             <div class="checkin-wrapper">
-                <div class="title">Ultimo Check In</div>
+                <div class="title">{{ "page.landing.lastCheckin" | translate }}</div>
                 <div class="content">
                     <div class="day">
                         {{
-                        attendanceData?.attendance?.checkIn
-                        | date: "EEEE, MMMM dd, yyyy"
+                            formatDateCheckIn(attendanceData?.attendance?.checkIn)
                         }}
                     </div>
                     <div class="hours">
