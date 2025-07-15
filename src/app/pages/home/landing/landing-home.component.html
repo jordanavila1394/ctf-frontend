@@ -44,7 +44,7 @@
                     attendanceData?.foundCheckIn &&
                     !attendanceData?.attendance?.checkOut
                 ">
-                <button pButton pRipple label="Devi fare il checkout " class="p-button-warning p-button-lg" size="large"
+                <button pButton pRipple  [label]="'page.landing.youMustCheckOut' | translate" class="p-button-warning p-button-lg" size="large"
                     [routerLink]="['/home/attendance']"></button>
             </div>
             <div *ngIf="
@@ -52,7 +52,7 @@
                     attendanceData?.attendance?.checkOut
                 " class="flex flex-column justify-content-center align-items-center gap-3">
                 <div>
-                    <span class="font-bold">Hai gia inviato la tua presenza oggi</span>
+                    <span class="font-bold">{{ "page.landing.presenceAlreadySent" | translate }}</span>
                 </div>
 
                 <div>

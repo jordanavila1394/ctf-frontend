@@ -187,6 +187,7 @@
             "lastCheckin": "Last check-in",
             "goOnWithCheckin": "Proceed with check-in",
             "youMustCheckOut": "You must check out",
+            "presenceAlreadySent": "Your presence has already been sent",
             "sickness": "Sickness",
             "leave": "Leave",
             "attendance": "Attendance",
@@ -195,6 +196,7 @@
             "support": "Support"
         },
         "attendance":{
+            "yourCompany": "Your company is ",
             "currentLocation": "Current location",
             "distanceMessage": "Estás a",
             "distanceFromOffice": "de la sede seleccionada",
@@ -215,6 +217,7 @@
             "placeholderPlace": "--Place--",
             "placeholderVehicle": "--Vehicle--",
             "allCompanies": "All companies",
+            "addImages": "Add images",
             "fiscalCode": "Fiscal code",
             "selectPlace": "Select place",
             "selectVehicle": "Select vehicle",
