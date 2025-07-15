@@ -210,6 +210,7 @@
             "company": "Empresa",
             "placeholderPlace": "--Sede--",
             "placeholderVehicle": "--Vehículo--",
+            "allCompanies": "Todas las empresas",
             "fiscalCode": "Código fiscal",
             "selectPlace": "Selecciona sede",
             "selectVehicle": "Selecciona vehículo",

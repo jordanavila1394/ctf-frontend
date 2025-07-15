@@ -13,7 +13,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 
 @NgModule({
     declarations: [DropdownSelectCompanyComponent],
-    imports: [BrowserModule, HttpClientModule, FormsModule, DropdownModule],
+    imports: [BrowserModule, HttpClientModule, TranslateModule, FormsModule, DropdownModule],
     providers: [],
     exports: [DropdownSelectCompanyComponent],
 })

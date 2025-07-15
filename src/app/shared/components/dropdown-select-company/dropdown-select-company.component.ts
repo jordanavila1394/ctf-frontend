@@ -21,6 +21,7 @@ export class DropdownSelectCompanyComponent implements OnInit {
     constructor(
         public companyService: CompanyService,
         public primengConfig: PrimeNGConfig,
+        private translateService: TranslateService,
         private store: Store<{ companyState: CompanyState }>,
     ) {
         this.companyState$ = store.select('companyState');
@@ -31,11 +32,22 @@ export class DropdownSelectCompanyComponent implements OnInit {
             this.selectedCompany = company?.currentCompany;
         });
 
+        this.translateService.onLangChange.subscribe(() => {
+            this.loadCompaniesWithTranslation();
+        });
+
+        // fallback se la lingua è già caricata
+        this.loadCompaniesWithTranslation();
+    }
+
+    loadCompaniesWithTranslation() {
         this.companyService.getAllCompanies().subscribe((companies) => {
-            this.companies = companies;
-            this.companies.unshift({ id: 0, name: 'Tutte le aziende' });
+            this.translateService.get('generic.fields.allCompanies').subscribe((translatedLabel) => {
+                this.companies = [{ id: 0, name: translatedLabel }, ...companies];
+            });
         });
     }
+      
     onChangeOption(event) {
         this.store.dispatch(setCompany({ currentCompany: event.value }));
     }

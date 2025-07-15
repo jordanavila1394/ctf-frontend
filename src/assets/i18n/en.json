@@ -209,6 +209,7 @@
             "company": "Company",
             "placeholderPlace": "--Place--",
             "placeholderVehicle": "--Vehicle--",
+            "allCompanies": "All companies",
             "fiscalCode": "Fiscal code",
             "selectPlace": "Select place",
             "selectVehicle": "Select vehicle",
