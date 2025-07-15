@@ -260,3 +260,219 @@
         }
     }
 }
+.vehicle-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-family: "Segoe UI", sans-serif;
+    padding: 1rem;
+
+    .speed-display {
+        text-align: center;
+        .value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #49555b;
+            .unit {
+                font-size: 1.2rem;
+                margin-left: 4px;
+            }
+        }
+        .label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    }
+
+    .fuel-display {
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+
+        .label {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #222;
+        }
+
+        .fuel-bar {
+            width: 150px;
+            height: 20px;
+            border-radius: 12px;
+            background: #ddd;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .fuel-fill {
+            height: 100%;
+            transition: width 0.5s ease-in-out;
+            border-radius: 12px 0 0 12px;
+
+            &.level-10 {
+                background: linear-gradient(90deg, #f44336, #ef5350); // rosso
+                width: 10%;
+            }
+
+            &.level-20 {
+                background: linear-gradient(
+                    90deg,
+                    #ff5722,
+                    #ff7043
+                ); // arancione scuro
+                width: 20%;
+            }
+
+            &.level-30 {
+                background: linear-gradient(
+                    90deg,
+                    #ff9800,
+                    #ffb74d
+                ); // arancione
+                width: 30%;
+            }
+
+            &.level-40 {
+                background: linear-gradient(
+                    90deg,
+                    #ffb300,
+                    #ffd54f
+                ); // giallo scuro
+                width: 40%;
+            }
+
+            &.level-50 {
+                background: linear-gradient(90deg, #ffc107, #ffca28); // giallo
+                width: 50%;
+            }
+
+            &.level-60 {
+                background: linear-gradient(
+                    90deg,
+                    #8bc34a,
+                    #9ccc65
+                ); // verde chiaro
+                width: 60%;
+            }
+
+            &.level-70 {
+                background: linear-gradient(90deg, #4caf50, #66bb6a); // verde
+                width: 70%;
+            }
+
+            &.level-80 {
+                background: linear-gradient(
+                    90deg,
+                    #43a047,
+                    #66bb6a
+                ); // verde scuro
+                width: 80%;
+            }
+
+            &.level-90 {
+                background: linear-gradient(
+                    90deg,
+                    #388e3c,
+                    #4caf50
+                ); // verde più scuro
+                width: 90%;
+            }
+
+            &.level-100 {
+                background: linear-gradient(
+                    90deg,
+                    #2e7d32,
+                    #388e3c
+                ); // verde molto scuro
+                width: 100%;
+            }
+
+            &.unknown {
+                background: repeating-linear-gradient(
+                    45deg,
+                    #bbb,
+                    #bbb 10px,
+                    #ccc 10px,
+                    #ccc 20px
+                );
+                width: 0;
+            }
+        }
+
+        .fuel-value {
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            color: #444;
+            font-weight: 500;
+        }
+    }
+
+    .engine-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 1rem;
+        width: fit-content;
+
+        &.on {
+            background-color: #d1f2d1;
+            color: #2e7d32;
+        }
+
+        &.off {
+            background-color: #e0e0e0;
+            color: #757575;
+        }
+
+        .engine-icon {
+            font-size: 1.3rem;
+        }
+    }
+
+    .engine-health {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        width: fit-content;
+        color: white;
+        text-transform: capitalize;
+
+        &.ottimo {
+            background-color: #4caf50; /* verde */
+        }
+
+        &.buono {
+            background-color: #2196f3; /* blu */
+        }
+
+        &.cattivo {
+            background-color: #f44336; /* rosso */
+        }
+
+        &.unknown {
+            background-color: #9e9e9e; /* grigio */
+        }
+    }
+
+    .battery-voltage {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #444;
+        padding: 0.5rem 1rem;
+        background: #f9f9f9;
+        border-radius: 12px;
+        max-width: 200px;
+        text-align: center;
+    }
+}

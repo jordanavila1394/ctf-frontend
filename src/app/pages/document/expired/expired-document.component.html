@@ -18,9 +18,9 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let document of documents">
-                            <td>{{ document.user.name }}</td>
-                            <td>{{ document.user.surname }}</td>
-                            <td>{{ document.fiscalCode }}</td>
+                            <td>{{ document?.user?.name }}</td>
+                            <td>{{ document?.user?.surname }}</td>
+                            <td>{{ document?.fiscalCode }}</td>
                             <td>
                                 <ng-container [ngSwitch]="document.category">
                                     <span *ngSwitchCase="'cedolino'"> Cedolino</span>
@@ -42,7 +42,7 @@
                             </td>
                             <td>
                                 <div class="expired-actions">
-                                    <a *ngIf="document.user.cellphone"
+                                    <a *ngIf="document?.user?.cellphone"
                                         href="https://wa.me/{{ document.user.cellphone }}"
                                         target="_blank">
                                         <img src="assets/icons/whatsapp.png" alt="WhatsApp" width="24" height="24">

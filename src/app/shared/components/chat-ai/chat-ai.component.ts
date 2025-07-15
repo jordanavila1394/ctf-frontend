@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { VehicleService } from 'src/app/services/vehicle.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { VehicleService } from 'src/app/services/vehicle.service';
 export class ChatAiComponent {
   isOpen = false;
   newMessage = '';
-  messages: { sender: 'user' | 'ai'; text: string }[] = [];
+  messages: Array<{ sender: string; text: string }> = [];
 
   @ViewChild('chatMessages') private chatMessagesContainer!: ElementRef;
 
@@ -19,7 +19,7 @@ export class ChatAiComponent {
   private readonly expiryKey = 'chatAiExpiry';
   private readonly ttl = 1000 * 60 * 60 * 24 * 30; // 30 giorni
 
-  constructor(private vehicleService: VehicleService) {
+  constructor(private vehicleService: VehicleService,) {
     this.loadMessages();
   }
 
@@ -31,7 +31,7 @@ export class ChatAiComponent {
         text: 'Ciao! Sono il tuo assistente AI 😊'
       });
       this.saveMessages();
-  
+
     }
     this.scrollToBottom();
 
@@ -81,7 +81,9 @@ export class ChatAiComponent {
     if (stored && expiry) {
       const expired = Date.now() - parseInt(expiry, 10) > this.ttl;
       if (!expired) {
-        this.messages = JSON.parse(stored);
+        const parsed = JSON.parse(stored) as Array<{ sender: string; text: string }>;
+        // Ora sanitize solo in memoria, quando serve
+        this.messages = parsed;
       } else {
         localStorage.removeItem(this.storageKey);
         localStorage.removeItem(this.expiryKey);
@@ -95,6 +97,23 @@ export class ChatAiComponent {
       this.saveMessages();
       this.scrollToBottom();
     };
+
+    if (message.toLowerCase().trim() === 'aiuto' || message.toLowerCase().trim() === 'help') {
+      const helpText = `
+  Comandi disponibili:<br/>
+  - <b>info targa [targa]</b>: Dati veicolo, conducente e azienda.<br/>
+  - <b>status targa [targa]</b>: Stato generale del veicolo (condizioni, allarmi, ecc.).<br/>
+  - <b>quadro targa [targa]</b>: Velocità, livello benzina e stato motore.<br/>
+  - <b>gomme targa [targa]</b>: Stato pneumatici.<br/>
+  - <b>mappa targa [targa]</b>: Mostra posizione veicolo.<br/>
+  - <b>aiuto</b>: Mostra questo elenco.
+`;
+
+      this.messages.push({ sender: 'ai', text: helpText });
+      this.saveMessages();
+      this.scrollToBottom();
+      return true;  // comando gestito, non proseguire con altri
+    }
 
     const infoMatch = message.match(/^info targa\s+(.+)$/i);
     if (infoMatch) {
@@ -141,8 +160,31 @@ export class ChatAiComponent {
 
       return true;
     }
+    //qui
+    const quadroMatch = message.match(/^quadro targa\s+(.+)$/i);
+    if (quadroMatch) {
+      const plate = quadroMatch[1].trim();
+      if (!plate) {
+        addAiMessage('Per favore inserisci una targa dopo "quadro targa".');
+        return true;
+      }
 
-    const tiresMatch = message.match(/^tires targa\s+(.+)$/i);
+      addAiMessage(`Verifico il quadro informazioni per la targa "${plate}"...`);
+
+      this.vehicleService.getVehicleInfo(plate).subscribe({
+        next: (data) => {
+          const quadroText = this.formatVehicleDashboard(data);
+          addAiMessage(quadroText);
+        },
+        error: () => {
+          addAiMessage('Spiacente, non sono riuscito a recuperare il quadro informazioni per questa targa.');
+        }
+      });
+
+      return true;
+    }
+
+    const tiresMatch = message.match(/^gomme targa\s+(.+)$/i);
     if (tiresMatch) {
       const plate = tiresMatch[1].trim();
       if (!plate) {
@@ -165,7 +207,7 @@ export class ChatAiComponent {
       return true;
     }
 
-    const mapMatch = message.match(/^map targa\s+(.+)$/i);
+    const mapMatch = message.match(/^mappa targa\s+(.+)$/i);
     if (mapMatch) {
       const plate = mapMatch[1].trim();
       if (!plate) {
@@ -268,6 +310,69 @@ export class ChatAiComponent {
       </table>
     `;
   }
+
+
+  private roundDownToNearest10(value: number): number {
+    return Math.floor(value / 10) * 10;
+  }
+
+  private formatVehicleDashboard(data: any): string {
+    if (!data || Object.keys(data).length === 0) {
+      return '<p class="no-info">Nessuna informazione di stato disponibile.</p>';
+    }
+
+    const oilLevelRaw = typeof data.oilLevel === 'number' ? Math.min(100, Math.max(0, data.oilLevel)) : 0;
+    const oilLevel = this.roundDownToNearest10(oilLevelRaw);
+
+    const engineHealthClassMap: Record<string, string> = {
+      ottimo: 'ottimo',
+      buono: 'buono',
+      cattivo: 'cattivo',
+    };
+    const engineHealthClass = engineHealthClassMap[data.engineHealth?.toLowerCase()] || 'unknown';
+
+    return `
+      <div class="vehicle-dashboard">
+        <div class="speed-display">
+          <div class="value">
+            <i class="pi pi-tachometer"></i> ${data.speed ?? 'N/D'}<span class="unit"> km/h</span>
+          </div>
+          <div class="label">Velocità</div>
+        </div>
+  
+        <div class="fuel-display">
+          <div class="label">
+            <i class="pi pi-drop"></i> Carburante
+          </div>
+          <div class="fuel-bar">
+            <div class="fuel-fill level-${oilLevel}" style="width: ${oilLevel}%"></div>
+          </div>
+          <div class="fuel-value">${oilLevelRaw}%</div>
+        </div>
+  
+        <div class="engine-status ${data.isEngineOn ? 'on' : 'off'}">
+          <span class="engine-icon">
+            <i class="pi pi-cog"></i>
+          </span>
+          <span class="engine-text">${data.isEngineOn ? 'Motore acceso' : 'Motore spento'}</span>
+        </div>
+  
+        <div class="engine-health ${engineHealthClass}">
+          <i class="pi pi-heart"></i>
+          ${data.engineHealth ? data.engineHealth.charAt(0).toUpperCase() + data.engineHealth.slice(1) : 'N/D'}
+        </div>
+  
+        <div class="battery-voltage">
+          <div class="label">
+            <i class="pi pi-bolt"></i> Tensione Batteria
+          </div>
+          <div class="value">${data.batteryVoltage ?? 'N/D'} V</div>
+        </div>
+      </div>
+    `;
+  }
+
+
 
   private formatTireStatus(data: any): string {
     if (!data || Object.keys(data).length === 0) {
