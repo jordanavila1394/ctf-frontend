@@ -170,5 +170,15 @@
             "updatedAt": "Fecha actualizacion",
             "actions": "Acciones"
         }
+    },
+    "page":{
+        "dashboard":{
+            "users": "Utenti",
+            "companies": "Aziende",
+            "vehicles": "Mezzi",
+            "attendances": "Presenze",
+            "checkin-done": "Check-in effettuato",
+            "checkin-pending": "Check-in in attesa"
+        }
     }
 }

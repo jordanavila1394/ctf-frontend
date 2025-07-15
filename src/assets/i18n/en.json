@@ -170,5 +170,15 @@
             "updatedAt": "Fecha actualizacion",
             "actions": "Acciones"
         }
+    },
+    "page": {
+        "dashboard": {
+            "users": "Users",
+            "companies": "Companies",
+            "vehicles": "Vehicles",
+            "attendances": "Attendances",
+            "checkin-done": "Check-in completed",
+            "checkin-pending": "Check-in pending"
+        }
     }
 }
