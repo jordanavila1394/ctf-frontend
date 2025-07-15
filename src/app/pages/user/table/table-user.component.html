@@ -161,10 +161,7 @@
                         <td>
                             <span>{{
                                 user.createdAt
-                                | date
-                                : "fullDate"
-                                : ""
-                                : translateService.currentLang
+                                | date: 'dd/MM/yyyy HH:mm'
                                 }}</span>
                         </td>
                         <td alignFrozen="right" pFrozenColumn [frozen]="actionsFrozen">

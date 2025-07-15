@@ -179,6 +179,24 @@
             "attendances": "Presenze",
             "checkin-done": "Check-in effettuato",
             "checkin-pending": "Check-in in attesa"
+        },
+        "landing": {
+            "hello": "Ciao",
+            "welcome": "Benvenuto su CTF Cloud",
+            "description": "Piattaforma per la gestione di aziende e mezzi",
+            "lastChekin": "Ultimo check-in",
+            "goOnWithCheckin": "Procedi con il check-in",
+            "youMustCheckOut": "Devi effettuare il check-out",
+            "sickness": "Malattia",
+            "leave": "Permesso",
+            "attendance": "Presenze",
+            "documents": "Documenti",
+            "guide": "Guida",
+            "support": "Supporto"
+        },
+        "attendance":{
+            "yourCompany": "La tua azienda è ",
+            "currentLocation": "Posizione attuale"
         }
     },
     "generic": {
@@ -189,7 +207,12 @@
             "date": "Data",
             "name": "Nome",
             "surname": "Cognome",
+            "company": "Azienda",
+            "placeholderPlace": "--Sede--",
+            "placeholderVehicle": "--Veicolo--",
             "fiscalCode": "Codice fiscale",
+            "selectPlace": "Seleziona sede",
+            "selectVehicle": "Seleziona mezzo",
             "email": "Email",
             "phone": "Telefono"
         }

@@ -179,6 +179,23 @@
             "attendances": "Attendances",
             "checkin-done": "Check-in completed",
             "checkin-pending": "Check-in pending"
+        },
+        "landing": {
+            "hello": "Hello",
+            "welcome": "Welcome to CTF Cloud",
+            "description": "CTF Cloud is a platform designed to manage your company in a simple and efficient way.",
+            "lastCheckin": "Last check-in",
+            "goOnWithCheckin": "Proceed with check-in",
+            "youMustCheckOut": "You must check out",
+            "sickness": "Sickness",
+            "leave": "Leave",
+            "attendance": "Attendance",
+            "documents": "Documents",
+            "guide": "Guide",
+            "support": "Support"
+        },
+        "attendance":{
+            "currentLocation": "Current location"
         }
     },
     "generic": {
@@ -189,7 +206,12 @@
             "date": "Date",
             "name": "Name",
             "surname": "Surname",
+            "company": "Company",
+            "placeholderPlace": "--Place--",
+            "placeholderVehicle": "--Vehicle--",
             "fiscalCode": "Fiscal code",
+            "selectPlace": "Select place",
+            "selectVehicle": "Select vehicle",
             "email": "Email",
             "phone": "Phone"
         }

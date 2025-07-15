@@ -2,10 +2,11 @@
     <div class="col-12">
         <div class="card">
             <div class="welcome-container">
-                Ciao,
+                {{ "page.landing.hello" | translate }},
                 <span class="font-bold">{{ currentUser.name }} {{ currentUser.surname }}</span>.
                 <br />
-                Benvenuto su CTF Cloud
+                {{ "page.landing.welcome" | translate }},<br />
+                {{ "page.landing.description" | translate }}
             </div>
         </div>
     </div>
@@ -36,7 +37,8 @@
     <div class="col-12">
         <div class="card">
             <div class="attendance-wrapper" *ngIf="!attendanceData?.foundCheckIn">
-                <button pButton pRipple label="Procedi con il Check In" class="p-button-success p-button-lg"
+                <button pButton pRipple   [label]="'page.landing.goOnWithCheckin' | translate" 
+                class="p-button-success p-button-lg"
                     size="large" [routerLink]="['/home/attendance']"></button>
             </div>
             <div class="attendance-wrapper" *ngIf="
@@ -124,7 +126,7 @@
                             <div class="image-wrapper">
                                 <img src="{{ menu?.source }}" class="" />
                             </div>
-                            <span>{{ menu?.label }}</span>
+                            <span>{{ menu?.label | translate }}</span>
                         </div>
                     </a>
                 </div>
@@ -134,7 +136,7 @@
                             <div class="image-wrapper">
                                 <img src="assets/icons/customer-service.png" class="" />
                             </div>
-                            <span>Supporto</span>
+                            <span>{{ 'page.landing.support' | translate }}</span>
                         </div>
                     </a>
                 </div>

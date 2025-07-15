@@ -6,8 +6,8 @@
                     {{ currentUser?.name }} {{ currentUser?.surname }}</span>
                 <br />
                 <div>
-                    <span class="font-bold">Azienda: </span>
-                    <span>{{ currentCompany?.name }}</span>
+                    <span >{{ "page.attendance.yourCompany" | translate }}: </span>
+                    <span class="font-bold">{{ currentCompany?.name }}</span>
                 </div>
             </div>
         </div>
@@ -17,9 +17,9 @@
             <form [formGroup]="checkInForm" #form="ngForm">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="user1">Seleziona sede</label>
+                        <label htmlFor="user1">{{ "generic.fields.selectPlace" | translate }}</label>
                         <p-dropdown [options]="placesItems" optionLabel="name" optionValue="id"
-                            formControlName="placeId" placeholder="--Sede--" (onChange)="onChangePlace($event)"
+                            formControlName="placeId" [placeholder]="'generic.fields.placeholderPlace' | translate" (onChange)="onChangePlace($event)"
                             [(ngModel)]="selectedPlace" [required]="true">
                             <ng-template let-place pTemplate="place">
                                 {{ place.name }} - {{ place.address }}
@@ -33,10 +33,10 @@
                     </div>
 
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="user1">Seleziona mezzo</label>
+                        <label htmlFor="user1">{{ "generic.fields.selectVehicle" | translate }}</label>
                         <p-dropdown [options]="vehiclesItems" [(ngModel)]="selectedVehicle" optionLabel="licensePlate"
                             optionValue="id" [filter]="true" filterBy="licensePlate" [showClear]="true"
-                            placeholder="--Veicolo--" formControlName="vehicleId" (onChange)="onChangeVehicle($event)"
+                            [placeholder]="'generic.fields.placeholderVehicle' | translate" formControlName="vehicleId" (onChange)="onChangeVehicle($event)"
                             [required]="true">
                             <ng-template let-vehicle pTemplate="selectedItem">
                                 <div class="flex align-items-center gap-2" *ngIf="selectedVehicle">
@@ -196,7 +196,7 @@
     <div class="col-12">
         <div class="card" *ngIf="currentAddress">
             <div *ngIf="currentAddress">
-                <div>Attualmente ti trovi</div>
+                <div>{{ "page.attendance.currentLocation" | translate }}</div>
                 <div class="font-bold">{{ currentAddress }}</div>
             </div>
 

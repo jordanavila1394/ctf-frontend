@@ -17,15 +17,14 @@ import { ROUTES } from '../utils/constants';
     selector: 'app-layout',
     templateUrl: './app.layout.component.html',
 })
-export class AppLayoutComponent implements OnDestroy, OnInit {
-    overlayMenuOpenSubscription: Subscription;
+export class AppLayoutComponent implements OnInit, OnDestroy {
+    overlayMenuOpenSubscription!: Subscription;
+    routerSubscription!: Subscription;
 
-    menuOutsideClickListener: any;
-
-    profileMenuOutsideClickListener: any;
+    menuOutsideClickListener: (() => void) | null = null;
+    profileMenuOutsideClickListener: (() => void) | null = null;
 
     @ViewChild(AppSidebarComponent) appSidebar!: AppSidebarComponent;
-
     @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
 
     constructor(
@@ -33,104 +32,81 @@ export class AppLayoutComponent implements OnDestroy, OnInit {
         public layoutService: LayoutService,
         public renderer: Renderer2,
         public router: Router,
-    ) {
-        this.overlayMenuOpenSubscription =
-            this.layoutService.overlayOpen$.subscribe(() => {
-                if (!this.menuOutsideClickListener) {
-                    this.menuOutsideClickListener = this.renderer.listen(
-                        'document',
-                        'click',
-                        (event) => {
-                            const isOutsideClicked = !(
-                                this.appSidebar.el.nativeElement.isSameNode(
-                                    event.target,
-                                ) ||
-                                this.appSidebar.el.nativeElement.contains(
-                                    event.target,
-                                ) ||
-                                this.appTopbar.menuButton.nativeElement.isSameNode(
-                                    event.target,
-                                ) ||
-                                this.appTopbar.menuButton.nativeElement.contains(
-                                    event.target,
-                                )
-                            );
+    ) { }
 
-                            if (isOutsideClicked) {
-                                this.hideMenu();
-                            }
-                        },
-                    );
-                }
+    ngOnInit(): void {
+        this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
+            this.bindOutsideClickListeners();
+            if (this.layoutService.state.staticMenuMobileActive) {
+                this.blockBodyScroll();
+            }
+        });
 
-                if (!this.profileMenuOutsideClickListener) {
-                    this.profileMenuOutsideClickListener = this.renderer.listen(
-                        'document',
-                        'click',
-                        (event) => {
-                            const isOutsideClicked = !(
-                                this.appTopbar.menu.nativeElement.isSameNode(
-                                    event.target,
-                                ) ||
-                                this.appTopbar.menu.nativeElement.contains(
-                                    event.target,
-                                ) ||
-                                this.appTopbar.topbarMenuButton.nativeElement.isSameNode(
-                                    event.target,
-                                ) ||
-                                this.appTopbar.topbarMenuButton.nativeElement.contains(
-                                    event.target,
-                                )
-                            );
-
-                            if (isOutsideClicked) {
-                                this.hideProfileMenu();
-                            }
-                        },
-                    );
-                }
-
-                if (this.layoutService.state.staticMenuMobileActive) {
-                    this.blockBodyScroll();
-                }
-            });
-
-        this.router.events
+        this.routerSubscription = this.router.events
             .pipe(filter((event) => event instanceof NavigationEnd))
             .subscribe(() => {
                 this.hideMenu();
                 this.hideProfileMenu();
             });
+
+        if (this.router.url === '/' || this.router.url === '') {
+            this.redirectBasedOnRole();
+        }
     }
-    ngOnInit(): void {
+
+    redirectBasedOnRole(): void {
         const userRoles = this.authService.getRoles();
-        if (
-            userRoles.includes('ROLE_ADMIN') ||
-            userRoles.includes('ROLE_MODERATOR')
-        ) {
+        if (userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MODERATOR')) {
             this.router.navigate([ROUTES.ROUTE_DASHBOARD]);
-        }
-        if (userRoles.includes('ROLE_ACCOUNTING')) {
+        } else if (userRoles.includes('ROLE_ACCOUNTING')) {
             this.router.navigate([ROUTES.ROUTE_TABLE_DEADLINES]);
-        }
-        if (userRoles.includes('ROLE_WORKER')) {
+        } else if (userRoles.includes('ROLE_WORKER')) {
             this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
         }
     }
 
-    hideMenu() {
+    bindOutsideClickListeners(): void {
+        if (!this.menuOutsideClickListener) {
+            this.menuOutsideClickListener = this.renderer.listen('document', 'click', (event) => {
+                const target = event.target as HTMLElement;
+                const clickedOutsideSidebar =
+                    !this.appSidebar.el.nativeElement.contains(target) &&
+                    !this.appTopbar.menuButton.nativeElement.contains(target);
+                if (clickedOutsideSidebar) {
+                    this.hideMenu();
+                }
+            });
+        }
+
+        if (!this.profileMenuOutsideClickListener) {
+            this.profileMenuOutsideClickListener = this.renderer.listen('document', 'click', (event) => {
+                const target = event.target as HTMLElement;
+                const clickedOutsideProfile =
+                    !this.appTopbar.menu.nativeElement.contains(target) &&
+                    !this.appTopbar.topbarMenuButton.nativeElement.contains(target);
+                if (clickedOutsideProfile) {
+                    this.hideProfileMenu();
+                }
+            });
+        }
+    }
+
+    hideMenu(): void {
         this.layoutService.state.overlayMenuActive = false;
         this.layoutService.state.staticMenuMobileActive = false;
         this.layoutService.state.menuHoverActive = false;
+
         if (this.menuOutsideClickListener) {
             this.menuOutsideClickListener();
             this.menuOutsideClickListener = null;
         }
+
         this.unblockBodyScroll();
     }
 
-    hideProfileMenu() {
+    hideProfileMenu(): void {
         this.layoutService.state.profileSidebarVisible = false;
+
         if (this.profileMenuOutsideClickListener) {
             this.profileMenuOutsideClickListener();
             this.profileMenuOutsideClickListener = null;
@@ -138,55 +114,48 @@ export class AppLayoutComponent implements OnDestroy, OnInit {
     }
 
     blockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.add('blocked-scroll');
-        } else {
-            document.body.className += ' blocked-scroll';
-        }
+        document.body.classList.add('blocked-scroll');
     }
 
     unblockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.remove('blocked-scroll');
-        } else {
-            document.body.className = document.body.className.replace(
-                new RegExp(
-                    '(^|\\b)' +
-                        'blocked-scroll'.split(' ').join('|') +
-                        '(\\b|$)',
-                    'gi',
-                ),
-                ' ',
-            );
-        }
+        document.body.classList.remove('blocked-scroll');
     }
 
-    get containerClass() {
+    get containerClass(): { [key: string]: boolean } {
+        const config = this.layoutService.config;
+        const state = this.layoutService.state;
+
         return {
-            'layout-theme-light':
-                this.layoutService.config.colorScheme === 'light',
-            'layout-theme-dark':
-                this.layoutService.config.colorScheme === 'dark',
-            'layout-overlay': this.layoutService.config.menuMode === 'overlay',
-            'layout-static': this.layoutService.config.menuMode === 'static',
+            'layout-theme-light': config.colorScheme === 'light',
+            'layout-theme-dark': config.colorScheme === 'dark',
+            'layout-overlay': config.menuMode === 'overlay',
+            'layout-static': config.menuMode === 'static',
             'layout-static-inactive':
-                this.layoutService.state.staticMenuDesktopInactive &&
-                this.layoutService.config.menuMode === 'static',
-            'layout-overlay-active': this.layoutService.state.overlayMenuActive,
-            'layout-mobile-active':
-                this.layoutService.state.staticMenuMobileActive,
-            'p-input-filled': this.layoutService.config.inputStyle === 'filled',
-            'p-ripple-disabled': !this.layoutService.config.ripple,
+                state.staticMenuDesktopInactive && config.menuMode === 'static',
+            'layout-overlay-active': state.overlayMenuActive,
+            'layout-mobile-active': state.staticMenuMobileActive,
+            'p-input-filled': config.inputStyle === 'filled',
+            'p-ripple-disabled': !config.ripple,
         };
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         if (this.overlayMenuOpenSubscription) {
             this.overlayMenuOpenSubscription.unsubscribe();
         }
 
+        if (this.routerSubscription) {
+            this.routerSubscription.unsubscribe();
+        }
+
         if (this.menuOutsideClickListener) {
             this.menuOutsideClickListener();
+            this.menuOutsideClickListener = null;
+        }
+
+        if (this.profileMenuOutsideClickListener) {
+            this.profileMenuOutsideClickListener();
+            this.profileMenuOutsideClickListener = null;
         }
     }
 }

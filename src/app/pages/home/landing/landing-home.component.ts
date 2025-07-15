@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
 import { DownloadService } from 'src/app/services/download.service';
 import { SpacesService } from 'src/app/services/spaces.service';
 import { UserService } from 'src/app/services/user.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     templateUrl: './landing-home.component.html',
@@ -63,46 +64,47 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
         private spacesService: SpacesService,
         private userService: UserService,
         private downloadService: DownloadService,
+        private translateService: TranslateService,
         public router: Router,
         private store: Store<{ authState: AuthState }>,
     ) {
         //Init
         this.operatorPhoneNumber = environment?.operatorPhoneNumber;
         this.authState$ = store.select('authState');
+
         this.menuItems = [
             {
-                label: 'Malattia',
+                label: 'page.landing.sickness',      // Malattia
                 source: 'assets/icons/flu.png',
                 linkRoute: ROUTES.ROUTE_MEDICAL_HOME,
-
                 icon: 'pi pi-fw pi-check',
             },
             {
-                label: 'Permesso',
+                label: 'page.landing.leave',         // Permesso
                 source: 'assets/icons/leave.png',
                 linkRoute: ROUTES.ROUTE_PERMISSION_HOME,
-
                 icon: 'pi pi-fw pi-check',
             },
             {
-                label: 'Presenze',
+                label: 'page.landing.attendance',    // Presenze
                 source: 'assets/icons/calendar.png',
                 linkRoute: ROUTES.ROUTE_MYATTENDANCES_HOME,
                 icon: 'pi pi-fw pi-refresh',
             },
             {
-                label: 'Documenti',
+                label: 'page.landing.documents',     // Documenti
                 source: 'assets/icons/stamp.png',
                 linkRoute: ROUTES.ROUTE_DOCUMENTS_HOME,
                 icon: 'pi pi-fw pi-trash',
             },
             {
-                label: 'Guida',
+                label: 'page.landing.guide',         // Guida
                 source: 'assets/icons/user-guide.png',
                 linkRoute: ROUTES.ROUTE_GUIDE_HOME,
                 icon: 'pi pi-fw pi-home',
             },
         ];
+          
         this.formatter = new Formatter();
     }
 
