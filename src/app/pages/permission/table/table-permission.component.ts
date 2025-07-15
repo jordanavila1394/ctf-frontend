@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 
 //Libraries
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
+import { formatDate } from '@angular/common';
 
 //PrimeNg
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
@@ -33,6 +34,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 
 import * as FileSaver from 'file-saver';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     templateUrl: './table-permission.component.html',
@@ -64,6 +66,7 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private companyService: CompanyService,
+        private translateService: TranslateService,
         private permissionService: PermissionService,
         public emailService: EmailService,
         private store: Store<{ companyState: CompanyState }>,
@@ -119,6 +122,20 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
         return this.permissions ? Object.keys(this.permissions) : [];
     }
 
+    formatMonth(date: string | Date): string {
+        const lang = this.getAngularLocale(this.translateService.currentLang || 'it');
+        console.log(lang);
+        return formatDate(date, 'MMMM yyyy', lang);
+    }
+
+    getAngularLocale(lang: string): string {
+        switch (lang) {
+            case 'it': return 'it-IT';
+            case 'en': return 'en-US';
+            case 'es': return 'es-ES';
+            default: return 'it-IT';
+        }
+    }
 
     approvePermission(permission) {
         this.permissionService

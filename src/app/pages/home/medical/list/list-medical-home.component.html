@@ -53,10 +53,10 @@
     <div class="col-12">
         <div class="card p-fluid">
             <form [formGroup]="myMedicalsForm" #form="ngForm">
-                <h5>Seleziona mese e anno</h5>
+                <h5>{{ "generic.fields.monthAndYear" | translate }}</h5>
                 <div class="p-formgrid grid">
                     <div class="field col">
-                        <label htmlFor="year1">Anno</label>
+                        <label htmlFor="year1">{{ "generic.fields.year" | translate }}</label>
                         <input
                             pInputText
                             id="year1"
@@ -65,7 +65,7 @@
                         />
                     </div>
                     <div class="field col">
-                        <label htmlFor="month1">Mese</label>
+                        <label htmlFor="month1">{{ "generic.fields.month" | translate }}</label>
                         <p-dropdown
                             [options]="monthsItems"
                             optionLabel="name"

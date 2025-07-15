@@ -12,7 +12,7 @@
             <div class="list-permission" *ngIf="permissions?.length > 0">
                 <ng-container *ngFor="let group of permissions">
                     <!-- Intestazione del mese -->
-                    <h3 class="month-header">{{ group.month | date: 'MMMM yyyy' : 'it-IT' }}</h3>
+                    <h3 class="month-header">{{ formatMonth(group.month) }}</h3>
 
                     <!-- Iterazione sulle autorizzazioni -->
                     <ng-container class="permissions" *ngFor="let permission of group.permissions">

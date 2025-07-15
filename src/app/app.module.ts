@@ -61,6 +61,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DrodownLanguageModule } from './shared/components/dropdown-language/dropdown-language.module';
 
 import localeIt from '@angular/common/locales/it';
+import localeEn from '@angular/common/locales/en';
+import localeEs from '@angular/common/locales/es';
 import { VehicleModule } from './pages/vehicle/vehicle.module';
 import { HomeModule } from './pages/home/home.module';
 import { ImagesDialogModule } from './shared/components/imagesDialog/images-dialog.module';
@@ -128,8 +130,8 @@ import { LoaderInterceptor } from './helpers/loader.interceptor';
 })
 export class AppModule {
     constructor() {
-        registerLocaleData(localeIt, 'it');
-        registerLocaleData(localeIt, 'es');
-        registerLocaleData(localeIt, 'en');
+        registerLocaleData(localeIt, 'it-IT');
+        registerLocaleData(localeEn, 'en-US');
+        registerLocaleData(localeEs, 'es-ES');
     }
 }

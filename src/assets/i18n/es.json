@@ -180,5 +180,18 @@
             "checkin-done": "Check-in realizado",
             "checkin-pending": "Check-in pendiente"
         }
+    },
+    "generic": {
+        "fields": {
+            "monthAndYear": "Selecciona mes y año",
+            "year": "Año",
+            "month": "Mes",
+            "date": "Fecha",
+            "name": "Nombre",
+            "surname": "Apellido",
+            "fiscalCode": "Código fiscal",
+            "email": "Email",
+            "phone": "Telefono"
+        }
     }
 }

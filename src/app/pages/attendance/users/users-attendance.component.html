@@ -2,14 +2,14 @@
     <div class="col-12">
         <div class="card p-fluid">
             <form [formGroup]="usersAttendancesForm" #form="ngForm">
-                <h5>Seleziona mese e anno</h5>
+                <h5>{{ "generic.fields.monthAndYear" | translate }}</h5>
                 <div class="p-formgrid grid">
                     <div class="field col">
-                        <label htmlFor="year1">Anno</label>
+                        <label htmlFor="year1">{{ "generic.fields.year" | translate }}</label>
                         <input pInputText id="year1" type="text" formControlName="currentYear" />
                     </div>
                     <div class="field col">
-                        <label htmlFor="month1">Mese</label>
+                        <label htmlFor="month1">{{ "generic.fields.month" | translate }}</label>
                         <p-dropdown [options]="monthsItems" optionLabel="name" formControlName="currentMonth"
                             [(ngModel)]="selectedCurrentMonth" (onChange)="onChangeMonth($event)"></p-dropdown>
                     </div>
@@ -24,14 +24,14 @@
                     <tr>
                         <th></th>
                         <th pSortableColumn="name">
-                            Nome <p-sortIcon field="name"></p-sortIcon>
+                            {{ "generic.fields.name" | translate }} <p-sortIcon field="name"></p-sortIcon>
                         </th>
                         <th pSortableColumn="surname">
-                            Cognome
+                            {{ "generic.fields.surname" | translate }}
                             <p-sortIcon field="surname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="fiscalCode">
-                            Codice fiscale
+                            {{ "generic.fields.fiscalCode" | translate }}
                             <p-sortIcon field="fiscalCode"></p-sortIcon>
                         </th>
                         <th pSortableColumn="totalHours">
@@ -216,16 +216,16 @@
             <button pButton icon="pi pi-fw {{
                             isExpanded ? 'pi-minus' : 'pi-plus'
                         }}" label="{{
-                            isExpanded ? 'Chiudi Tutto' : 'Espandi Tutto'
+                            isExpanded ? 'Close all' : 'Expand All'
                         }}" (click)="expandAll()"></button>
             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcelVertical()"
-                class="p-button-success mr-2" pTooltip="XLS Verticale" tooltipPosition="bottom"
+                class="p-button-success mr-2" pTooltip="XLS Vertical" tooltipPosition="bottom"
                 style="margin-left: 1rem"></button>
             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcelHorizontal()"
-                class="p-button-success mr-2" pTooltip="XLS Orizzontale" tooltipPosition="bottom"
+                class="p-button-success mr-2" pTooltip="XLS Horizontal" tooltipPosition="bottom"
                 style="margin-left: 1rem"></button>
             <button type="button" pButton pRipple icon="pi pi-sync" (click)="synchronizeAttendances()"
-                class="p-button-success mr-2" pTooltip="Sincronizza presenze" tooltipPosition="bottom"
+                class="p-button-success mr-2" pTooltip="Synchronize Attendances" tooltipPosition="bottom"
                 style="margin-left: 1rem"></button>
         </ng-template>
         </p-table>

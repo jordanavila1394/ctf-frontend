@@ -107,11 +107,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 const documentStyle = getComputedStyle(
                     document.documentElement,
                 );
+                const checkInDoneLabel = this.translateService.instant('page.dashboard.checkin-done');
+                const checkInMissingLabel = this.translateService.instant('page.dashboard.checkin-pending');
+
                 this.barDataAttendances = {
                     labels: this.attendances?.arrayDates,
                     datasets: [
                         {
-                            label: 'CheckIn Fatto',
+                            label: checkInDoneLabel,
                             backgroundColor:
                                 documentStyle.getPropertyValue('--green-200'),
                             borderColor:
@@ -119,11 +122,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                             data: this.attendances?.arrayCountCheck,
                         },
                         {
-                            label: 'Mancante',
+                            label: checkInMissingLabel,
                             backgroundColor:
-                                documentStyle.getPropertyValue('--red-200'),
+                                documentStyle.getPropertyValue('--orange-200'),
                             borderColor:
-                                documentStyle.getPropertyValue('--red-200'),
+                                documentStyle.getPropertyValue('--orange-200'),
                             data: this.attendances?.arrayCountMissing,
                         },
                     ],

@@ -33,14 +33,14 @@
                             <p-calendar formControlName="endDate" placeholder="Seleziona data"></p-calendar>
                         </div> -->
                         <div class="field col-12 md:col-3">
-                            <label for="year">Seleziona Anno:</label>
+                            <label for="year">{{ "generic.fields.year" | translate }}:</label>
                             <p-dropdown (onChange)="onChangeAnno($event)" [options]="years"
                                 formControlName="selectedYear" [(ngModel)]="selectedYear"
                                 placeholder="Select Year"></p-dropdown>
                         </div>
 
                         <div class="field col-12 md:col-3">
-                            <label for="month">Seleziona Mese:</label>
+                            <label for="month">{{ "generic.fields.month" | translate }}</label>
                             <p-dropdown (onChange)="onChangeMese($event)" [options]="months"
                                 formControlName="selectedMonth" [(ngModel)]="selectedMonth"
                                 placeholder="Select Month"></p-dropdown>
