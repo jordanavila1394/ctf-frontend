@@ -64,6 +64,7 @@ import localeIt from '@angular/common/locales/it';
 import { VehicleModule } from './pages/vehicle/vehicle.module';
 import { HomeModule } from './pages/home/home.module';
 import { ImagesDialogModule } from './shared/components/imagesDialog/images-dialog.module';
+import { LoaderInterceptor } from './helpers/loader.interceptor';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -112,7 +113,7 @@ import { ImagesDialogModule } from './shared/components/imagesDialog/images-dial
             useClass: HttpRequestInterceptor,
             multi: true,
         },
-
+        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         MessageService,
         CountryService,

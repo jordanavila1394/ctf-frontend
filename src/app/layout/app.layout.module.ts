@@ -23,6 +23,7 @@ import { GeoModalPermissionModule } from '../shared/components/geo-modal-permiss
 import { DropdownNotificationsModule } from '../shared/components/dropdown-notifications/dropdown-notifications.module';
 import { ModalMissingEmailModule } from '../shared/components/modal-missing-email/modal-missing-email.module';
 import { ChatAiModule } from '../shared/components/chat-ai/chat-ai.module';
+import { LoaderModule } from '../shared/components/loader/loader.module';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import { ChatAiModule } from '../shared/components/chat-ai/chat-ai.module';
         GeoModalPermissionModule,
         ModalMissingEmailModule,
         ChatAiModule,
+        LoaderModule,
         AppConfigModule,
     ],
     exports: [AppLayoutComponent],
