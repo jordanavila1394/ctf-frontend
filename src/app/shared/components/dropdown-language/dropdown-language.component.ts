@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
 
@@ -6,34 +6,48 @@ import { PrimeNGConfig } from 'primeng/api';
     selector: 'app-dropdown-language',
     templateUrl: './dropdown-language.component.html',
 })
-export class DropdownLanguageComponent {
-    selectedLanguage = { label: 'it', name: 'it', value: 'it', code: 'it' };
-    cities;
+export class DropdownLanguageComponent implements OnInit {
+    selectedLanguage: any;
     languagesOptions = [];
 
     constructor(
         public translateService: TranslateService,
-        public primengConfig: PrimeNGConfig,
-    ) {}
+        public primengConfig: PrimeNGConfig
+    ) { }
+
     ngOnInit(): void {
+        const savedLang = localStorage.getItem('selectedLanguage') || 'it';
+
         for (const language of this.translateService.getLangs()) {
-            this.languagesOptions.push({
+            const option = {
                 label: language,
                 name: language.toUpperCase(),
                 value: language,
                 code: language === 'en' ? 'uk' : language,
-            });
+            };
+            this.languagesOptions.push(option);
+
+            // Imposta il selezionato se combacia col localStorage
+            if (language === savedLang) {
+                this.selectedLanguage = option;
+            }
         }
-        this.selectedLanguage = {
-            label: 'it',
-            name: 'IT',
-            value: 'it',
-            code: 'it',
-        };
+
+        // Se non è stato trovato (fallback)
+        if (!this.selectedLanguage) {
+            this.selectedLanguage = {
+                label: 'it',
+                name: 'IT',
+                value: 'it',
+                code: 'it',
+            };
+        }
     }
 
     onChangeOption(event) {
-        this.translateService.use(event.value.value);
+        const lang = event.value.value || event.value; // Supporta vari formati
+        this.translateService.use(lang);
+        localStorage.setItem('selectedLanguage', lang); // Salva nel localStorage
         this.translateService
             .get('primeng')
             .subscribe((res) => this.primengConfig.setTranslation(res));

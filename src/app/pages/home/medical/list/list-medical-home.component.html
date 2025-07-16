@@ -1,34 +1,34 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5>Avvisa malattia</h5>
+            <h5>{{ "page.medical.title" | translate }}</h5>
             <form [formGroup]="medicalForm" #form="ngForm">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label htmlFor="dates1"
-                            >Seleziona periodo o data malattia</label
+                            >{{ "page.medical.selectRageOrDate" | translate }} </label
                         >
                         <p-calendar
                             formControlName="dates"
                             selectionMode="multiple"
-                            placeholder="Seleziona date"
+                            [placeholder]="'page.medical.placeholderDate' | translate"
                             [minDate]="minimumDate"
                         ></p-calendar>
                     </div>
 
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="dates1">Note</label>
+                        <label htmlFor="dates1">{{ "page.medical.notes" | translate }}</label>
                         <textarea
                             rows="5"
                             cols="30"
-                            placeholder="Eventuali note"
+                            [placeholder]="'page.medical.placeholderNotes' | translate"
                             ngModel
                             formControlName="note"
                             pInputTextarea
                         ></textarea>
                     </div>
                     <div class="field col-12 md:col-6" style="display: none">
-                        <label htmlFor="typology1">Tipologia permesso</label>
+                        <label htmlFor="typology1">{{ "page.medical.permissionType | translate }}</label>
                         <input
                             pInputText
                             id="typology1"
@@ -41,7 +41,7 @@
                 <button
                     pButton
                     pRipple
-                    label="Manda avviso"
+                    [label]="'page.medical.sendPermission' | translate"
                     class="w-full p-3 text-xl"
                     (click)="savePermission()"
                     [disabled]="!medicalForm.valid"
@@ -153,11 +153,11 @@
                         ></button>
                     </div>
                     <div class="note" *ngIf="permission.note">
-                        <strong>Note: </strong> {{ permission.note }}
+                        <strong>{{ "page.medical.notes" | translate }}: </strong> {{ permission.note }}
                     </div>
                 </div>
             </div>
-            <div *ngIf="!permissions">Nessuna richiesta trovata</div>
+            <div *ngIf="!permissions">{{ "page.medical.permissionsNotFound" | translate }}</div>
         </div>
     </div>
 </div>

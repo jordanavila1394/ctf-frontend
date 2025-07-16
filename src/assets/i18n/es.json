@@ -195,14 +195,25 @@
             "guide": "Guía",
             "support": "Soporte"
         },
-        "attendance":{
+        "attendance": {
             "yourCompany": "Tu empresa es ",
             "currentLocation": "Tu ubicación actual es ",
-            "distanceMessage": "You are",
-            "distanceFromOffice": "from the selected office",
-            "canCheckIn": "You can check in",
-            "cannotCheckIn": "You cannot check in.",
-            "enterRadiusAndReload": "Enter within 300m radius and reload the page"
+            "distanceMessage": "Estás a",
+            "distanceFromOffice": "de la sede seleccionada",
+            "canCheckIn": "Puedes registrarte",
+            "cannotCheckIn": "No puedes registrarte.",
+            "enterRadiusAndReload": "Entra dentro de un radio de 300m y recarga la página"
+        },
+        "medical": {
+            "title": "Avisar enfermedad",
+            "description": "Enviar una solicitud por enfermedad",
+            "selectRageOrDate": "Selecciona un periodo o una fecha de enfermedad",
+            "placeholderDate": "Selecciona una fecha",
+            "notes": "Notas",
+            "placeholderNotes": "Notas adicionales (opcional)",
+            "permissionType": "Tipo de permiso",
+            "sendPermission": "Enviar aviso",
+            "permissionsNotFound": "No se encontraron permisos"
         }
     },
     "generic": {

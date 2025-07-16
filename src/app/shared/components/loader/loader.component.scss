@@ -5,7 +5,7 @@
     z-index: 9999;
     width: 100vw;
     height: 100vh;
-    background: rgba(255, 255, 255, 0.6);
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17,6 +17,7 @@
     height: 60px;
     border: 6px solid rgba(155, 89, 182, 0.2); // viola chiaro
     border-top-color: #5c50af;                // viola elegante
+    background-color: transparent;
     border-radius: 50%;
     animation: spin 0.8s ease-in-out infinite;
     box-shadow: 0 0 12px #536aa9;

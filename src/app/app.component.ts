@@ -6,29 +6,34 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
     selector: 'app-root',
     templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     lang: string = 'it';
     locale: string;
 
     constructor(
         public translateService: TranslateService,
-        public primengConfig: PrimeNGConfig,
+        public primengConfig: PrimeNGConfig
     ) {
         this.primengConfig.ripple = true;
-        translateService.addLangs(['it', 'es', 'en']);
-        this.changeLang('it');
+        this.translateService.addLangs(['it', 'es', 'en']);
+
+        // Recupera la lingua dal localStorage oppure usa 'it' come default
+        const savedLang = localStorage.getItem('selectedLanguage') || 'it';
+        this.changeLang(savedLang);
     }
+
     ngOnInit() {
         this.locale = this.translateService.currentLang;
-        // don't forget to unsubscribe!
         this.translateService.onLangChange.subscribe(
             (langChangeEvent: LangChangeEvent) => {
                 this.locale = langChangeEvent.lang;
-            },
+            }
         );
     }
+
     changeLang(lang: string) {
         this.translateService.use(lang);
+        localStorage.setItem('selectedLanguage', lang); // Salva nel localStorage
         this.translateService
             .get('primeng')
             .subscribe((res) => this.primengConfig.setTranslation(res));

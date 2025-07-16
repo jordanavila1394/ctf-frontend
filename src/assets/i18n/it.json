@@ -203,6 +203,17 @@
             "canCheckIn": "Puoi effettuare il check",
             "cannotCheckIn": "Non puoi effettuare il check.",
             "enterRadiusAndReload": "Entra nel raggio di 300m e ricarica la pagina"
+        },
+        "medical": {
+            "title": "Avvisa malattia",
+            "description": "Invia una richiesta di malattia",
+            "selectRageOrDate": "Seleziona periodo o data malattia",
+            "placeholderDate": "Seleziona data",
+            "notes": "Note",
+            "placeholderNotes": "Eventuali note",
+            "permissionType": "Tipologia permesso",
+            "sendPermission": "Manda avviso",
+            "permissionsNotFound": "Nessun permesso trovato"
         }
     },
     "generic": {
