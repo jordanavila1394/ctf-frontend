@@ -193,7 +193,11 @@
             "attendance": "Attendance",
             "documents": "Documents",
             "guide": "Guide",
-            "support": "Support"
+            "support": "Support",
+            "documentWillBeExpired": "Your documents will expire in 30 days",
+            "expiredDateOn": "expired date on",
+            "writeToHelpDeskIyouNeedHelp": "If you need help, write to our help desk",
+            "helpdesk": "Help Desk"
         },
         "attendance": {
             "yourCompany": "Your company is ",
@@ -223,7 +227,7 @@
             "placeholderSelectDates": "Select dates",
             "hours": "Hours",
             "notes": "Notes",
-            "placeholderNotes": "Additional notes (optional)",
+            "placeholderNotes": "Additional notes",
             "sendPermission": "Submit request",
             "permissionsNotFound": "No permissions found"
         }
@@ -246,7 +250,20 @@
             "selectVehicle": "Select vehicle",
             "email": "Email",
             "phone": "Phone",
-            "optional": "Optional"
+            "optional": "Optional",
+            "checkIn": "Check-in",
+            "checkOut": "Check-out",
+            "status": "Status",
+            "hours": "Hours",
+            "actions": "Actions",
+            "select": "Select",
+            "selectAll": "Select all",
+            "paylips": "Pay slips",
+            "paylipsNotFound": "No pay slips found",
+            "incomeCertificates": "Income certificates (CUD)",
+            "incomeCertificatesNotFound": "No income certificates found",
+            "documents": "Documents",
+            "documentsNotFound": "No documents found"
         }
     }
 }

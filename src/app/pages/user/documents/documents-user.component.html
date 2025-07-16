@@ -109,7 +109,7 @@
 
     <div class="col-12 md:col-12">
         <div class="card">
-            <p-panel header="Cedolini" [toggleable]="true">
+            <p-panel [header]="'generic.fields.paylips' | translate" [toggleable]="true">
                 <div class="document-list">
                     <ng-container
                         *ngFor="let file of this.filesCedoliniDocument"
@@ -163,7 +163,7 @@
             </p-panel>
         </div>
         <div class="card">
-            <p-panel header="CUD" [toggleable]="true">
+            <p-panel [header]="'generic.fields.incomeCertificates' | translate" [toggleable]="true">
                 <div class="document-list">
                     <ng-container *ngFor="let file of this.filesCUDDocument">
                         <div class="file-wrapper">

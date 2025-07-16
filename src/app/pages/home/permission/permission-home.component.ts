@@ -23,6 +23,7 @@ import { PermissionService } from 'src/app/services/permission.service';
 import { MessageService } from 'primeng/api';
 import { EmailService } from 'src/app/services/email.service';
 import { environment } from 'src/environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     templateUrl: './permission-home.component.html',
@@ -93,6 +94,7 @@ export class PermissionHomeComponent implements OnInit {
         public layoutService: LayoutService,
         private permissionService: PermissionService,
         private messageService: MessageService,
+        private translateService: TranslateService,
         private userService: UserService,
         private emailService: EmailService,
         private router: Router,
@@ -106,9 +108,8 @@ export class PermissionHomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        //Current year
-        moment.locale('it');
-        
+
+
         this.myPermissionsForm.patchValue({
             currentYear: moment().year() + '',
         });
@@ -118,22 +119,27 @@ export class PermissionHomeComponent implements OnInit {
             code: moment().month(),
         };
 
-        //Current month
-        this.monthsItems.push({
-            name: moment().format('MMMM'),
-            code: moment().month(),
+        //Current year
+
+        this.translateService.onLangChange.subscribe((event) => {
+            moment.locale(event.lang);
+            this.updateMonths(); // una funzione per aggiornare `monthsItems`
         });
 
-        //Previous month
-        this.monthsItems.push({
-            name: moment().subtract(1, 'month').format('MMMM'),
-            code: moment().subtract(1, 'month').month(),
-        });
+
 
         this.authState$.subscribe((authS) => {
             this.currentUser = authS?.user || '';
+            const savedLang = localStorage.getItem('selectedLanguage') || 'it';
+            moment.locale(savedLang); // Imposta la lingua di moment.js
+            this.updateMonths();
             this.loadServices(this.currentUser);
         });
+
+        const savedLang = localStorage.getItem('selectedLanguage') || 'it';
+        moment.locale(savedLang); // Imposta la lingua di moment.js
+        this.updateMonths();
+
         const layourServiceSubscription =
             this.layoutService.configUpdate$.subscribe(() => {
                 this.loadServices(this.currentUser);
@@ -147,13 +153,29 @@ export class PermissionHomeComponent implements OnInit {
         this.loadServices(this.currentUser);
     }
 
+    updateMonths() {
+        this.monthsItems = [];
+        for (let i = 0; i < 12; i++) {
+            this.monthsItems.push({
+                name: moment().month(i).format('MMMM'),
+                code: i,
+            });
+        }
+        this.selectedCurrentMonth = {
+            name: moment().month(this.selectedCurrentMonth?.code).format('MMMM'),
+            code: this.selectedCurrentMonth?.code,
+        };
+        this.loadServices(this.currentUser);
+    }
+
+
     loadServices(currentUser) {
         const currentYear =
             parseInt(this.myPermissionsForm.value.currentYear, 10) || '';
         const currentMonth = this.selectedCurrentMonth?.code || '';
 
         const permissionServiceSubscription = this.permissionService
-            .getMyPermissions(currentUser.id, currentYear, currentMonth)
+            .getMyPermissions(currentUser?.id, currentYear, currentMonth)
             .subscribe((permissions) => {
                 this.permissions = permissions;
                 this.permissions = permissions.map((permission) => ({

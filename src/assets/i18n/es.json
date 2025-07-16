@@ -193,7 +193,11 @@
             "attendance": "Asistencia",
             "documents": "Documentos",
             "guide": "Guía",
-            "support": "Soporte"
+            "support": "Soporte",
+            "documentWillBeExpired": "Tu documentos caducarán en 30 días",
+            "expiredDateOn": "caduca el",
+            "writeToHelpDeskIyouNeedHelp": "Si necesitas ayuda, escribe a",
+            "helpdesk": "Atención al cliente"
         },
         "attendance": {
             "yourCompany": "Tu empresa es ",
@@ -223,7 +227,7 @@
             "placeholderSelectDates": "Selecciona fechas",
             "hours": "Horas",
             "notes": "Notas",
-            "placeholderNotes": "Notas adicionales (opcional)",
+            "placeholderNotes": "Notas adicionales",
             "sendPermission": "Enviar solicitud",
             "permissionsNotFound": "No se encontraron permisos"
         }
@@ -246,7 +250,20 @@
             "selectVehicle": "Selecciona vehículo",
             "email": "Email",
             "phone": "Telefono",
-            "optional": "Opcional"
+            "optional": "Opcional",
+            "checkIn": "Entrada",
+            "checkOut": "Salida",
+            "status": "Estado",
+            "hours": "Horas",
+            "actions": "Acciones",
+            "select": "Seleccionar",
+            "selectAll": "Seleccionar todo",
+            "paylips": "Recibos de pago",
+            "paylipsNotFound": "No se encontraron recibos de pago",
+            "incomeCertificates": "Certificados de ingresos",
+            "incomeCertificatesNotFound": "No se encontraron certificados de ingresos",
+            "documents": "Documentos",
+            "documentsNotFound": "No se encontraron documentos"
         }
     }
 }

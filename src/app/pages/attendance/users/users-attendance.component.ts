@@ -38,6 +38,7 @@ import * as moment from 'moment';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ImagesDialogComponent } from 'src/app/shared/components/imagesDialog/images-dialog.component';
 import { AttendanceService } from 'src/app/services/attendance.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -92,6 +93,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private companyService: CompanyService,
         private attendanceService: AttendanceService,
+        private translateService: TranslateService,
         public dialogService: DialogService,
         private userService: UserService,
         private store: Store<{ companyState: CompanyState }>,
@@ -162,12 +164,9 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
         };
 
         // Initialize monthsItems with all months of the year
-        for (let i = 0; i < 12; i++) {
-            this.monthsItems.push({
-                name: moment().month(i).format('MMMM'),
-                code: i,
-            });
-        }
+        const savedLang = localStorage.getItem('selectedLanguage') || 'it';
+        moment.locale(savedLang); // Imposta la lingua di moment.js
+        this.updateMonths();
 
         this.selectedCurrentMonth = this.monthsItems[moment().month()];
 
@@ -179,8 +178,25 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
             },
         );
 
+        this.translateService.onLangChange.subscribe((event) => {
+            moment.locale(event.lang);
+            this.updateMonths(); // una funzione per aggiornare `monthsItems`
+        });
+
         this.subscription.add(companyServiceSubscription);
     }
+
+    updateMonths() {
+        this.monthsItems = [];
+        for (let i = 0; i < 12; i++) {
+            this.monthsItems.push({
+                name: moment().month(i).format('MMMM'),
+                code: i,
+            });
+        }
+        this.loadServices(this.selectedCompany);
+    }
+    
 
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
@@ -198,7 +214,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
 
         const userServiceSubscription = this.userService
             .getAllUsersWithAttendances(
-                selectedCompany.id,
+                selectedCompany?.id,
                 currentYear,
                 currentMonth,
             )

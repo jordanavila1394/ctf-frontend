@@ -89,7 +89,8 @@
         <div class="card" style="display: flex; justify-content: center">
             <div class="expire-document-wrapper">
                 <div class="title">
-                    I seguenti documenti stanno scadendo entro 30 giorni:
+                    {{ "page.landing.documentWillBeExpired" | translate }}:
+
                 </div>
                 <ng-container class="list-document" *ngFor="let document of this.documentsExpiring">
                     <div class="document">
@@ -105,13 +106,13 @@
                                 <span *ngSwitchCase="'altro'">Altro</span>
                                 <span *ngSwitchDefault>Altro</span>
                             </ng-container>
-                        </a>
-                        scade il <strong>{{document.expireDate | date}}</strong>
+                        </a>                 
+                        {{ "page.landing.expiredDateOn" | translate }} <strong>{{document.expireDate | date}}</strong>
                     </div>
                 </ng-container>
                 <div style="padding: 1rem 0;">
-                    Scrivi ad assistenza e aggiorna documenti. Clicca su <a
-                        (click)="openWhatsAppChatOperator()">Assistenza</a>
+                    {{ "page.landing.writeToHelpDeskIyouNeedHelp" | translate }} <a
+                        (click)="openWhatsAppChatOperator()">{{ "page.landing.helpdesk" | translate }}</a>
                 </div>
             </div>
         </div>

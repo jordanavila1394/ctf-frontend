@@ -19,11 +19,11 @@
         <div class="card">
             <div class="my-attendances">
                 <div class="headers">
-                    <div><span>Data</span></div>
-                    <div><span>CheckIn</span></div>
-                    <div><span>CheckOut</span></div>
-                    <div><span>Stato</span></div>
-                    <div><span>Ore totali</span></div>
+                    <div><span>{{ "generic.fields.date" | translate }}</span></div>
+                    <div><span>{{ "generic.fields.checkIn" | translate }}</span></div>
+                    <div><span>{{ "generic.fields.checkOut" | translate }}</span></div>
+                    <div><span>{{ "generic.fields.status" | translate }}</span></div>
+                    <div><span>{{ "generic.fields.hours" | translate }}</span></div>
                 </div>
                 <div class="attendance" [ngClass]="{
                         'is-weekend': attendance?.checkIsWeekend

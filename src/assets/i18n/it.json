@@ -193,7 +193,11 @@
             "attendance": "Presenze",
             "documents": "Documenti",
             "guide": "Guida",
-            "support": "Supporto"
+            "support": "Supporto",
+            "documentWillBeExpired": "Il tuoi documenti scadrànno tra 30 giorni",
+            "expiredDateOn": "scadenza il",
+            "writeToHelpDeskIyouNeedHelp": "Se hai bisogno di aiuto, scrivi a",
+            "helpdesk": "Assistenza"
         },
         "attendance": {
             "yourCompany": "La tua azienda è ",
@@ -246,7 +250,20 @@
             "selectVehicle": "Seleziona mezzo",
             "email": "Email",
             "phone": "Telefono",
-            "optional": "Opzionale"
+            "optional": "Opzionale",
+            "checkIn": "Check-in",
+            "checkOut": "Check-out",
+            "status": "Stato",
+            "hours": "Ore",
+            "actions": "Azioni",
+            "select": "Seleziona",
+            "selectAll": "Seleziona tutto",
+            "paylips": "Cedolini",
+            "paylipsNotFound": "Nessun cedolino trovato",
+            "incomeCertificates": "Certificati di reddito (CUD)",
+            "incomeCertificatesNotFound": "Nessun certificato di reddito trovato",
+            "documents": "Documenti",
+            "documentsNotFound": "Nessun documento trovato"
         }
     }
 }
