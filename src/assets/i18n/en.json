@@ -214,6 +214,18 @@
             "permissionType": "Permission type",
             "sendPermission": "Send notice",
             "permissionsNotFound": "No permissions found"
+        },
+        "permissions": {
+            "title": "Request Permission",
+            "permissionType": "Permission type",
+            "placeholderType": "--Select type--",
+            "selectDatesPermission": "Select permission dates",
+            "placeholderSelectDates": "Select dates",
+            "hours": "Hours",
+            "notes": "Notes",
+            "placeholderNotes": "Additional notes (optional)",
+            "sendPermission": "Submit request",
+            "permissionsNotFound": "No permissions found"
         }
     },
     "generic": {
@@ -233,7 +245,8 @@
             "selectPlace": "Select place",
             "selectVehicle": "Select vehicle",
             "email": "Email",
-            "phone": "Phone"
+            "phone": "Phone",
+            "optional": "Optional"
         }
     }
 }

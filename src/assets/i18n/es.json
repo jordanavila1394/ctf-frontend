@@ -214,6 +214,18 @@
             "permissionType": "Tipo de permiso",
             "sendPermission": "Enviar aviso",
             "permissionsNotFound": "No se encontraron permisos"
+        },
+        "permissions": {
+            "title": "Solicitar permiso",
+            "permissionType": "Tipo de permiso",
+            "placeholderType": "--Selecciona tipo--",
+            "selectDatesPermission": "Selecciona fechas del permiso",
+            "placeholderSelectDates": "Selecciona fechas",
+            "hours": "Horas",
+            "notes": "Notas",
+            "placeholderNotes": "Notas adicionales (opcional)",
+            "sendPermission": "Enviar solicitud",
+            "permissionsNotFound": "No se encontraron permisos"
         }
     },
     "generic": {
@@ -233,7 +245,8 @@
             "selectPlace": "Selecciona sede",
             "selectVehicle": "Selecciona vehículo",
             "email": "Email",
-            "phone": "Telefono"
+            "phone": "Telefono",
+            "optional": "Opcional"
         }
     }
 }

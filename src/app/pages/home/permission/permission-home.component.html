@@ -1,37 +1,37 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h5>Richiede permesso</h5>
+            <h5>{{ "page.permissions.title" | translate }}</h5>
             <form [formGroup]="permissionForm" #form="ngForm">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="user1">Tipologia permesso</label>
+                        <label htmlFor="user1">{{ "page.permissions.permissionType" | translate }}</label>
                         <p-dropdown
                             formControlName="typology"
                             [options]="tipologyPermissionsItems"
                             optionLabel="name"
                             optionValue="value"
                             [showClear]="true"
-                            placeholder="--Tipologia--"
+                            [placeholder]="'page.permissions.placeholderType' | translate"
                         ></p-dropdown>
                     </div>
 
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="dates1">Seleziona date permessi</label>
+                        <label htmlFor="dates1">{{ "page.permissions.selectDatesPermission" | translate }}</label>
                         <p-calendar
                             formControlName="dates"
                             selectionMode="multiple"
-                            placeholder="Seleziona date"
+                            [placeholder]="'page.permissions.placeholderSelectDates' | translate"
                             [minDate]="minimumDate"
                         ></p-calendar>
                     </div>
                     <div class="field col-12 md:col-6 optional-field">
-                        <label htmlFor="hours1">Ore <span class="optional">(Opzionale)</span>:</label>
+                        <label htmlFor="hours1">{{ "page.permissions.hours" | translate }} <span class="optional">({{ "generic.fields.optional" | translate}})</span>:</label>
                         <p-inputNumber formControlName="hours"    [showButtons]="true"  step="1" min="1" max="8" placeholder="Ore"></p-inputNumber>
                     </div>
 
                     <div class="field col-12 md:col-6 optional-field">
-                        <label htmlFor="dates1">Note <span class="optional">(Opzionale)</span>:</label>
+                        <label htmlFor="dates1">{{ "page.permissions.notes" | translate }} <span class="optional">({{ "generic.fields.optional" | translate}})</span>:</label>
                         <textarea
                             rows="5"
                             cols="30"
@@ -46,7 +46,7 @@
                 <button
                     pButton
                     pRipple
-                    label="Richiedi permesso"
+                    [label]="'page.permissions.sendPermission' | translate"
                     class="w-full p-3 text-xl"
                     (click)="savePermission()"
                     [disabled]="!permissionForm.valid"
