@@ -230,6 +230,37 @@
             "placeholderNotes": "Additional notes",
             "sendPermission": "Submit request",
             "permissionsNotFound": "No permissions found"
+        },
+        "guide": {
+            "title": "Usage Guide",
+            "checkin": {
+                "title": "Check-In",
+                "instruction1": "On the main screen, look for the button",
+                "instruction2": "and click on it.",
+                "instruction3": "You will be redirected to a new page dedicated to check-in.",
+                "instruction4": "On the check-in page, locate the following elements:",
+                "item1": "List of available workplaces.",
+                "item2": "Field to enter the vehicle plate. \"Check-In\" button.",
+                "instruction5": "Select your workplace from the list.",
+                "instruction6": "Select the vehicle you are using.",
+                "instruction7": "Make sure you are within 300 meters of the workplace.",
+                "instruction8": "Click the button",
+                "instruction9": "to complete the process."
+            },
+            "checkout": {
+                "title": "Check-Out",
+                "instruction1": "On the main screen, find the message",
+                "message": "You need to check out",
+                "instruction2": "and click on it",
+                "instruction3": "You will be redirected to a new page dedicated to check-out.",
+                "instruction4": "On the check-out page, locate the following elements:",
+                "item1": "Field to add vehicle images.",
+                "item2": "\"Checkout\" button.",
+                "instruction5": "Add images of the vehicle following the provided instructions.",
+                "instruction6": "Click the button",
+                "instruction7": "to complete the process."
+            },
+            "videoTitle": "Video tutorial"
         }
     },
     "generic": {
@@ -255,6 +286,7 @@
             "checkOut": "Check-out",
             "status": "Status",
             "hours": "Hours",
+            "workedHours": "Worked hours",
             "actions": "Actions",
             "select": "Select",
             "selectAll": "Select all",
@@ -263,7 +295,9 @@
             "incomeCertificates": "Income certificates (CUD)",
             "incomeCertificatesNotFound": "No income certificates found",
             "documents": "Documents",
-            "documentsNotFound": "No documents found"
+            "documentsNotFound": "No documents found",
+            "notElementsFound": "No elements found",
+            "loadingElements": "Loading elements..."
         }
     }
 }

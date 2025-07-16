@@ -230,6 +230,37 @@
             "placeholderNotes": "Notas adicionales",
             "sendPermission": "Enviar solicitud",
             "permissionsNotFound": "No se encontraron permisos"
+        },
+        "guide": {
+            "title": "Guía de uso",
+            "checkin": {
+                "title": "Check-In",
+                "instruction1": "En la pantalla principal, busca el botón",
+                "instruction2": "y haz clic en él.",
+                "instruction3": "Serás redirigido a una nueva página dedicada al check-in.",
+                "instruction4": "En la página de check-in, localiza los siguientes elementos:",
+                "item1": "Lista de sedes de trabajo disponibles.",
+                "item2": "Campo para ingresar la matrícula del vehículo. Botón \"Check-In\".",
+                "instruction5": "Selecciona tu sede de trabajo de la lista.",
+                "instruction6": "Selecciona la matrícula del vehículo que estás utilizando.",
+                "instruction7": "Asegúrate de estar a menos de 300 metros del lugar de trabajo.",
+                "instruction8": "Haz clic en el botón",
+                "instruction9": "para completar el proceso."
+            },
+            "checkout": {
+                "title": "Check-Out",
+                "instruction1": "Desde la pantalla principal, localiza el mensaje",
+                "message": "Debes hacer el checkout",
+                "instruction2": "y haz clic en él",
+                "instruction3": "Serás redirigido a una nueva página dedicada al check-out.",
+                "instruction4": "En la página de check-out, localiza los siguientes elementos:",
+                "item1": "Campo para añadir imágenes del vehículo.",
+                "item2": "Botón \"Checkout\".",
+                "instruction5": "Añade las imágenes del vehículo siguiendo las instrucciones indicadas.",
+                "instruction6": "Haz clic en el botón",
+                "instruction7": "para completar el proceso."
+            },
+            "videoTitle": "Video tutorial"
         }
     },
     "generic": {
@@ -255,6 +286,7 @@
             "checkOut": "Salida",
             "status": "Estado",
             "hours": "Horas",
+            "workedHours": "Horas trabajadas",
             "actions": "Acciones",
             "select": "Seleccionar",
             "selectAll": "Seleccionar todo",
@@ -263,7 +295,9 @@
             "incomeCertificates": "Certificados de ingresos",
             "incomeCertificatesNotFound": "No se encontraron certificados de ingresos",
             "documents": "Documentos",
-            "documentsNotFound": "No se encontraron documentos"
+            "documentsNotFound": "No se encontraron documentos",
+            "notElementsFound": "No se encontraron elementos",
+            "loadingElements": "Cargando elementos..."
         }
     }
 }

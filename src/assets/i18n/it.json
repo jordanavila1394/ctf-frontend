@@ -219,7 +219,7 @@
             "sendPermission": "Manda avviso",
             "permissionsNotFound": "Nessun permesso trovato"
         },
-        "permissions":{
+        "permissions": {
             "title": "Richiedi permesso",
             "permissionType": "Tipologia permesso",
             "placeholderType": "--Seleziona tipologia--",
@@ -230,6 +230,37 @@
             "placeholderNotes": "Eventuali note",
             "sendPermission": "Invia richiesta",
             "permissionsNotFound": "Nessun permesso trovato"
+        },
+        "guide": {
+            "title": "Guida utilizzo",
+            "checkin": {
+                "title": "Check-In",
+                "instruction1": "Nella schermata principale, cerca il pulsante",
+                "instruction2": "e clicca su di esso.",
+                "instruction3": "Verrai reindirizzato a una nuova pagina dedicata al check-in.",
+                "instruction4": "Sulla pagina del check-in, individua i seguenti elementi:",
+                "item1": "Lista delle sedi di lavoro disponibili.",
+                "item2": "Campo per inserire la targa del mezzo. Pulsante \"Check-In\".",
+                "instruction5": "Seleziona la tua sede di lavoro dalla lista.",
+                "instruction6": "Seleziona la targa del mezzo che stai utilizzando.",
+                "instruction7": "Assicurati di trovarti a meno di 300 metri dal luogo di lavoro.",
+                "instruction8": "Clicca sul pulsante",
+                "instruction9": "per completare il processo."
+            },
+            "checkout": {
+                "title": "Check-Out",
+                "instruction1": "Dalla schermata principale, individua il messaggio",
+                "message": "Devi fare il checkout",
+                "instruction2": "e clicca su di esso",
+                "instruction3": "Verrai reindirizzato a una nuova pagina dedicata al checkout.",
+                "instruction4": "Sulla pagina del checkout, individua i seguenti elementi:",
+                "item1": "Campo per aggiungere immagini del mezzo.",
+                "item2": "Pulsante \"Checkout\".",
+                "instruction5": "Aggiungi le immagini del mezzo seguendo le istruzioni fornite.",
+                "instruction6": "Clicca sul pulsante",
+                "instruction7": "per completare il processo."
+            },
+            "videoTitle": "Video tutorial"
         }
     },
     "generic": {
@@ -255,6 +286,7 @@
             "checkOut": "Check-out",
             "status": "Stato",
             "hours": "Ore",
+            "workedHours": "Ore lavorate",
             "actions": "Azioni",
             "select": "Seleziona",
             "selectAll": "Seleziona tutto",
@@ -263,7 +295,9 @@
             "incomeCertificates": "Certificati di reddito (CUD)",
             "incomeCertificatesNotFound": "Nessun certificato di reddito trovato",
             "documents": "Documenti",
-            "documentsNotFound": "Nessun documento trovato"
+            "documentsNotFound": "Nessun documento trovato",
+            "notElementsFound": "Nessun elemento trovato",
+            "loadingElements": "Caricando elementi..."
         }
     }
 }

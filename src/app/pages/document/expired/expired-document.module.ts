@@ -32,6 +32,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ExpiredDocumentRoutingModule } from './expired-document-routing.module';
 import { ExpiredDocumentComponent } from './expired-document.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -59,6 +60,7 @@ import { ExpiredDocumentComponent } from './expired-document.component';
         ToastModule,
         DropzoneModule,
         NgxDropzoneModule,
+        TranslateModule,
         ToggleButtonModule,
     ],
     declarations: [ExpiredDocumentComponent],
