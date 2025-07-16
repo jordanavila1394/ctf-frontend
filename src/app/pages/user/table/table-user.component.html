@@ -33,7 +33,7 @@
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)"
-                                placeholder="Cerca parola chiave" class="w-full" />
+                            [placeholder]="'generic.fields.placeholderSearchWordKey' | translate" class="w-full" />
                         </span>
                     </div>
                 </ng-template>
@@ -100,7 +100,7 @@
                             <div class="flex justify-content-between align-items-center">
                                 Email
                                 <p-columnFilter type="text" field="email" display="menu"
-                                    placeholder="Cerca per email"></p-columnFilter>
+                                [placeholder]="'generic.fields.email' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 3rem">

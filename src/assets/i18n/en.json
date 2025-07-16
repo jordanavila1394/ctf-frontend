@@ -297,7 +297,28 @@
             "documents": "Documents",
             "documentsNotFound": "No documents found",
             "notElementsFound": "No elements found",
-            "loadingElements": "Loading elements..."
+            "loadingElements": "Loading elements...",
+            "placeholderSearchWordKey": "Search by keyword",
+            "companyName": "Company name",
+            "searchByName": "Search by name",
+            "legalForm": "Legal form",
+            "searchByLegalForm": "Search by legal form",
+            "reaNumber": "REA number",
+            "searchByREA": "Search by REA",
+            "vatNumber": "VAT number",
+            "searchByVAT": "Search by VAT",
+            "legalAddress": "Legal address",
+            "searchByLegalAddress": "Search by legal address",
+            "operationalAddress": "Operational address",
+            "searchByOperationalAddress": "Search by operational address",
+            "searchByPhone": "Search by phone",
+            "searchByEmail": "Search by email",
+            "pec": "PEC",
+            "searchByPec": "Search by PEC",
+            "ceo": "CEO",
+            "searchByCeo": "Search by CEO name surname",
+            "description": "Description",
+            "statusCompany": "Company status"
         }
     }
 }

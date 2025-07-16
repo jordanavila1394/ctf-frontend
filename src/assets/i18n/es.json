@@ -297,7 +297,28 @@
             "documents": "Documentos",
             "documentsNotFound": "No se encontraron documentos",
             "notElementsFound": "No se encontraron elementos",
-            "loadingElements": "Cargando elementos..."
+            "loadingElements": "Cargando elementos...",
+            "placeholderSearchWordKey": "Buscar por palabra clave",
+            "companyName": "Nombre de la empresa",
+            "searchByName": "Buscar por nombre",
+            "legalForm": "Forma jurídica",
+            "searchByLegalForm": "Buscar por forma jurídica",
+            "reaNumber": "Número REA",
+            "searchByREA": "Buscar por REA",
+            "vatNumber": "Número de VAT",
+            "searchByVAT": "Buscar por VAT",
+            "legalAddress": "Dirección legal",
+            "searchByLegalAddress": "Buscar por dirección legal",
+            "operationalAddress": "Dirección operativa",
+            "searchByOperationalAddress": "Buscar por dirección operativa",
+            "searchByPhone": "Buscar por teléfono",
+            "searchByEmail": "Buscar por correo electrónico",
+            "pec": "PEC",
+            "searchByPec": "Buscar por PEC",
+            "ceo": "Director general",
+            "searchByCeo": "Buscar por nombre y apellido del director",
+            "description": "Descripción",
+            "statusCompany": "Estado de la empresa"
         }
     }
 }

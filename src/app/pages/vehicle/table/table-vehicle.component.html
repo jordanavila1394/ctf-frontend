@@ -64,7 +64,7 @@
                                 type="text"
                                 #filter
                                 (input)="onGlobalFilter(dt1, $event)"
-                                placeholder="Cerca parola chiave"
+                                [placeholder]="'generic.fields.placeholderSearchWordKey' | translate"
                                 class="w-full"
                             />
                         </span>
