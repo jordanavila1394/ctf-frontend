@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card">
             <div class="flex" style="margin: 1rem">
-                <h5>Lista Mezzi</h5>
+                <h5>{{ "menu.routes.vehicle.table" | translate }}</h5>
 
                 <button
                     type="button"
@@ -43,7 +43,7 @@
                     >
                         <button
                             pButton
-                            label="Pulisci"
+                            [label]="'table.actions.clean' | translate"
                             class="p-button-outlined mb-2"
                             icon="pi pi-filter-slash"
                             (click)="clear(dt1)"
@@ -80,12 +80,12 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                {{ "table.columns.licensePlate" | translate }}
+                                {{ "generic.fields.licensePlate" | translate }}
                                 <p-columnFilter
                                     type="text"
                                     field="licensePlate"
                                     display="menu"
-                                    placeholder="Cerca per targa"
+                                    [placeholder]="'generic.fields.searchByLicensePlate' | translate"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -93,13 +93,13 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                {{ "table.columns.tipology" | translate }}
+                            {{ "generic.fields.tipology" | translate }}
 
                                 <p-columnFilter
                                     type="text"
                                     field="tipology"
                                     display="menu"
-                                    placeholder="Cerca per tipologia"
+                                    [placeholder]="'generic.fields.searchByTipology' | translate"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -107,13 +107,13 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                {{ "table.columns.model" | translate }}
+                            {{ "generic.fields.model" | translate }}
 
                                 <p-columnFilter
                                     type="text"
                                     field="model"
                                     display="menu"
-                                    placeholder="Cerca per modello"
+                                    [placeholder]="'generic.fields.searchByModel' | translate"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -121,12 +121,12 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                {{ "table.columns.rentalType" | translate }}
+                            {{ "generic.fields.rentalType" | translate }}
                                 <p-columnFilter
                                     type="text"
                                     field="rentalType"
                                     display="menu"
-                                    placeholder="Cerca per tipo noleggio"
+                                    [placeholder]="'generic.fields.searchByRentalType' | translate"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -135,12 +135,12 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                {{ "table.columns.driverType" | translate }}
+                            {{ "generic.fields.driverType" | translate }}
                                 <p-columnFilter
                                     type="text"
                                     field="driverType"
                                     display="menu"
-                                    placeholder="Cerca per tipo autista"
+                                    [placeholder]="'generic.fields.searchByDriverType' | translate"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -149,12 +149,12 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Nome Azienda
+                            {{ "generic.fields.company" | translate }}
                                 <p-columnFilter
                                     type="text"
                                     field="company.name"
                                     display="menu"
-                                    placeholder="Cerca per azienda"
+                                    [placeholder]="'generic.fields.searchByCompany' | translate"
                                 ></p-columnFilter>
                             </div>
                         </th>
@@ -175,7 +175,7 @@
                             <div
                                 class="flex justify-content-between align-items-center"
                             >
-                                Date
+                            {{ "generic.fields.date" | translate }}
                                 <p-columnFilter
                                     type="date"
                                     field="createdAt"
@@ -186,7 +186,7 @@
                                 </p-columnFilter>
                             </div>
                         </th>
-                        <th
+                        <!-- <th
                             style="min-width: 5rem"
                             alignFrozen="right"
                             pFrozenColumn
@@ -197,7 +197,7 @@
                             >
                             {{ "generic.fields.actions" | translate }}
                             </div>
-                        </th>
+                        </th> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-vehicle>
@@ -227,12 +227,12 @@
                         <td>
                             {{ vehicle?.createdAt | date: "dd/MM/yyyy" }}
                         </td>
-                        <td
+                        <!-- <td
                             alignFrozen="right"
                             pFrozenColumn
                             [frozen]="actionsFrozen"
                         >
-                            <!-- <button
+                           <button
                                 pButton
                                 type="button"
                                 icon="pi pi-search"
@@ -263,8 +263,8 @@
                                 icon="pi pi-trash"
                                 class="p-button-rounded p-button-danger p-button-text"
                             ></button>
-                            <p-confirmPopup key="confirmErase"></p-confirmPopup> -->
-                        </td>
+                            <p-confirmPopup key="confirmErase"></p-confirmPopup>
+                        </td> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">

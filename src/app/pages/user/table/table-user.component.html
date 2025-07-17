@@ -41,78 +41,78 @@
                     <tr>
                         <th style="min-width: 13rem" pFrozenColumn [frozen]="actionsFrozen">
                             <div class="flex justify-content-between align-items-center">
-                                Codice Fiscale
+                                {{ "generic.fields.fiscalCode" | translate }}
                                 <p-columnFilter type="text" field="name" display="fiscalCode"
-                                    placeholder="Cerca per codice fiscale"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchByFiscalCode' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
                             <div class="flex justify-content-between align-items-center">
-                                Nome
+                                {{ "generic.fields.name" | translate }}
                                 <p-columnFilter type="text" field="name" display="menu"
-                                    placeholder="Cerca per nome"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchByName' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
                             <div class="flex justify-content-between align-items-center">
-                                Cognome
+                                {{ "generic.fields.surname" | translate }}
                                 <p-columnFilter type="text" field="surname" display="menu"
-                                    placeholder="Cerca per cognome"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchBySurname' | translate"></p-columnFilter>
                             </div>
                         </th>
 
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Ruoli
+                                {{ "generic.fields.roles" | translate }}
                                 <p-columnFilter type="text" field="role" display="menu"
-                                    placeholder="Cerca per ruolo"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchByRole' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Posizione
+                                {{ "generic.fields.jobTitle" | translate }}
                                 <p-columnFilter type="text" field="position" display="menu"
-                                    placeholder="Cerca per posizione"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchByJobTitle' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Cliente associato
+                                {{ "generic.fields.associatedClient" | translate }}
                                 <p-columnFilter type="text" field="associatedClient" display="menu"
-                                    placeholder="Cerca per cliente associato"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchByAssociatedClient' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Filiale associato
+                                {{ "generic.fields.associatedBranch" | translate}}
                                 <p-columnFilter type="text" field="associatedBranch" display="menu"
-                                    placeholder="Cerca per filiale associato"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchByAssociatedBranch' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Company
+                                {{ "generic.fields.company" | translate}}
                                 <p-columnFilter type="text" field="company" display="menu"
-                                    placeholder="Cerca per company"></p-columnFilter>
+                                [placeholder]="'generic.fields.searchByCompany' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
                             <div class="flex justify-content-between align-items-center">
-                                Email
+                                {{ "generic.fields.email" | translate}}
                                 <p-columnFilter type="text" field="email" display="menu"
                                 [placeholder]="'generic.fields.email' | translate"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 3rem">
                             <div class="flex justify-content-between align-items-center">
-                                Stato utente
+                                {{ "generic.fields.statusUser" | translate}}
                                 <p-columnFilter type="boolean" field="status" display="menu"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
-                                Date creazione
-                                <p-columnFilter type="date" field="createdAt" display="menu" dateFormat="dd.mm.yy">
+                                {{ "generic.fields.createdAt" | translate}}
+                                <p-columnFilter type="date" field="createdAt" display="menu" dateFormat="dd/mm/yy">
                                 </p-columnFilter>
                             </div>
                         </th>

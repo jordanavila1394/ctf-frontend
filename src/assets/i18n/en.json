@@ -116,7 +116,7 @@
             },
             "permission": {
                 "menuTitle": "Permissions",
-                "table": "Permission list"
+                "table": "Permission and Illness list"
             },
             "user": {
                 "menuTitle": "Users",
@@ -271,6 +271,13 @@
             "date": "Date",
             "name": "Name",
             "surname": "Surname",
+            "password": "Password",
+            "confirmPassword": "Confirm password",
+            "address": "Address",
+            "countrty": "Country",
+            "dateOfBirth": "Date of birth",
+            "iban": "IBAN",
+            "workerNumber": "Worker number",
             "company": "Company",
             "placeholderPlace": "--Place--",
             "placeholderVehicle": "--Vehicle--",
@@ -318,7 +325,42 @@
             "ceo": "CEO",
             "searchByCeo": "Search by CEO name surname",
             "description": "Description",
-            "statusCompany": "Company status"
+            "statusCompany": "Company status",
+            "searchByFiscalCode": "Search by fiscal code",
+            "searchBySurname": "Search by surname",
+            "roles": "Roles",
+            "role": "Role",
+            "searchByRole": "Search by role",
+            "jobTitle": "Job title",
+            "searchByJobTitle": "Search by job title",
+            "associatedClient": "Associated client",
+            "searchByAssociatedClient": "Search by associated client",
+            "associatedBranch": "Associated branch",
+            "searchByAssociatedBranch": "Search by associated branch",
+            "searchByCompany": "Search by company",
+            "statusUser": "User status",
+            "createdAt": "Created at",
+            "licensePlate": "License plate",
+            "searchByLicensePlate": "Search by license plate",
+            "tipology": "Tipology",
+            "searchByTipology": "Search by tipology",
+            "model": "Model",
+            "searchByModel": "Search by model",
+            "rentalType": "Rental type",
+            "searchByRentalType": "Search by rental type",
+            "driverType": "Driver type",
+            "searchByDriverType": "Search by driver type",
+            "enableDisable": "Enable/Disable",
+            "create": "Create",
+            "update": "Update",
+            "delete": "Delete",         
+            "save": "Save",
+            "cancel": "Cancel",
+            "confirm": "Confirm",
+            "back": "Back",
+            "modify": "Modify",
+            "search": "Search"
+            
         }
     }
 }

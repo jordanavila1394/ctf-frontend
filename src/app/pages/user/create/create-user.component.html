@@ -1,231 +1,123 @@
 <div class="grid">
     <div class="col-12 md:col-12">
         <div class="card">
-            <form
-                [formGroup]="createForm"
-                #form="ngForm"
-                (ngSubmit)="onSubmit()"
-            >
-                <h5>Crea utente</h5>
+            <form [formGroup]="createForm" #form="ngForm" (ngSubmit)="onSubmit()">
+                <h5>{{ "menu.routes.user.create" | translate }}</h5>
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="name1">Nome (*)</label>
-                        <input
-                            pInputText
-                            id="name1"
-                            type="text"
-                            placeholder="Nome"
-                            formControlName="name"
-                            ngModel
-                        />
+                        <label htmlFor="name1">{{'generic.fields.name' | translate}} (*)</label>
+                        <input pInputText id="name1" type="text" placeholder="Nome" formControlName="name" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="surname1">Cognome (*)</label>
-                        <input
-                            pInputText
-                            id="surname1"
-                            type="text"
-                            placeholder="Cognome"
-                            formControlName="surname"
-                            ngModel
-                        />
+                        <label htmlFor="surname1">{{'generic.fields.surname' | translate}} (*)</label>
+                        <input pInputText id="surname1" type="text" placeholder="Cognome" formControlName="surname"
+                            ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="email1">Email</label>
-                        <input
-                            pInputText
-                            id="email1"
-                            type="text"
-                            placeholder="Email"
-                            formControlName="email"
-                            (input)="
+                        <label htmlFor="email1">{{'generic.fields.email' | translate}}</label>
+                        <input pInputText id="email1" type="text" placeholder="Email" formControlName="email" (input)="
                                 createForm.controls.email.setValue(
                                     createForm.controls.email.value.toLowerCase()
                                 )
-                            "
-                            ngModel
-                        />
-                        <div
-                            *ngIf="
+                            " ngModel />
+                        <div *ngIf="
                                 createForm.controls['email'].invalid &&
                                 (createForm.controls['email'].dirty ||
                                     createForm.controls['email'].touched)
-                            "
-                            class="alert"
-                        >
-                            <div
-                                *ngIf="
+                            " class="alert">
+                            <div *ngIf="
                                     createForm.controls['email'].errors[
                                         'pattern'
                                     ]
-                                "
-                            >
-                                <small class="p-error"
-                                    >Email address is invalid</small
-                                >
+                                ">
+                                <small class="p-error">Email address is invalid</small>
                             </div>
                         </div>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="cellphone1">Cellulare</label>
-                        <input
-                            pInputText
-                            id="cellphone1"
-                            type="text"
-                            placeholder="Cellulare"
-                            formControlName="cellphone"
-                            ngModel
-                        />
+                        <label htmlFor="cellphone1">{{'generic.fields.phone' | translate}}</label>
+                        <input pInputText id="cellphone1" type="text" placeholder="Cellulare"
+                            formControlName="cellphone" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="fiscalCode1">Codice fiscale</label>
-                        <input
-                            pInputText
-                            id="fiscalCode1"
-                            type="text"
-                            placeholder="Codice fiscale"
-                            formControlName="fiscalCode"
-                            ngModel
-                        />
+                        <label htmlFor="fiscalCode1">{{'generic.fields.fiscalCode' | translate}}</label>
+                        <input pInputText id="fiscalCode1" type="text" placeholder="Codice fiscale"
+                            formControlName="fiscalCode" ngModel />
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="password1">Password</label>
+                        <label htmlFor="password1">{{'generic.fields.password' | translate}}</label>
 
-                        <p-password
-                            formControlName="password"
-                            ngModel
-                            [toggleMask]="true"
-                        ></p-password>
+                        <p-password formControlName="password" ngModel [toggleMask]="true"></p-password>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="user1">Ruolo</label>
-                        <p-dropdown
-                            [options]="roles"
-                            optionLabel="label"
-                            optionValue="id"
-                            placeholder="Seleziona un ruolo"
-                            [showClear]="true"
-                            formControlName="roleId"
-                            [(ngModel)]="selectedRole"
-                        ></p-dropdown>
+                        <label htmlFor="user1">{{'generic.fields.role' | translate}}</label>
+                        <p-dropdown [options]="roles" optionLabel="label" optionValue="id"
+                            placeholder="Seleziona un ruolo" [showClear]="true" formControlName="roleId"
+                            [(ngModel)]="selectedRole"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="iban1">Indirizzo</label>
-                        <app-default-autocomplete
-                            id="address1"
-                            type="text"
-                            controlName="address"
-                            [defaultAutocompleteForm]="createForm"
-                        >
+                        <label htmlFor="iban1">{{'generic.fields.address' | translate}}</label>
+                        <app-default-autocomplete id="address1" type="text" controlName="address"
+                            [defaultAutocompleteForm]="createForm">
                         </app-default-autocomplete>
                     </div>
 
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="country1">Paese</label>
-                        <p-dropdown
-                            [options]="countryItems"
-                            optionLabel="name"
-                            optionValue="name"
-                            formControlName="birthCountry"
-                            placeholder="Seleziona paese"
-                            [required]="true"
-                        >
+                        <label htmlFor="country1">{{'generic.fields.country' | translate}}</label>
+                        <p-dropdown [options]="countryItems" optionLabel="name" optionValue="name"
+                            formControlName="birthCountry" placeholder="Seleziona paese" [required]="true">
                             <ng-template let-country pTemplate="country">
                                 {{ country.name }}
                             </ng-template>
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label for="birthDate1">Data di nascita</label>
-                        <input
-                            pInputText
-                            id="birthDate1"
-                            type="date"
-                            formControlName="birthDate"
-                            ngModel
-                        />
+                        <label for="birthDate1">{{'generic.fields.dateOfBirth' | translate}}</label>
+                        <input pInputText id="birthDate1" type="date" formControlName="birthDate" ngModel />
                     </div>
-                    
-                    
+
+
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="iban1">IBAN</label>
-                        <input
-                            pInputText
-                            id="iban1"
-                            type="text"
-                            placeholder="IBAN"
-                            formControlName="iban"
-                            ngModel
-                        />
+                        <label htmlFor="iban1">{{'generic.fields.iban' | translate}}</label>
+                        <input pInputText id="iban1" type="text" placeholder="IBAN" formControlName="iban" ngModel />
                     </div>
 
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="user1">Azienda</label>
-                        <p-dropdown
-                            [options]="companies"
-                            optionLabel="name"
-                            optionValue="id"
-                            placeholder="Seleziona un azienda"
-                            [showClear]="true"
-                            formControlName="companyId"
-                            [(ngModel)]="selectedCompany"
-                        ></p-dropdown>
+                        <label htmlFor="user1">{{'generic.fields.company' | translate}}</label>
+                        <p-dropdown [options]="companies" optionLabel="name" optionValue="id"
+                            placeholder="Seleziona un azienda" [showClear]="true" formControlName="companyId"
+                            [(ngModel)]="selectedCompany"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="workerNumber1">Numero lavoratore</label>
-                        <input
-                            pInputText
-                            id="workerNumber1"
-                            type="text"
-                            placeholder="Numero lavoratore"
-                            formControlName="workerNumber"
-                            ngModel
-                        />
+                        <label htmlFor="workerNumber1">{{'generic.fields.workerNumber' | translate}}</label>
+                        <input pInputText id="workerNumber1" type="text" placeholder="01234567"
+                            formControlName="workerNumber" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="associatedClient1">Cliente associato</label>
-                        <input
-                            pInputText
-                            id="associatedClient1"
-                            type="text"
-                            placeholder="Cliente associato"
-                            formControlName="associatedClient"
-                            ngModel
-                        />
+                        <label htmlFor="associatedClient1">{{'generic.fields.associatedClient' | translate}}</label>
+                        <input pInputText id="associatedClient1" type="text"
+                            [placeholder]="'generic.fields.associatedClient' | translate"
+                            formControlName="associatedClient" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="associatedBranch1">Filiale associato</label>
-                        <input pInputText id="associatedBranch1" type="text" placeholder="Filiale associato"
+                        <label htmlFor="associatedBranch1">{{'generic.fields.associatedBranch' | translate}}</label>
+                        <input pInputText id="associatedBranch1" type="text"
+                            [placeholder]="'generic.fields.associatedBranch' | translate"
                             formControlName="associatedBranch" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="position1">Posizione</label>
-                        <input
-                            pInputText
-                            id="position1"
-                            type="text"
-                            placeholder="Posizione"
-                            formControlName="position"
-                            ngModel
-                        />
+                        <label htmlFor="position1">{{'generic.fields.jobTitle' | translate}}</label>
+                        <input pInputText id="position1" type="text"
+                            [placeholder]="'generic.fields.jobTitle' | translate" formControlName="position" ngModel />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="status1">Attiva/Disattiva</label> <br />
+                        <label htmlFor="status1">{{'generic.fields.enableDisable' | translate}}</label> <br />
                         <p-inputSwitch formControlName="status"></p-inputSwitch>
                     </div>
                 </div>
-                <div
-                    class="flex justify-content-center align-items-center gap-2"
-                >
-                    <button
-                        pButton
-                        pRipple
-                        type="submit"
-                        class="p-button-success"
-                        label="Crea"
-                        icon="pi pi-plus"
-                        [disabled]="!createForm.valid"
-                    ></button>
+                <div class="flex justify-content-center align-items-center gap-2">
+                    <button pButton pRipple type="submit" class="p-button-success"  [label]="'generic.fields.create' | translate" icon="pi pi-plus"
+                        [disabled]="!createForm.valid"></button>
                 </div>
             </form>
         </div>

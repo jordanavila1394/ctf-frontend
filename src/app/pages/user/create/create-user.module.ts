@@ -27,6 +27,7 @@ import { CreateUserComponent } from './create-user.component';
 import { CreateUserRoutingModule } from './create-user-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { PasswordModule } from 'primeng/password';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import { PasswordModule } from 'primeng/password';
         SliderModule,
         TableModule,
         ToastModule,
+        TranslateModule,
         ToggleButtonModule,
     ],
     declarations: [CreateUserComponent],
