@@ -359,8 +359,17 @@
             "confirm": "Confirm",
             "back": "Back",
             "modify": "Modify",
-            "search": "Search"
-            
+            "search": "Search",
+            "open": "Open",
+            "close": "Close",
+            "dragYourLULDocumentHere": "Drag your LUL document here",
+            "saveDocuments": "Save documents",
+            "analizePDF": "Analyze PDF",
+            "expiringDocuments": "Expiring documents",
+            "documentName": "Document name",
+            "expirationDate": "Expiration date",
+            "documentLink": "Document link"
+        
         }
     }
 }

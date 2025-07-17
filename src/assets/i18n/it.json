@@ -359,7 +359,16 @@
             "confirm": "Conferma",
             "back": "Indietro",
             "modify": "Modifica",
-            "search": "Cerca"
+            "search": "Cerca",
+            "open": "Apri",
+            "close": "Chiudi",
+            "dragYourLULDocumentHere": "Trascina qui il tuo documento LUL",
+            "saveDocuments": "Salva documenti",
+            "analizePDF": "Analizza PDF",
+            "expiringDocuments": "Documenti in scadenza",
+            "documentName": "Nome documento",
+            "expirationDate": "Data di scadenza",
+            "documentLink": "Link documento"
         }
     }
 }

@@ -2,16 +2,16 @@
     <div class="col-12 lg:col-12 xl:col-12">
         <div class="card">
             <div class="container mt-4">
-                <h2>Documenti in Scadenza</h2>
+                <h2>{{'generic.fields.expiringDocuments' | translate }}</h2>
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Cognome</th>
-                            <th>Codice Fiscale</th>
-                            <th>Nome Documento</th>
-                            <th>Data di Scadenza</th>
-                            <th>Link</th>
+                            <th>{{'generic.fields.name' | translate }}</th>
+                            <th>{{'generic.fields.surname' | translate }}</th>
+                            <th>{{'generic.fields.fiscalCode' | translate }}</th>
+                            <th>{{'generic.fields.documentName' | translate }}</th>
+                            <th>{{'generic.fields.expirationDate' | translate }}</th>
+                            <th>{{'generic.fields.documentLink' | translate }}</th>
                             <th>{{ "generic.fields.actions" | translate }}</th>
 
                         </tr>
@@ -37,7 +37,7 @@
                             <td>{{ document.expireDate | date: 'dd/MM/yyyy' }}</td>
                             <td>
                                 <a class="link" href="{{ getFileUrl(document?.keyFile) }}">
-                                    Apri
+                                    {{'generic.fields.open' | translate }}
                                 </a>
                             </td>
                             <td>

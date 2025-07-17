@@ -32,6 +32,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { Translate } from 'aws-sdk';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -59,6 +61,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         ToastModule,
         DropzoneModule,
         NgxDropzoneModule,
+        TranslateModule,
         ToggleButtonModule,
     ],
     declarations: [CreateDocumentComponent],

@@ -359,7 +359,16 @@
             "confirm": "Confirma",
             "back": "Volver",
             "modify": "Modificar",
-            "search": "Buscar"
+            "search": "Buscar",
+            "open": "Abrir",3232333G
+            "close": "Cerrar",
+            "dragYourLULDocumentHere": "Arrastra tu documento LUL aquí",
+            "saveDocuments": "Guardar documentos",
+            "analizePDF": "Analizar PDF",
+            "expiringDocuments": "Documentos a caducar",
+            "documentName": "Nombre del documento",
+            "expirationDate": "Fecha de caducidad",
+            "documentLink": "Enlace del documento"
         }
     }
 }

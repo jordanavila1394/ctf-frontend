@@ -8,7 +8,7 @@
                     (dragover)="onDragOver($event)"
                     (click)="openFilePicker()"
                 >
-                    Trascina il tuo PDF qui
+                {{ 'generic.fields.dragYourLULDocumentHere' | translate }}
                 </div>
 
                 <input
@@ -64,7 +64,7 @@
                 *ngIf="this.fiscalCodesFounded.length > 1"
                 (click)="uploadAllCedolini()"
             >
-                Salva documenti
+            {{ 'generic.fields.saveDocuments' | translate }}
             </button>
         </div>
         <div class="card">
@@ -73,9 +73,9 @@
                 pButton
                 class="p-button-outlined p-button-rounded"
                 (click)="splitPdf()"
-                *ngIf="this.fiscalCodesFounded.length == 0"
+                *ngIf="this.fiscalCodesFounded.length === 0"
             >
-                Analizza PDF
+            {{'generic.fields.analizePDF' | translate }}
             </button>
             <div
                 class="fiscalcodes-wrapper"
@@ -83,9 +83,9 @@
             >
                 <table>
                     <tr>
-                        <th><strong>Codice fiscale</strong></th>
+                        <th><strong>{{'generic.fields.fiscalCode' | translate }}</strong></th>
                         <th><strong>Pag.</strong></th>
-                        <th>Country</th>
+                        <th>{{'generic.fields.actions' | translate }}</th>
                     </tr>
                     <tr *ngFor="let item of fiscalCodesFounded; let i = index">
                         <td>
