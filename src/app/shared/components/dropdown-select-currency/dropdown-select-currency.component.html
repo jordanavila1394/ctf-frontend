@@ -1,0 +1,5 @@
+<div>
+    <p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency" optionLabel="label" dataKey="value"
+        (onChange)="onChangeCurrency($event)" class="dropdown-select-currency" placeholder="Seleziona valuta">
+    </p-dropdown>
+</div>

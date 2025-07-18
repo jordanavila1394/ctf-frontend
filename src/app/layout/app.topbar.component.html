@@ -1,41 +1,28 @@
 <div class="layout-topbar" [ngClass]="isProduction ? 'production' : 'development'">
     <a class="layout-topbar-logo" routerLink="{{ redirectRoute }}">
-        <img
-            src="assets/layout/images/{{
+        <img src="assets/layout/images/{{
                 layoutService.config.colorScheme === 'light'
                     ? 'logo-dark'
                     : 'logo-white'
-            }}.svg"
-            alt="logo"
-        />
+            }}.svg" alt="logo" />
     </a>
 
-    <button
-        #menubutton
-        class="p-link layout-menu-button layout-topbar-button"
-        (click)="layoutService.onMenuToggle()"
-    >
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
         <i class="pi pi-bars"></i>
     </button>
 
-    <button
-        #topbarmenubutton
-        class="p-link layout-topbar-menu-button layout-topbar-button"
-        (click)="layoutService.showProfileSidebar()"
-    >
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()">
         <i class="pi pi-ellipsis-v"></i>
     </button>
-    <div
-        #topbarmenu
-        class="layout-topbar-menu"
-        [ngClass]="{
+    <div #topbarmenu class="layout-topbar-menu" [ngClass]="{
             'layout-topbar-menu-mobile-active':
                 layoutService.state.profileSidebarVisible
-        }"
-    >
+        }">
         <app-dropdown-select-company *ngIf="isVisibleMenuCompanies">
         </app-dropdown-select-company>
         <app-dropdown-language> </app-dropdown-language>
+        <app-dropdown-select-currency></app-dropdown-select-currency>
         <app-dropdown-notifications></app-dropdown-notifications>
         <button class="p-link layout-topbar-button" (click)="goToProfile()">
             <i class="pi pi-user"></i>

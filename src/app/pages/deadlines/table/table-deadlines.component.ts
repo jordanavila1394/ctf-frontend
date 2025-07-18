@@ -13,6 +13,7 @@ import { UploadService } from 'src/app/services/upload.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SpacesService } from 'src/app/services/spaces.service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { CurrencyState } from 'src/app/stores/dropdown-select-currency/dropdown-select-currency.reducer';
 
 @Component({
     templateUrl: './table-deadlines.component.html',
@@ -35,6 +36,7 @@ export class TableDeadlinesComponent implements OnInit {
     companies: [];
     years: number[];
     companyState$: Observable<CompanyState>;
+    currencyState$: Observable<CurrencyState>;
     subscription: Subscription = new Subscription();
     months: { name: string; id: number }[]; // Dichiarazione di months come un array di oggetti con proprietà 'nome' e 'id'
     statusOptions: string[] = ['Pagato', 'Non pagato']; // Aggiungi altri stati se necessario
@@ -59,6 +61,7 @@ export class TableDeadlinesComponent implements OnInit {
     currentDocumentUrl: SafeResourceUrl | null = null;  // URL for the currently selected document
 
     uploadedFiles: any[] = [];
+    currencyCode: any;
 
 
     constructor(
@@ -71,9 +74,11 @@ export class TableDeadlinesComponent implements OnInit {
         private sanitizer: DomSanitizer,
         private spacesService: SpacesService,
         public fb: FormBuilder,
-        private store: Store<{ companyState: CompanyState }>,
+        private store: Store<{ companyState: CompanyState , currencyState:CurrencyState}>,
     ) {
         this.companyState$ = store.select('companyState');
+        this.currencyState$ = store.select('currencyState');
+
         this.createEntityForm = this.fb.group({
             companyId: [null, Validators.required],
             name: ['', Validators.required],
@@ -103,6 +108,11 @@ export class TableDeadlinesComponent implements OnInit {
                 this.loadServices(this.selectedCompany);
             },
         );
+
+        const currencyServiceSubscription= this.currencyState$.subscribe((state) => {
+            this.currencyCode = state?.currentCurrency?.value || 'EUR';
+        });
+        
         this.companyService.getAllCompanies().subscribe((companies) => {
             this.companies = companies;
         });
@@ -113,7 +123,8 @@ export class TableDeadlinesComponent implements OnInit {
             this.loadServices(this.selectedCompany);
         });
 
-
+        
+        this.subscription.add(currencyServiceSubscription);
         this.subscription.add(companyServiceSubscription);
 
 

@@ -80,15 +80,15 @@
                                 </div>
                             </td>
                             <td>
-                                {{ entity.totalImportToPay | currency: "EUR" }}
+                                {{ entity.totalImportToPay | currency: currencyCode:'symbol':'1.2-2':'it-IT'}}
                             </td>
                             <td>
                                 {{
-                                entity.totalImportNotPayed | currency: "EUR"
+                                entity.totalImportNotPayed | currency: currencyCode:'symbol':'1.2-2':'it-IT'
                                 }}
                             </td>
                             <td>
-                                {{ entity.totalImportSum | currency: "EUR" }}
+                                {{ entity.totalImportSum | currency: currencyCode:'symbol':'1.2-2':'it-IT' }}
                             </td>
                             <td (click)="toggleExpand(i)">
                                 <i *ngIf="!isExpanded(i)" class="pi pi-arrow-circle-down"></i>
@@ -129,7 +129,7 @@
                                             <td>
                                                 {{
                                                 deadline.importToPay
-                                                | currency: "EUR"
+                                                | currency: currencyCode:'symbol':'1.2-2':'it-IT'
                                                 }}
                                             </td>
                                             <!-- <td>{{ deadline.note }}</td> -->
@@ -184,7 +184,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                {{ this.totalImportToPaySum | currency: "EUR" }}
+                                {{ this.totalImportToPaySum | currency: currencyCode:'symbol':'1.2-2':'it-IT'}}
                             </td>
                             <td>{{ "generic.fields.totalImportToPaySum" | translate}}</td>
                         </tr>
@@ -192,14 +192,14 @@
                             <td>
                                 {{
                                 this.totalImportNotPayedSum
-                                | currency: "EUR"
+                                | currency: currencyCode:'symbol':'1.2-2':'it-IT'
                                 }}
                             </td>
                             <td>{{ "generic.fields.totalImportNotPayedSum" | translate}}</td>
                         </tr>
                         <tr>
                             <td>
-                                {{ this.totalImportSum | currency: "EUR" }}
+                                {{ this.totalImportSum | currency: currencyCode:'symbol':'1.2-2':'it-IT'}}
                             </td>
                             <td>{{ "generic.fields.totalImportSumSum" | translate}}</td>
                         </tr>

@@ -24,6 +24,7 @@ import { DropdownNotificationsModule } from '../shared/components/dropdown-notif
 import { ModalMissingEmailModule } from '../shared/components/modal-missing-email/modal-missing-email.module';
 import { ChatAiModule } from '../shared/components/chat-ai/chat-ai.module';
 import { LoaderModule } from '../shared/components/loader/loader.module';
+import { DropdownSelectCurrencyModule } from '../shared/components/dropdown-select-currency/dropdown-select-currency.module';
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import { LoaderModule } from '../shared/components/loader/loader.module';
         SidebarModule,
         BadgeModule,
         DropdownSelectCompanyModule,
+        DropdownSelectCurrencyModule,
         DropdownNotificationsModule,
         RadioButtonModule,
         InputSwitchModule,
@@ -57,4 +59,4 @@ import { LoaderModule } from '../shared/components/loader/loader.module';
     ],
     exports: [AppLayoutComponent],
 })
-export class AppLayoutModule {}
+export class AppLayoutModule { }

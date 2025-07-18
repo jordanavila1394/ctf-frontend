@@ -67,7 +67,6 @@ import { VehicleModule } from './pages/vehicle/vehicle.module';
 import { HomeModule } from './pages/home/home.module';
 import { ImagesDialogModule } from './shared/components/imagesDialog/images-dialog.module';
 import { LoaderInterceptor } from './helpers/loader.interceptor';
-
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
     imports: [
