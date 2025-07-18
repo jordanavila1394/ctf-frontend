@@ -100,12 +100,12 @@
                                 <table class="inner-table">
                                     <thead>
                                         <tr>
-                                            <th>N°Rata</th>
-                                            <th>Data scadenza</th>
-                                            <th>Giorni rimanenti</th>
-                                            <th>Importo da pagare</th>
-                                            <th>Stato</th>
-                                            <th>Data pagamento</th>
+                                            <th>{{ "generic.fields.installmentNumber" | translate}}</th>
+                                            <th>{{ "generic.fields.installmentExpirationDate" | translate}}</th>
+                                            <th>{{ "generic.fields.installmentRemainingDays" | translate}}</th>
+                                            <th>{{ "generic.fields.installmentAmount" | translate}}</th>
+                                            <th>{{ "generic.fields.installmentStatus" | translate}}</th>
+                                            <th>{{ "generic.fields.installmentPaymentDate" | translate}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -186,7 +186,7 @@
                             <td>
                                 {{ this.totalImportToPaySum | currency: "EUR" }}
                             </td>
-                            <td>Importo Totale Pagato</td>
+                            <td>{{ "generic.fields.totalImportToPaySum" | translate}}</td>
                         </tr>
                         <tr>
                             <td>
@@ -195,20 +195,14 @@
                                 | currency: "EUR"
                                 }}
                             </td>
-                            <td>Importo Totale Non Pagato</td>
+                            <td>{{ "generic.fields.totalImportNotPayedSum" | translate}}</td>
                         </tr>
                         <tr>
                             <td>
                                 {{ this.totalImportSum | currency: "EUR" }}
                             </td>
-                            <td>Importo Totale</td>
+                            <td>{{ "generic.fields.totalImportSumSum" | translate}}</td>
                         </tr>
-                        <!-- <tr>
-                        <td>C</td>
-                        <td>
-                            {{ this.totalImportSum | currency: "EUR" }}
-                        </td>
-                    </tr> -->
                     </tbody>
                 </table>
             </div>
