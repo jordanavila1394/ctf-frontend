@@ -27,6 +27,7 @@ import { CreateVehicleComponent } from './create-vehicle.component';
 import { CreateVehicleRoutingModule } from './create-vehicle-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CalendarModule } from 'primeng/calendar';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import { CalendarModule } from 'primeng/calendar';
         SliderModule,
         TableModule,
         ToastModule,
+        TranslateModule,
         ToggleButtonModule,
     ],
     declarations: [CreateVehicleComponent],

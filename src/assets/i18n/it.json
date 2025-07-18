@@ -321,6 +321,7 @@
             "searchByPhone": "Cerca per telefono",
             "searchByEmail": "Cerca per email",
             "pec": "PEC",
+            "website": "Sito web",
             "searchByPec": "Cerca per PEC",
             "ceo": "Amministratore Delegato",
             "searchByCeo": "Cerca per nome e cognome dell'AD",
@@ -368,7 +369,14 @@
             "expiringDocuments": "Documenti in scadenza",
             "documentName": "Nome documento",
             "expirationDate": "Data di scadenza",
-            "documentLink": "Link documento"
+            "documentLink": "Link documento",
+            "createCompany": "Crea azienda",
+            "placeholderCompanyName": "Inserisci nome azienda",
+            "createVehicle": "Crea mezzo",
+            "placeholderTipologyVehicle": "Auto, Moto, Furgone",
+            "placeholderModelVehicle": "Inserisci modello mezzo",
+            "placeholderRentalType": " Leasing, Noleggio, Proprietà",
+            "placeholderDriverType": "Autista, Autista con patente C, Autista con patente D"
         }
     }
 }

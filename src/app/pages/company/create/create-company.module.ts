@@ -27,6 +27,7 @@ import { CreateCompanyComponent } from './create-company.component';
 import { CreateCompanyRoutingModule } from './create-company-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CalendarModule } from 'primeng/calendar';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import { CalendarModule } from 'primeng/calendar';
         SliderModule,
         TableModule,
         ToastModule,
+        TranslateModule,
         ToggleButtonModule,
     ],
     declarations: [CreateCompanyComponent],

@@ -321,6 +321,7 @@
             "searchByPhone": "Search by phone",
             "searchByEmail": "Search by email",
             "pec": "PEC",
+            "website": "Website",
             "searchByPec": "Search by PEC",
             "ceo": "CEO",
             "searchByCeo": "Search by CEO name surname",
@@ -368,8 +369,15 @@
             "expiringDocuments": "Expiring documents",
             "documentName": "Document name",
             "expirationDate": "Expiration date",
-            "documentLink": "Document link"
-        
+            "documentLink": "Document link",
+            "createCompany": "Create company",
+            "placeholderCompanyName": "Enter company name",
+            "createVehicle": "Create vehicle",
+            "placeholderTipologyVehicle": "Car, Motorcycle, Van",
+            "placeholderModelVehicle":"Enter vehicle model",
+            "placeholderRentalType": "Leasing, Rental, Owned",
+            "placeholderDriverType":" Driver, Driver with C license, Driver with D license"
+    
         }
     }
 }

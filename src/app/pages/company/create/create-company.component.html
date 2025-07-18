@@ -6,10 +6,10 @@
                 #form="ngForm"
                 (ngSubmit)="onSubmit()"
             >
-                <h5>Crea azienda</h5>
+                <h5>{{'generic.fields.createCompany' | translate }}</h5>
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="name1">Ragione sociale</label>
+                        <label htmlFor="name1">{{'generic.fields.companyName' | translate }}</label>
                         <input
                             pInputText
                             id="name1"
@@ -20,7 +20,7 @@
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="vat1">P.IVA</label>
+                        <label htmlFor="vat1">{{'generic.fields.vatNumber' | translate }}</label>
                         <input
                             pInputText
                             id="vat1"
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="rea_number1">Rea number</label>
+                        <label htmlFor="rea_number1">{{'generic.fields.reaNumber' | translate }}</label>
                         <input
                             pInputText
                             id="rea_number1"
@@ -58,7 +58,7 @@
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="legal_form1">Forma giuridica</label>
+                        <label htmlFor="legal_form1">{{'generic.fields.legalForm' | translate }}</label>
 
                         <p-dropdown
                             [options]="legalFormItems"
@@ -70,7 +70,7 @@
                         ></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="vat1">Sede legale</label>
+                        <label htmlFor="vat1">{{'generic.fields.legalAddress' | translate }}</label>
                         <app-default-autocomplete
                             controlName="registeredOffice"
                             [defaultAutocompleteForm]="createForm"
@@ -78,7 +78,7 @@
                         </app-default-autocomplete>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="vat1">Sede operativa</label>
+                        <label htmlFor="vat1">{{'generic.fields.operationalAddress' | translate }}</label>
                         <app-default-autocomplete
                             controlName="headOffice"
                             [defaultAutocompleteForm]="createForm"
@@ -86,7 +86,7 @@
                         </app-default-autocomplete>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="phone1">Telefono</label>
+                        <label htmlFor="phone1">{{'generic.fields.phone' | translate }}</label>
                         <input
                             pInputText
                             id="phone1"
@@ -98,7 +98,7 @@
                     </div>
 
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="email1">Email</label>
+                        <label htmlFor="email1">{{'generic.fields.email' | translate }}</label>
                         <input
                             pInputText
                             id="email1"
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="pec1">PEC</label>
+                        <label htmlFor="pec1">{{'generic.fields.pec' | translate }}</label>
                         <input
                             pInputText
                             id="pec1"
@@ -168,7 +168,7 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="website1">Sito web</label>
+                        <label htmlFor="website1">{{'generic.fields.website' | translate }}</label>
                         <input
                             pInputText
                             id="website1"
@@ -191,7 +191,7 @@
                         ></p-dropdown>
                     </div> -->
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="status1">Data Atto costituzione</label>
+                        <label htmlFor="status1">{{'generic.fields.createdAt' | translate }}</label>
                         <br />
                         <p-calendar
                             [showIcon]="true"
@@ -199,17 +199,16 @@
                         ></p-calendar>
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="status1">Attiva/Disattiva</label> <br />
+                        <label htmlFor="status1">{{'generic.fields.enableDisable' | translate }}</label> <br />
                         <p-inputSwitch formControlName="status"></p-inputSwitch>
                     </div>
 
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="description1">Descrizione</label>
+                        <label htmlFor="description1">{{'generic.fields.description' | translate }}</label>
 
                         <textarea
                             rows="5"
                             cols="30"
-                            placeholder="Eventuali descrizione"
                             ngModel
                             formControlName="description"
                             pInputTextarea
@@ -225,7 +224,7 @@
                         pRipple
                         type="submit"
                         class="p-button-success"
-                        label="Crea"
+                        [label]="'generic.fields.create' | translate"
                         icon="pi pi-plus"
                         [disabled]="!createForm.valid"
                     ></button>

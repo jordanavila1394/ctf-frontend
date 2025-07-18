@@ -6,59 +6,59 @@
                 #form="ngForm"
                 (ngSubmit)="onSubmit()"
             >
-                <h5>Crea mezzo</h5>
+                <h5>{{'generic.fields.createVehicle' | translate }}</h5>
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="licensePlate1">Targa</label>
+                        <label htmlFor="licensePlate1">{{'generic.fields.licensePlate' | translate }}</label>
                         <input
                             pInputText
                             id="licensePlate1"
-                            placeholder="Targa"
+                            placeholder="AB001XZ"
                             type="text"
                             formControlName="licensePlate"
                             ngModel
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="tipology1">Tipologia</label>
+                        <label htmlFor="tipology1">{{'generic.fields.tipology' | translate }}</label>
                         <input
                             pInputText
                             id="tipology1"
                             type="text"
-                            placeholder="Tipologia"
+                            [placeholder]="'generic.fields.placeholderTipologyVehicle' | translate"
                             formControlName="tipology"
                             ngModel
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="model1">Modello</label>
+                        <label htmlFor="model1">{{'generic.fields.model' | translate }}</label>
                         <input
                             pInputText
                             id="model1"
                             type="text"
-                            placeholder="Modello"
+                            [placeholder]="'generic.fields.placeholderModelVehicle' | translate"
                             formControlName="model"
                             ngModel
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="rentalType1">Tipo noleggio</label>
+                        <label htmlFor="rentalType1">{{'generic.fields.rentalType' | translate }}</label>
                         <input
                             pInputText
                             id="rentalType1"
                             type="text"
-                            placeholder="Tipo noleggio"
+                            [placeholder]="'generic.fields.placeholderRentalType' | translate"
                             formControlName="rentalType"
                             ngModel
                         />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label htmlFor="driverType1">Tipo autista</label>
+                        <label htmlFor="driverType1">{{'generic.fields.driverType' | translate }}</label>
                         <input
                             pInputText
                             id="driverType1"
                             type="text"
-                            placeholder="Tipo autista"
+                            [placeholder]="'generic.fields.placeholderDriverType' | translate"
                             formControlName="driverType"
                             ngModel
                         />

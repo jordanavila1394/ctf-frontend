@@ -321,6 +321,7 @@
             "searchByPhone": "Buscar por teléfono",
             "searchByEmail": "Buscar por correo electrónico",
             "pec": "PEC",
+            "website": "Sitio web",
             "searchByPec": "Buscar por PEC",
             "ceo": "Director general",
             "searchByCeo": "Buscar por nombre y apellido del director",
@@ -368,7 +369,14 @@
             "expiringDocuments": "Documentos a caducar",
             "documentName": "Nombre del documento",
             "expirationDate": "Fecha de caducidad",
-            "documentLink": "Enlace del documento"
+            "documentLink": "Enlace del documento",
+            "createCompany": "Crear empresa",
+            "placeholderCompanyName": "Nombre de la empresa",
+            "createVehicle": "Crear vehículo",
+            "placeholderTipologyVehicle": "Auto, Moto, Furgón",
+            "placeholderModelVehicle": "Modelo del vehículo",
+            "placeholderRentalType": " Leasing, Alquiler, Propiedad",
+            "placeholderDriverType": "Conductor, Conductor con licencia C, Conductor con licencia D"
         }
     }
 }
