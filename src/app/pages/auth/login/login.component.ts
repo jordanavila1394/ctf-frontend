@@ -11,6 +11,7 @@ import { LoginRequest } from 'src/app/models/global.request';
 
 import { environment } from 'src/environments/environment';
 
+import { AppConfig } from 'src/app/app-config';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -41,6 +42,7 @@ import { environment } from 'src/environments/environment';
 export class LoginComponent {
     //Global variables
     operatorPhoneNumber: any;
+    configCompanyName: any;
 
     constructor(
         public fb: FormBuilder,
@@ -51,6 +53,8 @@ export class LoginComponent {
     ) {
         this.authState$ = store.select('authState');
         this.operatorPhoneNumber = environment?.operatorPhoneNumber;
+        this.configCompanyName = AppConfig.companyName;
+
     }
     hidePassword = true;
 
@@ -128,7 +132,7 @@ export class LoginComponent {
         const pinValue = this.pinForm.value.pin;
         // Esegui login con il PIN
         console.log('PIN:', pinValue);
-        
+
         this.store.dispatch(loginWithPin({ request: { pin: pinValue } }));
 
         // Qui chiama il tuo servizio o logica di login

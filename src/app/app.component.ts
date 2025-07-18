@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-
+import { Title } from '@angular/platform-browser';
+import { AppConfig } from './app-config';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -10,13 +11,15 @@ export class AppComponent implements OnInit {
     lang: string = 'it';
     locale: string;
 
+
     constructor(
         public translateService: TranslateService,
+        private titleService: Title,
         public primengConfig: PrimeNGConfig
     ) {
         this.primengConfig.ripple = true;
+        this.titleService.setTitle(AppConfig.companyName); // dinamico!
         this.translateService.addLangs(['it', 'es', 'en']);
-
         // Recupera la lingua dal localStorage oppure usa 'it' come default
         const savedLang = localStorage.getItem('selectedLanguage') || 'it';
         this.changeLang(savedLang);

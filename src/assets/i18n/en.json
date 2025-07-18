@@ -182,8 +182,8 @@
         },
         "landing": {
             "hello": "Hello",
-            "welcome": "Welcome to CTF Cloud",
-            "description": "CTF Cloud is a platform designed to manage your company in a simple and efficient way.",
+            "welcome": "Welcome to  {{configCompany}}",
+            "description": "Platform designed to manage your company in a simple and efficient way.",
             "lastCheckin": "Last check-in",
             "goOnWithCheckin": "Proceed with check-in",
             "youMustCheckOut": "You must check out",

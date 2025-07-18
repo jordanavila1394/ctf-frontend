@@ -20,6 +20,8 @@ import { PermissionService } from 'src/app/services/permission.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmailService } from 'src/app/services/email.service';
 
+import { AppConfig } from 'src/app/app-config';
+
 @Component({
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
@@ -52,173 +54,177 @@ export class DashboardComponent implements OnInit, OnDestroy {
     idCompany: any;
     loading: boolean;
     permissions: any;
+    configCompanyName: string;
 
-    constructor(
-        public layoutService: LayoutService,
-        public translateService: TranslateService,
-        public attendaceService: AttendanceService,
-        public permissionService: PermissionService,
-        public emailService: EmailService,
-        private store: Store<{ companyState: CompanyState }>,
-    ) {
-        //Init
-        this.formatter = new Formatter();
-        this.companyState$ = store.select('companyState');
-    }
-    ngOnInit(): void {
-        const companyServiceSubscription = this.companyState$.subscribe(
-            (company) => {
-                this.selectedCompany = company?.currentCompany;
+
+constructor(
+    public layoutService: LayoutService,
+    public translateService: TranslateService,
+    public attendaceService: AttendanceService,
+    public permissionService: PermissionService,
+    public emailService: EmailService,
+    private store: Store<{ companyState: CompanyState }>,
+) {
+    //Init
+    this.formatter = new Formatter();
+    this.companyState$ = store.select('companyState');
+    this.configCompanyName = AppConfig.companyName;
+
+}
+ngOnInit(): void {
+    const companyServiceSubscription = this.companyState$.subscribe(
+        (company) => {
+            this.selectedCompany = company?.currentCompany;
+            this.loadServices(this.selectedCompany);
+        },
+    );
+
+    const translateServiceSubscription =
+        this.translateService.onLangChange.subscribe(
+            (langChangeEvent: LangChangeEvent) => {
+                this.locale = langChangeEvent.lang;
+                moment.locale(this.locale);
                 this.loadServices(this.selectedCompany);
             },
         );
+    const layourServiceSubscription =
+        this.layoutService.configUpdate$.subscribe(() => {
+            this.loadServices(this.selectedCompany);
+        });
+    if(this.subscription) {
+    this.subscription.add(companyServiceSubscription);
+    this.subscription.add(layourServiceSubscription);
+    this.subscription.add(translateServiceSubscription);
+}
+    }
 
-        const translateServiceSubscription =
-            this.translateService.onLangChange.subscribe(
-                (langChangeEvent: LangChangeEvent) => {
-                    this.locale = langChangeEvent.lang;
-                    moment.locale(this.locale);
-                    this.loadServices(this.selectedCompany);
-                },
+loadServices(currentCompany) {
+    const attendanceServiceSubscription = this.attendaceService
+        .getDataAttendances(currentCompany?.id | 0)
+        .subscribe((data) => {
+            this.attendances = this.formatter.formatCheckins(
+                data,
+                this.locale,
             );
-        const layourServiceSubscription =
-            this.layoutService.configUpdate$.subscribe(() => {
-                this.loadServices(this.selectedCompany);
-            });
-        if (this.subscription) {
-            this.subscription.add(companyServiceSubscription);
-            this.subscription.add(layourServiceSubscription);
-            this.subscription.add(translateServiceSubscription);
-        }
-    }
 
-    loadServices(currentCompany) {
-        const attendanceServiceSubscription = this.attendaceService
-            .getDataAttendances(currentCompany?.id | 0)
-            .subscribe((data) => {
-                this.attendances = this.formatter.formatCheckins(
-                    data,
-                    this.locale,
-                );
+            this.usersNumber = data.usersNumber;
+            this.vehiclesNumber = data.vehiclesNumber;
 
-                this.usersNumber = data.usersNumber;
-                this.vehiclesNumber = data.vehiclesNumber;
+            const documentStyle = getComputedStyle(
+                document.documentElement,
+            );
+            const checkInDoneLabel = this.translateService.instant('page.dashboard.checkin-done');
+            const checkInMissingLabel = this.translateService.instant('page.dashboard.checkin-pending');
 
-                const documentStyle = getComputedStyle(
-                    document.documentElement,
-                );
-                const checkInDoneLabel = this.translateService.instant('page.dashboard.checkin-done');
-                const checkInMissingLabel = this.translateService.instant('page.dashboard.checkin-pending');
+            this.barDataAttendances = {
+                labels: this.attendances?.arrayDates,
+                datasets: [
+                    {
+                        label: checkInDoneLabel,
+                        backgroundColor:
+                            documentStyle.getPropertyValue('--green-200'),
+                        borderColor:
+                            documentStyle.getPropertyValue('--green-200'),
+                        data: this.attendances?.arrayCountCheck,
+                    },
+                    {
+                        label: checkInMissingLabel,
+                        backgroundColor:
+                            documentStyle.getPropertyValue('--orange-200'),
+                        borderColor:
+                            documentStyle.getPropertyValue('--orange-200'),
+                        data: this.attendances?.arrayCountMissing,
+                    },
+                ],
+            };
+        });
 
-                this.barDataAttendances = {
-                    labels: this.attendances?.arrayDates,
-                    datasets: [
-                        {
-                            label: checkInDoneLabel,
-                            backgroundColor:
-                                documentStyle.getPropertyValue('--green-200'),
-                            borderColor:
-                                documentStyle.getPropertyValue('--green-200'),
-                            data: this.attendances?.arrayCountCheck,
-                        },
-                        {
-                            label: checkInMissingLabel,
-                            backgroundColor:
-                                documentStyle.getPropertyValue('--orange-200'),
-                            borderColor:
-                                documentStyle.getPropertyValue('--orange-200'),
-                            data: this.attendances?.arrayCountMissing,
-                        },
-                    ],
-                };
-            });
+    const permissionServiceSubscription = this.permissionService
+        .getAllPermissions(currentCompany.id | 0)
+        .subscribe((permissions) => {
+            this.permissions = permissions;
+            this.permissions = permissions.map((permission) => ({
+                ...permission,
+                datesText: permission?.dates,
+                dates: permission?.dates.split(','),
+            }));
+            this.loading = false;
+        });
+    if (this.subscription && permissionServiceSubscription)
+        this.subscription.add(permissionServiceSubscription);
+    if (this.subscription && attendanceServiceSubscription)
+        this.subscription.add(attendanceServiceSubscription);
+}
 
-        const permissionServiceSubscription = this.permissionService
-            .getAllPermissions(currentCompany.id | 0)
-            .subscribe((permissions) => {
-                this.permissions = permissions;
-                this.permissions = permissions.map((permission) => ({
-                    ...permission,
-                    datesText: permission?.dates,
-                    dates: permission?.dates.split(','),
-                }));
-                this.loading = false;
-            });
-        if (this.subscription && permissionServiceSubscription)
-            this.subscription.add(permissionServiceSubscription);
-        if (this.subscription && attendanceServiceSubscription)
-            this.subscription.add(attendanceServiceSubscription);
-    }
+approvePermission(permission) {
+    this.permissionService
+        .approvePermission(permission?.id, permission?.user?.id)
+        .subscribe((res) => {
+            if (permission?.user?.email) {
+                let messageEmail = '';
+                messageEmail +=
+                    'Ciao, ' +
+                    permission?.user?.name +
+                    ' ' +
+                    permission?.user?.surname +
+                    '. <br>';
+                messageEmail += "E' stato approvata la sua richiesta: <br>";
+                messageEmail +=
+                    '<strong>' + permission?.datesText + '</strong><br>';
 
-    approvePermission(permission) {
-        this.permissionService
-            .approvePermission(permission?.id, permission?.user?.id)
-            .subscribe((res) => {
-                if (permission?.user?.email) {
-                    let messageEmail = '';
-                    messageEmail +=
-                        'Ciao, ' +
-                        permission?.user?.name +
-                        ' ' +
-                        permission?.user?.surname +
-                        '. <br>';
-                    messageEmail += "E' stato approvata la sua richiesta: <br>";
-                    messageEmail +=
-                        '<strong>' + permission?.datesText + '</strong><br>';
+                this.emailService
+                    .sendEmail(
+                        permission?.user?.email,
+                        'CTF - Permesso approvato - ' + permission?.id,
+                        messageEmail,
+                    )
+                    .subscribe(
+                        (risposta) =>
+                            console.log(
+                                'Email inviata con successo:',
+                                risposta,
+                            ),
+                        (errore) =>
+                            console.error(
+                                "Errore durante l'invio dell'email:",
+                                errore,
+                            ),
+                    );
+            }
 
-                    this.emailService
-                        .sendEmail(
-                            permission?.user?.email,
-                            'CTF - Permesso approvato - ' + permission?.id,
-                            messageEmail,
-                        )
-                        .subscribe(
-                            (risposta) =>
-                                console.log(
-                                    'Email inviata con successo:',
-                                    risposta,
-                                ),
-                            (errore) =>
-                                console.error(
-                                    "Errore durante l'invio dell'email:",
-                                    errore,
-                                ),
-                        );
-                }
+            this.loadServices(this.selectedCompany);
+        });
+}
 
-                this.loadServices(this.selectedCompany);
-            });
-    }
+rejectPermission(permission) {
+    this.permissionService
+        .rejectPermission(permission?.id, permission?.user?.id)
+        .subscribe((res) => {
+            if (permission?.user?.email) {
+                this.emailService
+                    .sendEmail(
+                        permission?.user?.email,
+                        'CTF - Permesso Negato - ' + permission?.id,
+                        "E' stato negato il suo permesso",
+                    )
+                    .subscribe(
+                        (risposta) =>
+                            console.log(
+                                'Email inviata con successo:',
+                                risposta,
+                            ),
+                        (errore) =>
+                            console.error(
+                                "Errore durante l'invio dell'email:",
+                                errore,
+                            ),
+                    );
+            }
+            this.loadServices(this.selectedCompany);
+        });
+}
 
-    rejectPermission(permission) {
-        this.permissionService
-            .rejectPermission(permission?.id, permission?.user?.id)
-            .subscribe((res) => {
-                if (permission?.user?.email) {
-                    this.emailService
-                        .sendEmail(
-                            permission?.user?.email,
-                            'CTF - Permesso Negato - ' + permission?.id,
-                            "E' stato negato il suo permesso",
-                        )
-                        .subscribe(
-                            (risposta) =>
-                                console.log(
-                                    'Email inviata con successo:',
-                                    risposta,
-                                ),
-                            (errore) =>
-                                console.error(
-                                    "Errore durante l'invio dell'email:",
-                                    errore,
-                                ),
-                        );
-                }
-                this.loadServices(this.selectedCompany);
-            });
-    }
-
-    ngOnDestroy() {
-        if (this.subscription) this.subscription.unsubscribe();
-    }
+ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
+}
 }

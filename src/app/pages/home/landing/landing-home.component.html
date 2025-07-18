@@ -5,7 +5,7 @@
                 {{ "page.landing.hello" | translate }},
                 <span class="font-bold">{{ currentUser.name }} {{ currentUser.surname }}</span>.
                 <br />
-                {{ "page.landing.welcome" | translate }},<br />
+                {{ "page.landing.welcome" | translate:{ configCompany: this.configCompanyName } }}<br />
                 {{ "page.landing.description" | translate }}
             </div>
         </div>

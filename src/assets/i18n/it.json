@@ -182,7 +182,7 @@
         },
         "landing": {
             "hello": "Ciao",
-            "welcome": "Benvenuto su CTF Cloud",
+            "welcome": "Benvenuto su {{configCompany}}",
             "description": "Piattaforma per la gestione di aziende e mezzi",
             "lastCheckin": "Ultimo check-in",
             "goOnWithCheckin": "Procedi con il check-in",

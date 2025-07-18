@@ -28,6 +28,7 @@ import { SpacesService } from 'src/app/services/spaces.service';
 import { UserService } from 'src/app/services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 
+import { AppConfig } from 'src/app/app-config';
 @Component({
     templateUrl: './landing-home.component.html',
     styleUrls: ['./landing-home.component.scss'],
@@ -55,6 +56,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
     //Global variables
     operatorPhoneNumber: any;
     locale: string = 'it-IT';
+    configCompanyName: any;
 
     constructor(
         public layoutService: LayoutService,
@@ -67,6 +69,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
         private store: Store<{ authState: AuthState }>,
     ) {
         //Init
+        this.configCompanyName = AppConfig.companyName;
         this.operatorPhoneNumber = environment?.operatorPhoneNumber;
         this.authState$ = store.select('authState');
 
@@ -162,7 +165,7 @@ export class LandingHomeComponent implements OnInit, OnDestroy {
             Expires: 3600, // Tempo di scadenza del link in secondi
         });
     }
-  
+
 
     formatDateCheckIn(date: string | Date): string {
         const lang = this.getAngularLocale(this.translateService.currentLang || 'it');

@@ -182,7 +182,7 @@
         },
         "landing": {
             "hello": "Hola",
-            "welcome": "Bienvenido a CTF Cloud",
+            "welcome": "Bienvenido a {{configCompany}}",
             "description": "Plataforma de gestión de flotas y recursos humanos",
             "lastCheckin": "Último check-in",
             "goOnWithCheckin": "Procede con el check-in",
