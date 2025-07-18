@@ -12,6 +12,7 @@ import { EntityService } from 'src/app/services/entity.service';
 import { UploadService } from 'src/app/services/upload.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SpacesService } from 'src/app/services/spaces.service';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
     templateUrl: './table-deadlines.component.html',
@@ -66,6 +67,7 @@ export class TableDeadlinesComponent implements OnInit {
         private entityService: EntityService,
         private messageService: MessageService,
         private uploadService: UploadService,
+        private translateService: TranslateService,
         private sanitizer: DomSanitizer,
         private spacesService: SpacesService,
         public fb: FormBuilder,
@@ -81,7 +83,8 @@ export class TableDeadlinesComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        moment.locale('it');
+        const savedLang = localStorage.getItem('selectedLanguage') || 'it';
+        moment.locale(savedLang); // Imposta la lingua 
         this.months = this.generateMonthObjects(); // Inizializzazione di months con i nomi dei mesi e i loro ID
         this.currentMonth = moment().format('MMMM');
         this.selectedYear = moment().year();
@@ -103,6 +106,13 @@ export class TableDeadlinesComponent implements OnInit {
         this.companyService.getAllCompanies().subscribe((companies) => {
             this.companies = companies;
         });
+
+        this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+            moment.locale(event.lang);
+            this.months = this.generateMonthObjects();
+            this.loadServices(this.selectedCompany);
+        });
+
 
         this.subscription.add(companyServiceSubscription);
 
@@ -287,7 +297,7 @@ export class TableDeadlinesComponent implements OnInit {
             (response) => {
                 console.log(response)
                 this.uploadedFiles = []; // Clear the uploaded files array
-                fileUpload.clear(); 
+                fileUpload.clear();
             },
             (error) => { },
         );

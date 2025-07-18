@@ -6,7 +6,7 @@
                     <div>
                         <input id="selectAllMonths" type="checkbox" [(ngModel)]="selectAllMonths"
                             (change)="onSelectAllMonths()" />
-                        <label for="selectAllMonths">Seleziona tutto</label>
+                        <label for="selectAllMonths">{{ "generic.fields.selectAll" | translate }}</label>
                     </div>
 
                     <div class="year-dropdown">
@@ -17,8 +17,9 @@
                 <div class="months">
                     <div class="month" *ngFor="let month of months" [class.active]="isMonthSelected(month)"
                         (click)="toggleMonthSelection(month)">
+                       
                         <div class="importpayed" [style.height.%]="month?.importPayedPerc"></div>
-                        {{ month?.name | uppercase }}
+                        <b>{{ month?.name | uppercase }}</b>
                     </div>
                 </div>
             </div>
@@ -27,12 +28,12 @@
             <div class="top-table-operations">
                 <div class="import-csv">
                     <button pButton class="p-button-text" type="button" (click)="openEntitiesModal()">
-                        Aggiungi Ente
+                        {{ "generic.fields.addInstitution" | translate}}
                     </button>
                 </div>
                 <div class="import-csv">
                     <button pButton class="p-button-text" type="button" (click)="openImportModal()">
-                        Importa XLSX
+                        {{ "generic.fields.importExcel" | translate}}
                     </button>
                 </div>
             </div>
@@ -40,14 +41,14 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Nome</th>
-                        <th>Identificatore</th>
-                        <th>Azienda</th>
-                        <th>Pagatore</th>
-                        <th>Documento</th>
-                        <th>Tot. Importo Pagato</th>
-                        <th>Tot. Importo Non pagato</th>
-                        <th>Tot. Importo Rate</th>
+                        <th>{{ "generic.fields.name" | translate}}</th>
+                        <th>{{ "generic.fields.identifier" | translate}}</th>
+                        <th>{{ "generic.fields.company" | translate}}</th>
+                        <th>{{ "generic.fields.payer" | translate}}</th>
+                        <th>{{ "generic.fields.document" | translate}}</th>
+                        <th>{{ "generic.fields.totalImportToPay" | translate}}</th>
+                        <th>{{ "generic.fields.totalImportNotPayed" | translate}}</th>
+                        <th>{{ "generic.fields.totalImportSum" | translate}}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -312,14 +313,16 @@
                     <td>{{ entity.company?.name }}</td>
                     <td>{{ entity.payer}}</td>
                     <td>
-                    <div class="document-upload-container">
-                        <p-fileUpload #fileUpload [customUpload]="true" name="files[]" (onSelect)="uploadFiles($event)"
-                            [showUploadButton]="false" [multiple]="true" [maxFileSize]="500000000">
-                        </p-fileUpload>
-                        <button class="small-button"(click)="saveDocument(entity, fileUpload)">
-                            <img class="small-image" src="assets/icons/document-entity.png" alt="Aggiungi documento" title="documento" />
-                        </button>
-                    </div>
+                        <div class="document-upload-container">
+                            <p-fileUpload #fileUpload [customUpload]="true" name="files[]"
+                                (onSelect)="uploadFiles($event)" [showUploadButton]="false" [multiple]="true"
+                                [maxFileSize]="500000000">
+                            </p-fileUpload>
+                            <button class="small-button" (click)="saveDocument(entity, fileUpload)">
+                                <img class="small-image" src="assets/icons/document-entity.png" alt="Aggiungi documento"
+                                    title="documento" />
+                            </button>
+                        </div>
 
                     </td>
                     <td>

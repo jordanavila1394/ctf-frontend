@@ -376,7 +376,20 @@
             "placeholderTipologyVehicle": "Auto, Moto, Furgone",
             "placeholderModelVehicle": "Inserisci modello mezzo",
             "placeholderRentalType": " Leasing, Noleggio, Proprietà",
-            "placeholderDriverType": "Autista, Autista con patente C, Autista con patente D"
+            "placeholderDriverType": "Autista, Autista con patente C, Autista con patente D",
+            "payer": "Pagatore",
+            "document": "Documento",
+            "totalImportToPay": "Importo totale da pagare",
+            "totalImportNotPayed": "Importo totale non pagato",
+            "totalImportSum": "Importo totale",
+            "addInstitution": "Aggiungi istituzione",
+            "importExcel": "Importa Excel",
+            "installmentNumber": "Numero rata",
+            "installmentPaymentDate": "Data pagamento",
+            "installmentAmount": "Importo",
+            "installmentStatus": "Stato",
+            "installmentRemainingDays": "Giorni rimanenti",
+            "installmentExpirationDate": "Data di scadenza rata"
         }
     }
 }

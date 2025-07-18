@@ -376,7 +376,21 @@
             "placeholderTipologyVehicle": "Auto, Moto, Furgón",
             "placeholderModelVehicle": "Modelo del vehículo",
             "placeholderRentalType": " Leasing, Alquiler, Propiedad",
-            "placeholderDriverType": "Conductor, Conductor con licencia C, Conductor con licencia D"
+            "placeholderDriverType": "Conductor, Conductor con licencia C, Conductor con licencia D",
+            "identifier": "Identificador",
+            "payer": "Pagador",
+            "document": "Documento",
+            "totalImportToPay": "Importe total a pagar",
+            "totalImportNotPayed": "Importe total no pagado",
+            "totalImportSum": "Importe total",
+            "addInstitution": "Agregar institución",
+            "importExcel": "Importar Excel",
+            "installmentNumber": "Numero cuota",
+            "installmentPaymentDate": "Fecha de pago",
+            "installmentAmount": "Importe",
+            "installmentStatus": "Estado",
+            "installmentRemainingDays": "Días restantes",
+            "installmentExpirationDate": "Fecha de vencimiento de la cuota"
         }
     }
 }

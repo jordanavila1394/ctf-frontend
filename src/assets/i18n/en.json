@@ -376,7 +376,21 @@
             "placeholderTipologyVehicle": "Car, Motorcycle, Van",
             "placeholderModelVehicle":"Enter vehicle model",
             "placeholderRentalType": "Leasing, Rental, Owned",
-            "placeholderDriverType":" Driver, Driver with C license, Driver with D license"
+            "placeholderDriverType":" Driver, Driver with C license, Driver with D license",
+            "identifier": "Identifier",
+            "payer": "Payer",
+            "document": "Document",
+            "totalImportToPay": "Total import to pay",
+            "totalImportNotPayed": "Total import not paid",
+            "totalImportSum": "Total import sum",
+            "addInstitution": "Add institution",
+            "importExcel": "Import Excel",
+            "installmentNumber": "N° installment",
+            "installmentPaymentDate": "Payment date",
+            "installmentAmount": "Amount",
+            "installmentStatus": "Status",
+            "installmentRemainingDays": "Remaining days",
+            "installmentExpirationDate": "Expiration date"
     
         }
     }
