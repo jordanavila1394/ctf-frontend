@@ -78,6 +78,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     ) {
         this.workForceForm = this.fb.group({
             associatedClient: [null, Validators.required],
+            associatedBranch: [null, Validators.required],
             selectedMonth: [null, Validators.required],
             selectedYear: [null, Validators.required]
         });
