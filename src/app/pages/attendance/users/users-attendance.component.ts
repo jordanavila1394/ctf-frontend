@@ -250,7 +250,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
             });
         const userServiceAttendanceSummarySubscription = this.attendanceService
             .getUserAttendanceSummaryByMonth(
-                selectedCompany.id,
+                selectedCompany?.id,
                 currentYear,
                 currentMonth,
             )
@@ -494,7 +494,7 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
 
         this.users = this.users.map((user) =>
             this.attendanceService
-                .synchronizeAttendances(user.id, this.selectedCompany.id, currentMonth, currentYear)
+                .synchronizeAttendances(user.id, this.selectedCompany?.id, currentMonth, currentYear)
                 .subscribe((res) => {
                     console.log(res)
                 })

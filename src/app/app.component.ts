@@ -11,7 +11,6 @@ export class AppComponent implements OnInit {
     lang: string = 'it';
     locale: string;
 
-
     constructor(
         public translateService: TranslateService,
         private titleService: Title,

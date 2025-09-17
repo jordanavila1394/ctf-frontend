@@ -144,7 +144,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
 
     loadServices(selectedCompany) {
         const userServiceSubscription = this.userService
-            .getAllUsers(selectedCompany.id)
+            .getAllUsers(selectedCompany?.id)
             .subscribe((users) => {
                 this.users = users.map((user) => ({
                     ...user,

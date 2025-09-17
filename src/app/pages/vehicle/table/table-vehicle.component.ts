@@ -107,7 +107,7 @@ export class TableVehicleComponent implements OnInit {
 
     loadServices(selectedCompany) {
         const vehicleServiceSubscription = this.vehicleService
-            .getAllVehicles(selectedCompany.id)
+            .getAllVehicles(selectedCompany?.id)
             .subscribe((vehicles) => {
                 this.vehicles = vehicles.map((vehicle) => {
                     return vehicle;

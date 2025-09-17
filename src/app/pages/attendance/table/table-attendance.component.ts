@@ -78,7 +78,7 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
     //Services
     loadServices(selectedCompany) {
         const attendanceServiceSubscription = this.attendanceService
-            .getAllAttendances(selectedCompany.id)
+            .getAllAttendances(selectedCompany?.id)
             .subscribe((attendances) => {
                 this.attendances = attendances.map((attendance) => {
                     let newAttendance = attendance;
