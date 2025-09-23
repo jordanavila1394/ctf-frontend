@@ -68,23 +68,24 @@ export class PermissionHomeComponent implements OnInit {
     monthsItems = [];
 
     tipologyPermissionsItems: any = [
-        {
-            name: 'Permesso ROL',
-            value: 'Permesso ROL',
-        },
-        {
-            name: 'Ferie',
-            value: 'Ferie',
-        },
-        {
-            name: 'Giorno non retribuito',
-            value: 'Giorno non retribuito',
-        },
-        {
-            name: 'Congedo parentale',
-            value: 'Congedo parentale',
-        },
+        { name: 'Assenza non retribuita (gg.)', value: 'Assenza non retribuita (gg.)' },
+        { name: 'Aspettativa sindacale', value: 'Aspettativa sindacale' },
+        { name: 'Aspettativa', value: 'Aspettativa' },
+        { name: "Festivita' (infrasettimanale)", value: "Festivita' (infrasettimanale)" },
+        { name: 'Ferie', value: 'Ferie' },
+        { name: 'Infortunio', value: 'Infortunio' },
+        { name: 'Malattia operai e apprendisti', value: 'Malattia operai e apprendisti' },
+        { name: 'Congedo padre L.92/2012', value: 'Congedo padre L.92/2012' },
+        { name: 'Congedo parentale 7/8/9 mese', value: 'Congedo parentale 7/8/9 mese' },
+        { name: 'Congedo parentale ore 7/8/9', value: 'Congedo parentale ore 7/8/9' },
+        { name: 'Sciopero', value: 'Sciopero' },
+        { name: 'L 104 se si tratta di un figlio', value: 'L 104 se si tratta di un figlio' },
+        { name: 'L.104 se si tratta di un genitore', value: 'L.104 se si tratta di un genitore' },
+        { name: 'Permessi riduzione orario (ROL)', value: 'Permessi riduzione orario (ROL)' },
+        { name: 'Permesso sindacale', value: 'Permesso sindacale' },
+        { name: 'STUDIO', value: 'STUDIO' },
     ];
+
     permissions: any;
     adminEmails: any;
     minimumDate: any;
@@ -108,7 +109,7 @@ export class PermissionHomeComponent implements OnInit {
     ngOnInit(): void {
         //Current year
         moment.locale('it');
-        
+
         this.myPermissionsForm.patchValue({
             currentYear: moment().year() + '',
         });

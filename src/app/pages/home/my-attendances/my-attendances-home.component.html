@@ -24,6 +24,7 @@
                     <div><span>CheckOut</span></div>
                     <div><span>Stato</span></div>
                     <div><span>Ore totali</span></div>
+                    <div><span>Ore mancanti (su 9 ore e 40 minuti)</span></div>
                 </div>
                 <div class="attendance" [ngClass]="{
                         'is-weekend': attendance?.checkIsWeekend
@@ -62,8 +63,14 @@
                         </div>
 
                     </div>
+
                     <div class="workedHours">
                         {{ attendance?.workedHours }}
+                    </div>
+                    <div>
+                        <span class="missingHours">
+                            {{ attendance?.notWorkedHours }}
+                        </span>
                     </div>
                 </div>
                 <div class="missing" *ngIf="attendances?.length === 0">

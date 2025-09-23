@@ -105,12 +105,19 @@ export class MyAttendancesHomeComponent implements OnInit, OnDestroy {
                 this.attendances = data;
                 this.attendances = data.map((attendance) => ({
                     ...attendance,
+                    notWorkedHours: attendance?.checkOut
+                        ? this.formatter.calculateMissingWorkingHours(
+                            new Date(attendance?.checkOut),
+                            new Date(attendance?.checkIn),
+                        )
+                        : 0,
                     workedHours: attendance?.checkOut
-                        ? this.formatter.formatDifferenceHours(
+                        ? this.formatter.formatDifferenceAccurateHours(
                               new Date(attendance?.checkOut),
                               new Date(attendance?.checkIn),
                           )
                         : 0,
+                    
                     checkIsWeekend: this.formatter.formatIsWeekendOrFestivo(
                         new Date(attendance?.checkIn),
                     ),

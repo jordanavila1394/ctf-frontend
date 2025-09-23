@@ -78,6 +78,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     ) {
         this.workForceForm = this.fb.group({
             associatedClient: [null, Validators.required],
+            associatedBranch: [null, Validators.required],
             selectedMonth: [null, Validators.required],
             selectedYear: [null, Validators.required]
         });
@@ -219,8 +220,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
         return new Date(year, month + 1, 0).getDate();
     }
 
-    getAbsenceOrAttendancesType(user: User, day: Date): string {
-
+    getAbsenceOrAttendancesInfo(user: User, day: Date): { type: string, hours?: string } {
         const dayTime = new Date(day.setHours(0, 0, 0, 0)).getTime();
 
         // Controlla prima nelle assenze
@@ -232,9 +232,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             })
         );
 
-
         if (absence) {
-            return absence.type;
+            return { type: absence.type };
         }
 
         // Se non c'è assenza, controlla se è presente nelle presenze
@@ -245,16 +244,20 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
                 return attendanceDate === dayTime;
             })
         );
+
         if (attendance) {
-            return attendance.type;
+            return { type: attendance.type, hours: attendance.hours };
         }
-        return ''
+
+        return { type: '' };
     }
 
 
+
     getDayClasses(user: User, day: Date): any {
-        const absenceType = this.getAbsenceOrAttendancesType(user, day);
+        const { type: absenceType, hours: attendanceHours } = this.getAbsenceOrAttendancesInfo(user, day);
         const isToday = this.isToday(day);
+
         return {
             'current-day': isToday,
             'malattia': absenceType === 'Malattia',
@@ -267,19 +270,53 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     }
 
     getAbsenceSymbol(user: User, day: Date): string {
-        const absenceOrAttendanceType = this.getAbsenceOrAttendancesType(user, day);
-        switch (absenceOrAttendanceType) {
-            case 'Malattia': return 'M';
-            case 'Ferie': return 'F';
-            case 'Permesso': return 'P';
-            case 'Permesso ROL': return 'Pr';
-            case 'Congedo parentale': return 'CP';
-            case 'Presente': return '8';
-            case 'Verificare': return '-';
-            case 'CheckOut?': return '?';
-
-            default: return absenceOrAttendanceType.slice(0, 2).toUpperCase();
+        const { type: absenceType, hours: attendanceHours } = this.getAbsenceOrAttendancesInfo(user, day);
+        switch (absenceType) {
+            case 'Presente':
+                return attendanceHours || 'H';
+            case 'Verificare':
+                return '-';
+            case 'Malattia':
+            case 'Malattia operai e apprendisti':
+                return 'M3'; // unificato
+            case 'Ferie':
+                return 'FP';
+            case 'Permesso':
+            case 'Permesso ROL':
+                return 'P1'; // unificato
+            case 'Congedo parentale':
+            case 'Congedo parentale 7/8/9 mese':
+                return 'MG'; // unificato
+            case 'Congedo parentale ore 7/8/9':
+                return 'MH';
+            case 'Sciopero':
+                return 'SC';
+            case 'Non lavorato':
+                return '?';
+            case 'Assenza non retribuita (gg.)':
+                return 'A1';
+            case 'Aspettativa sindacale':
+                return 'A5';
+            case 'Aspettativa':
+                return 'A4';
+            case "Festivita' (infrasettimanale)":
+                return 'F1';
+            case 'Infortunio':
+                return 'I1';
+            case 'Congedo padre L.92/2012':
+                return 'M7';
+            case 'L 104 se si tratta di un figlio':
+                return 'H1';
+            case 'L.104 se si tratta di un genitore':
+                return 'H7';
+            case 'Permesso sindacale':
+                return 'PS';
+            case 'STUDIO':
+                return 'ST';
+            default:
+                return absenceType.slice(0, 2).toUpperCase();
         }
+
     }
 
     getMonthHeaderClasses(monthIndex: number): any {

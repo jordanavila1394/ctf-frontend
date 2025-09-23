@@ -112,6 +112,25 @@
                             </table>
                         </div>
                     </div>
+                    <div class="right-pane">
+                        <div class="totals-pane">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Totali ore mancanti</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let user of userPermissions">
+                                        <td><span class="count">{{ user.missingWorkedHours }}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+
                     <!-- <div class="permessi-rol-pane">
                         <table>
                             <thead>
