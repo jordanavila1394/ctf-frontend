@@ -62,16 +62,44 @@ export default class Formatter {
             return 0;
         }
     }
+    
+    calculateMissingWorkingHours(date2, date1) {
+        const checkIn = moment(date1);
+        const checkOut = moment(date2);
+        const duration = moment.duration(checkOut.diff(checkIn));
+
+        const totalWorkedHours = duration.asHours(); // ore decimali
+        const standardWorkingHours = 9.67; // 9 ore e 40 minuti
+
+        const missingHours = standardWorkingHours - totalWorkedHours;
+
+        if (missingHours <= 0) {
+            return "Nessuna ora mancante";
+        }
+
+        const hours = Math.floor(missingHours);
+        const minutes = Math.round((missingHours - hours) * 60);
+        const rounded = missingHours.toFixed(2);
+
+        return `${hours} ore e ${minutes} minuti`;
+    }
+
+
     formatDifferenceAccurateHours(date2, date1) {
         const checkIn = moment(date1);
         const checkOut = moment(date2);
         const duration = moment.duration(checkOut.diff(checkIn));
 
-        const hours = Math.floor(duration.asHours());
-        const minutes = Math.floor(duration.asMinutes()) % 60;
+        const preciseHours = duration.asHours(); // ore decimali
+        const roundedHours = preciseHours.toFixed(2); // es. "6.89"
+
+        const hours = Math.floor(preciseHours); // parte intera
+        const minutes = Math.round((preciseHours - hours) * 60); // parte decimale convertita in minuti
 
         return `${hours} ore e ${minutes} minuti`;
     }
+
+
     formatIsWeekendOrFestivo(date) {
         if (date.getDay() == 6 || date.getDay() == 0) return true;
         return false;
@@ -97,7 +125,7 @@ export default class Formatter {
                 'Check In': moment(attendance?.checkIn).format('HH:mm'),
                 'Check Out': moment(attendance?.checkOut).format('HH:mm'),
                 'Ore precise': attendance?.workedAccurateHours,
-                'Ore Totali': attendance?.workedHours,
+                'Ore non valorate': attendance?.notWorkedHours,
                 Stato: attendance?.status,
                 _row: rowStyle, // Assign the style to _row property
             });
@@ -111,9 +139,9 @@ export default class Formatter {
         for (let attendance of attendances) {
             hours += attendance?.checkOut
                 ? this.formatDifferenceHours(
-                      new Date(attendance?.checkOut),
-                      new Date(attendance?.checkIn),
-                  )
+                    new Date(attendance?.checkOut),
+                    new Date(attendance?.checkIn),
+                )
                 : 0;
         }
         return hours;

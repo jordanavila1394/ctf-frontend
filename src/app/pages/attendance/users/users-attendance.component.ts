@@ -116,25 +116,18 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                     this.onStatusChange(this.selectedItem, 'Verificare');
                 },
             },
-            {
-                label: 'Malattia',
-                command: () => {
-                    this.onStatusChange(this.selectedItem, 'Malattia');
-                },
-            },
+            // {
+            //     label: 'Malattia',
+            //     command: () => {
+            //         this.onStatusChange(this.selectedItem, 'Malattia');
+            //     },
+            // },
             {
                 label: 'Ferie',
                 command: () => {
                     this.onStatusChange(this.selectedItem, 'Ferie');
                 },
             },
-            {
-                label: 'Permesso/ROL',
-                command: () => {
-                    this.onStatusChange(this.selectedItem, 'Permesso/ROL');
-                },
-            }
-            ,
             {
                 label: 'Sciopero',
                 command: () => {
@@ -146,6 +139,90 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 command: () => {
                     this.onStatusChange(this.selectedItem, 'Non lavorato');
                 },
+            },
+            {
+                label: 'Assenza non retribuita',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Assenza non retribuita');
+                },
+            },
+            {
+                label: 'Aspettativa sindacale',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Aspettativa sindacale');
+                },
+            },
+            {
+                label: 'Aspettativa',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Aspettativa');
+                },
+            },
+            {
+                label: 'Festivita(infrasettimanali)',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Festivita(infrasettimanali)');
+                },
+            },
+            {
+                label: 'Infortunio',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Infortunio');
+                },
+            },
+            {
+                label: 'Malattia operai e apprendisti',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Malattia operai e apprendisti');
+                },
+            },
+            {
+                label: "Congedo padre L.92/2012",
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Congedo padre L.92/2012');
+                },
+            },
+            {
+                label: 'Congedo parentale 7/8/9 mese',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Congedo parentale 7/8/9 mese');
+                }
+            },
+            {
+                label: 'Congedo parentale ore 7/8/9',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Congedo parentale ore 7/8/9');
+                }   
+            },
+            {
+                label: 'L 104 se si tratta di un figlio',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'L 104 se si tratta di un figlio');
+                },
+            },
+            {
+                label:'L 104 se si tratta di un genitore',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'L 104 se si tratta di un genitore');
+                }
+            },
+            {
+                label:'Permessi riduzione orario (ROL)',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Permessi riduzione orario (ROL)');
+                }
+            },
+            {
+                label:'Permesso sindacale',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Permesso sindacale');
+                }
+            },
+            {
+                label:'STUDIO',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'STUDIO');
+                }
             }
         ];
 
@@ -211,8 +288,8 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
 
                     attendances: user.attendances.map((attendance) => ({
                         ...attendance,
-                        workedHours: attendance?.checkOut
-                            ? this.formatter.formatDifferenceHours(
+                        notWorkedHours: attendance?.checkOut
+                            ? this.formatter.calculateMissingWorkingHours(
                                 new Date(attendance?.checkOut),
                                 new Date(attendance?.checkIn),
                             )
