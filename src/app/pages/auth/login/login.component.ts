@@ -35,6 +35,26 @@ import { environment } from 'src/environments/environment';
                 padding: 0.5rem;
                 font-size: 0.6rem;
             }
+            .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            }
+
+            .divider::before,
+            .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+            }
+
+            .divider span {
+            padding: 0 10px;
+            color: #555;
+            font-weight: 500;
+            }
+
         `,
     ],
 })
@@ -128,7 +148,7 @@ export class LoginComponent {
         const pinValue = this.pinForm.value.pin;
         // Esegui login con il PIN
         console.log('PIN:', pinValue);
-        
+
         this.store.dispatch(loginWithPin({ request: { pin: pinValue } }));
 
         // Qui chiama il tuo servizio o logica di login
