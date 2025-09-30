@@ -195,11 +195,17 @@
             <h5>PIN</h5>
             <p>Il PIN è un codice che serve per fare la login</p>
 
-            <div>
+            <div style="width: auto;">
                 <p>{{ pinMessage }}</p>
+                <button pButton pRipple label="Genera pin" class="w-full p-3 text-xl mt-2" (click)="generaPIN()"></button>
 
-                <button pButton pRipple label="Genera pin" class="w-full p-3 text-xl" (click)="generaPIN()"></button>
+                <button pButton pRipple label="Genera pin (con invio email)" class="w-full p-3 text-xl mt-2" (click)="generaPINWithEmail()"></button>
             </div>
+
+            <button pButton pRipple label="Invia PIN via WhatsApp" class="w-full p-3 text-xl mt-2"
+                (click)="inviaPINviaWhatsApp()" [disabled]="!hasPin || !modifyForm.value.cellphone"></button>
+            <button pButton pRipple label="Invia PIN via Email" class="w-full p-3 text-xl mt-2"
+                (click)="inviaPINviaEmail()" [disabled]="!hasPin || !modifyForm.value.email"></button>
 
         </div>
 
