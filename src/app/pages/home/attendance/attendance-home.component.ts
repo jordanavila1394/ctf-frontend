@@ -31,6 +31,7 @@ import { FileUpload, FileUploadEvent, UploadEvent } from 'primeng/fileupload';
 import { Howl } from 'howler';
 import { MessageService } from 'primeng/api';
 import { VehicleService } from 'src/app/services/vehicle.service';
+import { logout } from 'src/app/stores/auth/authentication.actions';
 
 @Component({
     templateUrl: './attendance-home.component.html',
@@ -379,7 +380,8 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                 )
                 .subscribe((res) => {
                     this.playSoundButton();
-                    this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
+                    this.store.dispatch(logout());
+                    this.router.navigate([ROUTES.ROUTE_LOGIN]);
                 });
         }
     }
@@ -389,7 +391,8 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         for (let file of this.uploadedFiles) {
             formData.append('files', file);
         }
-        if (this.uploadedFiles.length > 0) {
+        let enableControlFiles = true; //this.uploadedFiles.length > 0;
+        if (enableControlFiles) {
             const licensePlate = this.vehiclesItems.find(
                 (vehicle) => vehicle.id === this.selectedVehicle,
             ).licensePlate;
@@ -419,7 +422,8 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                 )
                 .subscribe((res) => {
                     this.playSoundButton();
-                    this.router.navigate([ROUTES.ROUTE_LANDING_HOME]);
+                    this.store.dispatch(logout());
+                    this.router.navigate([ROUTES.ROUTE_LOGIN]);
                 });
         } else {
             this.messageService.add({
