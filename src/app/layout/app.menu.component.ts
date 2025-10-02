@@ -176,6 +176,14 @@ export class AppMenuComponent implements OnInit {
                     },
                 ],
             });
+        }
+
+        if (
+            userRoles.includes('ROLE_ADMIN') ||
+            userRoles.includes('ROLE_MODERATOR') ||
+            userRoles.includes('ROLE_ACCOUNTING') ||
+            userRoles.includes('ROLE_PREPOSTO')
+        ) {
             this.model.push({
                 label: 'Workforce',
                 translationCode: 'menu.routes.workforce.menuTitle',
@@ -190,9 +198,11 @@ export class AppMenuComponent implements OnInit {
             });
         }
 
+
         if (
             userRoles.includes('ROLE_WORKER') ||
             userRoles.includes('ROLE_ADMIN') ||
+            userRoles.includes('ROLE_PREPOSTO') ||
             userRoles.includes('ROLE_MODERATOR')
         ) {
             this.model.push({
