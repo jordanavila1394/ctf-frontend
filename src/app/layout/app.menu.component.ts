@@ -159,6 +159,22 @@ export class AppMenuComponent implements OnInit {
                 ],
             });
         }
+
+        if (userRoles.includes('ROLE_PREPOSTO')
+        ) {
+            this.model.push({
+                label: 'Attendances',
+                translationCode: 'menu.routes.attendance.menuTitle',
+                items: [
+                    {
+                        label: 'Attendance list',
+                        translationCode: 'menu.routes.attendance.table',
+                        icon: 'pi pi-list',
+                        routerLink: [ROUTES.ROUTE_TABLE_ATTENDANCE],
+                    },
+                ],
+            });
+        }
         if (
             userRoles.includes('ROLE_ADMIN') ||
             userRoles.includes('ROLE_MODERATOR') ||
