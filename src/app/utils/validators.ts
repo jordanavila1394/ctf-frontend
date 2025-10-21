@@ -64,4 +64,25 @@ export class ValidationService {
       return { invalidPassword: true };
     }
   }
+
+  static sameDayValidator(): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const checkIn = group.get('checkInTime')?.value;
+      const checkOut = group.get('checkOutTime')?.value;
+
+      if (!checkIn || !checkOut) return null;
+
+      const inDate = new Date(checkIn);
+      const outDate = new Date(checkOut);
+
+      const sameDay =
+        inDate.getFullYear() === outDate.getFullYear() &&
+        inDate.getMonth() === outDate.getMonth() &&
+        inDate.getDate() === outDate.getDate();
+
+      return sameDay ? null : { dateMismatch: true };
+    };
+  }
+
+
 }

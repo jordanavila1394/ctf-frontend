@@ -80,6 +80,21 @@ export class AttendanceService {
             httpOptions,
         );
     }
+    checkInAttendanceWithTime(userId, companyId, placeId, vehicleId, checkInTime): Observable<any> {
+        return this.http.post(
+            API_URL + 'checkInAttendanceWithTime',
+            {
+                userId,
+                companyId,
+                placeId,
+                vehicleId,
+                checkInTime,
+            },
+            httpOptions,
+        );
+    }
+
+
     checkOutAttendance(id, userId, includeFacchinaggio, facchinaggioNameClient, facchinaggioAddressClient, facchinaggioValue, includeViaggioExtra, viaggioExtraNameClient, viaggioExtraAddressClient, viaggioExtraValue): Observable<any> {
         return this.http.post(
             API_URL + 'checkOutAttendance',
@@ -94,6 +109,26 @@ export class AttendanceService {
                 viaggioExtraNameClient,
                 viaggioExtraAddressClient,
                 viaggioExtraValue
+            },
+            httpOptions,
+        );
+    }
+
+    checkOutAttendanceWithTime(id, userId, includeFacchinaggio, facchinaggioNameClient, facchinaggioAddressClient, facchinaggioValue, includeViaggioExtra, viaggioExtraNameClient, viaggioExtraAddressClient, viaggioExtraValue, checkOutTime): Observable<any> {
+        return this.http.post(
+            API_URL + 'checkOutAttendanceWithTime',
+            {
+                id,
+                userId,
+                includeFacchinaggio,
+                facchinaggioNameClient,
+                facchinaggioAddressClient,
+                facchinaggioValue,
+                includeViaggioExtra,
+                viaggioExtraNameClient,
+                viaggioExtraAddressClient,
+                viaggioExtraValue,
+                checkOutTime
             },
             httpOptions,
         );
