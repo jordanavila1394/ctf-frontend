@@ -167,15 +167,34 @@
                             </ng-template>
                         </p-dropdown>
                     </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="checkInTime">Orario Check-In</label>
+                        <p-calendar formControlName="checkInTime" [(ngModel)]="checkInForm.value.checkInTime" [showTime]="true"
+                            hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+                    </div>
+                    
+                    <div class="field col-12 md:col-6">
+                        <label for="checkOutTime">Orario Check-Out</label>
+                        <p-calendar formControlName="checkOutTime" [(ngModel)]="checkInForm.value.checkOutTime" [showTime]="true"
+                            hourFormat="24" dateFormat="dd/mm/yy"></p-calendar>
+                    </div>
+
                 </div>
+                <div *ngIf="checkInForm?.errors?.['dateMismatch']" class="p-error">
+                    Check-In e Check-Out devono essere nello stesso giorno.
+                </div>
+
                 <div class="mt-3 lg:mt-0">
+                    <p *ngIf="attendanceData?.foundCheckIn"><strong>Orario Check-In:</strong> {{ attendanceData?.attendance?.checkIn | date: 'short' }}</p>
+                    <p *ngIf="attendanceData?.foundCheckIn"><strong>Orario Check-Out:</strong> {{ attendanceData?.attendance?.checkOut | date: 'short' }}</p>
                     <button *ngIf="!attendanceData?.foundCheckIn" pButton pRipple (click)="manualCheckIn()"
                         label="Fai CheckIn" class="p-button-outlined mr-2"></button>
                     <button *ngIf="
-                            attendanceData?.foundCheckIn &&
-                            !attendanceData?.attendance?.checkOut
-                        " pButton pRipple label="Fai CheckOut" (click)="manualCheckOut()"
+                        attendanceData?.foundCheckIn &&
+                        !attendanceData?.attendance?.checkOut
+                    " pButton pRipple label="Fai CheckOut" (click)="manualCheckOut()" [disabled]="checkInForm?.errors?.['dateMismatch']"
                         class="p-button-outlined mr-2"></button>
+
                     <div *ngIf="
                             attendanceData?.foundCheckIn &&
                             attendanceData?.attendance?.checkOut

@@ -54,6 +54,10 @@ export class UserService {
         return this.http.get(API_URL + 'getUser' + '/' + id);
     }
 
+    getUserByFiscalCode(fiscalCode: string): Observable<any> {
+        return this.http.post(API_URL + `getUserByFiscalCode`, { fiscalCode }, httpOptions);
+    }   
+
     checkIfExistUser(fiscalCode: string): Observable<any> {
         return this.http.post(
             API_URL + 'checkIfExistUser',

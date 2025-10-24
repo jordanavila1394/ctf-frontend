@@ -26,6 +26,7 @@ import { DefaultAutocompleteModule } from '../../../shared/components/default-au
 // Components
 import { ModifyUserComponent } from './modify-user.component';
 import { ModifyUserRoutingModule } from './modify-user-routing.module';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     imports: [
@@ -48,6 +49,7 @@ import { ModifyUserRoutingModule } from './modify-user-routing.module';
         SliderModule,
         TableModule,
         ToastModule,
+        CalendarModule,
         ToggleButtonModule,
     ],
     declarations: [ModifyUserComponent],

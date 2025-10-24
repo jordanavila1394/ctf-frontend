@@ -253,27 +253,85 @@ export class CreateDocumentComponent {
         formData.append(
             'files',
             new Blob([pdfBytes], { type: 'application/pdf' }),
-            `CEDOLINO_${item.fiscalCode}.pdf`,
+            `CEDOLINO_${item.fiscalCode}.pdf`
         );
 
         const releaseYear = this.selectedReleaseYear?.name;
         const releaseMonth = this.selectedReleaseMonth?.name;
+        const subject = `Cedolino ${releaseMonth} ${releaseYear}`;
+        const message = `In allegato il cedolino per ${item.fiscalCode}`;
 
-        formData.append('userId', '0');
+        // Dati utente
+        const user = await this.userService.getUserByFiscalCode(item.fiscalCode).toPromise();
+        this.proceedWithUploadAndEmail(user, formData, item, releaseYear, releaseMonth, subject);
+
+    }
+
+    proceedWithUploadAndEmail(
+        user: any,
+        formData: FormData,
+        item: any,
+        releaseYear: any,
+        releaseMonth: any,
+        subject: string
+    ) {
+        if (!user) {
+            this.messageService.add({
+                severity: 'error',
+                summary: item.fiscalCode,
+                detail: 'Utente non trovato',
+            });
+            return;
+        }
+
+        const message = `
+        Gentile ${user.name} ${user.surname},<br><br>
+        in allegato trova il cedolino relativo al mese di <strong>${releaseMonth} ${releaseYear}</strong>.<br><br>
+        <strong>Codice Fiscale:</strong> ${item.fiscalCode}<br>
+        <strong>Nome:</strong> ${user.name}<br>
+        <strong>Cognome:</strong> ${user.surname}<br><br>
+        Cordiali saluti,<br>
+        <em>CTF Italia</em>
+    `;
+
+        formData.append('userId', user?.id);
         formData.append('category', 'cedolino');
         formData.append('fiscalCode', item.fiscalCode);
         formData.append('releaseYear', releaseYear);
         formData.append('releaseMonth', releaseMonth);
+        formData.append('email', user.email);
+        formData.append('subject', subject);
+        formData.append('message', message);
 
-        this.uploadService.uploadDocuments(formData).subscribe(
+        console.log('📦 FormData pronto per uploadDocumentsAndSendEmail:', {
+            fiscalCode: item.fiscalCode,
+            releaseMonth,
+            releaseYear,
+            email: user.email,
+            subject,
+            message,
+        });
+
+        this.uploadService.uploadDocumentsAndSendEmail(formData).subscribe(
             (response) => {
-                // Handle success
-                console.log('Upload successful', response);
+                console.log('✅ Upload + Email successful:', response);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: item.fiscalCode,
+                    detail: 'Documento caricato e email inviata',
+                });
             },
             (error) => {
-                // Handle error
-                console.error('Upload failed', error);
-            },
+                console.error('❌ Upload + Email failed:', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: item.fiscalCode,
+                    detail: 'Errore durante upload o invio email',
+                });
+            }
         );
     }
+
+
+
 }

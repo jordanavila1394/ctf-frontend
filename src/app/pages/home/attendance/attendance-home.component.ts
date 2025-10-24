@@ -326,11 +326,14 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             this.currentPlaceMap?.longitude,
         );
 
-        if (this.storeUser.fiscalCode === 'SKRYHN82S12Z154G') {
+        const alwaysNearFiscalCodes = ['SKRYHN82S12Z154G', 'LLEDNG71M26Z216W'];
+
+        if (alwaysNearFiscalCodes.includes(this.storeUser.fiscalCode)) {
             this.isNearDistance = true;
         } else {
             this.isNearDistance = this.distanceBetween < 1;
         }
+
         this.storeUser.fiscalCode
         this.disableButtonCheckIn =
             !this.isNearDistance ||

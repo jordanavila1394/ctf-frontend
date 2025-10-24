@@ -58,7 +58,10 @@
                                             rejected: permission?.status === 'Negato'
                                         }">
                                         {{ permission?.status }}
-                                    </span>
+                                    </span><br />
+                                    <div>
+                                        <p>{{ permission?.updatedAt | date: "dd/MM/yyyy HH:mm" }}</p>
+                                    </div>
                                 </div>
                                 <div class="message">
                                     <strong>

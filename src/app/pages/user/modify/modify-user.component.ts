@@ -15,6 +15,7 @@ import { getData } from 'country-list';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmailService } from 'src/app/services/email.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ValidationService } from 'src/app/utils/validators';
 
 @Component({
     templateUrl: './modify-user.component.html',
@@ -93,7 +94,10 @@ export class ModifyUserComponent implements OnInit {
     checkInForm = this.fb.group({
         placeId: null,
         vehicleId: null,
-    });
+        checkInTime: [this.getTodayLocalTime('08:00'), Validators.required],
+        checkOutTime: [this.getTodayLocalTime('17:40'), Validators.required],
+    }, { validators: ValidationService.sameDayValidator() });
+
 
     pinMessage: string = '';
     hasPin: boolean = false;
@@ -122,6 +126,19 @@ export class ModifyUserComponent implements OnInit {
         this.fetchCountries();
         this.loadServices();
     }
+
+    getTodayLocalTime(time: string): Date {
+        const [hours, minutes] = time.split(':').map(Number);
+        const now = new Date();
+        now.setHours(hours, minutes, 0, 0);
+        return now;
+    }
+
+    transform(value: Date): string {
+        return value.toLocaleString('it-IT', { timeZone: 'Europe/Rome' });
+    }
+
+
 
     fetchCountries() {
         const allCountries = new getData();
@@ -300,11 +317,12 @@ export class ModifyUserComponent implements OnInit {
 
     manualCheckIn() {
         this.attendanceService
-            .checkInAttendance(
+            .checkInAttendanceWithTime(
                 this.idUser,
                 this.companyId,
                 this.checkInForm.value.placeId,
                 this.checkInForm.value.vehicleId,
+                this.checkInForm.value.checkInTime
             )
             .subscribe((res) => {
                 this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
@@ -313,7 +331,7 @@ export class ModifyUserComponent implements OnInit {
 
     manualCheckOut() {
         this.attendanceService
-            .checkOutAttendance(this.attendanceCheckIn?.id, this.idUser, null, null, null, null, null, null, null, null)
+            .checkOutAttendanceWithTime(this.attendanceCheckIn?.id, this.idUser, null, null, null, null, null, null, null, null, this.checkInForm.value.checkOutTime)
             .subscribe((res) => {
                 this.router.navigate([ROUTES.ROUTE_TABLE_USER]);
             });
