@@ -19,6 +19,10 @@ export class UploadService {
         return this.http.post(API_URL + 'uploadDocuments', formData);
     }
 
+    uploadDocumentsAndSendEmail(formData: FormData) {
+        return this.http.post(API_URL + 'uploadDocumentsAndSendEmail', formData);
+    }
+
     uploadEntityDocuments(formData: FormData) {
         return this.http.post(API_URL + 'uploadEntityDocuments', formData);
     }
