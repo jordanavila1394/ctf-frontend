@@ -273,16 +273,16 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
                                         });
                                     }
                                     if (this.attendanceCheckIn) {
-                                        this.checkInForm.controls[
-                                            'placeId'
-                                        ].disable({
-                                            onlySelf: true,
-                                        });
-                                        this.checkInForm.controls[
-                                            'vehicleId'
-                                        ].disable({
-                                            onlySelf: true,
-                                        });
+                                        // this.checkInForm.controls[
+                                        //     'placeId'
+                                        // ].disable({
+                                        //     onlySelf: true,
+                                        // });
+                                        // this.checkInForm.controls[
+                                        //     'vehicleId'
+                                        // ].disable({
+                                        //     onlySelf: true,
+                                        // });
                                     }
 
                                     this.loading = false;
@@ -340,6 +340,11 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             this.selectedPlace === null ||
             this.selectedVehicle === null;
     }
+
+    isNumber(value: any): boolean {
+        return typeof value === 'number' && !isNaN(value);
+    }
+
 
     getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
         var R = 6371; // Radius of the earth in km
