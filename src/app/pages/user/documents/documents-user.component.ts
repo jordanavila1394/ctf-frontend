@@ -25,6 +25,29 @@ export class DocumentsUserComponent {
     //Language
     locale: string;
 
+    groupedCedolini: {
+        year: string;
+        months: {
+            month: string;
+            files: any[];
+        }[];
+    }[] = [];
+
+    monthMap: { [key: string]: number } = {
+        gennaio: 1,
+        febbraio: 2,
+        marzo: 3,
+        aprile: 4,
+        maggio: 5,
+        giugno: 6,
+        luglio: 7,
+        agosto: 8,
+        settembre: 9,
+        ottobre: 10,
+        novembre: 11,
+        dicembre: 12,
+    };
+
     categoriesItems = [
         {
             name: 'Cedolino',
@@ -111,6 +134,8 @@ export class DocumentsUserComponent {
             .getCedoliniDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
                 this.filesCedoliniDocument = files;
+                this.groupCedoliniByYearAndMonth(files);
+
             });
 
         const downloadCUDDocumentServiceSubscription = this.downloadService
@@ -134,6 +159,39 @@ export class DocumentsUserComponent {
             this.subscription.add(downloadCUDDocumentServiceSubscription);
         if (translateServiceSubscription && this.subscription)
             this.subscription.add(translateServiceSubscription);
+    }
+
+    groupCedoliniByYearAndMonth(files: any[]) {
+        const temp: {
+            [year: string]: {
+                [month: string]: any[];
+            };
+        } = {};
+
+        for (const file of files) {
+            const year = file.releaseYear;
+            const rawMonth = file.releaseMonth?.toLowerCase()?.trim();
+            const month = rawMonth in this.monthMap ? rawMonth : 'gennaio'; // fallback
+
+            if (!temp[year]) temp[year] = {};
+            if (!temp[year][month]) temp[year][month] = [];
+
+            temp[year][month].push(file);
+        }
+
+        this.groupedCedolini = Object.keys(temp)
+            .sort((a, b) => parseInt(b) - parseInt(a)) // anni decrescenti
+            .map((year) => ({
+                year,
+                months: Object.keys(temp[year])
+                    .sort((a, b) => this.monthMap[b] - this.monthMap[a]) // mesi decrescenti
+                    .map((month) => ({
+                        month,
+                        files: temp[year][month].sort(
+                            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                        ),
+                    })),
+            }));
     }
 
     getAllMonths(): any[] {
