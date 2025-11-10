@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DocumentsHomeComponent } from './documents-home.component';
 import { DocumentsHomeRoutingModule } from './documents-home-routing.module';
 import { PanelModule } from 'primeng/panel';
+import { SortByKeyAscPipe, SortByKeyDescPipe } from 'src/app/utils/sort-by-bey.pipe';
 
 @NgModule({
     imports: [
@@ -27,6 +28,7 @@ import { PanelModule } from 'primeng/panel';
         ButtonModule,
         TranslateModule,
     ],
-    declarations: [DocumentsHomeComponent],
+    declarations: [DocumentsHomeComponent, SortByKeyAscPipe,
+        SortByKeyDescPipe],
 })
-export class DocumentsHomeModule {}
+export class DocumentsHomeModule { }
