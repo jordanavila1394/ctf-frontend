@@ -54,3 +54,120 @@
         }
     }
 }
+.grouped-cedolini {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .year-block {
+        padding-left: 1rem;
+        border-left: 4px solid #007acc;
+
+        .year-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #007acc;
+            margin-bottom: 1rem;
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .month-block {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+            .month-title {
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: #333;
+            }
+
+            .document-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+
+                .file-wrapper {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.5rem;
+                    width: 100%;
+                    min-height: 180px;
+                    padding: 1rem;
+                    border-radius: 10px;
+                    background-color: #f0f8ff;
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                    transition: transform 0.2s ease;
+
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .category {
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        color: #007acc;
+                    }
+
+                    .file-name {
+                        font-size: 0.85rem;
+                        font-weight: 500;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        max-width: 150px;
+                        text-align: center;
+                    }
+
+                    .file-extension {
+                        font-size: 0.75rem;
+                        color: #666;
+                    }
+
+                    .link {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        z-index: 1;
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .month-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+        }
+
+        .file-wrapper {
+            flex-direction: row;
+            align-items: flex-start;
+
+            img {
+                width: 2rem;
+                height: 2rem;
+            }
+
+            .file-name,
+            .file-extension,
+            .category {
+                font-size: 0.7rem;
+                text-align: left;
+            }
+        }
+    }
+}

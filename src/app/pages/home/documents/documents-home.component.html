@@ -2,49 +2,40 @@
     <div class="col-12 md:col-12">
         <div class="card">
             <p-panel header="Cedolini" [toggleable]="true">
-                <div class="document-list">
-                    <ng-container
-                        *ngFor="let file of this.filesCedoliniDocument"
-                    >
-                        <div class="file-wrapper">
-                            <div class="category">{{ file.category }}</div>
-                            <div>
-                                <img
-                                    src="assets/icons/{{ file.category }}.png"
-                                    class="w-3rem h-3rem"
-                                    alt="Ferie"
-                                />
+                <div class="grouped-cedolini">
+                    <ng-container *ngFor="let yearBlock of groupedCedolini">
+                        <div class="year-block">
+                            <h2 class="year-title">{{ yearBlock.year }}</h2>
+        
+                            <div class="month-grid">
+                                <ng-container *ngFor="let monthBlock of yearBlock.months">
+                                    <div class="month-block">
+                                        <h3 class="month-title">{{ monthBlock.month | titlecase }}</h3>
+        
+                                        <div class="document-list">
+                                            <ng-container *ngFor="let file of monthBlock.files">
+                                                <div class="file-wrapper">
+                                                    <div class="category">{{ file.category }}</div>
+                                                    <img src="assets/icons/{{ file.category }}.png" class="w-3rem h-3rem"
+                                                        alt="{{ file.category }}" />
+                                                    <div><strong>{{ file.releaseYear }}</strong></div>
+                                                    <div>{{ file.createdAt | date: 'EEEE, MMMM dd, yyyy' }}</div>
+                                                    <div class="file-name"><strong>{{ getFileName(file?.keyFile) }}</strong>
+                                                    </div>
+                                                    <div class="file-extension">.{{ getFileExtension(file?.keyFile) }}</div>
+                                                    <a class="link" [href]="getFileUrl(file?.keyFile)"></a>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
-                            <div>
-                                <strong
-                                    >{{ file.releaseMonth | titlecase }}
-                                    {{ file.releaseYear }}
-                                </strong>
-                            </div>
-                            <div>
-                                {{
-                                    file.createdAt | date: "EEEE, MMMM dd, yyyy"
-                                }}
-                            </div>
-                            <div class="file-name">
-                                <strong>
-                                    {{ getFileName(file?.keyFile) }}
-                                </strong>
-                            </div>
-                            <div class="file-extension">
-                                .{{ getFileExtension(file?.keyFile) }}
-                            </div>
-
-                            <a
-                                class="link"
-                                href="{{ getFileUrl(file?.keyFile) }}"
-                            >
-                            </a>
                         </div>
                     </ng-container>
                 </div>
             </p-panel>
         </div>
+
         <div class="card">
             <p-panel header="CUD" [toggleable]="true">
                 <div class="document-list">
@@ -52,11 +43,7 @@
                         <div class="file-wrapper">
                             <div class="category">{{ file.category }}</div>
                             <div>
-                                <img
-                                    src="assets/icons/{{ file.category }}.png"
-                                    class="w-3rem h-3rem"
-                                    alt="Ferie"
-                                />
+                                <img src="assets/icons/{{ file.category }}.png" class="w-3rem h-3rem" alt="Ferie" />
                             </div>
                             <div>
                                 <strong>
@@ -65,7 +52,7 @@
                             </div>
                             <div>
                                 {{
-                                    file.createdAt | date: "EEEE, MMMM dd, yyyy"
+                                file.createdAt | date: "EEEE, MMMM dd, yyyy"
                                 }}
                             </div>
                             <div class="file-name">
@@ -77,10 +64,7 @@
                                 .{{ getFileExtension(file?.keyFile) }}
                             </div>
 
-                            <a
-                                class="link"
-                                href="{{ getFileUrl(file?.keyFile) }}"
-                            >
+                            <a class="link" href="{{ getFileUrl(file?.keyFile) }}">
                             </a>
                         </div>
                     </ng-container>
@@ -93,20 +77,17 @@
                     <ng-container *ngFor="let file of this.files">
                         <div class="file-wrapper">
                             <div class="close-wrapper">
-                                <button pButton pRipple icon="pi pi-times" class="p-button-text" (click)="deleteDocument(file?.keyFile)"></button>
+                                <button pButton pRipple icon="pi pi-times" class="p-button-text"
+                                    (click)="deleteDocument(file?.keyFile)"></button>
                             </div>
                             <div class="category">{{ file.category }}</div>
                             <div>
-                                <img
-                                    src="assets/icons/{{ file.category }}.png"
-                                    class="w-3rem h-3rem"
-                                    alt="Ferie"
-                                />
+                                <img src="assets/icons/{{ file.category }}.png" class="w-3rem h-3rem" alt="Ferie" />
                             </div>
 
                             <div>
                                 {{
-                                    file.createdAt | date: "EEEE, MMMM dd, yyyy"
+                                file.createdAt | date: "EEEE, MMMM dd, yyyy"
                                 }}
                             </div>
                             <div class="file-name">
@@ -118,10 +99,7 @@
                                 .{{ getFileExtension(file?.keyFile) }}
                             </div>
 
-                            <a
-                                class="link"
-                                href="{{ getFileUrl(file?.keyFile) }}"
-                            >
+                            <a class="link" href="{{ getFileUrl(file?.keyFile) }}">
                             </a>
                         </div>
                     </ng-container>

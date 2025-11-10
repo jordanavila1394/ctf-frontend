@@ -6,7 +6,6 @@ import { Observable, Subscription } from 'rxjs';
 import { DownloadService } from 'src/app/services/download.service';
 import { SpacesService } from 'src/app/services/spaces.service';
 import { UploadService } from 'src/app/services/upload.service';
-
 import { AuthState } from 'src/app/stores/auth/authentication.reducer';
 
 @Component({
@@ -15,46 +14,44 @@ import { AuthState } from 'src/app/stores/auth/authentication.reducer';
 })
 export class DocumentsHomeComponent {
     authState$: Observable<AuthState>;
-
     uploadedFiles: any[] = [];
     filesSpaces: AWS.S3.Object[];
     files: any;
     filesCedoliniDocument: any;
     filesCUDDocument: any;
 
+    groupedCedolini: {
+        year: string;
+        months: {
+            month: string;
+            files: any[];
+        }[];
+    }[] = [];
+
+    monthMap: { [key: string]: number } = {
+        gennaio: 1,
+        febbraio: 2,
+        marzo: 3,
+        aprile: 4,
+        maggio: 5,
+        giugno: 6,
+        luglio: 7,
+        agosto: 8,
+        settembre: 9,
+        ottobre: 10,
+        novembre: 11,
+        dicembre: 12,
+    };
+
     categoriesItems = [
-        {
-            name: 'Cedolino',
-            id: 'cedolino',
-        },
-        {
-            name: 'CUD',
-            id: 'cud',
-        },
-        {
-            name: 'Documenti Identità',
-            id: 'documento-identita',
-        },
-        {
-            name: 'Patente',
-            id: 'patente',
-        },
-        {
-            name: 'Patente ADR',
-            id: 'patente-adr',
-        },
-        {
-            name: 'Permesso soggiorno',
-            id: 'permesso-soggiorno',
-        },
-        {
-            name: 'Contratto lavoro',
-            id: 'contratto-lavoro',
-        },
-        {
-            name: 'Altro',
-            id: 'altro',
-        },
+        { name: 'Cedolino', id: 'cedolino' },
+        { name: 'CUD', id: 'cud' },
+        { name: 'Documenti Identità', id: 'documento-identita' },
+        { name: 'Patente', id: 'patente' },
+        { name: 'Patente ADR', id: 'patente-adr' },
+        { name: 'Permesso soggiorno', id: 'permesso-soggiorno' },
+        { name: 'Contratto lavoro', id: 'contratto-lavoro' },
+        { name: 'Altro', id: 'altro' },
     ];
 
     documentsForm = this.fb.group({
@@ -62,9 +59,10 @@ export class DocumentsHomeComponent {
         category: ['', [Validators.required]],
         fiscalCode: ['', [Validators.required]],
     });
+
     currentFiscalCode: any;
     selectedCategory: any;
-    subscription: Subscription;
+    subscription: Subscription = new Subscription();
     currentUser: any;
 
     constructor(
@@ -73,7 +71,7 @@ export class DocumentsHomeComponent {
         private uploadService: UploadService,
         private downloadService: DownloadService,
         private spacesService: SpacesService,
-        private store: Store<{ authState: AuthState }>,
+        private store: Store<{ authState: AuthState }>
     ) {
         this.authState$ = store.select('authState');
         this.authState$.subscribe((authS) => {
@@ -86,44 +84,83 @@ export class DocumentsHomeComponent {
         });
     }
 
-    loadServices(idUser, fiscalCode) {
+
+
+    loadServices(idUser: string, fiscalCode: string) {
         const downloadServiceSubscription = this.downloadService
             .getDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
                 this.files = files;
             });
+
         const downloadCedoliniDocumentServiceSubscription = this.downloadService
             .getCedoliniDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
                 this.filesCedoliniDocument = files;
+                this.groupCedoliniByYearAndMonth(files);
             });
+
         const downloadCUDDocumentServiceSubscription = this.downloadService
             .getCUDDocumentsByUser(idUser, fiscalCode)
             .subscribe((files) => {
                 this.filesCUDDocument = files;
             });
 
-        if (downloadServiceSubscription && this.subscription)
-            this.subscription.add(downloadServiceSubscription);
-        if (downloadCedoliniDocumentServiceSubscription && this.subscription)
-            this.subscription.add(downloadCedoliniDocumentServiceSubscription);
-         if (downloadCUDDocumentServiceSubscription && this.subscription)
-             this.subscription.add(downloadCUDDocumentServiceSubscription);
+        this.subscription.add(downloadServiceSubscription);
+        this.subscription.add(downloadCedoliniDocumentServiceSubscription);
+        this.subscription.add(downloadCUDDocumentServiceSubscription);
+    }
+
+
+
+
+    groupCedoliniByYearAndMonth(files: any[]) {
+        const temp: {
+            [year: string]: {
+                [month: string]: any[];
+            };
+        } = {};
+
+        for (const file of files) {
+            const year = file.releaseYear;
+            const rawMonth = file.releaseMonth?.toLowerCase()?.trim();
+            const month = rawMonth in this.monthMap ? rawMonth : 'gennaio'; // fallback
+
+            if (!temp[year]) temp[year] = {};
+            if (!temp[year][month]) temp[year][month] = [];
+
+            temp[year][month].push(file);
+        }
+
+        this.groupedCedolini = Object.keys(temp)
+            .sort((a, b) => parseInt(b) - parseInt(a)) // anni decrescenti
+            .map((year) => ({
+                year,
+                months: Object.keys(temp[year])
+                    .sort((a, b) => this.monthMap[b] - this.monthMap[a]) // mesi decrescenti
+                    .map((month) => ({
+                        month,
+                        files: temp[year][month].sort(
+                            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                        ),
+                    })),
+            }));
     }
 
     getFileUrl(key: string): string {
         return this.spacesService.s3.getSignedUrl('getObject', {
             Bucket: this.spacesService.bucketName,
             Key: key,
-            Expires: 3600, // Tempo di scadenza del link in secondi
+            Expires: 3600,
         });
     }
 
-    uploadFiles(event) {
+    uploadFiles(event: any) {
         for (let file of event.files) {
             this.uploadedFiles.push(file);
         }
     }
+
     saveDocument() {
         const formData = new FormData();
 
@@ -131,11 +168,8 @@ export class DocumentsHomeComponent {
             formData.append('files', file);
         }
 
-        //TARGA
         const userId = this.documentsForm.value.userId;
-        const category = this.selectedCategory?.id
-            ? this.selectedCategory?.id
-            : 'altro';
+        const category = this.selectedCategory?.id || 'altro';
         const fiscalCode = this.documentsForm.value.fiscalCode;
 
         formData.append('userId', userId);
@@ -143,29 +177,31 @@ export class DocumentsHomeComponent {
         formData.append('fiscalCode', fiscalCode);
 
         this.uploadService.uploadDocuments(formData).subscribe(
-            (response) => {
+            () => {
                 this.loadServices(userId, fiscalCode);
             },
-            (error) => {},
-        );
-    }
-    deleteDocument(file) {
-        this.uploadService.deleteDocument(file).subscribe(
-            (response) => {
-                this.loadServices(this.documentsForm.value.userId, this.documentsForm.value.fiscalCode);
-            },
-            (error) => { },
+            (error) => {
+                console.error('Errore upload:', error);
+            }
         );
     }
 
-    getFileName(file) {
+    deleteDocument(file: string) {
+        this.uploadService.deleteDocument(file).subscribe(
+            () => {
+                this.loadServices(this.documentsForm.value.userId, this.documentsForm.value.fiscalCode);
+            },
+            (error) => {
+                console.error('Errore delete:', error);
+            }
+        );
+    }
+
+    getFileName(file: string): string {
         return file.substring(file.lastIndexOf('/') + 1);
     }
 
-    getFileExtension(file) {
-        return file
-            .substring(file.lastIndexOf('/') + 1)
-            .split('.')
-            .pop();
+    getFileExtension(file: string): string {
+        return file.substring(file.lastIndexOf('/') + 1).split('.').pop();
     }
 }

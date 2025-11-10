@@ -250,14 +250,16 @@ export class CreateDocumentComponent {
 
         // Upload the saved PDF document
         const formData = new FormData();
+        const releaseYear = this.selectedReleaseYear?.name;
+        const releaseMonth = this.selectedReleaseMonth?.name;
+        const fileName = `CEDOLINO_${item.fiscalCode}_${releaseMonth}_${releaseYear}.pdf`;
+
         formData.append(
             'files',
             new Blob([pdfBytes], { type: 'application/pdf' }),
-            `CEDOLINO_${item.fiscalCode}.pdf`
+            fileName
         );
 
-        const releaseYear = this.selectedReleaseYear?.name;
-        const releaseMonth = this.selectedReleaseMonth?.name;
         const subject = `Cedolino ${releaseMonth} ${releaseYear}`;
         const message = `In allegato il cedolino per ${item.fiscalCode}`;
 
