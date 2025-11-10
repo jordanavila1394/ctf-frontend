@@ -1,64 +1,69 @@
-<div class="grid">
-    <div class="col-12 lg:col-12 xl:col-12">
-        <div class="card">
-            <div class="container mt-4">
-                <h2>Documenti in Scadenza</h2>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Cognome</th>
-                            <th>Codice Fiscale</th>
-                            <th>Nome Documento</th>
-                            <th>Data di Scadenza</th>
-                            <th>Link</th>
-                            <th>Azioni</th>
+<div class="container mt-4">
+    <h2>Documenti in Scadenza</h2>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let document of documents">
-                            <td>{{ document?.user?.name }}</td>
-                            <td>{{ document?.user?.surname }}</td>
-                            <td>{{ document?.fiscalCode }}</td>
-                            <td>
-                                <ng-container [ngSwitch]="document?.category">
-                                    <span *ngSwitchCase="'cedolino'"> Cedolino</span>
-                                    <span *ngSwitchCase="'cud'">CUD</span>
-                                    <span *ngSwitchCase="'documento-identita'">Documento Identità</span>
-                                    <span *ngSwitchCase="'patente'">Patente</span>
-                                    <span *ngSwitchCase="'patente-adr'">Patente ADR</span>
-                                    <span *ngSwitchCase="'permesso-soggiorno'">Permesso soggiorno</span>
-                                    <span *ngSwitchCase="'contratto-lavoro'">Contratto lavoro</span>
-                                    <span *ngSwitchCase="'altro'">Altro</span>
-                                    <span *ngSwitchDefault>Altro</span>
-                                </ng-container>
-                            </td>
-                            <td>{{ document.expireDate | date: 'dd/MM/yyyy' }}</td>
-                            <td>
-                                <a class="link" href="{{ getFileUrl(document?.keyFile) }}">
-                                    Apri
-                                </a>
-                            </td>
-                            <td>
-                                <div class="expired-actions">
-                                    <a *ngIf="document?.user?.cellphone"
-                                        href="https://wa.me/{{ document.user.cellphone }}"
-                                        target="_blank">
-                                        <img src="assets/icons/whatsapp.png" alt="WhatsApp" width="24" height="24">
-                                    </a>
-                                    <!-- Icona Apri Documenti -->
-                                    <a [routerLink]="['/user/documents']"
-                                        [queryParams]="{ id: document?.id, fiscalCode: document?.fiscalCode }">
-                                        <img src="assets/icons/documents.png" alt="Documento" width="24" height="24">
-                                    </a>
-                                </div>
+    <!-- Filtri -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>Tipologia Documento</label>
+            <select class="form-control" [(ngModel)]="filterCategory" (change)="applyFilters()">
+                <option value="">Tutti</option>
+                <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
+            </select>
 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        </div>
+        <div class="filter-group">
+            <label>Nome</label>
+            <input type="text" class="form-control" [(ngModel)]="filterName" (input)="applyFilters()">
+        </div>
+        <div class="filter-group">
+            <label>Cognome</label>
+            <input type="text" class="form-control" [(ngModel)]="filterSurname" (input)="applyFilters()">
+        </div>
+        <div class="filter-group">
+            <label>Codice Fiscale</label>
+            <input type="text" class="form-control" [(ngModel)]="filterFiscalCode" (input)="applyFilters()">
         </div>
     </div>
+
+    <!-- Tabella -->
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Codice Fiscale</th>
+                <th>Nome Documento</th>
+                <th>Data di Scadenza</th>
+                <th>Link</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let document of filteredDocuments">
+                <td>{{ document?.user?.name }}</td>
+                <td>{{ document?.user?.surname }}</td>
+                <td>{{ document?.fiscalCode }}</td>
+                <td>{{ getCategoryLabel(document?.category) }}</td>
+
+                <td>{{ document.expireDate | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                    <a class="link" href="{{ getFileUrl(document?.keyFile) }}">
+                        Apri
+                    </a>
+                </td>
+                <td>
+                    <div class="expired-actions">
+                        <a *ngIf="document?.user?.cellphone" href="https://wa.me/{{ document.user.cellphone }}"
+                            target="_blank">
+                            <img src="assets/icons/whatsapp.png" alt="WhatsApp" width="24" height="24">
+                        </a>
+                        <a [routerLink]="['/user/documents']"
+                            [queryParams]="{ id: document?.id, fiscalCode: document?.fiscalCode }">
+                            <img src="assets/icons/documents.png" alt="Documento" width="24" height="24">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
