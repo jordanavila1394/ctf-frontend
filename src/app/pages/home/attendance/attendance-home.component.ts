@@ -93,7 +93,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     currentPlaceMap: any;
     currentAddress: string;
     distanceBetween: number;
-    isNearDistance: boolean = false;
+    enabledToCheck: boolean = false;
 
     disableButtonCheckIn: boolean = false;
     disableButtonCheckOut: boolean = false;
@@ -104,6 +104,9 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
     private soundButton = new Howl({
         src: ['assets/sounds/button-press.mp3'],
     });
+    unableToCheckTablet: boolean;
+    isAllowedDistance: boolean;
+    mustBeChecked: boolean;
 
     constructor(
         public fb: FormBuilder,
@@ -300,6 +303,8 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
         if (userServiceSubscription && this.subscription)
             this.subscription.add(userServiceSubscription);
     }
+
+
     onChangePlace(event) {
         localStorage.setItem('selectedPlace', this.selectedPlace);
         this.selectedPlaceAddress = this.placesItems.find(
@@ -326,17 +331,26 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             this.currentPlaceMap?.longitude,
         );
 
+        const ua = navigator.userAgent.toLowerCase();
+        const isTablet = /ipad|android(?!.*mobile)|tablet/.test(ua);
+        const associatedBranchesToCheck = ['Origgio - 181'];
+        this.mustBeChecked = associatedBranchesToCheck.includes(this.currentUser.associatedBranch)
         const alwaysNearFiscalCodes = ['SKRYHN82S12Z154G', 'LLEDNG71M26Z216W'];
 
+       this.isAllowedDistance = this.distanceBetween < 1; //1 km
         if (alwaysNearFiscalCodes.includes(this.storeUser.fiscalCode)) {
-            this.isNearDistance = true;
+            this.enabledToCheck = true;
         } else {
-            this.isNearDistance = this.distanceBetween < 1;
+            if (this.mustBeChecked) {
+                this.enabledToCheck = this.isAllowedDistance && isTablet;
+            } else {
+                this.enabledToCheck = this.isAllowedDistance;
+            }
         }
 
         this.storeUser.fiscalCode
         this.disableButtonCheckIn =
-            !this.isNearDistance ||
+            !this.enabledToCheck ||
             this.selectedPlace === null ||
             this.selectedVehicle === null;
     }

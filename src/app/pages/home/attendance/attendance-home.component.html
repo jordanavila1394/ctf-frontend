@@ -176,10 +176,10 @@
                         !(attendanceData && attendanceData?.foundCheckIn) &&
                         currentAddress
                     " [ngClass]="
-                        isNearDistance
+                        enabledToCheck
                             ? 'attendance-button active-checkin'
                             : 'attendance-button disabled'
-                    " [disabled]="!isNearDistance" (click)="saveCheckIn()">
+                    " [disabled]="!enabledToCheck" (click)="saveCheckIn()">
                     <span>Checkin</span>
                 </button>
                 <button *ngIf="
@@ -187,56 +187,62 @@
                         attendanceData?.foundCheckIn &&
                         currentAddress
                     " [ngClass]="
-                        isNearDistance
+                        enabledToCheck
                             ? 'attendance-button active-checkout'
                             : 'attendance-button disabled'
-                    " [disabled]="!isNearDistance" (click)="saveCheckOut()">
+                    " [disabled]="!enabledToCheck" (click)="saveCheckOut()">
                     <span>Checkout</span>
                 </button>
+
             </div>
         </div>
     </div>
     <div class="col-12">
         <div class="card">
-    
+
             <!-- Se l'indirizzo è disponibile -->
             <ng-container *ngIf="currentAddress; else noAddress">
                 <div>Attualmente ti trovi</div>
                 <div class="font-bold">{{ currentAddress }}</div>
             </ng-container>
-    
+
             <!-- Se l'indirizzo NON è disponibile -->
             <ng-template #noAddress>
                 <div style="color: gray;">
                     Posizione non disponibile. Controlla le autorizzazioni GPS o ricarica la pagina.
                 </div>
             </ng-template>
-    
+
             <hr />
-    
+
             <!-- Se la distanza è un numero valido -->
             <ng-container *ngIf="isNumber(distanceBetween); else noDistance">
                 Sei a {{ distanceBetween | number: '.1-3' }} km dalla sede selezionata.<br />
-    
-                <div *ngIf="isNearDistance; else tooFar">
+
+                <div *ngIf="enabledToCheck; else tooFar">
                     ✅ Puoi effettuare il check
                 </div>
-    
+
                 <ng-template #tooFar>
                     <div style="color: red;">
                         ❌ Non puoi effettuare il check.<br />
-                        Entra nel raggio di 300m e ricarica la pagina.
+                        <p *ngIf="!this.isAllowedDistance">
+                            📏 Entra nel raggio di 1km e ricarica la pagina.
+                        </p>
+                        <p *ngIf="this.mustBeChecked">
+                            📱 La checkin per questa sede è obbligatoria dal tablet.
+                        </p>
                     </div>
                 </ng-template>
             </ng-container>
-    
+
             <!-- Se la distanza NON è disponibile -->
             <ng-template #noDistance>
                 <div style="color: gray;">
                     Distanza non disponibile. Attendi il calcolo o ricarica la pagina.
                 </div>
             </ng-template>
-    
+
         </div>
     </div>
 

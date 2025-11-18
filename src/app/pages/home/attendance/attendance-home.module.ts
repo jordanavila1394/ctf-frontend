@@ -19,29 +19,31 @@ import { AccordionModule } from 'primeng/accordion';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
+import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
     imports: [
-        CommonModule,
-        AttendanceHomeRoutingModule,
-        GoogleMapsDemoModule,
-        ProgressSpinnerModule,
-        FormsModule,
-        ChartModule,
-        FileUploadModule,
-        MenuModule,
-        DropdownModule,
-        ReactiveFormsModule,
-        TableModule,
-        StyleClassModule,
-        PanelMenuModule,
-        ButtonModule,
-        InputNumberModule,
-        CheckboxModule,
-        InputTextModule,
-        AccordionModule,
-        TranslateModule,
-    ],
+    CommonModule,
+    AttendanceHomeRoutingModule,
+    GoogleMapsDemoModule,
+    ProgressSpinnerModule,
+    FormsModule,
+    ChartModule,
+    FileUploadModule,
+    MenuModule,
+    DropdownModule,
+    ReactiveFormsModule,
+    TableModule,
+    StyleClassModule,
+    PanelMenuModule,
+    ButtonModule,
+    InputNumberModule,
+    CheckboxModule,
+    InputTextModule,
+    AccordionModule,
+    TranslateModule,
+    A11yModule
+],
     declarations: [AttendanceHomeComponent],
 })
 export class AttendanceHomeModule {}

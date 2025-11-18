@@ -29,7 +29,6 @@ export class ModalMissingEmailComponent {
       if (this.currentUser && this.currentUser.email) {
         this.isModalOpen = false;
         this.userEmail = this.currentUser.email;
-        console.log('User Email:', this.userEmail);
       } else {
         this.isModalOpen = true;
       }
