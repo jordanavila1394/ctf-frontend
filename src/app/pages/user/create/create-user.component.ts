@@ -81,6 +81,7 @@ export class CreateUserComponent implements OnInit {
         position: [''],
         address: [''],
         birthCountry: [''],
+        hireDate: [''],
         birthDate: [''],
         iban: [''],
         roleId: ['', [Validators.required]],
@@ -139,6 +140,7 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.iban,
                 this.createForm.value.birthCountry,
                 this.createForm.value.birthDate,
+                this.createForm.value.hireDate,
                 this.createForm.value.status,
             )
             .subscribe((res) =>

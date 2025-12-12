@@ -85,6 +85,7 @@ export class UserService {
         iban: string,
         birthCountry: string,
         birthDate: string,
+        hireDate: string,
         status: boolean,
     ): Observable<any> {
         return this.http.post(
@@ -106,6 +107,7 @@ export class UserService {
                 iban,
                 birthCountry,
                 birthDate,
+                hireDate,
                 status,
             },
             httpOptions,
@@ -129,6 +131,7 @@ export class UserService {
         iban: string,
         birthCountry: string,
         birthDate: string,
+        hireDate: string,
         status: boolean,
     ): Observable<any> {
         return this.http.patch(
@@ -150,6 +153,7 @@ export class UserService {
                 iban,
                 birthCountry,
                 birthDate,
+                hireDate,
                 status,
             },
             httpOptions,
