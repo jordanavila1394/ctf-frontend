@@ -342,7 +342,7 @@ export class AttendanceHomeComponent implements OnInit, OnDestroy {
             this.enabledToCheck = true;
         } else {
             if (this.mustBeChecked) {
-                this.enabledToCheck = this.isAllowedDistance && isTablet;
+                this.enabledToCheck = this.isAllowedDistance; //isTable &&
             } else {
                 this.enabledToCheck = this.isAllowedDistance;
             }
