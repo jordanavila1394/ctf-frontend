@@ -58,6 +58,7 @@ export class DetailUserComponent implements OnInit {
         iban: [''],
         birthCountry: [''],
         birthDate: [''],
+        hireDate: [''],
         status: [''],
     });
     currentUser: any;
@@ -105,6 +106,7 @@ export class DetailUserComponent implements OnInit {
                     iban: user.iban,
                     status: user.status,
                     birthCountry: user.birthCountry,
+                    hireDate: user.hireDate,
                     birthDate: user.birthDate,
                 });
             });
@@ -163,6 +165,9 @@ export class DetailUserComponent implements OnInit {
             this.detailForm.controls['birthDate'].disable({
                 onlySelf: true,
             });
+             this.detailForm.controls['hireDate'].disable({
+                onlySelf: true,
+            });
         });
     }
 
@@ -201,6 +206,9 @@ export class DetailUserComponent implements OnInit {
             Cognome: this.currentUser.surname,
             Cittadinanza: this.currentUser.birthCountry,
             'Data di nascita': moment(this.currentUser.birthDate).format(
+                'DD/MM/YYYY',
+            ),
+            'Data di assunzione': moment(this.currentUser.hireDate).format(
                 'DD/MM/YYYY',
             ),
             'Codice Fiscale': this.currentUser.fiscalCode,

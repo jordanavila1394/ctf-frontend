@@ -76,6 +76,7 @@ export class ModifyUserComponent implements OnInit {
         address: [''],
         birthCountry: [''],
         birthDate: [''],
+        hireDate: [''],
         iban: [''],
         status: [false, [Validators.required]],
     });
@@ -205,6 +206,7 @@ export class ModifyUserComponent implements OnInit {
                     iban: user.iban,
                     birthCountry: user.birthCountry,
                     birthDate: user.birthDate,
+                    hireDate: user.hireDate,
                     status: user.status,
                 });
             });
@@ -268,6 +270,7 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.iban,
                 this.modifyForm.value.birthCountry,
                 this.modifyForm.value.birthDate,
+                this.modifyForm.value.hireDate,
                 this.modifyForm.value.status,
             )
             .subscribe((res) => {
