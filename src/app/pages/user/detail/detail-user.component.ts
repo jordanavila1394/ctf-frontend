@@ -53,6 +53,7 @@ export class DetailUserComponent implements OnInit {
         companyId: [''],
         workerNumber: [''],
         associatedClient: [''],
+        associatedBranch: [''],
         position: [''],
         address: [''],
         iban: [''],

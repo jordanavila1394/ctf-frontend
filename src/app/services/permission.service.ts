@@ -63,12 +63,12 @@ export class PermissionService {
         );
     }
 
-    getAllPermissionsByClientAndBranch(associatedClient, associatedBranch, startDate, endDate): Observable<any> {
+    getAllPermissionsByClientAndBranch(clientId, branchId, startDate, endDate): Observable<any> {
         return this.http.post(
             API_URL + 'permissionsByClientAndBranch',
             {
-                associatedClient,
-                associatedBranch,
+                clientId,
+                branchId,
                 startDate,
                 endDate
             },

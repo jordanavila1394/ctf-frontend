@@ -80,7 +80,12 @@
                     <div class="field col-12 md:col-4">
                         <label htmlFor="associatedBranch1">Filiale associato</label>
                         <input pInputText id="associatedBranch1" type="text" placeholder="Filiale associato"
-                            formControlName="associatedBranch" ngModel />
+                            formControlName="associatedBranch" ngModel
+                            (input)="modifyForm.controls.associatedBranch.setValue(modifyForm.controls.associatedBranch.value?.toUpperCase())"
+                            (blur)="modifyForm.patchValue({associatedBranch: modifyForm.value.associatedBranch?.trim()})" />
+                        <small class="p-error" *ngIf="modifyForm.controls['associatedBranch'].hasError('whitespace') && modifyForm.controls['associatedBranch'].touched">
+                            Il campo non può contenere solo spazi
+                        </small>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label htmlFor="position1">Posizione</label>

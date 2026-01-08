@@ -105,6 +105,42 @@ export class AppMenuComponent implements OnInit {
                 ],
             });
             this.model.push({
+                label: 'Clienti e Filiali',
+                translationCode: 'menu.routes.clientBranch.menuTitle',
+                items: [
+                    {
+                        label: 'Lista clienti',
+                        translationCode: 'menu.routes.client.table',
+                        icon: 'pi pi-briefcase',
+                        routerLink: [ROUTES.ROUTE_TABLE_CLIENT],
+                    },
+                    {
+                        label: 'Aggiungi cliente',
+                        translationCode: 'menu.routes.client.create',
+                        icon: 'pi pi-plus-circle',
+                        routerLink: [ROUTES.ROUTE_CREATE_CLIENT],
+                    },
+                    {
+                        label: 'Lista filiali',
+                        translationCode: 'menu.routes.branch.table',
+                        icon: 'pi pi-building',
+                        routerLink: [ROUTES.ROUTE_TABLE_BRANCH],
+                    },
+                    {
+                        label: 'Aggiungi filiale',
+                        translationCode: 'menu.routes.branch.create',
+                        icon: 'pi pi-plus-circle',
+                        routerLink: [ROUTES.ROUTE_CREATE_BRANCH],
+                    },
+                    {
+                        label: 'Migrazione dati',
+                        translationCode: 'menu.routes.migration.title',
+                        icon: 'pi pi-arrow-right-arrow-left',
+                        routerLink: [ROUTES.ROUTE_MIGRATION],
+                    },
+                ],
+            });
+            this.model.push({
                 label: 'Documents',
                 translationCode: 'menu.routes.documents.menuTitle',
                 items: [

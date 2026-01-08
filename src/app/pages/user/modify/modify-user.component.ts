@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
-import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
@@ -71,7 +71,7 @@ export class ModifyUserComponent implements OnInit {
         companyId: ['', [Validators.required]],
         workerNumber: [''],
         associatedClient: [''],
-        associatedBranch: [''],
+        associatedBranch: ['', [this.noWhitespaceValidator.bind(this)]],
         position: [''],
         address: [''],
         birthCountry: [''],
@@ -126,6 +126,14 @@ export class ModifyUserComponent implements OnInit {
     ngOnInit() {
         this.fetchCountries();
         this.loadServices();
+    }
+
+    // Validatore personalizzato per evitare stringhe vuote o solo spazi
+    noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
+        if (control.value && control.value.trim().length === 0) {
+            return { whitespace: true };
+        }
+        return null;
     }
 
     getTodayLocalTime(time: string): Date {
@@ -252,6 +260,10 @@ export class ModifyUserComponent implements OnInit {
     selectAddress(place: any): void { }
 
     updateUser(): void {
+        // Trim dei valori prima del submit
+        const associatedBranch = this.modifyForm.value.associatedBranch?.trim() || '';
+        const associatedClient = this.modifyForm.value.associatedClient?.trim() || '';
+        
         this.userService
             .patchUser(
                 parseInt(this.modifyForm.value.id, 10),
@@ -263,8 +275,8 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.roleId,
                 this.modifyForm.value.companyId,
                 this.modifyForm.value.workerNumber,
-                this.modifyForm.value.associatedClient,
-                this.modifyForm.value.associatedBranch,
+                associatedClient,
+                associatedBranch,
                 this.modifyForm.value.position,
                 this.modifyForm.value.address,
                 this.modifyForm.value.iban,

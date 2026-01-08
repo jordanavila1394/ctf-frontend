@@ -74,6 +74,39 @@ import { AuthGuard } from './services/auth.guard';
                             },
                         },
                         {
+                            path: 'client',
+                            loadChildren: () =>
+                                import('./pages/client/client.module').then(
+                                    (m) => m.ClientModule,
+                                ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
+                        {
+                            path: 'branch',
+                            loadChildren: () =>
+                                import('./pages/branch/branch.module').then(
+                                    (m) => m.BranchModule,
+                                ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
+                        {
+                            path: 'migration',
+                            loadChildren: () =>
+                                import('./pages/migration/migration.module').then(
+                                    (m) => m.MigrationModule,
+                                ),
+                            canActivate: [AuthGuard],
+                            data: {
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                            },
+                        },
+                        {
                             path: 'document',
                             loadChildren: () =>
                                 import('./pages/document/document.module').then(

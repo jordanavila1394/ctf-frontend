@@ -8,20 +8,16 @@
                             <label for="associatedClient">Seleziona Cliente Associato</label>
                             <p-dropdown (onChange)="onChangeClient($event)" [options]="associatedClients"
                                 formControlName="associatedClient" placeholder="--Cliente--"
-                                [(ngModel)]="selectedClient" [required]="true">
-                                <ng-template let-client pTemplate="item">
-                                    {{ client }}
-                                </ng-template>
+                                [(ngModel)]="selectedClient" [required]="true"
+                                optionLabel="name">
                             </p-dropdown>
                         </div>
                         <div class="field col-12 md:col-6">
                             <label for="associatedClient">Seleziona Filiale Associato</label>
                             <p-dropdown (onChange)="onChangeBranch($event)" [options]="associatedBranchs"
                                 formControlName="associatedBranch" placeholder="--Filiale--"
-                                [(ngModel)]="selectedBranch" [required]="true">
-                                <ng-template let-branch pTemplate="item">
-                                    {{ branch }}
-                                </ng-template>
+                                [(ngModel)]="selectedBranch" [required]="true"
+                                optionLabel="name">
                             </p-dropdown>
                         </div>
                         <!-- <div class="field col-12 md:col-3">

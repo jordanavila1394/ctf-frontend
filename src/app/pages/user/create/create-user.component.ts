@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
@@ -56,6 +56,14 @@ export class CreateUserComponent implements OnInit {
         this.loadServices();
     }
 
+    // Validatore personalizzato per evitare stringhe vuote o solo spazi
+    noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
+        if (control.value && control.value.trim().length === 0) {
+            return { whitespace: true };
+        }
+        return null;
+    }
+
     loadServices() {
         this.roleService.getAllRoles().subscribe((roles) => {
             this.roles = roles;
@@ -77,7 +85,7 @@ export class CreateUserComponent implements OnInit {
         fiscalCode: ['', [Validators.required]],
         workerNumber: [''],
         associatedClient: [''],
-        associatedBranch: [''],
+        associatedBranch: ['', [this.noWhitespaceValidator.bind(this)]],
         position: [''],
         address: [''],
         birthCountry: [''],
@@ -122,6 +130,10 @@ export class CreateUserComponent implements OnInit {
     }
 
     onSubmit(): void {
+        // Trim dei valori prima del submit
+        const associatedBranch = this.createForm.value.associatedBranch?.trim() || '';
+        const associatedClient = this.createForm.value.associatedClient?.trim() || '';
+        
         this.userService
             .createUser(
                 this.createForm.value.fiscalCode,
@@ -133,8 +145,8 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.roleId,
                 this.createForm.value.companyId,
                 this.createForm.value.workerNumber,
-                this.createForm.value.associatedClient,
-                this.createForm.value.associatedBranch,
+                associatedClient,
+                associatedBranch,
                 this.createForm.value.position,
                 this.createForm.value.address,
                 this.createForm.value.iban,
