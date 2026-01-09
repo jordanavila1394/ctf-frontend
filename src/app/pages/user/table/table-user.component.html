@@ -19,7 +19,9 @@
                     'fiscalCode',
                     'position',
                     'role',
-                    'company'
+                    'company',
+                    'client.name',
+                    'branch.name'
                 ]" responsiveLayout="scroll" [styleClass]="selectedSize" sortMode="multiple"
                 [multiSortMeta]="[{ field: 'role', order: 1 }]">
                 <ng-template pTemplate="caption">
@@ -78,14 +80,14 @@
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
                                 Cliente associato
-                                <p-columnFilter type="text" field="associatedClient" display="menu"
+                                <p-columnFilter type="text" field="client.name" display="menu"
                                     placeholder="Cerca per cliente associato"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
                                 Filiale associato
-                                <p-columnFilter type="text" field="associatedBranch" display="menu"
+                                <p-columnFilter type="text" field="branch.name" display="menu"
                                     placeholder="Cerca per filiale associato"></p-columnFilter>
                             </div>
                         </th>
@@ -151,8 +153,8 @@
                             </span>
                         </td>
                         <td>{{ user?.position }}</td>
-                        <td>{{ user?.associatedClient }}</td>
-                        <td>{{ user?.associatedBranch}}</td>
+                        <td>{{ user?.client?.name }}</td>
+                        <td>{{ user?.branch?.name }}</td>
                         <td>{{ user?.company }}</td>
                         <td>
                             <span>{{
