@@ -4,6 +4,8 @@ import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PermissionService } from 'src/app/services/permission.service';
 import { UserService } from 'src/app/services/user.service';
+import { ClientService } from 'src/app/services/client.service';
+import { BranchService } from 'src/app/services/branch.service';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 interface User {
@@ -41,8 +43,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     associatedClients: any[] = [];
     associatedBranchs: any[] = [];
     workForceForm: FormGroup;
-    selectedClient: string | null = null;
-    selectedBranch: string | null = null;
+    selectedClient: any = null;
+    selectedBranch: any = null;
     userPermissions: any;
     selectedMonth: number | null = null;
     selectedMonthLabel: string = '';
@@ -73,6 +75,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     constructor(
         private userService: UserService,
         private permissionService: PermissionService,
+        private clientService: ClientService,
+        private branchService: BranchService,
         private cdRef: ChangeDetectorRef,
         private fb: FormBuilder,
     ) {
@@ -164,8 +168,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
 
             // Call the service to get permissions
             this.permissionService.getAllPermissionsByClientAndBranch(
-                this.selectedClient,
-                this.selectedBranch,
+                this.selectedClient?.id,
+                this.selectedBranch?.id,
                 startOfMonth,
                 endOfMonth
             )
@@ -188,7 +192,7 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
 
 
     getAllAssociatedClients() {
-        this.userService.getAllAssociatedClients()
+        this.clientService.getAllClients()
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(
                 clients => this.associatedClients = clients,
@@ -197,11 +201,11 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     }
 
     getAllAssociatedBranchs() {
-        this.userService.getAllAssociatedBranchs()
+        this.branchService.getAllBranches()
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(
                 branchs => this.associatedBranchs = branchs,
-                error => console.error('Error fetching associated clients:', error)
+                error => console.error('Error fetching associated branches:', error)
             );
     }
 

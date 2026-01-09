@@ -123,6 +123,23 @@
                 "table": "Lista usuarios",
                 "create": "Agrega usuario"
             },
+            "clientBranch": {
+                "menuTitle": "Clientes y Sucursales"
+            },
+            "client": {
+                "menuTitle": "Clientes",
+                "table": "Lista clientes",
+                "create": "Agrega cliente"
+            },
+            "branch": {
+                "menuTitle": "Sucursales",
+                "table": "Lista sucursales",
+                "create": "Agrega sucursal"
+            },
+            "migration": {
+                "title": "Migración de datos",
+                "menuTitle": "Migración Cliente/Sucursal"
+            },
             "company": {
                 "menuTitle": "Empresas",
                 "table": "Lista empresas",

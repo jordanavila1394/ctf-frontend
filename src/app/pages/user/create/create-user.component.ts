@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { RoleService } from 'src/app/services/role.service';
 import { CompanyService } from 'src/app/services/company.service';
+import { ClientService } from 'src/app/services/client.service';
+import { BranchService } from 'src/app/services/branch.service';
 import { getData } from 'country-list';
 
 @Component({
@@ -31,10 +33,14 @@ export class CreateUserComponent implements OnInit {
 
     checkedStatus: boolean = true;
 
-    roles: [];
-    companies: [];
+    roles: any[];
+    companies: any[];
+    clients: any[];
+    branches: any[];
     selectedRole: any;
     selectedCompany: any;
+    selectedClient: any;
+    selectedBranch: any;
     countryItems: { name: string; code: string }[] = [];
 
     constructor(
@@ -44,6 +50,8 @@ export class CreateUserComponent implements OnInit {
         private userService: UserService,
         private companyService: CompanyService,
         private roleService: RoleService,
+        private clientService: ClientService,
+        private branchService: BranchService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -56,12 +64,26 @@ export class CreateUserComponent implements OnInit {
         this.loadServices();
     }
 
+    // Validatore personalizzato per evitare stringhe vuote o solo spazi
+    noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
+        if (control.value && control.value.trim().length === 0) {
+            return { whitespace: true };
+        }
+        return null;
+    }
+
     loadServices() {
         this.roleService.getAllRoles().subscribe((roles) => {
             this.roles = roles;
         });
         this.companyService.getAllCompanies().subscribe((companies) => {
             this.companies = companies;
+        });
+        this.clientService.getAllClients().subscribe((clients) => {
+            this.clients = clients;
+        });
+        this.branchService.getAllBranches().subscribe((branches) => {
+            this.branches = branches;
         });
     }
 
@@ -76,8 +98,8 @@ export class CreateUserComponent implements OnInit {
         cellphone: [''],
         fiscalCode: ['', [Validators.required]],
         workerNumber: [''],
-        associatedClient: [''],
-        associatedBranch: [''],
+        clientId: [null],
+        branchId: [null],
         position: [''],
         address: [''],
         birthCountry: [''],
@@ -133,8 +155,8 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.roleId,
                 this.createForm.value.companyId,
                 this.createForm.value.workerNumber,
-                this.createForm.value.associatedClient,
-                this.createForm.value.associatedBranch,
+                this.createForm.value.clientId,
+                this.createForm.value.branchId,
                 this.createForm.value.position,
                 this.createForm.value.address,
                 this.createForm.value.iban,

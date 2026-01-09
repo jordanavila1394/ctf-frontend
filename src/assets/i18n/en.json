@@ -123,6 +123,23 @@
                 "table": "User list",
                 "create": "Add User"
             },
+            "clientBranch": {
+                "menuTitle": "Clients and Branches"
+            },
+            "client": {
+                "menuTitle": "Clients",
+                "table": "Client list",
+                "create": "Add Client"
+            },
+            "branch": {
+                "menuTitle": "Branches",
+                "table": "Branch list",
+                "create": "Add Branch"
+            },
+            "migration": {
+                "title": "Data migration",
+                "menuTitle": "Client/Branch Migration"
+            },
             "company": {
                 "menuTitle": "Companies",
                 "table": "Company list",

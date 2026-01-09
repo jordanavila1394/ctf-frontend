@@ -1,0 +1,283 @@
+<div class="grid">
+    <div class="col-12">
+        <p-confirmDialog header="Conferma" width="425"></p-confirmDialog>
+        <div class="card">
+            <h5>Debug Client e Branch</h5>
+            <p class="text-600">
+                Questa pagina permette di verificare lo stato dei dati clientId/branchId
+                e di eseguire aggiornamenti massivi.
+            </p>
+
+            <!-- Sezione Debug Data -->
+            <div *ngIf="loading" class="flex justify-content-center align-items-center" style="min-height: 200px">
+                <p-progressSpinner></p-progressSpinner>
+            </div>
+
+            <div *ngIf="!loading && debugData">
+                <!-- Summary Card -->
+                <div class="card bg-blue-50 mb-4">
+                    <h6 class="text-blue-900 mb-3">
+                        <i class="pi pi-info-circle mr-2"></i>Riepilogo Stato Dati
+                    </h6>
+                    <div class="grid">
+                        <div class="col-12 md:col-4">
+                            <div class="text-center p-3">
+                                <div class="text-2xl font-bold text-blue-900">
+                                    {{ debugData.summary.totalUsers }}
+                                </div>
+                                <div class="text-sm text-600">Utenti Totali</div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <div class="text-center p-3">
+                                <div class="text-2xl font-bold text-orange-600">
+                                    {{ debugData.summary.existingClientsInTable }}
+                                </div>
+                                <div class="text-sm text-600">Client in Tabella</div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <div class="text-center p-3">
+                                <div class="text-2xl font-bold text-orange-600">
+                                    {{ debugData.summary.existingBranchesInTable }}
+                                </div>
+                                <div class="text-sm text-600">Branch in Tabella</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid mt-3">
+                        <div class="col-12 md:col-6">
+                            <div class="p-3 border-round" style="background: white">
+                                <h6 class="text-700 mb-3">📊 Stato Client</h6>
+                                <div class="flex justify-content-between mb-2">
+                                    <span>Utenti con associatedClient:</span>
+                                    <strong>{{ debugData.summary.usersWithAssociatedClient }}</strong>
+                                </div>
+                                <div class="flex justify-content-between">
+                                    <span>Utenti con clientId:</span>
+                                    <strong 
+                                        [class.text-green-600]="debugData.summary.usersWithClientId === debugData.summary.usersWithAssociatedClient"
+                                        [class.text-red-600]="debugData.summary.usersWithClientId < debugData.summary.usersWithAssociatedClient">
+                                        {{ debugData.summary.usersWithClientId }}
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="p-3 border-round" style="background: white">
+                                <h6 class="text-700 mb-3">📊 Stato Branch</h6>
+                                <div class="flex justify-content-between mb-2">
+                                    <span>Utenti con associatedBranch:</span>
+                                    <strong>{{ debugData.summary.usersWithAssociatedBranch }}</strong>
+                                </div>
+                                <div class="flex justify-content-between">
+                                    <span>Utenti con branchId:</span>
+                                    <strong
+                                        [class.text-green-600]="debugData.summary.usersWithBranchId === debugData.summary.usersWithAssociatedBranch"
+                                        [class.text-red-600]="debugData.summary.usersWithBranchId < debugData.summary.usersWithAssociatedBranch">
+                                        {{ debugData.summary.usersWithBranchId }}
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="card mb-4" *ngIf="debugData.recommendations && debugData.recommendations.length > 0">
+                    <h6 class="mb-3">
+                        <i class="pi pi-lightbulb mr-2"></i>Raccomandazioni
+                    </h6>
+                    <p-message
+                        *ngFor="let rec of debugData.recommendations"
+                        [severity]="getSeverity(rec)"
+                        [text]="rec"
+                        styleClass="mb-2 w-full"
+                    ></p-message>
+                </div>
+
+                <!-- Sample Users -->
+                <div class="card mb-4" *ngIf="debugData.sampleUsers && debugData.sampleUsers.length > 0">
+                    <h6 class="mb-3">
+                        <i class="pi pi-users mr-2"></i>Esempio Utenti (primi 5)
+                    </h6>
+                    <p-table [value]="debugData.sampleUsers" [tableStyle]="{ 'min-width': '50rem' }">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Associated Client</th>
+                                <th>Client ID</th>
+                                <th>Associated Branch</th>
+                                <th>Branch ID</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-user>
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>
+                                    <span *ngIf="user.associatedClient" class="font-semibold">{{
+                                        user.associatedClient
+                                    }}</span>
+                                    <span *ngIf="!user.associatedClient" class="text-400">-</span>
+                                </td>
+                                <td>
+                                    <p-tag
+                                        *ngIf="user.clientId"
+                                        [value]="user.clientId.toString()"
+                                        severity="success"
+                                    ></p-tag>
+                                    <p-tag
+                                        *ngIf="!user.clientId"
+                                        value="mancante"
+                                        severity="danger"
+                                    ></p-tag>
+                                </td>
+                                <td>
+                                    <span *ngIf="user.associatedBranch" class="font-semibold">{{
+                                        user.associatedBranch
+                                    }}</span>
+                                    <span *ngIf="!user.associatedBranch" class="text-400">-</span>
+                                </td>
+                                <td>
+                                    <p-tag
+                                        *ngIf="user.branchId"
+                                        [value]="user.branchId.toString()"
+                                        severity="success"
+                                    ></p-tag>
+                                    <p-tag
+                                        *ngIf="!user.branchId"
+                                        value="mancante"
+                                        severity="danger"
+                                    ></p-tag>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <!-- Refresh Button -->
+                <div class="flex justify-content-center mb-4">
+                    <button
+                        pButton
+                        pRipple
+                        label="Aggiorna Dati Debug"
+                        icon="pi pi-refresh"
+                        class="p-button-info"
+                        (click)="loadDebugData()"
+                    ></button>
+                </div>
+            </div>
+
+            <!-- Bulk Update Section -->
+            <div class="card bg-orange-50">
+                <h6 class="text-orange-900 mb-3">
+                    <i class="pi pi-arrow-right-arrow-left mr-2"></i>Aggiornamento Massivo
+                </h6>
+                <p class="text-600 mb-3">
+                    Cambia tutti gli utenti da un client/branch a un altro in modo massivo.
+                </p>
+
+                <div class="grid">
+                    <div class="field col-12 md:col-3">
+                        <label>Tipo</label>
+                        <p-dropdown
+                            [(ngModel)]="bulkUpdateType"
+                            [options]="[
+                                { label: 'Client', value: 'client' },
+                                { label: 'Branch', value: 'branch' }
+                            ]"
+                            optionLabel="label"
+                            optionValue="value"
+                            placeholder="Seleziona tipo"
+                        ></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4" *ngIf="bulkUpdateType === 'client'">
+                        <label>Da Client</label>
+                        <p-dropdown
+                            [(ngModel)]="selectedFromId"
+                            [options]="clients"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Seleziona client"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4" *ngIf="bulkUpdateType === 'client'">
+                        <label>A Client</label>
+                        <p-dropdown
+                            [(ngModel)]="selectedToId"
+                            [options]="clients"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Seleziona client"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4" *ngIf="bulkUpdateType === 'branch'">
+                        <label>Da Branch</label>
+                        <p-dropdown
+                            [(ngModel)]="selectedFromId"
+                            [options]="branches"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Seleziona branch"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4" *ngIf="bulkUpdateType === 'branch'">
+                        <label>A Branch</label>
+                        <p-dropdown
+                            [(ngModel)]="selectedToId"
+                            [options]="branches"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Seleziona branch"
+                            [filter]="true"
+                            filterBy="name"
+                        ></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-1 flex align-items-end">
+                        <button
+                            pButton
+                            pRipple
+                            label="Esegui"
+                            icon="pi pi-arrow-right"
+                            class="p-button-warning w-full"
+                            (click)="confirmBulkUpdate()"
+                            [disabled]="!selectedFromId || !selectedToId || updateInProgress"
+                            [loading]="updateInProgress"
+                        ></button>
+                    </div>
+                </div>
+
+                <!-- Bulk Update Result -->
+                <div *ngIf="bulkUpdateResult" class="mt-3">
+                    <p-message
+                        severity="success"
+                        [text]="bulkUpdateResult.message"
+                        styleClass="w-full"
+                    ></p-message>
+                    <div class="mt-2 text-sm text-600">
+                        <p><strong>Tipo:</strong> {{ bulkUpdateResult.type }}</p>
+                        <p><strong>Da:</strong> {{ bulkUpdateResult.fromName }} (ID: {{ bulkUpdateResult.fromId }})</p>
+                        <p><strong>A:</strong> {{ bulkUpdateResult.toName }} (ID: {{ bulkUpdateResult.toId }})</p>
+                        <p><strong>Utenti aggiornati:</strong> {{ bulkUpdateResult.updatedUsers }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <p-toast></p-toast>
+        </div>
+    </div>
+</div>
