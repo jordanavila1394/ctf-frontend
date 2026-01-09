@@ -41,13 +41,13 @@
                         <th style="min-width: 5rem">
                             <div class="flex justify-content-between align-items-center">
                                 Cliente
-                                <p-columnFilter type="text" field="user.associatedClient" display="menu" placeholder="Search by cliente"></p-columnFilter>
+                                <p-columnFilter type="text" field="user.client.name" display="menu" placeholder="Search by cliente"></p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 5rem">
                             <div class="flex justify-content-between align-items-center">
                                 Filiale
-                                <p-columnFilter type="text" field="user.associatedBranch" display="menu"
+                                <p-columnFilter type="text" field="user.branch.name" display="menu"
                                     placeholder="Search by filiale"></p-columnFilter>
                             </div>
                         </th>
@@ -61,8 +61,8 @@
                         <th style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
                                 CheckIn
-                                <p-columnFilter type="date" field="checkIn" display="menu" placeholder="dd/MM/yyyy"
-                                    dateFormat="dd/MM/yyyy H:mm">
+                                <p-columnFilter type="date" field="checkIn" display="menu" dateFormat="dd/mm/yy"
+                                    matchMode="dateOnly">
                                 </p-columnFilter>
                             </div>
                         </th>
@@ -72,8 +72,8 @@
                         <th style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
                                 CheckOut
-                                <p-columnFilter type="date" field="checkOut" display="menu" placeholder="dd/MM/yyyy"
-                                    dateFormat="dd/MM/yyyy H:mm">
+                                <p-columnFilter type="date" field="checkOut" display="menu" dateFormat="dd/mm/yy"
+                                    matchMode="dateOnly">
                                 </p-columnFilter>
                             </div>
                         </th>
@@ -100,10 +100,10 @@
                             {{ attendance?.user?.surname }}
                         </td>
                         <td class="font-bold">
-                            {{ attendance?.user?.associatedClient }}
+                            {{ attendance?.user?.client?.name }}
                         </td>
                         <td class="font-bold">
-                            {{ attendance?.user?.associatedBranch }}
+                            {{ attendance?.user?.branch?.name }}
                         </td>
                         <td class="font-bold">
                             {{ attendance?.company?.name }}
