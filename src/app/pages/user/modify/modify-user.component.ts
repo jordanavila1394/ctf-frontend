@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
+import { ClientService } from 'src/app/services/client.service';
+import { BranchService } from 'src/app/services/branch.service';
 import { AttendanceService } from 'src/app/services/attendance.service';
 import { VehicleService } from 'src/app/services/vehicle.service';
 import { Subscription } from 'rxjs';
@@ -40,10 +42,14 @@ export class ModifyUserComponent implements OnInit {
     ];
     ceosItems: any;
 
-    roles: [];
-    companies: [];
+    roles: any[];
+    companies: any[];
+    clients: any[];
+    branches: any[];
     selectedRole: any;
     selectedCompany: any;
+    selectedClient: any;
+    selectedBranch: any;
     selectedPlace: any;
     placesItems: any;
 
@@ -70,8 +76,8 @@ export class ModifyUserComponent implements OnInit {
         roleId: ['', [Validators.required]],
         companyId: ['', [Validators.required]],
         workerNumber: [''],
-        associatedClient: [''],
-        associatedBranch: ['', [this.noWhitespaceValidator.bind(this)]],
+        clientId: [null],
+        branchId: [null],
         position: [''],
         address: [''],
         birthCountry: [''],
@@ -116,6 +122,8 @@ export class ModifyUserComponent implements OnInit {
         public emailService: EmailService,
         private authService: AuthService,
         private roleService: RoleService,
+        private clientService: ClientService,
+        private branchService: BranchService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -176,6 +184,13 @@ export class ModifyUserComponent implements OnInit {
     }
 
     loadServices() {
+        this.clientService.getAllClients().subscribe((clients) => {
+            this.clients = clients;
+        });
+        this.branchService.getAllBranches().subscribe((branches) => {
+            this.branches = branches;
+        });
+        
         this.route.queryParams.subscribe((params) => {
             this.idUser = params['id'];
             this.modifyForm.patchValue({
@@ -207,8 +222,8 @@ export class ModifyUserComponent implements OnInit {
                     roleId: roleId,
                     companyId: this.companyId,
                     workerNumber: user.workerNumber,
-                    associatedClient: user.associatedClient,
-                    associatedBranch: user.associatedBranch,
+                    clientId: user.clientId,
+                    branchId: user.branchId,
                     position: user.position,
                     address: user.address,
                     iban: user.iban,
@@ -217,6 +232,8 @@ export class ModifyUserComponent implements OnInit {
                     hireDate: user.hireDate,
                     status: user.status,
                 });
+                this.selectedClient = user.clientId;
+                this.selectedBranch = user.branchId;
             });
             const attendanceServiceSubscription = this.attendanceService
                 .getAttendanceByUser(this.idUser)
@@ -260,10 +277,6 @@ export class ModifyUserComponent implements OnInit {
     selectAddress(place: any): void { }
 
     updateUser(): void {
-        // Trim dei valori prima del submit
-        const associatedBranch = this.modifyForm.value.associatedBranch?.trim() || '';
-        const associatedClient = this.modifyForm.value.associatedClient?.trim() || '';
-        
         this.userService
             .patchUser(
                 parseInt(this.modifyForm.value.id, 10),
@@ -275,8 +288,8 @@ export class ModifyUserComponent implements OnInit {
                 this.modifyForm.value.roleId,
                 this.modifyForm.value.companyId,
                 this.modifyForm.value.workerNumber,
-                associatedClient,
-                associatedBranch,
+                this.modifyForm.value.clientId,
+                this.modifyForm.value.branchId,
                 this.modifyForm.value.position,
                 this.modifyForm.value.address,
                 this.modifyForm.value.iban,

@@ -9,6 +9,8 @@ import { ROUTES } from 'src/app/utils/constants';
 import { BlobOptions } from 'buffer';
 import { CompanyService } from 'src/app/services/company.service';
 import { RoleService } from 'src/app/services/role.service';
+import { ClientService } from 'src/app/services/client.service';
+import { BranchService } from 'src/app/services/branch.service';
 import { DocxService } from 'src/app/services/docx.service';
 import { getData } from 'country-list';
 import * as moment from 'moment';
@@ -20,10 +22,14 @@ import * as moment from 'moment';
 export class DetailUserComponent implements OnInit {
     idUser: string;
 
-    roles: [];
-    companies: [];
+    roles: any[];
+    companies: any[];
+    clients: any[];
+    branches: any[];
     selectedRole: any;
     selectedCompany: any;
+    selectedClient: any;
+    selectedBranch: any;
 
     selectedLegalForm: any = null;
     selectedCeo: any = null;
@@ -52,8 +58,8 @@ export class DetailUserComponent implements OnInit {
         roleId: [''],
         companyId: [''],
         workerNumber: [''],
-        associatedClient: [''],
-        associatedBranch: [''],
+        clientId: [null],
+        branchId: [null],
         position: [''],
         address: [''],
         iban: [''],
@@ -72,6 +78,8 @@ export class DetailUserComponent implements OnInit {
         private companyService: CompanyService,
         private docxService: DocxService,
         private roleService: RoleService,
+        private clientService: ClientService,
+        private branchService: BranchService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -85,6 +93,13 @@ export class DetailUserComponent implements OnInit {
     }
 
     loadServices() {
+        this.clientService.getAllClients().subscribe((clients) => {
+            this.clients = clients;
+        });
+        this.branchService.getAllBranches().subscribe((branches) => {
+            this.branches = branches;
+        });
+        
         this.route.queryParams.subscribe((params) => {
             this.idUser = params['id'];
             this.detailForm.patchValue({
@@ -101,7 +116,8 @@ export class DetailUserComponent implements OnInit {
                     roleId: user.roles[0].id,
                     companyId: user.companies[0].id,
                     workerNumber: user.workerNumber,
-                    associatedClient: user.associatedClient,
+                    clientId: user.clientId,
+                    branchId: user.branchId,
                     position: user.position,
                     address: user.address,
                     iban: user.iban,
@@ -110,6 +126,8 @@ export class DetailUserComponent implements OnInit {
                     hireDate: user.hireDate,
                     birthDate: user.birthDate,
                 });
+                this.selectedClient = user.clientId;
+                this.selectedBranch = user.branchId;
             });
 
             this.roleService.getAllRoles().subscribe((roles) => {

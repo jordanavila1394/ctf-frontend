@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { ROUTES } from 'src/app/utils/constants';
 import { RoleService } from 'src/app/services/role.service';
 import { CompanyService } from 'src/app/services/company.service';
+import { ClientService } from 'src/app/services/client.service';
+import { BranchService } from 'src/app/services/branch.service';
 import { getData } from 'country-list';
 
 @Component({
@@ -31,10 +33,14 @@ export class CreateUserComponent implements OnInit {
 
     checkedStatus: boolean = true;
 
-    roles: [];
-    companies: [];
+    roles: any[];
+    companies: any[];
+    clients: any[];
+    branches: any[];
     selectedRole: any;
     selectedCompany: any;
+    selectedClient: any;
+    selectedBranch: any;
     countryItems: { name: string; code: string }[] = [];
 
     constructor(
@@ -44,6 +50,8 @@ export class CreateUserComponent implements OnInit {
         private userService: UserService,
         private companyService: CompanyService,
         private roleService: RoleService,
+        private clientService: ClientService,
+        private branchService: BranchService,
     ) {
         this.ngxGpAutocompleteService.setOptions({
             componentRestrictions: { country: ['IT'] },
@@ -71,6 +79,12 @@ export class CreateUserComponent implements OnInit {
         this.companyService.getAllCompanies().subscribe((companies) => {
             this.companies = companies;
         });
+        this.clientService.getAllClients().subscribe((clients) => {
+            this.clients = clients;
+        });
+        this.branchService.getAllBranches().subscribe((branches) => {
+            this.branches = branches;
+        });
     }
 
     createForm = this.fb.group({
@@ -84,8 +98,8 @@ export class CreateUserComponent implements OnInit {
         cellphone: [''],
         fiscalCode: ['', [Validators.required]],
         workerNumber: [''],
-        associatedClient: [''],
-        associatedBranch: ['', [this.noWhitespaceValidator.bind(this)]],
+        clientId: [null],
+        branchId: [null],
         position: [''],
         address: [''],
         birthCountry: [''],
@@ -130,10 +144,6 @@ export class CreateUserComponent implements OnInit {
     }
 
     onSubmit(): void {
-        // Trim dei valori prima del submit
-        const associatedBranch = this.createForm.value.associatedBranch?.trim() || '';
-        const associatedClient = this.createForm.value.associatedClient?.trim() || '';
-        
         this.userService
             .createUser(
                 this.createForm.value.fiscalCode,
@@ -145,8 +155,8 @@ export class CreateUserComponent implements OnInit {
                 this.createForm.value.roleId,
                 this.createForm.value.companyId,
                 this.createForm.value.workerNumber,
-                associatedClient,
-                associatedBranch,
+                this.createForm.value.clientId,
+                this.createForm.value.branchId,
                 this.createForm.value.position,
                 this.createForm.value.address,
                 this.createForm.value.iban,
