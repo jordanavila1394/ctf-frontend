@@ -159,6 +159,12 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 },
             },
             {
+                label: 'Ex festivita',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Ex festivita');
+                },
+            },
+            {
                 label: 'Festivita(infrasettimanali)',
                 command: () => {
                     this.onStatusChange(this.selectedItem, 'Festivita(infrasettimanali)');

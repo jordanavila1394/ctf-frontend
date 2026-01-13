@@ -70,6 +70,7 @@ export class PermissionHomeComponent implements OnInit {
     tipologyPermissionsItems: any = [
         { name: 'Assenza non retribuita (gg.)', value: 'Assenza non retribuita (gg.)' },
         { name: 'Aspettativa sindacale', value: 'Aspettativa sindacale' },
+        { name:'Ex festivita', value: 'Ex festivita' },
         { name: 'Aspettativa', value: 'Aspettativa' },
         { name: "Festivita' (infrasettimanale)", value: "Festivita' (infrasettimanale)" },
         { name: 'Ferie', value: 'Ferie' },

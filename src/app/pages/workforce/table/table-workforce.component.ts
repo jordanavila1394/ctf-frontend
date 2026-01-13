@@ -301,6 +301,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
                 return 'A1';
             case 'Aspettativa sindacale':
                 return 'A5';
+            case 'Ex festivita':
+                return 'EF';
             case 'Aspettativa':
                 return 'A4';
             case "Festivita' (infrasettimanale)":

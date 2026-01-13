@@ -84,91 +84,9 @@
                     </div>
                 </div>
 
-                <!-- Recommendations -->
-                <div class="card mb-4" *ngIf="debugData.recommendations && debugData.recommendations.length > 0">
-                    <h6 class="mb-3">
-                        <i class="pi pi-lightbulb mr-2"></i>Raccomandazioni
-                    </h6>
-                    <p-message
-                        *ngFor="let rec of debugData.recommendations"
-                        [severity]="getSeverity(rec)"
-                        [text]="rec"
-                        styleClass="mb-2 w-full"
-                    ></p-message>
-                </div>
+               
 
-                <!-- Sample Users -->
-                <div class="card mb-4" *ngIf="debugData.sampleUsers && debugData.sampleUsers.length > 0">
-                    <h6 class="mb-3">
-                        <i class="pi pi-users mr-2"></i>Esempio Utenti (primi 5)
-                    </h6>
-                    <p-table [value]="debugData.sampleUsers" [tableStyle]="{ 'min-width': '50rem' }">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Associated Client</th>
-                                <th>Client ID</th>
-                                <th>Associated Branch</th>
-                                <th>Branch ID</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-user>
-                            <tr>
-                                <td>{{ user.id }}</td>
-                                <td>{{ user.name }}</td>
-                                <td>
-                                    <span *ngIf="user.associatedClient" class="font-semibold">{{
-                                        user.associatedClient
-                                    }}</span>
-                                    <span *ngIf="!user.associatedClient" class="text-400">-</span>
-                                </td>
-                                <td>
-                                    <p-tag
-                                        *ngIf="user.clientId"
-                                        [value]="user.clientId.toString()"
-                                        severity="success"
-                                    ></p-tag>
-                                    <p-tag
-                                        *ngIf="!user.clientId"
-                                        value="mancante"
-                                        severity="danger"
-                                    ></p-tag>
-                                </td>
-                                <td>
-                                    <span *ngIf="user.associatedBranch" class="font-semibold">{{
-                                        user.associatedBranch
-                                    }}</span>
-                                    <span *ngIf="!user.associatedBranch" class="text-400">-</span>
-                                </td>
-                                <td>
-                                    <p-tag
-                                        *ngIf="user.branchId"
-                                        [value]="user.branchId.toString()"
-                                        severity="success"
-                                    ></p-tag>
-                                    <p-tag
-                                        *ngIf="!user.branchId"
-                                        value="mancante"
-                                        severity="danger"
-                                    ></p-tag>
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </div>
-
-                <!-- Refresh Button -->
-                <div class="flex justify-content-center mb-4">
-                    <button
-                        pButton
-                        pRipple
-                        label="Aggiorna Dati Debug"
-                        icon="pi pi-refresh"
-                        class="p-button-info"
-                        (click)="loadDebugData()"
-                    ></button>
-                </div>
+            
             </div>
 
             <!-- Bulk Update Section -->

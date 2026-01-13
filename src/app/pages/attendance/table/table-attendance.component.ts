@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { NgxGpAutocompleteService } from '@angular-magic/ngx-gp-autocomplete';
 
 //PrimeNg
-import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
+import { MessageService, ConfirmationService, MenuItem, FilterService } from 'primeng/api';
 import { Table } from 'primeng/table';
 
 //Services
@@ -36,7 +36,7 @@ import { Observable, Subscription } from 'rxjs';
     providers: [MessageService, ConfirmationService],
 })
 export class TableAttendanceComponent implements OnInit, OnDestroy {
-    attendances: Company[] = [];
+    attendances: any[] = [];
 
     rowGroupMetadata: any;
 
@@ -58,8 +58,30 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private attendanceService: AttendanceService,
         private store: Store<{ companyState: CompanyState }>,
+        private filterService: FilterService,
     ) {
         this.companyState$ = store.select('companyState');
+        
+        // Register custom date-only filter
+        this.filterService.register('dateOnly', (value: any, filter: any): boolean => {
+            if (!filter) {
+                return true;
+            }
+            if (!value) {
+                return false;
+            }
+            
+            // Ensure both are Date objects
+            const valueDate = value instanceof Date ? value : new Date(value);
+            const filterDate = filter instanceof Date ? filter : new Date(filter);
+            
+            // Compare only date part (ignore time)
+            return (
+                valueDate.getFullYear() === filterDate.getFullYear() &&
+                valueDate.getMonth() === filterDate.getMonth() &&
+                valueDate.getDate() === filterDate.getDate()
+            );
+        });
     }
 
     ngOnInit(): void {
@@ -83,6 +105,13 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
                 this.attendances = attendances.map((attendance) => {
                     let newAttendance = attendance;
                     newAttendance.company = attendance?.user?.companies[0];
+                    // Convert date strings to Date objects for PrimeNG filters
+                    if (newAttendance.checkIn) {
+                        newAttendance.checkIn = new Date(newAttendance.checkIn);
+                    }
+                    if (newAttendance.checkOut) {
+                        newAttendance.checkOut = new Date(newAttendance.checkOut);
+                    }
                     return newAttendance;
                 });
 
@@ -155,4 +184,6 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
         table.clear();
         this.filter.nativeElement.value = '';
     }
+
+
 }
