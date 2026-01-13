@@ -146,6 +146,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
         const userServiceSubscription = this.userService
             .getAllUsers(selectedCompany.id)
             .subscribe((users) => {
+                console.log('Users from backend:', users);
                 this.users = users.map((user) => ({
                     ...user,
                     mainRole: {
@@ -156,6 +157,7 @@ export class TableUserComponent implements OnInit, OnDestroy {
                     company: user.companies[0]?.name,
                     createdAt: new Date(user.createdAt),
                 }));
+                console.log('Mapped users:', this.users);
             });
         this.subscription.add(userServiceSubscription);
 
