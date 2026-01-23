@@ -84,6 +84,11 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
     visible: boolean;
 
     items: MenuItem[] = [];
+    
+    // Editing state
+    editingAttendanceId: number | null = null;
+    tempCheckIn: Date | null = null;
+    tempCheckOut: Date | null = null;
 
     constructor(
         private router: Router,
@@ -567,5 +572,58 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 })
         );
         this.loadServices(this.selectedCompany);
+    }
+
+    // Editing methods
+    startEdit(attendance: any) {
+        this.editingAttendanceId = attendance.id;
+        this.tempCheckIn = attendance.checkIn ? new Date(attendance.checkIn) : null;
+        this.tempCheckOut = attendance.checkOut ? new Date(attendance.checkOut) : null;
+    }
+
+    cancelEdit() {
+        this.editingAttendanceId = null;
+        this.tempCheckIn = null;
+        this.tempCheckOut = null;
+    }
+
+    saveEdit(attendance: any) {
+        if (!this.tempCheckIn || !this.tempCheckOut) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Errore',
+                detail: 'Check-in e check-out sono obbligatori',
+            });
+            return;
+        }
+
+        // Format dates to ISO string
+        const checkInTime = this.tempCheckIn.toISOString();
+        const checkOutTime = this.tempCheckOut.toISOString();
+
+        this.attendanceService
+            .updateAttendanceTimes(attendance.id, checkInTime, checkOutTime)
+            .subscribe(
+                (res) => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Successo',
+                        detail: 'Orari aggiornati con successo',
+                    });
+                    this.cancelEdit();
+                    this.loadServices(this.selectedCompany);
+                },
+                (error) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Errore',
+                        detail: 'Errore nell\'aggiornamento degli orari',
+                    });
+                }
+            );
+    }
+
+    isEditing(attendanceId: number): boolean {
+        return this.editingAttendanceId === attendanceId;
     }
 }
