@@ -179,4 +179,16 @@ export class AttendanceService {
             httpOptions,
         );
     }
+
+    updateAttendanceTimes(id: number, checkInTime: string, checkOutTime: string): Observable<any> {
+        return this.http.post(
+            API_URL + 'updateAttendanceTimes',
+            {
+                id,
+                checkInTime,
+                checkOutTime
+            },
+            httpOptions,
+        );
+    }
 }

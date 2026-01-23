@@ -79,7 +79,7 @@
                         <th>Ore non lavorate</th>
                         <th>Extra</th>
                         <th>Stato</th>
-                        <th>Foto</th>
+                        <th>Azioni</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-attendance>
@@ -105,16 +105,34 @@
                             </div>
                         </td>
                         <td>
-                            {{
-                            attendance?.checkIn
-                            | date: "HH:mm"
-                            }}
+                            <div *ngIf="!isEditing(attendance?.id)">
+                                {{
+                                attendance?.checkIn
+                                | date: "HH:mm"
+                                }}
+                            </div>
+                            <p-calendar *ngIf="isEditing(attendance?.id)" 
+                                [(ngModel)]="tempCheckIn" 
+                                [showTime]="true" 
+                                hourFormat="24" 
+                                dateFormat="dd/mm/yy"
+                                [style]="{'width': '100%'}">
+                            </p-calendar>
                         </td>
                         <td>
-                            {{
-                            attendance?.checkOut
-                            | date: "HH:mm"
-                            }}
+                            <div *ngIf="!isEditing(attendance?.id)">
+                                {{
+                                attendance?.checkOut
+                                | date: "HH:mm"
+                                }}
+                            </div>
+                            <p-calendar *ngIf="isEditing(attendance?.id)" 
+                                [(ngModel)]="tempCheckOut" 
+                                [showTime]="true" 
+                                hourFormat="24" 
+                                dateFormat="dd/mm/yy"
+                                [style]="{'width': '100%'}">
+                            </p-calendar>
                         </td>
                         <td>
                             {{
@@ -167,6 +185,30 @@
                                                         display: flex;
                                                         gap: 4px;
                                                     ">
+                                <button *ngIf="!isEditing(attendance?.id)" 
+                                    type="button" 
+                                    (click)="startEdit(attendance)" 
+                                    pButton 
+                                    class="p-button-outlined p-button-secondary"
+                                    icon="pi pi-pencil"
+                                    pTooltip="Modifica orari"
+                                    tooltipPosition="top"></button>
+                                <button *ngIf="isEditing(attendance?.id)" 
+                                    type="button" 
+                                    (click)="saveEdit(attendance)" 
+                                    pButton 
+                                    class="p-button-outlined p-button-success"
+                                    icon="pi pi-save"
+                                    pTooltip="Salva modifiche"
+                                    tooltipPosition="top"></button>
+                                <button *ngIf="isEditing(attendance?.id)" 
+                                    type="button" 
+                                    (click)="cancelEdit()" 
+                                    pButton 
+                                    class="p-button-outlined p-button-danger"
+                                    icon="pi pi-times"
+                                    pTooltip="Annulla"
+                                    tooltipPosition="top"></button>
                                 <button *ngIf="
                                                             attendance?.status ===
                                                             'Verificare'

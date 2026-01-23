@@ -26,6 +26,7 @@ import { UsersAttendanceComponent } from './users-attendance.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
     imports: [
@@ -51,6 +52,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         MenuModule,
         FormsModule,
         SplitButtonModule,
+        TooltipModule,
         TranslateModule,
         ReactiveFormsModule,
         ToastModule,
