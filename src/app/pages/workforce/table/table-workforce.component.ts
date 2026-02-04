@@ -293,6 +293,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
                 return 'MG'; // unificato
             case 'Congedo parentale ore 7/8/9':
                 return 'MH';
+            case 'Congedo matrimoniale':
+                return 'CM';
             case 'Sciopero':
                 return 'SC';
             case 'Non lavorato':

@@ -79,6 +79,7 @@ export class PermissionHomeComponent implements OnInit {
         { name: 'Congedo padre L.92/2012', value: 'Congedo padre L.92/2012' },
         { name: 'Congedo parentale 7/8/9 mese', value: 'Congedo parentale 7/8/9 mese' },
         { name: 'Congedo parentale ore 7/8/9', value: 'Congedo parentale ore 7/8/9' },
+        { name: 'Congedo matrimoniale', value: 'Congedo matrimoniale' },
         { name: 'Sciopero', value: 'Sciopero' },
         { name: 'L 104 se si tratta di un figlio', value: 'L 104 se si tratta di un figlio' },
         { name: 'L.104 se si tratta di un genitore', value: 'L.104 se si tratta di un genitore' },

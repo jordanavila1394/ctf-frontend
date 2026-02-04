@@ -206,6 +206,12 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 }   
             },
             {
+                label: 'Congedo matrimoniale',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Congedo matrimoniale');
+                }
+            },
+            {
                 label: 'L 104 se si tratta di un figlio',
                 command: () => {
                     this.onStatusChange(this.selectedItem, 'L 104 se si tratta di un figlio');
