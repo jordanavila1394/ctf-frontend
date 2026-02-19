@@ -51,6 +51,9 @@
                             <span class="warning" *ngSwitchCase="'Verificare'">
                                 {{ attendance?.status }}
                             </span>
+                            <span class="error" *ngSwitchCase="'Assente'">
+                                {{ attendance?.status }}
+                            </span>
                             <span class="error" *ngSwitchCase="'CheckOut?'">
                                 {{ attendance?.status }}
                             </span>

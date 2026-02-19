@@ -280,6 +280,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
                 return attendanceHours || 'H';
             case 'Verificare':
                 return '-';
+            case 'Assente':
+                return '-';
             case 'Malattia':
             case 'Malattia operai e apprendisti':
                 return 'M3'; // unificato

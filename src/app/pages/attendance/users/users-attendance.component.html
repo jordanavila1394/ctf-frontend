@@ -211,7 +211,7 @@
                                     tooltipPosition="top"></button>
                                 <button *ngIf="
                                                             attendance?.status ===
-                                                            'Verificare'
+                                                            'Verificare' || attendance?.status === 'Assente'
                                                         " type="button" (click)="
                                                             validateAttendance(
                                                                 attendance
