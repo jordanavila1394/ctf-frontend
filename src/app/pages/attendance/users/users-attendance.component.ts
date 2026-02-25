@@ -121,6 +121,13 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                     this.onStatusChange(this.selectedItem, 'Verificare');
                 },
             },
+            {
+                label: 'Assente',
+                icon: 'pi pi-ban',
+                command: () => {
+                    this.onStatusChange(this.selectedItem, 'Assente');
+                },
+            },
             // {
             //     label: 'Malattia',
             //     command: () => {
@@ -366,6 +373,8 @@ export class UsersAttendanceComponent implements OnInit, OnDestroy {
                 return 'p-button-success';
             case 'Verificare':
                 return 'p-button-warning';
+            case 'Assente':
+                return 'p-button-danger';
             case 'CheckOut?':
                 return 'p-button-danger';
             default:

@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 import { PermissionService } from 'src/app/services/permission.service';
 import { UserService } from 'src/app/services/user.service';
 import { ClientService } from 'src/app/services/client.service';
 import { BranchService } from 'src/app/services/branch.service';
+import { AuthService } from 'src/app/services/auth.service';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 interface User {
@@ -49,6 +51,10 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     selectedMonth: number | null = null;
     selectedMonthLabel: string = '';
     selectedYear: any;
+    isPrepost: boolean = false;
+    userLoggedInBranchId: number | null = null;
+    private clientsLoaded: boolean = false;
+    private branchesLoaded: boolean = false;
     years: { label: string, value: number }[] = [
         { label: `${this.currentYear}`, value: this.currentYear },
         { label: `${this.currentYear - 1}`, value: this.currentYear - 1 }
@@ -79,6 +85,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
         private branchService: BranchService,
         private cdRef: ChangeDetectorRef,
         private fb: FormBuilder,
+        private authService: AuthService,
+        private store: Store<any>,
     ) {
         this.workForceForm = this.fb.group({
             associatedClient: [null, Validators.required],
@@ -89,8 +97,44 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        // Get logged-in user from the Store 
+        this.store.select('authState').pipe(
+            filter(authState => authState && authState.user),
+            takeUntil(this.ngUnsubscribe)
+        ).subscribe(authState => {
+            const loggedInUser = authState.user;
+            console.log('Logged in user:', loggedInUser);
+            
+            if (loggedInUser) {
+                // Check if user has Preposto role (roles is an array of strings like 'ROLE_PREPOSTO')
+                if (loggedInUser.roles && Array.isArray(loggedInUser.roles)) {
+                    this.isPrepost = loggedInUser.roles.some(role => 
+                        role === 'ROLE_PREPOSTO' || role === 'Preposto' || role === 'PREPOSTO'
+                    );
+                    console.log('Is Preposto:', this.isPrepost);
+                }
+                
+                // Fetch complete user data to get branchId
+                this.userService.getUser(loggedInUser.id).pipe(
+                    takeUntil(this.ngUnsubscribe)
+                ).subscribe({
+                    next: (userData) => {
+                        console.log('Complete user data:', userData);
+                        this.userLoggedInBranchId = userData.branchId;
+                        console.log('User branch ID from API:', this.userLoggedInBranchId);
+                        
+                        // Reload branches after we have the branchId
+                        this.getAllAssociatedBranchs();
+                    },
+                    error: (err) => {
+                        console.error('Error fetching complete user data:', err);
+                    }
+                });
+            }
+        });
+
         this.getAllAssociatedClients();
-        this.getAllAssociatedBranchs();
+        
         // Set current year and month
         const currentMonth = new Date().getMonth(); // 0-based index (0 = January)
         const currentYear = new Date().getFullYear(); // Current year
@@ -105,7 +149,6 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
 
         // Initial load of permissions and day generation
         this.generateDaysForMonth(currentMonth);
-        this.getAllPermissionsByClientAndBranch();
     }
 
     onChangeClient(event: any) {
@@ -154,9 +197,24 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
 
 
     getAllPermissionsByClientAndBranch() {
+        console.log('=== getAllPermissionsByClientAndBranch called ===');
+        console.log('isPrepost:', this.isPrepost);
+        console.log('selectedClient:', this.selectedClient);
+        console.log('selectedBranch:', this.selectedBranch);
+        console.log('selectedMonth:', this.selectedMonth);
+        console.log('selectedYear:', this.selectedYear);
 
-        // Ensure selectedMonth and selectedYear are not null
-        if (this.selectedMonth !== null && this.selectedYear !== null) {
+        // For Preposto: require branch (auto-selected), client is optional
+        // For non-Preposto: allow call even with null values (to fetch unfiltered data)
+        const hasRequiredFilters = this.isPrepost 
+            ? this.selectedBranch // Only branch is required for Preposto
+            : true; // For non-Preposto, always allow
+
+        console.log('hasRequiredFilters:', hasRequiredFilters);
+
+        if (this.selectedMonth !== null && this.selectedYear !== null && hasRequiredFilters) {
+            console.log('✅ All conditions met - Loading permissions');
+            console.log('Loading permissions - Client:', this.selectedClient?.id, 'Branch:', this.selectedBranch?.id);
             this.isLoading = true; // Start loading
 
             // Adjust the startDate and endDate based on the selected month and year
@@ -166,10 +224,18 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             // Set the end of the month to the last moment (23:59:59.999)
             endOfMonth.setHours(23, 59, 59, 999);
 
+            // For both Preposto and non-Preposto: send selected values if available
+            // Preposto: will have both selectedClient and selectedBranch
+            // Non-Preposto: will have null on initial load, but will use selected values if user changes dropdowns
+            const clientId = this.selectedClient?.id ?? null;
+            const branchId = this.selectedBranch?.id ?? null;
+
+            console.log('🔄 Calling API with - clientId:', clientId, 'branchId:', branchId);
+
             // Call the service to get permissions
             this.permissionService.getAllPermissionsByClientAndBranch(
-                this.selectedClient?.id,
-                this.selectedBranch?.id,
+                clientId,
+                branchId,
                 startOfMonth,
                 endOfMonth
             )
@@ -185,28 +251,91 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
                     }
                 });
         } else {
-            console.warn('Selected month or year is not set.');
+            console.warn('❌ Missing required filters or dates', {
+                month: this.selectedMonth,
+                year: this.selectedYear,
+                client: this.selectedClient?.id,
+                branch: this.selectedBranch?.id,
+                isPrepost: this.isPrepost,
+                hasRequiredFilters: hasRequiredFilters
+            });
         }
     }
 
 
 
     getAllAssociatedClients() {
+        console.log('📥 getAllAssociatedClients called');
         this.clientService.getAllClients()
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(
-                clients => this.associatedClients = clients,
-                error => console.error('Error fetching associated clients:', error)
+                clients => {
+                    console.log('✅ Clients loaded:', clients.length, 'items');
+                    this.associatedClients = clients;
+                    this.clientsLoaded = true;
+                    console.log('clientsLoaded set to:', this.clientsLoaded);
+                    console.log('branchesLoaded current state:', this.branchesLoaded);
+                    
+                    // Per non-Preposto, carica i permessi quando i dati sono disponibili
+                    this.tryLoadPermissionsForNonPreposto();
+                },
+                error => console.error('❌ Error fetching associated clients:', error)
             );
     }
 
     getAllAssociatedBranchs() {
+        console.log('📥 getAllAssociatedBranchs called');
         this.branchService.getAllBranches()
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(
-                branchs => this.associatedBranchs = branchs,
+                branchs => {
+                    console.log('✅ All branches loaded:', branchs.length, 'items');
+                    console.log('CurrentState - isPrepost:', this.isPrepost, 'userBranchId:', this.userLoggedInBranchId);
+                    
+                    // If user is Preposto, filter branches to show only their branch
+                    if (this.isPrepost && this.userLoggedInBranchId) {
+                        console.log('Filtering branches for Preposto');
+                        this.associatedBranchs = branchs.filter(branch => branch.id === this.userLoggedInBranchId);
+                        // Find and set the user's branch as selected
+                        const userBranch = branchs.find(branch => branch.id === this.userLoggedInBranchId);
+                        if (userBranch) {
+                            console.log('Setting user branch:', userBranch);
+                            this.selectedBranch = userBranch;
+                            this.workForceForm.patchValue({
+                                associatedBranch: userBranch
+                            });
+                            // Trigger data load with the pre-selected branch
+                            this.getAllPermissionsByClientAndBranch();
+                        }
+                    } else {
+                        console.log('📋 Showing all branches - no auto-selection for non-Preposto');
+                        this.associatedBranchs = branchs;
+                        this.branchesLoaded = true;
+                        console.log('branchesLoaded set to:', this.branchesLoaded);
+                        console.log('clientsLoaded current state:', this.clientsLoaded);
+                        
+                        // Per non-Preposto, carica i permessi quando i dati sono disponibili
+                        this.tryLoadPermissionsForNonPreposto();
+                    }
+                },
                 error => console.error('Error fetching associated branches:', error)
             );
+    }
+    
+    private tryLoadPermissionsForNonPreposto() {
+        console.log('🔍 tryLoadPermissionsForNonPreposto called');
+        console.log('Condition check:');
+        console.log('  !this.isPrepost:', !this.isPrepost);
+        console.log('  this.clientsLoaded:', this.clientsLoaded);
+        console.log('  this.branchesLoaded:', this.branchesLoaded);
+        
+        // Per non-Preposto: carica i permessi automaticamente quando sia clienti che filiali sono caricati
+        if (!this.isPrepost && this.clientsLoaded && this.branchesLoaded) {
+            console.log('✅ Non-Preposto: all conditions met - loading permissions with null filters');
+            this.getAllPermissionsByClientAndBranch();
+        } else {
+            console.log('⏳ Non-Preposto: conditions not yet met, waiting...');
+        }
     }
 
 
@@ -279,6 +408,8 @@ export class TableWorkforceComponent implements OnInit, OnDestroy {
             case 'Presente':
                 return attendanceHours || 'H';
             case 'Verificare':
+                return '-';
+            case 'Assente':
                 return '-';
             case 'Malattia':
             case 'Malattia operai e apprendisti':
