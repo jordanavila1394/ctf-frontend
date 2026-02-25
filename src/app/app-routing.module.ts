@@ -136,7 +136,7 @@ import { AuthGuard } from './services/auth.guard';
                                 ).then((m) => m.PermissionModule),
                             canActivate: [AuthGuard],
                             data: {
-                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+                                roles: ['ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_PREPOSTO'],
                             },
                         },
                         {

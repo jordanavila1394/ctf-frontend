@@ -18,6 +18,8 @@ import { Table } from 'primeng/table';
 //Services
 import { CompanyService } from 'src/app/services/company.service';
 import { PermissionService } from 'src/app/services/permission.service';
+import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 //Models
 import { Company } from 'src/app/models/company';
@@ -30,7 +32,8 @@ import Formatter from 'src/app/utils/formatters';
 //Store
 import { CompanyState } from 'src/app/stores/dropdown-select-company/dropdown-select-company.reducer';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, Subject } from 'rxjs';
+import { takeUntil, filter } from 'rxjs/operators';
 
 import * as FileSaver from 'file-saver';
 
@@ -52,6 +55,9 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
     companyState$: Observable<CompanyState>;
     selectedCompany: any;
     subscription: Subscription = new Subscription();
+    isPrepost: boolean = false;
+    userLoggedInBranchId: number | null = null;
+    private ngUnsubscribe: Subject<void> = new Subject<void>();
 
     permissions: any;
 
@@ -65,14 +71,49 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private companyService: CompanyService,
         private permissionService: PermissionService,
+        private userService: UserService,
+        private authService: AuthService,
         public emailService: EmailService,
-        private store: Store<{ companyState: CompanyState }>,
+        private store: Store<any>,
     ) {
         this.companyState$ = store.select('companyState');
         this.formatter = new Formatter();
     }
 
     ngOnInit(): void {
+        // First, detect if user is Preposto and get their branchId
+        this.store.select('authState').pipe(
+            filter(authState => authState && authState.user),
+            takeUntil(this.ngUnsubscribe)
+        ).subscribe(authState => {
+            const loggedInUser = authState.user;
+            console.log('👤 Logged in user:', loggedInUser);
+            
+            if (loggedInUser) {
+                // Check if user has Preposto role
+                if (loggedInUser.roles && Array.isArray(loggedInUser.roles)) {
+                    this.isPrepost = loggedInUser.roles.some(role => 
+                        role === 'ROLE_PREPOSTO' || role === 'Preposto' || role === 'PREPOSTO'
+                    );
+                    console.log('🏢 Is Preposto:', this.isPrepost);
+                }
+                
+                // Fetch complete user data to get branchId
+                this.userService.getUser(loggedInUser.id).pipe(
+                    takeUntil(this.ngUnsubscribe)
+                ).subscribe({
+                    next: (userData) => {
+                        console.log('📋 Complete user data:', userData);
+                        this.userLoggedInBranchId = userData.branchId;
+                        console.log('🏪 User branch ID from API:', this.userLoggedInBranchId);
+                    },
+                    error: (err) => {
+                        console.error('❌ Error fetching complete user data:', err);
+                    }
+                });
+            }
+        });
+
         const companyServiceSubscription = this.companyState$.subscribe(
             (company) => {
                 this.selectedCompany = company?.currentCompany;
@@ -84,6 +125,8 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
     }
     //Services
 
@@ -92,7 +135,31 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
             .allPermissionsByMonth(currentCompany.id | 0)
             .subscribe((groupedPermissions: { [month: string]: any[] }) => {
 
-                this.permissions = Object.entries(groupedPermissions).map(([month, permissions]) => ({
+                console.log('📥 Received permissions:', Object.values(groupedPermissions).flat().length, 'items');
+
+                let filteredGroupedPermissions = groupedPermissions;
+
+                // If user is Preposto, filter permissions to only show users from their branch
+                if (this.isPrepost && this.userLoggedInBranchId) {
+                    console.log('🔍 Filtering permissions for Preposto - branchId:', this.userLoggedInBranchId);
+                    filteredGroupedPermissions = {};
+                    
+                    Object.entries(groupedPermissions).forEach(([month, permissions]) => {
+                        const filteredPermissions = permissions.filter(permission => {
+                            const userBranchId = permission?.user?.branchId;
+                            console.log('   User:', permission?.user?.name, 'branchId:', userBranchId, 'match:', userBranchId === this.userLoggedInBranchId);
+                            return userBranchId === this.userLoggedInBranchId;
+                        });
+                        if (filteredPermissions.length > 0) {
+                            filteredGroupedPermissions[month] = filteredPermissions;
+                        }
+                    });
+                    console.log('✅ Filtered permissions count:', Object.values(filteredGroupedPermissions).flat().length, 'items');
+                } else if (!this.isPrepost) {
+                    console.log('📋 Non-Preposto: showing all permissions');
+                }
+
+                this.permissions = Object.entries(filteredGroupedPermissions).map(([month, permissions]) => ({
                     month,
                     permissions: permissions.map((permission) => ({
                         ...permission,

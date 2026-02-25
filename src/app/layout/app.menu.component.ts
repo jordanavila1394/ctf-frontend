@@ -26,6 +26,7 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {
         const userRoles = this.authService.getRoles();
+        console.log('🔍 Menu - User roles from authService:', userRoles);
         this.isProduction = environment?.production;
         if (
             userRoles.includes('ROLE_ADMIN') ||
@@ -198,6 +199,7 @@ export class AppMenuComponent implements OnInit {
 
         if (userRoles.includes('ROLE_PREPOSTO')
         ) {
+            console.log('✅ Is Preposto - adding Attendances and Permissions menu');
             this.model.push({
                 label: 'Attendances',
                 translationCode: 'menu.routes.attendance.menuTitle',
@@ -210,6 +212,20 @@ export class AppMenuComponent implements OnInit {
                     },
                 ],
             });
+            this.model.push({
+                label: 'Permissions',
+                translationCode: 'menu.routes.permission.menuTitle',
+                items: [
+                    {
+                        label: 'Permission list',
+                        translationCode: 'menu.routes.permission.table',
+                        icon: 'pi pi-list',
+                        routerLink: [ROUTES.ROUTE_TABLE_PERMISSION],
+                    },
+                ],
+            });
+        } else {
+            console.log('❌ Is NOT Preposto - not adding Preposto menus');
         }
         if (
             userRoles.includes('ROLE_ADMIN') ||
