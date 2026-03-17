@@ -38,10 +38,16 @@
                         </div>
                     </div>
                     <div class="checkin">
-                        {{ attendance?.checkIn | date: "HH:mm" }}
+                        <ng-container *ngIf="attendance?.status !== 'Assente'; else dashedCheckIn">
+                            {{ attendance?.checkIn | date: "HH:mm" }}
+                        </ng-container>
+                        <ng-template #dashedCheckIn>-</ng-template>
                     </div>
                     <div class="checkout">
-                        {{ attendance?.checkOut | date: "HH:mm" }}
+                        <ng-container *ngIf="attendance?.status !== 'Assente'; else dashedCheckOut">
+                            {{ attendance?.checkOut | date: "HH:mm" }}
+                        </ng-container>
+                        <ng-template #dashedCheckOut>-</ng-template>
                     </div>
                     <div class="status">
                         <div [ngSwitch]="attendance?.status">
@@ -68,7 +74,10 @@
                     </div>
 
                     <div class="workedHours">
-                        {{ attendance?.workedHours }}
+                        <ng-container *ngIf="attendance?.status !== 'Assente'; else dashedWorkedHours">
+                            {{ attendance?.workedHours }}
+                        </ng-container>
+                        <ng-template #dashedWorkedHours>-</ng-template>
                     </div>
                     <!-- <div>
                         <span class="missingHours">
