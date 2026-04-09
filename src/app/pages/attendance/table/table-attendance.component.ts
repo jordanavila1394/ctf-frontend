@@ -40,6 +40,8 @@ import { takeUntil, filter } from 'rxjs/operators';
 })
 export class TableAttendanceComponent implements OnInit, OnDestroy {
     attendances: any[] = [];
+    statusFilterOptions: { label: string; value: string }[] = [];
+    companyFilterOptions: { label: string; value: string }[] = [];
 
     rowGroupMetadata: any;
 
@@ -174,6 +176,18 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
                     return newAttendance;
                 });
 
+                this.statusFilterOptions = this.buildFilterOptions(
+                    this.attendances
+                        .map((attendance) => attendance?.status)
+                        .filter((status) => !!status),
+                );
+
+                this.companyFilterOptions = this.buildFilterOptions(
+                    this.attendances
+                        .map((attendance) => attendance?.company?.name)
+                        .filter((companyName) => !!companyName),
+                );
+
                 this.loading = false;
             });
         if (this.subscription && attendanceServiceSubscription)
@@ -242,6 +256,76 @@ export class TableAttendanceComponent implements OnInit, OnDestroy {
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
+    }
+
+    private buildFilterOptions(values: string[]): { label: string; value: string }[] {
+        const uniqueValues = Array.from(
+            new Set(values.map((value) => value.trim()).filter((value) => !!value)),
+        ).sort((a, b) => a.localeCompare(b, 'it', { sensitivity: 'base' }));
+
+        return uniqueValues.map((value) => ({
+            label: value,
+            value,
+        }));
+    }
+
+    getStatusChipClass(status: string | null | undefined): string {
+        const normalizedStatus = (status || '').trim().toLowerCase();
+
+        if (normalizedStatus === 'presente') {
+            return 'status-present';
+        }
+
+        if (normalizedStatus === 'assente') {
+            return 'status-absent';
+        }
+
+        if (normalizedStatus === 'verificare') {
+            return 'status-warning';
+        }
+
+        if (normalizedStatus === 'ferie') {
+            return 'status-vacation';
+        }
+
+        if (normalizedStatus === 'sciopero') {
+            return 'status-strike';
+        }
+
+        if (normalizedStatus === 'non lavorato') {
+            return 'status-neutral';
+        }
+
+        if (
+            normalizedStatus === 'aspettativa' ||
+            normalizedStatus === 'aspettativa sindacale'
+        ) {
+            return 'status-leave';
+        }
+
+        if (
+            normalizedStatus === 'malattia' ||
+            normalizedStatus === 'infortunio' ||
+            normalizedStatus === 'malattia operai e apprendisti'
+        ) {
+            return 'status-medical';
+        }
+
+        if (
+            normalizedStatus === 'assenza non retribuita' ||
+            normalizedStatus.includes('congedo')
+        ) {
+            return 'status-unpaid';
+        }
+
+        if (
+            normalizedStatus === 'ex festivita' ||
+            normalizedStatus === 'festivita(infrasettimanali)'
+        ) {
+            return 'status-holiday';
+        }
+
+        return 'status-default';
     }
 
 

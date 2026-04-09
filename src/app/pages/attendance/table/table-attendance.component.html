@@ -54,15 +54,28 @@
                         <th style="min-width: 13rem">
                             <div class="flex justify-content-between align-items-center">
                                 Azienda
-                                <p-columnFilter type="text" field="company.name" display="menu"
-                                    placeholder="Search by userId"></p-columnFilter>
+                                <p-columnFilter field="company.name" matchMode="equals" display="menu"
+                                    [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                                    placeholder="Seleziona azienda">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-dropdown [ngModel]="value" [options]="companyFilterOptions"
+                                            (onChange)="filter($event.value)" [showClear]="true"
+                                            placeholder="Tutte" appendTo="body"></p-dropdown>
+                                    </ng-template>
+                                </p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
                                 CheckIn
-                                <p-columnFilter type="date" field="checkIn" display="menu" dateFormat="dd/mm/yy"
-                                    matchMode="dateOnly">
+                                <p-columnFilter type="date" field="checkIn" display="menu" matchMode="dateOnly"
+                                    [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-calendar [ngModel]="value" [showIcon]="true" [showTime]="false"
+                                            dateFormat="dd/mm/yy" appendTo="body" [showButtonBar]="true"
+                                            (onSelect)="filter($event)" (onClearClick)="filter(null)">
+                                        </p-calendar>
+                                    </ng-template>
                                 </p-columnFilter>
                             </div>
                         </th>
@@ -72,16 +85,29 @@
                         <th style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
                                 CheckOut
-                                <p-columnFilter type="date" field="checkOut" display="menu" dateFormat="dd/mm/yy"
-                                    matchMode="dateOnly">
+                                <p-columnFilter type="date" field="checkOut" display="menu" matchMode="dateOnly"
+                                    [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-calendar [ngModel]="value" [showIcon]="true" [showTime]="false"
+                                            dateFormat="dd/mm/yy" appendTo="body" [showButtonBar]="true"
+                                            (onSelect)="filter($event)" (onClearClick)="filter(null)">
+                                        </p-calendar>
+                                    </ng-template>
                                 </p-columnFilter>
                             </div>
                         </th>
                         <th style="min-width: 13rem">
                             <div class="flex justify-content-between align-items-center">
                                 Status
-                                <p-columnFilter type="text" field="company.status" display="menu"
-                                    placeholder="Search by status"></p-columnFilter>
+                                <p-columnFilter field="status" matchMode="equals" display="menu"
+                                    [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                                    placeholder="Seleziona status">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-dropdown [ngModel]="value" [options]="statusFilterOptions"
+                                            (onChange)="filter($event.value)" [showClear]="true"
+                                            placeholder="Tutti" appendTo="body"></p-dropdown>
+                                    </ng-template>
+                                </p-columnFilter>
                             </div>
                         </th>
                         <th alignFrozen="right" pFrozenColumn [frozen]="actionsFrozen">
@@ -118,7 +144,9 @@
                             }}
                         </td>
                         <td class="font-bold">
-                            {{ attendance?.status}}
+                            <span class="status-chip" [ngClass]="getStatusChipClass(attendance?.status)">
+                                {{ attendance?.status || 'N/D' }}
+                            </span>
                         </td>
                         <td alignFrozen="right" pFrozenColumn [frozen]="actionsFrozen"></td>
                     </tr>
