@@ -30,4 +30,11 @@ export class UploadService {
     deleteDocument(file: string) {
         return this.http.post(API_URL + 'deleteDocument', { key: file });
     }
+
+    deleteCedoliniByPeriod(releaseMonth: string, releaseYear: string | number) {
+        return this.http.post(API_URL + 'deleteCedoliniByPeriod', {
+            releaseMonth,
+            releaseYear,
+        });
+    }
 }

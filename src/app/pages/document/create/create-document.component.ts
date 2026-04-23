@@ -26,12 +26,15 @@ export class CreateDocumentComponent {
     yearsItems: any[] = [];
     selectedReleaseMonth;
     selectedReleaseYear;
+    selectedDeleteMonth;
+    selectedDeleteYear;
     testEmail: string = '';
 
     constructor(
         public fb: FormBuilder,
         private uploadService: UploadService,
         private messageService: MessageService,
+        private confirmationService: ConfirmationService,
         private userService: UserService,
         private emailService: EmailService,
     ) {
@@ -48,6 +51,9 @@ export class CreateDocumentComponent {
         this.selectedReleaseYear = this.yearsItems.find(
             (year) => year.value === currentYear,
         );
+
+        this.selectedDeleteMonth = this.selectedReleaseMonth;
+        this.selectedDeleteYear = this.selectedReleaseYear;
     } // Inject UploadService
     documentsForm = this.fb.group({
         userId: ['', [Validators.required]],
@@ -372,6 +378,57 @@ export class CreateDocumentComponent {
                 });
             }
         );
+    }
+
+    confirmDeleteCedoliniByPeriod() {
+        const releaseMonth = this.selectedDeleteMonth?.name;
+        const releaseYear = this.selectedDeleteYear?.name;
+
+        if (!releaseMonth || !releaseYear) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Elimina cedolini',
+                detail: 'Seleziona mese e anno prima di procedere',
+            });
+            return;
+        }
+
+        this.confirmationService.confirm({
+            header: 'Conferma eliminazione',
+            icon: 'pi pi-exclamation-triangle',
+            message: `Eliminare tutti i cedolini di ${releaseMonth} ${releaseYear} per tutti gli utenti?`,
+            acceptLabel: 'Elimina',
+            rejectLabel: 'Annulla',
+            accept: () => this.deleteCedoliniByPeriod(releaseMonth, releaseYear),
+        });
+    }
+
+    deleteCedoliniByPeriod(releaseMonth: string, releaseYear: string) {
+        console.log('[delete-cedolini] Richiesta eliminazione', {
+            releaseMonth,
+            releaseYear,
+        });
+
+        this.uploadService
+            .deleteCedoliniByPeriod(releaseMonth, releaseYear)
+            .subscribe(
+                (response: any) => {
+                    console.log('[delete-cedolini] Completata', response);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Elimina cedolini',
+                        detail: `Eliminati ${response?.deletedCount || 0} cedolini di ${releaseMonth} ${releaseYear}`,
+                    });
+                },
+                (error) => {
+                    console.error('[delete-cedolini] Errore', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Elimina cedolini',
+                        detail: error?.error?.message || 'Errore durante eliminazione massiva',
+                    });
+                }
+            );
     }
 
 

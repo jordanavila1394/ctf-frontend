@@ -57,6 +57,37 @@
                 </div>
             </div>
 
+            <div class="mb-3">
+                <label class="block mb-2"><strong>Eliminazione massiva cedolini</strong></label>
+                <div class="grid">
+                    <div class="field col-6 md:col-6">
+                        <p-dropdown
+                            placeholder="-Mese-"
+                            [options]="monthsItems"
+                            optionLabel="name"
+                            [(ngModel)]="selectedDeleteMonth"
+                        ></p-dropdown>
+                    </div>
+                    <div class="field col-6 md:col-6">
+                        <p-dropdown
+                            placeholder="-Anno-"
+                            [options]="yearsItems"
+                            optionLabel="name"
+                            [(ngModel)]="selectedDeleteYear"
+                        ></p-dropdown>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    pButton
+                    class="p-button-danger p-button-outlined"
+                    icon="pi pi-trash"
+                    label="Elimina tutti i cedolini del periodo"
+                    (click)="confirmDeleteCedoliniByPeriod()"
+                ></button>
+            </div>
+
             <button type="button" pButton class="p-button-outlined p-button-rounded" (click)="splitPdf()"
                 *ngIf="this.fiscalCodesFounded.length === 0">
                 Analizza PDF
@@ -93,3 +124,5 @@
         </div>
     </div>
 </div>
+
+<p-confirmDialog></p-confirmDialog>
