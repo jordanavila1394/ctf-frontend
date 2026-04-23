@@ -4,6 +4,7 @@ import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import { UploadService } from 'src/app/services/upload.service';
 import { UserService } from 'src/app/services/user.service';
+import { EmailService } from 'src/app/services/email.service';
 import { FormBuilder, Validators } from '@angular/forms';
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 import * as moment from 'moment';
@@ -25,12 +26,14 @@ export class CreateDocumentComponent {
     yearsItems: any[] = [];
     selectedReleaseMonth;
     selectedReleaseYear;
+    testEmail: string = '';
 
     constructor(
         public fb: FormBuilder,
         private uploadService: UploadService,
         private messageService: MessageService,
         private userService: UserService,
+        private emailService: EmailService,
     ) {
         moment.locale('it');
         this.monthsItems = this.getAllMonths();
@@ -329,6 +332,43 @@ export class CreateDocumentComponent {
                     severity: 'error',
                     summary: item.fiscalCode,
                     detail: 'Errore durante upload o invio email',
+                });
+            }
+        );
+    }
+
+    sendTestEmail() {
+        const recipient = this.testEmail?.trim();
+
+        if (!recipient) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Test email',
+                detail: 'Inserisci un indirizzo email valido',
+            });
+            return;
+        }
+
+        const subject = 'Test invio email - CTF Italia';
+        const message = `Questo e un test di invio email dalla pagina document/create. Ora: ${new Date().toISOString()}`;
+
+        console.log('[test-email] Invio test email', { recipient, subject });
+
+        this.emailService.sendEmail(recipient, subject, message).subscribe(
+            (response) => {
+                console.log('[test-email] Invio completato', response);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Test email',
+                    detail: `Email di test inviata a ${recipient}`,
+                });
+            },
+            (error) => {
+                console.error('[test-email] Errore invio', error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Test email',
+                    detail: 'Invio test fallito, controlla i log backend',
                 });
             }
         );
