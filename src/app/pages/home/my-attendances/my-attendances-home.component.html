@@ -50,20 +50,26 @@
                         <ng-template #dashedCheckOut>-</ng-template>
                     </div>
                     <div class="status">
-                        <div [ngSwitch]="attendance?.status">
-                            <span class="success" *ngSwitchCase="'Presente'">
+                        <div [ngSwitch]="attendance?.status?.trim()?.toLowerCase()">
+                            <span class="success" *ngSwitchCase="'presente'">
                                 {{ attendance?.status }}
                             </span>
-                            <span class="warning" *ngSwitchCase="'Verificare'">
+                            <span class="warning" *ngSwitchCase="'verificare'">
                                 {{ attendance?.status }}
                             </span>
-                            <span class="error" *ngSwitchCase="'Assente'">
+                            <span class="error" *ngSwitchCase="'assente'">
                                 {{ attendance?.status }}
                             </span>
-                            <span class="error" *ngSwitchCase="'CheckOut?'">
+                            <span class="error" *ngSwitchCase="'checkout?'">
                                 {{ attendance?.status }}
                             </span>
-                            <span class="error" *ngSwitchCase="'Sciopero'">
+                            <span class="error" *ngSwitchCase="'sciopero'">
+                                {{ attendance?.status }}
+                            </span>
+                            <span class="medical" *ngSwitchCase="'malattia'">
+                                {{ attendance?.status }}
+                            </span>
+                            <span class="medical" *ngSwitchCase="'malattia operai e apprendisti'">
                                 {{ attendance?.status }}
                             </span>
                             <span class="default" *ngSwitchDefault>
