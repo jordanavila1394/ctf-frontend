@@ -96,8 +96,9 @@
                 <table>
                     <tr>
                         <th><strong>Codice fiscale</strong></th>
-                        <th><strong>Pag.</strong></th>
-                        <th>Country</th>
+                        <th><strong>Busta</strong></th>
+                        <th><strong>LUL</strong></th>
+                        <th></th>
                     </tr>
                     <tr *ngFor="let item of fiscalCodesFounded; let i = index">
                         <td>
@@ -106,6 +107,11 @@
                         <td>
                             <div class="flex justify-content-center">
                                 {{ item.pageNumber }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex justify-content-center">
+                                {{ item.hasLul ? item.lulPageNumber : '—' }}
                             </div>
                         </td>
                         <td>

@@ -150,22 +150,50 @@ export class CreateDocumentComponent {
     async searchPdfForCodiceFiscale() {
         const pdf = await pdfjsLib.getDocument(this.pdfSrc).promise;
         const numPages = pdf.numPages;
+        this.fiscalCodesFounded = [];
+
+        const pagesWithFiscalCode = new Set<number>();
 
         for (let i = 1; i <= numPages; i++) {
             const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
-            textContent.items
-                .map((item) => {
-                    if (item['str'].match(this.codiceFiscaleRegex)) {
-                        this.fiscalCodesFounded.push({
-                            fiscalCode: item['str'].trim().toUpperCase(),
-                            pageNumber: i,
-                        });
-                    }
-                    return item['str'];
-                })
-                .join(' ');
+            const foundOnPage = new Set<string>();
+
+            for (const item of textContent.items) {
+                const raw = (item['str'] || '').trim().toUpperCase();
+                if (!raw.match(this.codiceFiscaleRegex) || foundOnPage.has(raw)) {
+                    continue;
+                }
+                foundOnPage.add(raw);
+                pagesWithFiscalCode.add(i);
+                this.fiscalCodesFounded.push({
+                    fiscalCode: raw,
+                    pageNumber: i,
+                    lulPageNumber: null as number | null,
+                    hasLul: false,
+                });
+            }
         }
+
+        // Il LUL segue quasi sempre la busta paga. Se la pagina successiva
+        // non contiene un CF (quindi non è un'altra busta), la alleghiamo.
+        // Eccezione tipica: cedolini TFR inviati senza LUL.
+        for (const entry of this.fiscalCodesFounded) {
+            const nextPage = entry.pageNumber + 1;
+            if (nextPage <= numPages && !pagesWithFiscalCode.has(nextPage)) {
+                entry.lulPageNumber = nextPage;
+                entry.hasLul = true;
+            }
+        }
+    }
+
+    /** Pagine da includere nel PDF: busta paga + LUL se presente. */
+    private getPagesToCopy(item: any): number[] {
+        const pages = [item.pageNumber - 1];
+        if (item.hasLul && item.lulPageNumber) {
+            pages.push(item.lulPageNumber - 1);
+        }
+        return pages;
     }
 
     async checkIfExistUser(fiscalCode: string): Promise<boolean> {
@@ -219,10 +247,9 @@ export class CreateDocumentComponent {
 
         const pdfDoc = await PDFDocument.create();
         const srcDoc = await PDFDocument.load(this.pdfSrc);
-        const [copiedPage] = await pdfDoc.copyPages(srcDoc, [
-            item.pageNumber - 1,
-        ]);
-        pdfDoc.addPage(copiedPage);
+        const pageIndexes = this.getPagesToCopy(item);
+        const copiedPages = await pdfDoc.copyPages(srcDoc, pageIndexes);
+        copiedPages.forEach((copiedPage) => pdfDoc.addPage(copiedPage));
 
         const pdfBytes = await pdfDoc.save();
 
@@ -250,14 +277,13 @@ export class CreateDocumentComponent {
 
         const pdfDoc = await PDFDocument.create();
         const srcDoc = await PDFDocument.load(this.pdfSrc);
-        const [copiedPage] = await pdfDoc.copyPages(srcDoc, [
-            item.pageNumber - 1,
-        ]);
-        pdfDoc.addPage(copiedPage);
+        const pageIndexes = this.getPagesToCopy(item);
+        const copiedPages = await pdfDoc.copyPages(srcDoc, pageIndexes);
+        copiedPages.forEach((copiedPage) => pdfDoc.addPage(copiedPage));
 
         const pdfBytes = await pdfDoc.save();
 
-        // Upload the saved PDF document
+        // Upload the saved PDF document (busta paga + LUL se presente)
         const formData = new FormData();
         const releaseYear = this.selectedReleaseYear?.name;
         const releaseMonth = this.selectedReleaseMonth?.name;
@@ -269,8 +295,9 @@ export class CreateDocumentComponent {
             fileName
         );
 
-        const subject = `Cedolino ${releaseMonth} ${releaseYear}`;
-        const message = `In allegato il cedolino per ${item.fiscalCode}`;
+        const subject = item.hasLul
+            ? `Cedolino e LUL ${releaseMonth} ${releaseYear}`
+            : `Cedolino ${releaseMonth} ${releaseYear}`;
 
         // Dati utente
         const user = await this.userService.getUserByFiscalCode(item.fiscalCode).toPromise();
@@ -295,9 +322,12 @@ export class CreateDocumentComponent {
             return;
         }
 
+        const attachmentLabel = item.hasLul
+            ? 'il cedolino e il LUL'
+            : 'il cedolino';
         const message = `
         Gentile ${user.name} ${user.surname},<br><br>
-        in allegato trova il cedolino relativo al mese di <strong>${releaseMonth} ${releaseYear}</strong>.<br><br>
+        in allegato trova ${attachmentLabel} relativo al mese di <strong>${releaseMonth} ${releaseYear}</strong>.<br><br>
         <strong>Codice Fiscale:</strong> ${item.fiscalCode}<br>
         <strong>Nome:</strong> ${user.name}<br>
         <strong>Cognome:</strong> ${user.surname}<br><br>
