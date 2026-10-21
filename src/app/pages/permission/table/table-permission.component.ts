@@ -187,42 +187,11 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
     }
 
 
+    // Email inviata solo dal backend (evita doppio invio SMTP)
     approvePermission(permission) {
         this.permissionService
             .approvePermission(permission?.id, permission?.user?.id)
-            .subscribe((res) => {
-                if (permission?.user?.email) {
-                    let messageEmail = '';
-                    messageEmail +=
-                        'Ciao, ' +
-                        permission?.user?.name +
-                        ' ' +
-                        permission?.user?.surname +
-                        '. <br>';
-                    messageEmail += "E' stato approvata la sua richiesta: <br>";
-                    messageEmail +=
-                        '<strong>' + permission?.datesText + '</strong><br>';
-
-                    this.emailService
-                        .sendEmail(
-                            permission?.user?.email,
-                            'CTF - Permesso approvato - ' + permission?.id,
-                            messageEmail,
-                        )
-                        .subscribe(
-                            (risposta) =>
-                                console.log(
-                                    'Email inviata con successo:',
-                                    risposta,
-                                ),
-                            (errore) =>
-                                console.error(
-                                    "Errore durante l'invio dell'email:",
-                                    errore,
-                                ),
-                        );
-                }
-
+            .subscribe(() => {
                 this.loadServices(this.selectedCompany);
             });
     }
@@ -230,27 +199,7 @@ export class TablePermissionComponent implements OnInit, OnDestroy {
     rejectPermission(permission) {
         this.permissionService
             .rejectPermission(permission?.id, permission?.user?.id)
-            .subscribe((res) => {
-                if (permission?.user?.email) {
-                    this.emailService
-                        .sendEmail(
-                            permission?.user?.email,
-                            'CTF - Permesso Negato - ' + permission?.id,
-                            "E' stato negato il suo permesso",
-                        )
-                        .subscribe(
-                            (risposta) =>
-                                console.log(
-                                    'Email inviata con successo:',
-                                    risposta,
-                                ),
-                            (errore) =>
-                                console.error(
-                                    "Errore durante l'invio dell'email:",
-                                    errore,
-                                ),
-                        );
-                }
+            .subscribe(() => {
                 this.loadServices(this.selectedCompany);
             });
     }

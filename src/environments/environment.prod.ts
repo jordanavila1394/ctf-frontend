@@ -7,7 +7,7 @@ export const environment = {
     secretAccessKey: 'P3FOkWhN7rm9OFBd3nuPoRpY+HEspRFINBfkqvfkeO0',
     bucketName: 'ctf.images',
     adminEmails: [
-        'ctfcloud@ctfitalia.com',
+        'cloudctf@ctfitalia.com',
         'avirrueta@ctfitalia.com',
         'mgutierrez@ctfitalia.com',
         'personale@ctfitalia.com',
