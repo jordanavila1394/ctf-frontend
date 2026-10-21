@@ -88,7 +88,7 @@ export class CreateDocumentComponent {
         fileInput.click();
     }
 
-    uploadAllCedolini() {
+    async uploadAllCedolini() {
         if (this.fiscalCodesFounded.length === 0) {
             alert(
                 'No fiscal codes found to upload. ' + this.fiscalCodesFounded,
@@ -96,11 +96,11 @@ export class CreateDocumentComponent {
             return;
         }
 
-        // Cicla attraverso ogni item in fiscalCodesFounded
-        this.fiscalCodesFounded.forEach(async (item: any) => {
-            console.log('caricamento ');
-            await this.savePageAsDocument(item); // Chiama savePageAsDocument per salvare il documento
-        });
+        // Sequenziale: evita race sull'ArrayBuffer del PDF e rate-limit Gmail
+        for (const item of this.fiscalCodesFounded) {
+            console.log('caricamento', item.fiscalCode);
+            await this.savePageAsDocument(item);
+        }
     }
 
     onFileSelected(event: Event): void {
@@ -198,14 +198,21 @@ export class CreateDocumentComponent {
 
     async checkIfExistUser(fiscalCode: string): Promise<boolean> {
         try {
-            const exists = await this.userService
+            const response = await this.userService
                 .checkIfExistUser(fiscalCode)
                 .toPromise();
-            return exists;
+            return !!response?.userExist;
         } catch (error) {
             console.error('Error checking user existence:', error);
             return false;
         }
+    }
+
+    private getPdfSourceCopy(): ArrayBuffer | string {
+        if (this.pdfSrc instanceof ArrayBuffer) {
+            return this.pdfSrc.slice(0);
+        }
+        return this.pdfSrc;
     }
 
     async savePageAsImg(item: any): Promise<void> {
@@ -246,7 +253,7 @@ export class CreateDocumentComponent {
         }
 
         const pdfDoc = await PDFDocument.create();
-        const srcDoc = await PDFDocument.load(this.pdfSrc);
+        const srcDoc = await PDFDocument.load(this.getPdfSourceCopy());
         const pageIndexes = this.getPagesToCopy(item);
         const copiedPages = await pdfDoc.copyPages(srcDoc, pageIndexes);
         copiedPages.forEach((copiedPage) => pdfDoc.addPage(copiedPage));
@@ -265,44 +272,62 @@ export class CreateDocumentComponent {
             alert('Nessun codice fiscale trovato.');
             return;
         }
+
         const userExists = await this.checkIfExistUser(item.fiscalCode);
-        console.log(userExists);
         if (!userExists) {
             this.messageService.add({
                 severity: 'error',
                 summary: item.fiscalCode,
-                detail: 'Non esiste utente ',
+                detail: 'Utente non trovato in piattaforma',
             });
+            return;
+        }
+
+        let user: any;
+        try {
+            user = await this.userService
+                .getUserByFiscalCode(item.fiscalCode)
+                .toPromise();
+        } catch (error) {
+            console.error('Errore getUserByFiscalCode:', error);
+            this.messageService.add({
+                severity: 'error',
+                summary: item.fiscalCode,
+                detail: 'Utente non trovato',
+            });
+            return;
         }
 
         const pdfDoc = await PDFDocument.create();
-        const srcDoc = await PDFDocument.load(this.pdfSrc);
+        const srcDoc = await PDFDocument.load(this.getPdfSourceCopy());
         const pageIndexes = this.getPagesToCopy(item);
         const copiedPages = await pdfDoc.copyPages(srcDoc, pageIndexes);
         copiedPages.forEach((copiedPage) => pdfDoc.addPage(copiedPage));
 
         const pdfBytes = await pdfDoc.save();
 
-        // Upload the saved PDF document (busta paga + LUL se presente)
         const formData = new FormData();
-        const releaseYear = this.selectedReleaseYear?.name;
-        const releaseMonth = this.selectedReleaseMonth?.name;
+        const releaseYear = String(this.selectedReleaseYear?.name ?? '');
+        const releaseMonth = String(this.selectedReleaseMonth?.name ?? '');
         const fileName = `CEDOLINO_${item.fiscalCode}_${releaseMonth}_${releaseYear}.pdf`;
 
         formData.append(
             'files',
-            new Blob([pdfBytes], { type: 'application/pdf' }),
-            fileName
+            new File([pdfBytes], fileName, { type: 'application/pdf' }),
         );
 
         const subject = item.hasLul
             ? `Cedolino e LUL ${releaseMonth} ${releaseYear}`
             : `Cedolino ${releaseMonth} ${releaseYear}`;
 
-        // Dati utente
-        const user = await this.userService.getUserByFiscalCode(item.fiscalCode).toPromise();
-        this.proceedWithUploadAndEmail(user, formData, item, releaseYear, releaseMonth, subject);
-
+        this.proceedWithUploadAndEmail(
+            user,
+            formData,
+            item,
+            releaseYear,
+            releaseMonth,
+            subject,
+        );
     }
 
     proceedWithUploadAndEmail(
@@ -354,8 +379,16 @@ export class CreateDocumentComponent {
         });
 
         this.uploadService.uploadDocumentsAndSendEmail(formData).subscribe(
-            (response) => {
-                console.log('✅ Upload + Email successful:', response);
+            (response: any) => {
+                console.log('✅ Upload + Email response:', response);
+                if (response?.emailSent === false && response?.emailError) {
+                    this.messageService.add({
+                        severity: 'warn',
+                        summary: item.fiscalCode,
+                        detail: 'Documento caricato, email non inviata',
+                    });
+                    return;
+                }
                 this.messageService.add({
                     severity: 'success',
                     summary: item.fiscalCode,
@@ -367,7 +400,10 @@ export class CreateDocumentComponent {
                 this.messageService.add({
                     severity: 'error',
                     summary: item.fiscalCode,
-                    detail: 'Errore durante upload o invio email',
+                    detail:
+                        error?.error?.error ||
+                        error?.error?.message ||
+                        'Errore durante upload o invio email',
                 });
             }
         );
