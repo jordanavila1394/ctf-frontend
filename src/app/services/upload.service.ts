@@ -37,4 +37,14 @@ export class UploadService {
             releaseYear,
         });
     }
+
+    deleteDuplicateCedoliniByPeriod(
+        releaseMonth: string,
+        releaseYear: string | number,
+    ) {
+        return this.http.post(API_URL + 'deleteDuplicateCedoliniByPeriod', {
+            releaseMonth,
+            releaseYear,
+        });
+    }
 }

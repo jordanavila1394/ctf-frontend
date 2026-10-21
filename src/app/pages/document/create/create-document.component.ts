@@ -469,6 +469,33 @@ export class CreateDocumentComponent {
         });
     }
 
+    confirmDeleteDuplicateCedoliniByPeriod() {
+        const releaseMonth = this.selectedDeleteMonth?.name;
+        const releaseYear = this.selectedDeleteYear?.name;
+
+        if (!releaseMonth || !releaseYear) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Elimina duplicati',
+                detail: 'Seleziona mese e anno prima di procedere',
+            });
+            return;
+        }
+
+        this.confirmationService.confirm({
+            header: 'Conferma eliminazione duplicati',
+            icon: 'pi pi-exclamation-triangle',
+            message: `Per ${releaseMonth} ${releaseYear}: tenere 1 cedolino per codice fiscale (il più recente) e cancellare i duplicati?`,
+            acceptLabel: 'Elimina duplicati',
+            rejectLabel: 'Annulla',
+            accept: () =>
+                this.deleteDuplicateCedoliniByPeriod(
+                    releaseMonth,
+                    releaseYear,
+                ),
+        });
+    }
+
     deleteCedoliniByPeriod(releaseMonth: string, releaseYear: string) {
         console.log('[delete-cedolini] Richiesta eliminazione', {
             releaseMonth,
@@ -494,6 +521,39 @@ export class CreateDocumentComponent {
                         detail: error?.error?.message || 'Errore durante eliminazione massiva',
                     });
                 }
+            );
+    }
+
+    deleteDuplicateCedoliniByPeriod(
+        releaseMonth: string,
+        releaseYear: string | number,
+    ) {
+        console.log('[delete-duplicate-cedolini] Richiesta', {
+            releaseMonth,
+            releaseYear,
+        });
+
+        this.uploadService
+            .deleteDuplicateCedoliniByPeriod(releaseMonth, releaseYear)
+            .subscribe(
+                (response: any) => {
+                    console.log('[delete-duplicate-cedolini] Completata', response);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Elimina duplicati',
+                        detail: `Tenuti ${response?.keptCount || 0}, eliminati ${response?.deletedCount || 0} duplicati di ${releaseMonth} ${releaseYear}`,
+                    });
+                },
+                (error) => {
+                    console.error('[delete-duplicate-cedolini] Errore', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Elimina duplicati',
+                        detail:
+                            error?.error?.message ||
+                            'Errore durante eliminazione duplicati',
+                    });
+                },
             );
     }
 
